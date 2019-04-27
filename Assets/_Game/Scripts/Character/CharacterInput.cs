@@ -4,7 +4,7 @@ using UnityStandardAssets.CrossPlatformInput;
 
 
 [RequireComponent(typeof(CharacterController))]
-public class CharacterInput : MonoBehaviour
+public class CharacterInput : MonoSingleton<CharacterInput>
 {
     private CharacterController m_Character; // A reference to the ThirdPersonCharacter on the object
     private Transform m_Cam;                  // A reference to the main camera in the scenes transform
@@ -12,6 +12,8 @@ public class CharacterInput : MonoBehaviour
     private Vector3 m_Move;
     private bool m_Jump;                      // the world-relative desired move direction, calculated from the camForward and user input.
 
+    private Singleton<CharacterInput> characterInput;
+    public Action<GravityDirections> OnPlatformSwitched = delegate { };
 
     private void Start()
     {
@@ -49,8 +51,15 @@ public class CharacterInput : MonoBehaviour
         float v = CrossPlatformInputManager.GetAxis("Vertical");
         bool crouch = Input.GetKey(KeyCode.C);
 
-        // if (Input.GetKeyDown(KeyCode.Alpha1))
-        //     m_Character.ChangeGravity();
+        //Gravity switch input for testing
+        if (Input.GetKeyDown(KeyCode.Alpha1))
+            OnPlatformSwitched(GravityDirections.DOWN);
+        if (Input.GetKeyDown(KeyCode.Alpha2))
+            OnPlatformSwitched(GravityDirections.UP);
+        if (Input.GetKeyDown(KeyCode.Alpha3))
+            OnPlatformSwitched(GravityDirections.LEFT);
+        if (Input.GetKeyDown(KeyCode.Alpha4))
+            OnPlatformSwitched(GravityDirections.RIGHT);
 
         // calculate move direction to pass to character
         if (m_Cam != null)
@@ -74,4 +83,3 @@ public class CharacterInput : MonoBehaviour
         m_Jump = false;
     }
 }
-

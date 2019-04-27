@@ -3,7 +3,7 @@ using UnityEngine;
 using Unity.Collections;
 
 [RequireComponent(typeof(Rigidbody))]
-public class CharacterController : MonoBehaviour
+public class CharacterController : MonoSingleton<CharacterController>
 {
     [Header("Refs")]
     [SerializeField]
@@ -13,11 +13,10 @@ public class CharacterController : MonoBehaviour
     LayerCollider FeetCollider;
 
     [Header("Settings")]
-
     [SerializeField] float m_MovingTurnSpeed = 360;
     [SerializeField] float m_StationaryTurnSpeed = 180;
     [SerializeField] float m_JumpPower = 12f;
-    [Range(1f, 4f)] [SerializeField] float m_GravityMultiplier = 2f;
+    [Range(1f, 4f)] [SerializeField] float m_GravityMultiplier = 1f;
     [SerializeField] float m_MoveSpeedMultiplier = 1f;
 
     Rigidbody m_Rigidbody;
@@ -25,8 +24,18 @@ public class CharacterController : MonoBehaviour
     const float k_Half = 0.5f;
     float m_TurnAmount;
     float m_ForwardAmount;
+
+    //
     //TODO: get it from gravity service
     Vector3 m_GroundNormal = Vector3.up;
+    private static float m_Gravity = -9.81f;
+    [SerializeField] private Vector3 m_GravityPullVector;
+    [SerializeField] private Vector3 m_GravityUp;
+    [SerializeField] private Vector3 dummyGrav;
+    [SerializeField] List<GameObject> m_AllAtractors = new List<GameObject>();
+    [SerializeField] private GameObject m_currentAttractor;
+    //
+
     float _colliderHeight;
     Vector3 _boxColliderCenter;
     bool m_Crouching;
@@ -40,15 +49,22 @@ public class CharacterController : MonoBehaviour
     protected RaycastHit[] hitBuffer = new RaycastHit[16];
     protected List<RaycastHit> hitBufferList = new List<RaycastHit>(16);
 
-
-
     void Start()
     {
         m_Rigidbody = GetComponent<Rigidbody>();
         _colliderHeight = BoxCollider.size.y;
         _boxColliderCenter = BoxCollider.center;
 
-        m_Rigidbody.constraints = RigidbodyConstraints.FreezeRotationX | RigidbodyConstraints.FreezeRotationY | RigidbodyConstraints.FreezeRotationZ;
+        CharacterInput.Instance.OnPlatformSwitched -= PlatformSwitched;
+        CharacterInput.Instance.OnPlatformSwitched += PlatformSwitched;
+
+        //HACK: Remove this one we have gravity service
+        m_GravityPullVector = m_AllAtractors[0].transform.position;
+        m_currentAttractor = m_AllAtractors[0];
+        //
+
+        m_Rigidbody.useGravity = false;
+        m_Rigidbody.constraints = RigidbodyConstraints.FreezeRotation;
     }
 
 
@@ -132,7 +148,7 @@ public class CharacterController : MonoBehaviour
     void HandleAirborneMovement()
     {
         // apply extra gravity from multiplier:
-        Vector3 extraGravityForce = (Physics.gravity * m_GravityMultiplier) - Physics.gravity;
+        Vector3 extraGravityForce = (m_Gravity * m_GravityUp * m_GravityMultiplier) - (m_Gravity * m_GravityUp);
         m_Rigidbody.AddForce(extraGravityForce);
     }
 
@@ -143,7 +159,7 @@ public class CharacterController : MonoBehaviour
         if (jump && !crouch)
         {
             // jump!
-            m_Rigidbody.velocity = new Vector3(m_Rigidbody.velocity.x, m_JumpPower, m_Rigidbody.velocity.z);
+            m_Rigidbody.velocity = new Vector3(m_Rigidbody.velocity.x, m_Rigidbody.transform.up.y * m_JumpPower, m_Rigidbody.velocity.z);
             m_IsGrounded = false;
         }
     }
@@ -172,9 +188,6 @@ public class CharacterController : MonoBehaviour
     }
 
     public float minGroundNormalY = .65f;
-    public float gravityModifier = 1f;
-
-
 
     protected const float minMoveDistance = 0.001f;
     protected const float shellRadius = 0.01f;
@@ -186,7 +199,13 @@ public class CharacterController : MonoBehaviour
 
     void FixedUpdate()
     {
-        velocity += gravityModifier * Physics.gravity * Time.deltaTime;
+        //Apply adequate gravity
+        m_GravityUp = m_GravityPullVector.normalized * -1;
+        dummyGrav = m_GravityUp * m_Gravity * m_GravityMultiplier;
+        m_Rigidbody.rotation = Quaternion.Slerp(m_Rigidbody.rotation, m_currentAttractor.transform.rotation, 5 * Time.deltaTime);
+        m_Rigidbody.AddForce(m_GravityUp * m_Gravity * m_GravityMultiplier);
+
+        //velocity += gravityModifier * Physics.gravity * Time.deltaTime;
         velocity.x = targetVelocity.x;
 
         grounded = false;
@@ -247,5 +266,29 @@ public class CharacterController : MonoBehaviour
         }
 
         m_Rigidbody.position = m_Rigidbody.position + move.normalized * distance;
+    }
+
+    private void PlatformSwitched(GravityDirections dir)
+    {
+        switch (dir)
+        {
+            case GravityDirections.DOWN:
+                m_GravityPullVector = new Vector3(0, m_AllAtractors[0].transform.up.y * -1, 0);
+                m_currentAttractor = m_AllAtractors[0];               
+                break;
+            case GravityDirections.UP:
+                m_GravityPullVector = new Vector3(0, m_AllAtractors[1].transform.up.y * -1, 0);
+                m_GravityPullVector = m_AllAtractors[1].transform.position;
+                m_currentAttractor = m_AllAtractors[1];
+                break;
+            case GravityDirections.LEFT:
+                m_GravityPullVector = new Vector3(m_AllAtractors[2].transform.up.x * -1, 0, 0);
+                m_currentAttractor = m_AllAtractors[2];
+                break;
+            case GravityDirections.RIGHT:
+                m_GravityPullVector = new Vector3(m_AllAtractors[3].transform.up.x * -1, 0, 0);
+                m_currentAttractor = m_AllAtractors[3];
+                break;
+        }
     }
 }
