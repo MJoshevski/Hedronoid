@@ -19,11 +19,9 @@ public class CharacterController : MonoBehaviour
     [SerializeField] float m_JumpPower = 12f;
     [Range(1f, 4f)] [SerializeField] float m_GravityMultiplier = 2f;
     [SerializeField] float m_MoveSpeedMultiplier = 1f;
-    [SerializeField] float m_GroundCheckDistance = 0.1f;
 
     Rigidbody m_Rigidbody;
     [ReadOnly] [SerializeField] bool m_IsGrounded;
-    float m_OrigGroundCheckDistance;
     const float k_Half = 0.5f;
     float m_TurnAmount;
     float m_ForwardAmount;
@@ -51,7 +49,6 @@ public class CharacterController : MonoBehaviour
         _boxColliderCenter = BoxCollider.center;
 
         m_Rigidbody.constraints = RigidbodyConstraints.FreezeRotationX | RigidbodyConstraints.FreezeRotationY | RigidbodyConstraints.FreezeRotationZ;
-        m_OrigGroundCheckDistance = m_GroundCheckDistance;
     }
 
 
@@ -137,8 +134,6 @@ public class CharacterController : MonoBehaviour
         // apply extra gravity from multiplier:
         Vector3 extraGravityForce = (Physics.gravity * m_GravityMultiplier) - Physics.gravity;
         m_Rigidbody.AddForce(extraGravityForce);
-
-        m_GroundCheckDistance = m_Rigidbody.velocity.y < 0 ? m_OrigGroundCheckDistance : 0.01f;
     }
 
 
@@ -150,7 +145,6 @@ public class CharacterController : MonoBehaviour
             // jump!
             m_Rigidbody.velocity = new Vector3(m_Rigidbody.velocity.x, m_JumpPower, m_Rigidbody.velocity.z);
             m_IsGrounded = false;
-            m_GroundCheckDistance = 0.1f;
         }
     }
 
@@ -163,8 +157,6 @@ public class CharacterController : MonoBehaviour
 
     void MoveForward()
     {
-        if (!m_IsGrounded || Time.deltaTime <= 0)
-            return;
 
         var velocity = transform.forward * m_ForwardAmount * m_MoveSpeedMultiplier * Time.deltaTime;
         // we preserve the existing y part of the current velocity.

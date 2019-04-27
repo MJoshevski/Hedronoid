@@ -38,7 +38,7 @@ RenderSettings:
   m_ReflectionIntensity: 1
   m_CustomReflection: {fileID: 0}
   m_Sun: {fileID: 0}
-  m_IndirectSpecularColor: {r: 0.44657898, g: 0.4964133, b: 0.5748178, a: 1}
+  m_IndirectSpecularColor: {r: 0.44657856, g: 0.49641234, b: 0.57481724, a: 1}
   m_UseRadianceAmbientProbe: 0
 --- !u!157 &3
 LightmapSettings:
@@ -1211,44 +1211,15 @@ PrefabInstance:
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
       objectReference: {fileID: 0}
-    - target: {fileID: 5869925505566868056, guid: 3d386cfb14680421c892da295c39a6c9,
+    - target: {fileID: 5869925505237446342, guid: 3d386cfb14680421c892da295c39a6c9,
         type: 3}
-      propertyPath: m_Drag
-      value: 0.05
-      objectReference: {fileID: 0}
-    - target: {fileID: 5869925505566868056, guid: 3d386cfb14680421c892da295c39a6c9,
+      propertyPath: m_GravityAttractor
+      value: 
+      objectReference: {fileID: 1654557070}
+    - target: {fileID: 1684308886139246646, guid: 3d386cfb14680421c892da295c39a6c9,
         type: 3}
-      propertyPath: m_Mass
-      value: 1
-      objectReference: {fileID: 0}
-    - target: {fileID: 5869925505566868056, guid: 3d386cfb14680421c892da295c39a6c9,
-        type: 3}
-      propertyPath: m_UseGravity
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 5869925505566868056, guid: 3d386cfb14680421c892da295c39a6c9,
-        type: 3}
-      propertyPath: m_CollisionDetection
-      value: 1
-      objectReference: {fileID: 0}
+      propertyPath: m_GravityAttractor
+      value: 
+      objectReference: {fileID: 1654557070}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 3d386cfb14680421c892da295c39a6c9, type: 3}
---- !u!1 &5869925505237446341 stripped
-GameObject:
-  m_CorrespondingSourceObject: {fileID: 5869925505561593352, guid: 3d386cfb14680421c892da295c39a6c9,
-    type: 3}
-  m_PrefabInstance: {fileID: 5869925505237446340}
-  m_PrefabAsset: {fileID: 0}
---- !u!114 &5869925505237446342
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 5869925505237446341}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 93d867038bede134ea78fcfd0faac551, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  m_GravityAttractor: {fileID: 1654557070}
