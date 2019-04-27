@@ -23,7 +23,7 @@ namespace MDKShooter.Gravity
             Quaternion bodyRotation = m_body.rotation;
             Quaternion targetRotation = Quaternion.FromToRotation(bodyUp, gravityUp) * bodyRotation;
             bodyRotation = Quaternion.Slerp(bodyRotation, targetRotation, 50 * Time.deltaTime);
-            Debug.LogFormat("Body Rotation: {0} --- Target ROtation: {1}", bodyRotation.eulerAngles.ToString(), targetRotation.eulerAngles.ToString());
+            //Debug.LogFormat("Body Rotation: {0} --- Target ROtation: {1}", bodyRotation.eulerAngles.ToString(), targetRotation.eulerAngles.ToString());
         }
     }
 }
