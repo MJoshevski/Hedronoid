@@ -1,12 +1,16 @@
 using System.Collections.Generic;
 using UnityEngine;
-
+using Unity.Collections;
 
 [RequireComponent(typeof(Rigidbody))]
 public class CharacterController : MonoBehaviour
 {
     [Header("Refs")]
-    [SerializeField] BoxCollider BoxCollider;
+    [SerializeField]
+    BoxCollider BoxCollider;
+
+    [SerializeField]
+    LayerCollider FeetCollider;
 
     [Header("Settings")]
 
@@ -23,7 +27,8 @@ public class CharacterController : MonoBehaviour
     const float k_Half = 0.5f;
     float m_TurnAmount;
     float m_ForwardAmount;
-    Vector3 m_GroundNormal;
+    //TODO: get it from gravity service
+    Vector3 m_GroundNormal = Vector3.up;
     float _colliderHeight;
     Vector3 _boxColliderCenter;
     bool m_Crouching;
@@ -170,25 +175,8 @@ public class CharacterController : MonoBehaviour
 
     void CheckGroundStatus()
     {
-        RaycastHit hitInfo;
-#if UNITY_EDITOR
-        // helper to visualise the ground check ray in the scene view
-        Debug.DrawLine(transform.position + (Vector3.up * 0.1f), transform.position + (Vector3.up * 0.1f) + (Vector3.down * m_GroundCheckDistance), Color.red);
-#endif
-        // 0.1f is a small offset to start the ray from inside the character
-        // it is also good to note that the transform position in the sample assets is at the base of the character
-        if (Physics.Raycast(transform.position + (Vector3.up * 0.1f), Vector3.down, out hitInfo, m_GroundCheckDistance))
-        {
-            m_GroundNormal = hitInfo.normal;
-            m_IsGrounded = true;
-            // m_Animator.applyRootMotion = true;
-        }
-        else
-        {
-            m_IsGrounded = false;
-            m_GroundNormal = Vector3.up;
-            // m_Animator.applyRootMotion = false;
-        }
+        m_IsGrounded = FeetCollider.IsColliding();
+
     }
 
     public float minGroundNormalY = .65f;
