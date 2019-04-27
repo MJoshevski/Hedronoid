@@ -50,8 +50,8 @@ namespace UnityStandardAssets.Characters.ThirdPerson
             float v = CrossPlatformInputManager.GetAxis("Vertical");
             bool crouch = Input.GetKey(KeyCode.C);
 
-            if (Input.GetKeyDown(KeyCode.Alpha1))
-                m_Character.ChangeGravity();
+            // if (Input.GetKeyDown(KeyCode.Alpha1))
+            //     m_Character.ChangeGravity();
 
             // calculate move direction to pass to character
             if (m_Cam != null)
