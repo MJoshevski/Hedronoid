@@ -59,7 +59,7 @@ public class CharacterController : MonoSingleton<CharacterController>
         CharacterInput.Instance.OnPlatformSwitched += PlatformSwitched;
 
         //HACK: Remove this one we have gravity service
-        m_GravityPullVector = m_AllAtractors[0].transform.position;
+        m_GravityPullVector = new Vector3(0, m_AllAtractors[0].transform.up.y * -1, 0);
         m_currentAttractor = m_AllAtractors[0];
         //
 
