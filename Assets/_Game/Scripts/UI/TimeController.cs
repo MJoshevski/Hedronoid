@@ -33,7 +33,7 @@ public class TimeController : MonoBehaviour
         PlayButton.gameObject.SetActive(zeroTimescale);
         PauseButton.gameObject.SetActive(!zeroTimescale);
 
-        if (Input.GetKeyDown(KeyCode.P))
+        if (Input.GetKeyDown(KeyCode.Escape))
         {
             Time.timeScale = zeroTimescale ? 1 : 0;
         }

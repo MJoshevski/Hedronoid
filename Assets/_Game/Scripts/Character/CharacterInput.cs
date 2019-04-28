@@ -1,4 +1,5 @@
 using System;
+using MDKShooter;
 using UnityEngine;
 using UnityStandardAssets.CrossPlatformInput;
 
@@ -10,9 +11,7 @@ public class CharacterInput : MonoSingleton<CharacterInput>
     private Transform m_Cam;                  // A reference to the main camera in the scenes transform
     private Vector3 m_CamForward;             // The current forward direction of the camera
     private Vector3 m_Move;
-    private bool m_Jump;                      // the world-relative desired move direction, calculated from the camForward and user input.
 
-    private Singleton<CharacterInput> characterInput;
     public Action<GravityDirections> OnPlatformSwitched = delegate { };
 
     private void Start()
@@ -34,22 +33,14 @@ public class CharacterInput : MonoSingleton<CharacterInput>
     }
 
 
-    private void Update()
-    {
-        if (!m_Jump)
-        {
-            m_Jump = CrossPlatformInputManager.GetButtonDown("Jump");
-        }
-    }
-
 
     // Fixed update is called in sync with physics
     private void FixedUpdate()
     {
+        var playerActions = InputManager.Instance.PlayerActions;
         // read inputs
-        float h = CrossPlatformInputManager.GetAxis("Horizontal");
-        float v = CrossPlatformInputManager.GetAxis("Vertical");
-        bool crouch = Input.GetKey(KeyCode.C);
+        float h = playerActions.Move.X;
+        float v = playerActions.Move.Y;
 
         //Gravity switch input for testing
         if (Input.GetKeyDown(KeyCode.Alpha1))
@@ -73,13 +64,15 @@ public class CharacterInput : MonoSingleton<CharacterInput>
             // we use world-relative directions in the case of no main camera
             m_Move = v * Vector3.forward + h * Vector3.right;
         }
-#if !MOBILE_INPUT
-        // walk speed multiplier
-        if (Input.GetKey(KeyCode.LeftShift)) m_Move *= 0.5f;
-#endif
+        // #if !MOBILE_INPUT
+        //         // walk speed multiplier
+        //         if (Input.GetKey(KeyCode.LeftShift)) m_Move *= 0.5f;
+        // #endif
 
+        // bool crouch = Input.GetKey(KeyCode.C);
+        bool crouch = false;
+        bool jump = playerActions.Jump.WasPressed;
         // pass all parameters to the character control script
-        m_Character.Move(m_Move, crouch, m_Jump);
-        m_Jump = false;
+        m_Character.Move(m_Move, crouch, jump);
     }
 }

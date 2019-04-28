@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-public abstract class MonoSingleton<T> : MonoBehaviour where T : MonoBehaviour
+public abstract class MonoSingleton<T> : MonoBehaviour where T : class
 {
     static T _instance;
 
@@ -13,7 +13,7 @@ public abstract class MonoSingleton<T> : MonoBehaviour where T : MonoBehaviour
             if (_instance == null)
             {
                 Debug.LogError("Trying to access not awoken instance");
-                return null;
+                return default(T);
             }
             return _instance;
         }
@@ -26,6 +26,6 @@ public abstract class MonoSingleton<T> : MonoBehaviour where T : MonoBehaviour
 
     protected virtual void OnDestroy()
     {
-        _instance = null;
+        _instance = default(T);
     }
 }

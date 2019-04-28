@@ -19,19 +19,14 @@ public class CursorLocker : MonoBehaviour
 
     void Update()
     {
-        if (Input.GetKeyDown(KeyCode.Escape))
-        {
-            UnlockCursorDisableCamera();
-        }
-        else if (Input.GetMouseButtonDown(0))
-        {
-            LockCursorEnableCamera();
-        }
-
         bool zeroTimeScale = Mathf.Approximately(0, Time.timeScale);
         if (zeroTimeScale)
         {
             UnlockCursorDisableCamera();
+        }
+        else
+        {
+            LockCursorEnableCamera();
         }
     }
 

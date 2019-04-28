@@ -3,7 +3,7 @@ using UnityEngine;
 using Unity.Collections;
 
 [RequireComponent(typeof(Rigidbody))]
-public class CharacterController : MonoSingleton<CharacterController>
+public class CharacterController : MonoBehaviour
 {
     [Header("Refs")]
     [SerializeField]
@@ -30,9 +30,12 @@ public class CharacterController : MonoSingleton<CharacterController>
     Vector3 m_GroundNormal = Vector3.up;
     private static float m_Gravity = -9.81f;
     [SerializeField] private float m_GravityRotationMultiplier = 5f;
-    /*[SerializeField]*/ private Vector3 m_GravityPullVector;
-    /*[SerializeField]*/ private Vector3 m_GravityUp;
-    /*[SerializeField]*/ private Vector3 m_TotalPull;
+    /*[SerializeField]*/
+    private Vector3 m_GravityPullVector;
+    /*[SerializeField]*/
+    private Vector3 m_GravityUp;
+    /*[SerializeField]*/
+    private Vector3 m_TotalPull;
     [SerializeField] List<GameObject> m_AllAtractors = new List<GameObject>();
     [SerializeField] private GameObject m_currentAttractor;
     //
@@ -205,7 +208,7 @@ public class CharacterController : MonoSingleton<CharacterController>
 
         //Apply adequate rotation
         if (m_Rigidbody.transform.up != m_currentAttractor.transform.up)
-            m_Rigidbody.rotation = Quaternion.Slerp(m_Rigidbody.rotation, m_currentAttractor.transform.rotation, m_GravityRotationMultiplier * Time.deltaTime);        
+            m_Rigidbody.rotation = Quaternion.Slerp(m_Rigidbody.rotation, m_currentAttractor.transform.rotation, m_GravityRotationMultiplier * Time.deltaTime);
 
         //Debugging
         m_GravityUp = m_GravityPullVector.normalized * -1;
@@ -280,7 +283,7 @@ public class CharacterController : MonoSingleton<CharacterController>
         {
             case GravityDirections.DOWN:
                 m_GravityPullVector = new Vector3(0, m_AllAtractors[0].transform.up.y * -1, 0);
-                m_currentAttractor = m_AllAtractors[0];               
+                m_currentAttractor = m_AllAtractors[0];
                 break;
             case GravityDirections.UP:
                 m_GravityPullVector = new Vector3(0, m_AllAtractors[1].transform.up.y * -1, 0);
