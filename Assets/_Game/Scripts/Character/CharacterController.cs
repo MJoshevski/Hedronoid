@@ -2,7 +2,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using Unity.Collections;
 
-public class CharacterController : MonoBehaviour
+public class CharacterController : MonoSingleton<CharacterController>
 {
     [Header("Refs")]
     [SerializeField]

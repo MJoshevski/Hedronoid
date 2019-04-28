@@ -34,7 +34,13 @@ public class CharacterInput : MonoBehaviour
         if (_camera != null)
         {
             // calculate camera relative direction to move:
-            _camForward = Vector3.Scale(_camera.forward, new Vector3(1, 0, 1)).normalized;
+
+            // calculate camera relative direction to move:
+            if (GravityService.Instance.GravityUp.x == 0)
+                _camForward = Vector3.Scale(_camera.forward, new Vector3(1, 0, 1)).normalized;
+            else
+                _camForward = Vector3.Scale(_camera.forward, new Vector3(0, 1, 1)).normalized;
+
             _move = v * _camForward + h * _camera.right;
         }
         else
