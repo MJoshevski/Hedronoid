@@ -29,9 +29,9 @@ public class CharacterController : MonoSingleton<CharacterController>
     //TODO: get it from gravity service
     Vector3 m_GroundNormal = Vector3.up;
     private static float m_Gravity = -9.81f;
-    [SerializeField] private Vector3 m_GravityPullVector;
-    [SerializeField] private Vector3 m_GravityUp;
-    [SerializeField] private Vector3 dummyGrav;
+    /*[SerializeField]*/ private Vector3 m_GravityPullVector;
+    /*[SerializeField]*/ private Vector3 m_GravityUp;
+    /*[SerializeField]*/ private Vector3 m_TotalPull;
     [SerializeField] List<GameObject> m_AllAtractors = new List<GameObject>();
     [SerializeField] private GameObject m_currentAttractor;
     //
@@ -200,10 +200,15 @@ public class CharacterController : MonoSingleton<CharacterController>
     void FixedUpdate()
     {
         //Apply adequate gravity
-        m_GravityUp = m_GravityPullVector.normalized * -1;
-        dummyGrav = m_GravityUp * m_Gravity * m_GravityMultiplier;
-        m_Rigidbody.rotation = Quaternion.Slerp(m_Rigidbody.rotation, m_currentAttractor.transform.rotation, 5 * Time.deltaTime);
         m_Rigidbody.AddForce(m_GravityUp * m_Gravity * m_GravityMultiplier);
+
+        //Apply adequate rotation
+        if (m_Rigidbody.transform.up != m_currentAttractor.transform.up)
+            m_Rigidbody.rotation = Quaternion.Slerp(m_Rigidbody.rotation, m_currentAttractor.transform.rotation, 5 * Time.deltaTime);        
+
+        //Debugging
+        m_GravityUp = m_GravityPullVector.normalized * -1;
+        m_TotalPull = m_GravityUp * m_Gravity * m_GravityMultiplier;
 
         //velocity += gravityModifier * Physics.gravity * Time.deltaTime;
         velocity.x = targetVelocity.x;
