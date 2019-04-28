@@ -17,6 +17,7 @@ public class CharacterController : MonoBehaviour
     [SerializeField] float m_StationaryTurnSpeed = 180;
     [SerializeField] float m_JumpPower = 12f;
     [Range(1f, 4f)] [SerializeField] float m_GravityMultiplier = 1f;
+    [Range(1f, 4f)] [SerializeField] float m_AirborneGravityMultiplier = 1f;
     [SerializeField] float m_MoveSpeedMultiplier = 1f;
 
     Rigidbody m_Rigidbody;
@@ -152,7 +153,7 @@ public class CharacterController : MonoBehaviour
     void HandleAirborneMovement()
     {
         // apply extra gravity from multiplier:
-        Vector3 extraGravityForce = (m_Gravity * m_GravityUp * m_GravityMultiplier) - (m_Gravity * m_GravityUp);
+        Vector3 extraGravityForce = (m_Gravity * m_GravityUp * m_AirborneGravityMultiplier) - (m_Gravity * m_GravityUp);
         m_Rigidbody.AddForce(extraGravityForce);
     }
 
@@ -179,8 +180,12 @@ public class CharacterController : MonoBehaviour
     {
 
         var velocity = transform.forward * m_ForwardAmount * m_MoveSpeedMultiplier * Time.deltaTime;
+
+		// HACK (for different up-vectors)
         // we preserve the existing y part of the current velocity.
-        velocity.y = m_Rigidbody.velocity.y;
+        if(m_GravityUp.x == 0) velocity.y = m_Rigidbody.velocity.y;
+        else velocity.x = m_Rigidbody.velocity.x;
+
         m_Rigidbody.velocity = velocity;
     }
 
@@ -208,7 +213,10 @@ public class CharacterController : MonoBehaviour
 
         //Apply adequate rotation
         if (m_Rigidbody.transform.up != m_currentAttractor.transform.up)
-            m_Rigidbody.rotation = Quaternion.Slerp(m_Rigidbody.rotation, m_currentAttractor.transform.rotation, m_GravityRotationMultiplier * Time.deltaTime);
+            m_Rigidbody.rotation = Quaternion.Slerp(
+                m_Rigidbody.rotation, 
+                m_currentAttractor.transform.rotation, 
+                m_GravityRotationMultiplier * Time.deltaTime);
 
         //Debugging
         m_GravityUp = m_GravityPullVector.normalized * -1;
@@ -282,20 +290,19 @@ public class CharacterController : MonoBehaviour
         switch (dir)
         {
             case GravityDirections.DOWN:
-                m_GravityPullVector = new Vector3(0, m_AllAtractors[0].transform.up.y * -1, 0);
+                m_GravityPullVector = new Vector3(0, m_AllAtractors[0].transform.up.y * -1, 0).normalized;
                 m_currentAttractor = m_AllAtractors[0];
                 break;
             case GravityDirections.UP:
-                m_GravityPullVector = new Vector3(0, m_AllAtractors[1].transform.up.y * -1, 0);
-                m_GravityPullVector = m_AllAtractors[1].transform.position;
+                m_GravityPullVector = new Vector3(0, m_AllAtractors[1].transform.up.y * -1, 0).normalized;
                 m_currentAttractor = m_AllAtractors[1];
                 break;
             case GravityDirections.LEFT:
-                m_GravityPullVector = new Vector3(m_AllAtractors[2].transform.up.x * -1, 0, 0);
+                m_GravityPullVector = new Vector3(m_AllAtractors[2].transform.up.x * -1, 0, 0).normalized;
                 m_currentAttractor = m_AllAtractors[2];
                 break;
             case GravityDirections.RIGHT:
-                m_GravityPullVector = new Vector3(m_AllAtractors[3].transform.up.x * -1, 0, 0);
+                m_GravityPullVector = new Vector3(m_AllAtractors[3].transform.up.x * -1, 0, 0).normalized;
                 m_currentAttractor = m_AllAtractors[3];
                 break;
         }
