@@ -164,7 +164,12 @@ public class CharacterController : MonoBehaviour
         if (jump && !crouch)
         {
             // jump!
-            m_Rigidbody.velocity = new Vector3(m_Rigidbody.velocity.x, m_Rigidbody.transform.up.y * m_JumpPower, m_Rigidbody.velocity.z);
+			//HACK (same thing with the up-axis, like all the way around)
+            if(m_GravityUp.x == 0)
+                m_Rigidbody.velocity = new Vector3(m_Rigidbody.velocity.x, m_Rigidbody.transform.up.y * m_JumpPower, m_Rigidbody.velocity.z);
+            else
+                m_Rigidbody.velocity = new Vector3(m_Rigidbody.transform.up.x * m_JumpPower, m_Rigidbody.velocity.y, m_Rigidbody.velocity.z);
+
             m_IsGrounded = false;
         }
     }
