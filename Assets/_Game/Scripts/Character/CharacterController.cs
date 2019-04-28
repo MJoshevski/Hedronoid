@@ -29,6 +29,7 @@ public class CharacterController : MonoSingleton<CharacterController>
     //TODO: get it from gravity service
     Vector3 m_GroundNormal = Vector3.up;
     private static float m_Gravity = -9.81f;
+    [SerializeField] private float m_GravityRotationMultiplier = 5f;
     /*[SerializeField]*/ private Vector3 m_GravityPullVector;
     /*[SerializeField]*/ private Vector3 m_GravityUp;
     /*[SerializeField]*/ private Vector3 m_TotalPull;
@@ -204,7 +205,7 @@ public class CharacterController : MonoSingleton<CharacterController>
 
         //Apply adequate rotation
         if (m_Rigidbody.transform.up != m_currentAttractor.transform.up)
-            m_Rigidbody.rotation = Quaternion.Slerp(m_Rigidbody.rotation, m_currentAttractor.transform.rotation, 5 * Time.deltaTime);        
+            m_Rigidbody.rotation = Quaternion.Slerp(m_Rigidbody.rotation, m_currentAttractor.transform.rotation, m_GravityRotationMultiplier * Time.deltaTime);        
 
         //Debugging
         m_GravityUp = m_GravityPullVector.normalized * -1;
