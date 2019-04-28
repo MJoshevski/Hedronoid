@@ -160,6 +160,7 @@ MonoBehaviour:
   m_GravityMultiplier: 1
   m_MoveSpeedMultiplier: 250
   m_IsGrounded: 0
+  m_GravityRotationMultiplier: 5
   m_AllAtractors:
   - {fileID: 0}
   - {fileID: 0}
@@ -170,7 +171,6 @@ MonoBehaviour:
     serializedVersion: 2
     m_Bits: 3072
   minGroundNormalY: 0.65
-  gravityModifier: 21.92
 --- !u!1 &5877965305757545085
 GameObject:
   m_ObjectHideFlags: 0
@@ -199,7 +199,7 @@ Transform:
   m_GameObject: {fileID: 5877965305757545085}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
   m_LocalPosition: {x: 0, y: -0.05, z: 0}
-  m_LocalScale: {x: 0.5, y: 0.1128, z: 0.5}
+  m_LocalScale: {x: 1.3191794, y: 0.29760692, z: 1.3191794}
   m_Children: []
   m_Father: {fileID: 5869925505561883532}
   m_RootOrder: 1
@@ -238,8 +238,8 @@ BoxCollider:
   m_IsTrigger: 1
   m_Enabled: 1
   serializedVersion: 2
-  m_Size: {x: 1, y: 1, z: 1}
-  m_Center: {x: 0, y: 0, z: 0}
+  m_Size: {x: 1, y: 2.3683808, z: 1}
+  m_Center: {x: 0, y: -0.6841906, z: 0}
 --- !u!1 &8199128269527489037
 GameObject:
   m_ObjectHideFlags: 0
