@@ -10,7 +10,8 @@ GameObject:
   m_Component:
   - component: {fileID: 2679362505920283240}
   - component: {fileID: 2679362505917431084}
-  - component: {fileID: 2679362505910447020}
+  - component: {fileID: 8566071669599544002}
+  - component: {fileID: 4483128039469355680}
   - component: {fileID: 2679362505910447022}
   m_Layer: 0
   m_Name: Camera
@@ -50,7 +51,7 @@ Rigidbody:
   m_Interpolate: 1
   m_Constraints: 0
   m_CollisionDetection: 0
---- !u!114 &2679362505910447020
+--- !u!114 &8566071669599544002
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -59,7 +60,7 @@ MonoBehaviour:
   m_GameObject: {fileID: 2679362505920650824}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: e44af8091779fcb40801d5b284353dbe, type: 3}
+  m_Script: {fileID: 11500000, guid: 21d611a48a46143ae9d47926b057d576, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
   m_Target: {fileID: 0}
@@ -70,8 +71,21 @@ MonoBehaviour:
   m_TurnSmoothing: 0
   m_TiltMax: 90
   m_TiltMin: 45
-  m_LockCursor: 1
   m_VerticalAutoReturn: 0
+--- !u!114 &4483128039469355680
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2679362505920650824}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 4a7fee9d55a994799be839fab802f650, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  LockCursor: 1
+  Camera: {fileID: 8566071669599544002}
 --- !u!114 &2679362505910447022
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -148,7 +162,7 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 2679362505920650830}
   m_LocalRotation: {x: 0, y: 0.000000063325004, z: 0, w: 1}
-  m_LocalPosition: {x: 0.25, y: 0, z: -2}
+  m_LocalPosition: {x: 0.25, y: 0, z: -4.68}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children:
   - {fileID: 4781991692998856654}
@@ -180,7 +194,7 @@ Camera:
     height: 1
   near clip plane: 0.02
   far clip plane: 400
-  field of view: 60
+  field of view: 100
   orthographic: 0
   orthographic size: 100
   m_Depth: -1
