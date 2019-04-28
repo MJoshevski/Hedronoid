@@ -42,7 +42,7 @@ namespace MDKShooter
         protected void Update()
         {
             HandleRotationMovement();
-            Debug.Log(m_Target.rotation.eulerAngles.ToString());
+            //Debug.Log(m_Target.rotation.eulerAngles.ToString());
         }
 
         protected override void FollowTarget(float deltaTime)
