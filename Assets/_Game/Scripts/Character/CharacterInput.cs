@@ -26,14 +26,15 @@ public class CharacterInput : MonoBehaviour
         float h = playerActions.Move.X;
         float v = playerActions.Move.Y;
 
-        _move = v * _camera.forward + h * _camera.right;
+        var moveDirection = v * _camera.forward + h * _camera.right;
+        moveDirection = Vector3.ProjectOnPlane(moveDirection, GravityService.Instance.GravityUp);
+        moveDirection.Normalize();
 
-        Debug.DrawRay(transform.position, _move, Color.yellow);
+        Debug.DrawRay(transform.position, moveDirection, Color.yellow);
 
-        _character.Move(_move, crouch: false);
+        _character.MoveDirection = moveDirection;
     }
 
-    CharacterController _character; // A reference to the ThirdPersonCharacter on the object
+    CharacterController _character;
     Transform _camera;
-    Vector3 _move;
 }
