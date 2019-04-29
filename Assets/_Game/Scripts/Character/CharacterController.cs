@@ -7,12 +7,10 @@ public class CharacterController : MonoSingleton<CharacterController>
     [Header("Refs")]
     [SerializeField]
     LayerCollider FeetCollider;
-
     public Rigidbody Rigidbody;
 
     [Header("Settings")]
     [SerializeField] CharacterMoveSettings CharacterMoveSettings;
-    [Range(1f, 4f)] [SerializeField] float m_GravityMultiplier = 1f;
     [SerializeField] private float m_GravityRotationMultiplier = 5f;
     [SerializeField] bool _isGrounded;
     public bool IsGrounded { get { return _isGrounded; } set { _isGrounded = value; } }
@@ -25,8 +23,6 @@ public class CharacterController : MonoSingleton<CharacterController>
         MoveForward();
 
         var gravityService = GravityService.Instance;
-        //Apply adequate gravity
-        Rigidbody.AddForce(gravityService.GravityUp * gravityService.Gravity * m_GravityMultiplier);
 
         //Apply adequate rotation
         if (Rigidbody.transform.up != gravityService.GravityUp)
