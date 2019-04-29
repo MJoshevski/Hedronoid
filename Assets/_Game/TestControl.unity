@@ -23,7 +23,7 @@ RenderSettings:
   m_AmbientSkyColor: {r: 1.319508, g: 1.319508, b: 1.319508, a: 1}
   m_AmbientEquatorColor: {r: 0.114, g: 0.125, b: 0.133, a: 1}
   m_AmbientGroundColor: {r: 0.047, g: 0.043, b: 0.035, a: 1}
-  m_AmbientIntensity: 2.1
+  m_AmbientIntensity: 2.61
   m_AmbientMode: 0
   m_SubtractiveShadowColor: {r: 0.42, g: 0.478, b: 0.627, a: 1}
   m_SkyboxMaterial: {fileID: 2100000, guid: bf1bf92a3ce592e40b898be6c21cc2fa, type: 2}
@@ -327,6 +327,11 @@ PrefabInstance:
     - target: {fileID: 1673355011540225911, guid: ffee8eb1def04426b938066cd70993cb,
         type: 3}
       propertyPath: m_Pivot.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 1772530825984408950, guid: ffee8eb1def04426b938066cd70993cb,
+        type: 3}
+      propertyPath: m_SizeDelta.y
       value: 0
       objectReference: {fileID: 0}
     m_RemovedComponents: []
@@ -8299,6 +8304,16 @@ PrefabInstance:
       propertyPath: m_Enabled
       value: 1
       objectReference: {fileID: 0}
+    - target: {fileID: 8566071669599544002, guid: c7336a1fec5a9444eb48d3edaff92b8f,
+        type: 3}
+      propertyPath: m_MoveSpeed
+      value: 12
+      objectReference: {fileID: 0}
+    - target: {fileID: 8566071669599544002, guid: c7336a1fec5a9444eb48d3edaff92b8f,
+        type: 3}
+      propertyPath: m_TurnSpeed
+      value: 2
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: c7336a1fec5a9444eb48d3edaff92b8f, type: 3}
 --- !u!1 &868424445
@@ -12222,6 +12237,32 @@ MeshFilter:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1267923536}
   m_Mesh: {fileID: 10202, guid: 0000000000000000e000000000000000, type: 0}
+--- !u!1 &1275077718 stripped
+GameObject:
+  m_CorrespondingSourceObject: {fileID: 5869925505561593352, guid: 3d386cfb14680421c892da295c39a6c9,
+    type: 3}
+  m_PrefabInstance: {fileID: 5869925505237446340}
+  m_PrefabAsset: {fileID: 0}
+--- !u!54 &1275077724 stripped
+Rigidbody:
+  m_CorrespondingSourceObject: {fileID: 5869925505566868056, guid: 3d386cfb14680421c892da295c39a6c9,
+    type: 3}
+  m_PrefabInstance: {fileID: 5869925505237446340}
+  m_PrefabAsset: {fileID: 0}
+--- !u!114 &1275077726
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1275077718}
+  m_Enabled: 0
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 02b0b254739634fdfafff7361887afd2, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  Magnitude: 10
+  Rigidbody: {fileID: 1275077724}
 --- !u!1 &1332820979
 GameObject:
   m_ObjectHideFlags: 0
@@ -12877,7 +12918,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 0
+  m_IsActive: 1
 --- !u!4 &1404922021
 Transform:
   m_ObjectHideFlags: 0
@@ -18400,7 +18441,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 0
+  m_IsActive: 1
 --- !u!4 &2003267528
 Transform:
   m_ObjectHideFlags: 0
@@ -20087,6 +20128,11 @@ PrefabInstance:
         type: 3}
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 1623772253456667958, guid: 3d386cfb14680421c892da295c39a6c9,
+        type: 3}
+      propertyPath: m_GravityMultiplier
+      value: 3
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 3d386cfb14680421c892da295c39a6c9, type: 3}
