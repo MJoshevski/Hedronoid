@@ -29,8 +29,7 @@ public class CharacterController : MonoSingleton<CharacterController>
     Vector3 _boxColliderCenter;
     bool m_Crouching;
 
-    [SerializeField]
-    LayerMask m_GroundLayer;
+    [SerializeField] LayerMask m_GroundLayer;
     Vector3 targetVelocity;
     bool grounded;
     Vector3 groundNormal;
@@ -68,62 +67,60 @@ public class CharacterController : MonoSingleton<CharacterController>
 
         // control and velocity handling is different when grounded and airborne:
         if (!IsGrounded)
-        {
             HandleAirborneMovement();
-        }
 
-        ScaleCapsuleForCrouching(crouch);
-        PreventStandingInLowHeadroom();
+        // ScaleCapsuleForCrouching(crouch);
+        // PreventStandingInLowHeadroom();
 
         MoveForward();
     }
 
 
-    void ScaleCapsuleForCrouching(bool crouch)
-    {
-        if (IsGrounded && crouch)
-        {
-            if (m_Crouching) return;
-            var size = BoxCollider.size;
-            size.y = size.y / 2;
-            BoxCollider.size = size;
-            BoxCollider.center = BoxCollider.center / 2f;
+    // void ScaleCapsuleForCrouching(bool crouch)
+    // {
+    //     if (IsGrounded && crouch)
+    //     {
+    //         if (m_Crouching) return;
+    //         var size = BoxCollider.size;
+    //         size.y = size.y / 2;
+    //         BoxCollider.size = size;
+    //         BoxCollider.center = BoxCollider.center / 2f;
 
-            m_Crouching = true;
-        }
-        else
-        {
-            var halfWidth = BoxCollider.size.x / 2f;
-            Ray crouchRay = new Ray(Rigidbody.position + Vector3.up * halfWidth * k_Half, Vector3.up);
-            float crouchRayLength = _colliderHeight - halfWidth * k_Half;
-            if (Physics.SphereCast(crouchRay, halfWidth * k_Half, crouchRayLength, Physics.AllLayers, QueryTriggerInteraction.Ignore))
-            {
-                m_Crouching = true;
-                return;
-            }
-            var size = BoxCollider.size;
-            size.y = _colliderHeight;
-            BoxCollider.size = size;
-            BoxCollider.center = _boxColliderCenter;
-            m_Crouching = false;
-        }
-    }
+    //         m_Crouching = true;
+    //     }
+    //     else
+    //     {
+    //         var halfWidth = BoxCollider.size.x / 2f;
+    //         Ray crouchRay = new Ray(Rigidbody.position + Vector3.up * halfWidth * k_Half, Vector3.up);
+    //         float crouchRayLength = _colliderHeight - halfWidth * k_Half;
+    //         if (Physics.SphereCast(crouchRay, halfWidth * k_Half, crouchRayLength, Physics.AllLayers, QueryTriggerInteraction.Ignore))
+    //         {
+    //             m_Crouching = true;
+    //             return;
+    //         }
+    //         var size = BoxCollider.size;
+    //         size.y = _colliderHeight;
+    //         BoxCollider.size = size;
+    //         BoxCollider.center = _boxColliderCenter;
+    //         m_Crouching = false;
+    //     }
+    // }
 
-    void PreventStandingInLowHeadroom()
-    {
-        // prevent standing up in crouch-only zones
-        if (!m_Crouching)
-        {
-            var quarterWidth = BoxCollider.size.x / 2f * k_Half;
+    // void PreventStandingInLowHeadroom()
+    // {
+    //     // prevent standing up in crouch-only zones
+    //     if (!m_Crouching)
+    //     {
+    //         var quarterWidth = BoxCollider.size.x / 2f * k_Half;
 
-            Ray crouchRay = new Ray(Rigidbody.position + Vector3.up * quarterWidth, Vector3.up);
-            float crouchRayLength = _colliderHeight - quarterWidth;
-            if (Physics.SphereCast(crouchRay, quarterWidth, crouchRayLength, Physics.AllLayers, QueryTriggerInteraction.Ignore))
-            {
-                m_Crouching = true;
-            }
-        }
-    }
+    //         Ray crouchRay = new Ray(Rigidbody.position + Vector3.up * quarterWidth, Vector3.up);
+    //         float crouchRayLength = _colliderHeight - quarterWidth;
+    //         if (Physics.SphereCast(crouchRay, quarterWidth, crouchRayLength, Physics.AllLayers, QueryTriggerInteraction.Ignore))
+    //         {
+    //             m_Crouching = true;
+    //         }
+    //     }
+    // }
 
     void HandleAirborneMovement()
     {
@@ -188,7 +185,6 @@ public class CharacterController : MonoSingleton<CharacterController>
         // m_GravityService.Instance.GravityUp = m_GravityPullVector.normalized * -1;
         // m_TotalPull = m_GravityService.Instance.GravityUp * m_Gravity * m_GravityMultiplier;
 
-        //velocity += gravityModifier * Physics.gravity * Time.deltaTime;
         velocity.x = targetVelocity.x;
 
         grounded = false;
@@ -227,6 +223,7 @@ public class CharacterController : MonoSingleton<CharacterController>
                 Vector3 currentNormal = hitBufferList[i].normal;
                 if (currentNormal.y > minGroundNormalY)
                 {
+                    Debug.Log("|_");
                     grounded = true;
                     if (yMovement)
                     {
@@ -238,7 +235,11 @@ public class CharacterController : MonoSingleton<CharacterController>
                 float projection = Vector2.Dot(velocity, currentNormal);
                 if (projection < 0)
                 {
+                    Debug.Log("->projection < 0");
+                    Debug.Log("->->vel from " + velocity);
+
                     velocity = velocity - projection * currentNormal;
+                    Debug.Log("->vel to " + velocity);
                 }
 
                 float modifiedDistance = hitBufferList[i].distance - shellRadius;
