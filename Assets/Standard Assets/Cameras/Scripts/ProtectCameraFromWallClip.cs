@@ -11,17 +11,17 @@ namespace UnityStandardAssets.Cameras
         public float sphereCastRadius = 0.1f;           // the radius of the sphere used to test for object between camera and target
         public bool visualiseInEditor;                  // toggle for visualising the algorithm through lines for the raycast in the editor
         public float closestDistance = 0.5f;            // the closest distance the camera can be from the target
-        public bool protecting { get; private set; }    // used for determining if there is an object between the target and the camera
+        public bool protecting { get; protected set; }    // used for determining if there is an object between the target and the camera
         public string dontClipTag = "Player";           // don't clip against objects with this tag (useful for not clipping against the targeted object)
 
-        private Transform m_Cam;                  // the transform of the camera
-        private Transform m_Pivot;                // the point at which the camera pivots around
-        private float m_OriginalDist;             // the original distance to the camera before any modification are made
-        private float m_MoveVelocity;             // the velocity at which the camera moved
-        private float m_CurrentDist;              // the current distance from the camera to the target
-        private Ray m_Ray = new Ray();                        // the ray used in the lateupdate for casting between the camera and the target
-        private RaycastHit[] m_Hits;              // the hits between the camera and the target
-        private RayHitComparer m_RayHitComparer;  // variable to compare raycast hit distances
+        protected Transform m_Cam;                  // the transform of the camera
+        protected Transform m_Pivot;                // the point at which the camera pivots around
+        protected float m_OriginalDist;             // the original distance to the camera before any modification are made
+        protected float m_MoveVelocity;             // the velocity at which the camera moved
+        protected float m_CurrentDist;              // the current distance from the camera to the target
+        protected Ray m_Ray = new Ray();                        // the ray used in the lateupdate for casting between the camera and the target
+        protected RaycastHit[] m_Hits;              // the hits between the camera and the target
+        protected RayHitComparer m_RayHitComparer;  // variable to compare raycast hit distances
 
 
         private void Start()
@@ -37,7 +37,7 @@ namespace UnityStandardAssets.Cameras
         }
 
 
-        private void LateUpdate()
+        protected virtual void LateUpdate()
         {
             // initially set the target distance
             float targetDist = m_OriginalDist;
