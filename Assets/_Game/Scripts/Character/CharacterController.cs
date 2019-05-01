@@ -5,9 +5,8 @@ using Unity.Collections;
 public class CharacterController : MonoSingleton<CharacterController>
 {
     [Header("Refs")]
-    [SerializeField]
-    LayerCollider FeetCollider;
-    public Rigidbody Rigidbody;
+    [SerializeField] LayerCollider FeetCollider;
+    [SerializeField] Rigidbody Rigidbody;
 
     [Header("Settings")]
     [SerializeField] CharacterMoveSettings CharacterMoveSettings;

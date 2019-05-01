@@ -7,7 +7,8 @@ using UnityEngine;
 public class CharacterDash : MonoBehaviour
 {
     [Header("Refs")]
-    [SerializeField] CharacterController CharacterController;
+    [SerializeField] Rigidbody Rigidbody;
+    [SerializeField] LayerCollider Collider;
 
     [Header("Settings")]
     [SerializeField] CharacterDashSettings CharacterDashSettings;
@@ -22,25 +23,68 @@ public class CharacterDash : MonoBehaviour
         {
             Debug.LogError("Could not find player action with name " + CharacterDashSettings.ActionName);
         }
+
+        if (Collider != null)
+        {
+            Collider.CollisionEnter += OnCollision;
+        }
     }
 
-    void Update()
+    void OnDestroy()
+    {
+        if (Collider != null)
+        {
+            Collider.CollisionEnter -= OnCollision;
+        }
+    }
+
+    void FixedUpdate()
     {
         if (!_playerAction.WasPressed)
             return;
 
-        if (CharacterDashSettings.ShouldBeGrounded && !CharacterController.IsGrounded)
+        if (_executions >= CharacterDashSettings.ExecutionsBeforeReset)
             return;
 
-        var gravityService = GravityService.Instance;
-        var rigidBody = CharacterController.Rigidbody;
-
-        var forceDirection = transform.TransformDirection(CharacterDashSettings.RelativeDirection);
-        forceDirection.Normalize();
-
-        Debug.DrawRay(transform.position, forceDirection, Color.green, 1f);
-        rigidBody.AddForce(forceDirection * CharacterDashSettings.Power, ForceMode.Impulse);
+        var forceSettings = CharacterDashSettings.PhysicalForce;
+        _actionCoroutine = StartCoroutine(DoApplyForceOverTime());
     }
 
+    void OnCollision(Collider other)
+    {
+        _executions = 0;
+    }
+
+    IEnumerator DoApplyForceOverTime()
+    {
+        _executions++;
+        var forceSettings = CharacterDashSettings.PhysicalForce;
+        var gravityService = GravityService.Instance;
+
+        float time = 0f;
+        AnimationCurve powerOverTime = forceSettings.PowerOverTime;
+        Keyframe lastKeyFrame = powerOverTime[powerOverTime.length - 1];
+        while (time <= lastKeyFrame.time)
+        {
+            var forceDirection = transform.TransformDirection(forceSettings.Direction);
+            forceDirection.Normalize();
+            float power = powerOverTime.Evaluate(time);
+            Debug.DrawRay(transform.position, forceDirection, Color.green);
+            Rigidbody.AddForce(forceDirection * power, forceSettings.ForceMode);
+
+            yield return new WaitForFixedUpdate();
+
+            time += Time.fixedDeltaTime;
+        }
+
+        if (!Collider)
+        {
+            _executions--;
+        }
+    }
+
+
+    int _executions = 0;
     InControl.PlayerAction _playerAction;
+    Coroutine _actionCoroutine = null;
 }

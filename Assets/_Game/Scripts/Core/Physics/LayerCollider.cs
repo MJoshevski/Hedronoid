@@ -1,10 +1,14 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using UnityEngine;
 
 public class LayerCollider : MonoBehaviour
 {
     [SerializeField]
     LayerMask LayerMask;
+
+    public event Action<Collider> CollisionEnter;
+    public event Action<Collider> CollisionExit;
 
     public bool IsColliding()
     {
@@ -17,6 +21,7 @@ public class LayerCollider : MonoBehaviour
         if (LayerMask.Contains(go.layer))
         {
             _collidingObjects.Add(go);
+            this.Raise(CollisionEnter, other);
         }
     }
 
@@ -26,6 +31,7 @@ public class LayerCollider : MonoBehaviour
         if (LayerMask.Contains(go.layer))
         {
             _collidingObjects.Remove(go);
+            this.Raise(CollisionExit, other);
         }
     }
 

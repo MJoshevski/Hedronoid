@@ -156,7 +156,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: bf44902be7b2e498fa6f52bec847c625, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  CharacterController: {fileID: 1623772253456667958}
+  Rigidbody: {fileID: 5869925505566868056}
+  Collider: {fileID: 5191230440869478058}
   CharacterDashSettings: {fileID: 11400000, guid: 75808c1548bf24196935ccc05ecff254,
     type: 2}
 --- !u!114 &5329574447273562964
@@ -171,7 +172,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: bf44902be7b2e498fa6f52bec847c625, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  CharacterController: {fileID: 1623772253456667958}
+  Rigidbody: {fileID: 5869925505566868056}
+  Collider: {fileID: 0}
   CharacterDashSettings: {fileID: 11400000, guid: c3596e1d78c26415cac3f469d1320c30,
     type: 2}
 --- !u!114 &1623772253456667958

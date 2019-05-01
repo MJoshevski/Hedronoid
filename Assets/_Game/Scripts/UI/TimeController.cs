@@ -9,9 +9,6 @@ public class TimeController : MonoBehaviour
     Button PlayButton;
 
     [SerializeField]
-    Button PauseButton;
-
-    [SerializeField]
     Text TimeScaleText;
 
     void Start()
@@ -20,10 +17,6 @@ public class TimeController : MonoBehaviour
         {
             Time.timeScale = 1;
         });
-        PauseButton.onClick.AddListener(() =>
-        {
-            Time.timeScale = 0;
-        });
     }
 
     void Update()
@@ -31,7 +24,6 @@ public class TimeController : MonoBehaviour
         TimeScaleText.text = Time.timeScale.ToString();
         bool zeroTimescale = Mathf.Approximately(0, Time.timeScale);
         PlayButton.gameObject.SetActive(zeroTimescale);
-        PauseButton.gameObject.SetActive(!zeroTimescale);
 
         if (Input.GetKeyDown(KeyCode.Escape))
         {
