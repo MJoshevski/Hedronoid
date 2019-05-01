@@ -75,7 +75,8 @@ public class CharacterDash : MonoBehaviour, IMoveDirectionDependent
         float time = 0f;
         AnimationCurve powerOverTime = forceSettings.PowerOverTime;
         Keyframe lastKeyFrame = powerOverTime[powerOverTime.length - 1];
-        while (time <= lastKeyFrame.time)
+        while (time <= lastKeyFrame.time
+            && (!CharacterDashSettings.ContinuousInput || (CharacterDashSettings.ContinuousInput && _playerAction.IsPressed)))
         {
             float power = powerOverTime.Evaluate(time);
 
