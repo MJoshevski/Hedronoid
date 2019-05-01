@@ -66,12 +66,11 @@ MonoBehaviour:
   m_Target: {fileID: 0}
   m_AutoTargetPlayer: 1
   m_UpdateType: 0
-  m_MoveSpeed: 10
+  m_MoveSpeed: 60
   m_TurnSpeed: 1.5
-  m_TurnSmoothing: 0
+  m_GravityAdaptTurnSpeed: 500
   m_TiltMax: 90
   m_TiltMin: 45
-  m_VerticalAutoReturn: 0
 --- !u!114 &4483128039469355680
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -93,7 +92,7 @@ MonoBehaviour:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 2679362505920650824}
-  m_Enabled: 0
+  m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 94b04ec3bda6b7747aa53936ef3b0ae2, type: 3}
   m_Name: 

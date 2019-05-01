@@ -8312,12 +8312,17 @@ PrefabInstance:
     - target: {fileID: 8566071669599544002, guid: c7336a1fec5a9444eb48d3edaff92b8f,
         type: 3}
       propertyPath: m_MoveSpeed
-      value: 12
+      value: 60
       objectReference: {fileID: 0}
     - target: {fileID: 8566071669599544002, guid: c7336a1fec5a9444eb48d3edaff92b8f,
         type: 3}
       propertyPath: m_TurnSpeed
-      value: 2
+      value: 4.5
+      objectReference: {fileID: 0}
+    - target: {fileID: 2679362505910447022, guid: c7336a1fec5a9444eb48d3edaff92b8f,
+        type: 3}
+      propertyPath: m_Enabled
+      value: 1
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: c7336a1fec5a9444eb48d3edaff92b8f, type: 3}
