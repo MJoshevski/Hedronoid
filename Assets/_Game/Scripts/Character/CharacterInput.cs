@@ -3,8 +3,6 @@ using MDKShooter;
 using UnityEngine;
 using UnityStandardAssets.CrossPlatformInput;
 
-
-[RequireComponent(typeof(CharacterController))]
 public class CharacterInput : MonoBehaviour
 {
     void Start()
@@ -17,7 +15,6 @@ public class CharacterInput : MonoBehaviour
         {
             Debug.LogError("Warning: no main camera found. Third person character needs a Camera tagged \"MainCamera\", for camera-relative controls.");
         }
-        _character = GetComponent<CharacterController>();
     }
 
     void FixedUpdate()
@@ -32,9 +29,12 @@ public class CharacterInput : MonoBehaviour
 
         Debug.DrawRay(transform.position, moveDirection, Color.yellow);
 
-        _character.MoveDirection = moveDirection;
+        var moveDirectionDependentComponents = GetComponents<IMoveDirectionDependent>();
+        for (int i = 0; i < moveDirectionDependentComponents.Length; i++)
+        {
+            moveDirectionDependentComponents[i].MoveDirection = moveDirection;
+        }
     }
 
-    CharacterController _character;
     Transform _camera;
 }

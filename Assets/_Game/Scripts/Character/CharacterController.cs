@@ -2,7 +2,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using Unity.Collections;
 
-public class CharacterController : MonoSingleton<CharacterController>
+public class CharacterController : MonoSingleton<CharacterController>, IMoveDirectionDependent
 {
     [Header("Refs")]
     [SerializeField] LayerCollider FeetCollider;
