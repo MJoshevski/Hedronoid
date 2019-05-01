@@ -4,7 +4,7 @@ using System.Linq;
 using MDKShooter;
 using UnityEngine;
 
-public class CharacterDash : MonoBehaviour
+public class CharacterDash : MonoBehaviour, IMoveDirectionDependent
 {
     [Header("Refs")]
     [SerializeField] Rigidbody Rigidbody;
@@ -12,6 +12,8 @@ public class CharacterDash : MonoBehaviour
 
     [Header("Settings")]
     [SerializeField] CharacterDashSettings CharacterDashSettings;
+
+    public Vector3 MoveDirection { get; set; }
 
     void Start()
     {
@@ -61,15 +63,24 @@ public class CharacterDash : MonoBehaviour
         var forceSettings = CharacterDashSettings.PhysicalForce;
         var gravityService = GravityService.Instance;
 
+        var moveDirection = MoveDirection;
+        if (moveDirection.sqrMagnitude < .25f)
+            moveDirection = transform.forward;
+
+        var forceDirection = Quaternion.FromToRotation(Vector3.forward, moveDirection)
+            * GravityService.Instance.GravityRotation
+            * forceSettings.Direction;
+        forceDirection.Normalize();
+
         float time = 0f;
         AnimationCurve powerOverTime = forceSettings.PowerOverTime;
         Keyframe lastKeyFrame = powerOverTime[powerOverTime.length - 1];
         while (time <= lastKeyFrame.time)
         {
-            var forceDirection = transform.TransformDirection(forceSettings.Direction);
-            forceDirection.Normalize();
             float power = powerOverTime.Evaluate(time);
+
             Debug.DrawRay(transform.position, forceDirection, Color.green);
+
             Rigidbody.AddForce(forceDirection * power, forceSettings.ForceMode);
 
             yield return new WaitForFixedUpdate();
