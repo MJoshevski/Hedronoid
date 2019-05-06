@@ -42,6 +42,15 @@ public class CharacterDash : MonoBehaviour, IMoveDirectionDependent
 
     void FixedUpdate()
     {
+        if (CharacterDashSettings.ContinuousInput
+            && !_playerAction.IsPressed
+            && _forceApplyCoroutine != null)
+        {
+            StopCoroutine(_forceApplyCoroutine);
+            _forceApplyCoroutine = null;
+            AfterApplyForce();
+        }
+
         if (!_playerAction.WasPressed)
             return;
 
@@ -72,30 +81,22 @@ public class CharacterDash : MonoBehaviour, IMoveDirectionDependent
             * forceSettings.Direction;
         forceDirection.Normalize();
 
-        float time = 0f;
-        AnimationCurve powerOverTime = forceSettings.PowerOverTime;
-        Keyframe lastKeyFrame = powerOverTime[powerOverTime.length - 1];
-        while (time <= lastKeyFrame.time
-            && (!CharacterDashSettings.ContinuousInput || (CharacterDashSettings.ContinuousInput && _playerAction.IsPressed)))
-        {
-            float power = powerOverTime.Evaluate(time);
+        _forceApplyCoroutine = StartCoroutine(Rigidbody.ApplyForceContinuously(forceDirection, forceSettings));
+        yield return _forceApplyCoroutine;
 
-            Debug.DrawRay(transform.position, forceDirection, Color.green);
+        AfterApplyForce();
+    }
 
-            Rigidbody.AddForce(forceDirection * power, forceSettings.ForceMode);
-
-            yield return new WaitForFixedUpdate();
-
-            time += Time.fixedDeltaTime;
-        }
-
+    void AfterApplyForce()
+    {
         if (!Collider)
         {
             _executions--;
         }
+        _forceApplyCoroutine = null;
     }
 
-
+    Coroutine _forceApplyCoroutine = null;
     int _executions = 0;
     InControl.PlayerAction _playerAction;
     Coroutine _actionCoroutine = null;
