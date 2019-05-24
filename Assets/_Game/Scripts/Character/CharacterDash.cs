@@ -41,7 +41,7 @@ public class CharacterDash : MonoBehaviour, IMoveDirectionDependent
         }
     }
 
-    void FixedUpdate()
+    protected virtual void FixedUpdate()
     {
         if (CharacterDashSettings.ContinuousInput
             && !_playerAction.IsPressed
@@ -62,7 +62,7 @@ public class CharacterDash : MonoBehaviour, IMoveDirectionDependent
         _actionCoroutine = StartCoroutine(DoApplyForceOverTime());
     }
 
-    void OnCollision(Collider other)
+    void OnCollision(Collision collision)
     {
         _executions = 0;
     }
