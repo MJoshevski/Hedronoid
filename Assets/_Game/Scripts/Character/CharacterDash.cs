@@ -11,6 +11,7 @@ public class CharacterDash : MonoBehaviour, IMoveDirectionDependent
     [SerializeField] LayerCollider Collider;
 
     [Header("Settings")]
+    [DisplayScriptableObjectPropertiesAttribute]
     [SerializeField] CharacterDashSettings CharacterDashSettings;
 
     public Vector3 MoveDirection { get; set; }

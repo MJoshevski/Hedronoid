@@ -4,11 +4,12 @@ using UnityEngine;
 
 public class VelocityDamp : MonoBehaviour
 {
-    [Header("Settings")]
-    [SerializeField] VelocityDampSettings Settings;
-
     [Header("Refs")]
     [SerializeField] Rigidbody Rigidbody;
+
+    [Header("Settings")]
+    [DisplayScriptableObjectPropertiesAttribute]
+    [SerializeField] VelocityDampSettings Settings;
 
     void FixedUpdate()
     {

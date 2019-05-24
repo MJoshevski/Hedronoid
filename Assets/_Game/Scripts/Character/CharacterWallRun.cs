@@ -7,6 +7,7 @@ public class CharacterWallRun : MonoBehaviour
     [SerializeField] Rigidbody Rigidbody;
 
     [Header("Settings")]
+    [DisplayScriptableObjectPropertiesAttribute]
     [SerializeField] CharacterWallRunSettings Settings;
 
     public bool WallRunning { get { return _wallRunning; } private set { _wallRunning = value; } }

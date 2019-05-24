@@ -9,6 +9,7 @@ public class CharacterController : MonoSingleton<CharacterController>, IMoveDire
     [SerializeField] Rigidbody Rigidbody;
 
     [Header("Settings")]
+    [DisplayScriptableObjectPropertiesAttribute]
     [SerializeField] CharacterMoveSettings CharacterMoveSettings;
     [SerializeField] private float m_GravityRotationMultiplier = 5f;
     [SerializeField] bool _isGrounded;
