@@ -15,7 +15,6 @@ namespace MDKShooter
         // 			Camera
 
         [SerializeField] private float m_MoveSpeed = 1f;                                    // How fast the rig will move to keep up with the target's position.
-        [Range(0f, 10f)] [SerializeField] private float m_TurnSpeed = 1.5f;                 // How fast the rig will rotate from user input.
         [Range(100f, 1000f)] [SerializeField] private float m_GravityAdaptTurnSpeed = 500f; // How fast the rig will adapt to the newly changed gravity
         [SerializeField] private float m_TiltMax = 75f;                                     // The maximum value of the x axis rotation of the pivot.
         [SerializeField] private float m_TiltMin = 45f;                                     // The minimum value of the x axis rotation of the pivot.
@@ -33,10 +32,10 @@ namespace MDKShooter
             var y = playerAction.Look.Y;
 
 
-            var horizontalAngle = x * m_TurnSpeed * Time.deltaTime * InputManager.Instance.MouseHorizontalSensitivity;
+            var horizontalAngle = x * Time.deltaTime * InputManager.Instance.MouseHorizontalSensitivity;
             transform.Rotate(new Vector3(0, horizontalAngle, 0), Space.Self);
 
-            float verticalAngle = -y * m_TurnSpeed * Time.deltaTime * InputManager.Instance.MouseVerticalSensitivity;
+            float verticalAngle = -y * Time.deltaTime * InputManager.Instance.MouseVerticalSensitivity;
             m_Pivot.Rotate(new Vector3(verticalAngle, 0, 0), Space.Self);
 
             //TODO: add clamping

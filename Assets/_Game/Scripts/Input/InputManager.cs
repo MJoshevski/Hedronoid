@@ -7,8 +7,8 @@ namespace MDKShooter
     public interface IInputManager
     {
         PlayerActionSet PlayerActions { get; }
-        float MouseHorizontalSensitivity { get; }
-        float MouseVerticalSensitivity { get; }
+        float MouseHorizontalSensitivity { get; set; }
+        float MouseVerticalSensitivity { get; set; }
 
         void SaveBindings();
         void ResetBindings();
@@ -17,8 +17,8 @@ namespace MDKShooter
     public class InputManager : MonoSingleton<IInputManager>, IInputManager
     {
         public PlayerActionSet PlayerActions { get; private set; }
-        public float MouseHorizontalSensitivity { get; private set; }
-        public float MouseVerticalSensitivity { get; private set; }
+        public float MouseHorizontalSensitivity { get; set; }
+        public float MouseVerticalSensitivity { get; set; }
 
         protected override void Awake()
         {
@@ -33,6 +33,8 @@ namespace MDKShooter
         {
             var saveData = PlayerActions.Save();
             PlayerPrefs.SetString(KEY_BINDINGS, saveData);
+            PlayerPrefs.SetFloat(KEY_MOUSE_HORIZONTAL_SENSITIVITY, MouseHorizontalSensitivity);
+            PlayerPrefs.SetFloat(KEY_MOUSE_VERTICAL_SENSITIVITY, MouseVerticalSensitivity);
             PlayerPrefs.Save();
             Debug.Log("Bindings saved...");
 
