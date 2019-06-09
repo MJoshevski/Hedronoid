@@ -29,32 +29,95 @@ public class GravityService : MonoSingleton<IGravityService>, IGravityService
 
     void Start()
     {
-        GravityService.Instance.SwitchDirection(GravityDirections.DOWN);
+        Direction = GravityDirections.DOWN;
+        SwitchDirection(GravityDirections.UP);
     }
 
     public void SwitchDirection(GravityDirections direction)
     {
-        Direction = direction;
+        Debug.LogFormat("[Gravity] Switched from {0} to {1}", this.Direction, direction);
         switch (direction)
         {
             case GravityDirections.DOWN:
                 GravityDirection = Vector3.down;
-                GravityRotation = Quaternion.identity;
                 break;
             case GravityDirections.UP:
                 GravityDirection = Vector3.up;
-                GravityRotation = Quaternion.Euler(0, 0, 180);
                 break;
             case GravityDirections.LEFT:
                 GravityDirection = Vector3.left;
-                GravityRotation = Quaternion.Euler(0, 0, -90);
                 break;
             case GravityDirections.RIGHT:
                 GravityDirection = Vector3.right;
-                GravityRotation = Quaternion.Euler(0, 0, 90);
                 break;
         }
-
-        Debug.Log("Changed direction to " + direction);
+        switch (Direction)
+        {
+            case GravityDirections.UP:
+                {
+                    switch (direction)
+                    {
+                        case GravityDirections.DOWN:
+                            GravityRotation = Quaternion.Euler(0, -90, 0);
+                            break;
+                        case GravityDirections.LEFT:
+                            GravityRotation = Quaternion.Euler(90, 0, -90);
+                            break;
+                        case GravityDirections.RIGHT:
+                            GravityRotation = Quaternion.Euler(90, 0, 90);
+                            break;
+                    }
+                }
+                break;
+            case GravityDirections.DOWN:
+                {
+                    switch (direction)
+                    {
+                        case GravityDirections.UP:
+                            GravityRotation = Quaternion.Euler(0.0f, -270.0f, 180.0f);
+                            break;
+                        case GravityDirections.LEFT:
+                            GravityRotation = Quaternion.Euler(-90, 0, -90);
+                            break;
+                        case GravityDirections.RIGHT:
+                            GravityRotation = Quaternion.Euler(-90, 0, 90);
+                            break;
+                    }
+                }
+                break;
+            case GravityDirections.LEFT:
+                {
+                    switch (direction)
+                    {
+                        case GravityDirections.UP:
+                            GravityRotation = Quaternion.Euler(0.0f, -270.0f, 180.0f);
+                            break;
+                        case GravityDirections.DOWN:
+                            GravityRotation = Quaternion.Euler(180.0f, -90.0f, -180.0f);
+                            break;
+                        case GravityDirections.RIGHT:
+                            GravityRotation = Quaternion.Euler(0, 0, 90);
+                            break;
+                    }
+                }
+                break;
+            case GravityDirections.RIGHT:
+                {
+                    switch (direction)
+                    {
+                        case GravityDirections.UP:
+                            GravityRotation = Quaternion.Euler(0, 180, 180);
+                            break;
+                        case GravityDirections.DOWN:
+                            GravityRotation = Quaternion.Euler(0, -90, 0);
+                            break;
+                        case GravityDirections.LEFT:
+                            GravityRotation = Quaternion.Euler(0, 180, 90);
+                            break;
+                    }
+                }
+                break;
+        }
+        Direction = direction;
     }
 }
