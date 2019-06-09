@@ -15,7 +15,7 @@ public class TimeController : MonoBehaviour
     {
         PlayButton.onClick.AddListener(() =>
         {
-            Time.timeScale = 1;
+            Time.timeScale = _timeScaleBeforePause;
         });
     }
 
@@ -27,7 +27,20 @@ public class TimeController : MonoBehaviour
 
         if (Input.GetKeyDown(KeyCode.Escape))
         {
-            Time.timeScale = zeroTimescale ? 1 : 0;
+            _timeScaleBeforePause = Time.timeScale;
+
+            Time.timeScale = zeroTimescale ? _timeScaleBeforePause : 0;
+        }
+
+        if (Input.GetKeyDown(KeyCode.Equals))
+        {
+            Time.timeScale += .25f;
+        }
+        if (Input.GetKeyDown(KeyCode.Minus))
+        {
+            Time.timeScale -= .25f;
         }
     }
+
+    float _timeScaleBeforePause;
 }
