@@ -50,6 +50,12 @@ public class GravityService : MonoSingleton<IGravityService>, IGravityService
             case GravityDirections.RIGHT:
                 GravityDirection = Vector3.right;
                 break;
+            case GravityDirections.FRONT:
+                GravityDirection = Vector3.forward;
+                break;
+            case GravityDirections.BACK:
+                GravityDirection = Vector3.back;
+                break;
         }
         switch (Direction)
         {
@@ -65,6 +71,14 @@ public class GravityService : MonoSingleton<IGravityService>, IGravityService
                             break;
                         case GravityDirections.RIGHT:
                             GravityRotation = Quaternion.Euler(90, 0, 90);
+                            break;
+                        case GravityDirections.FRONT:
+                            GravityDirection = Vector3.forward;
+                            GravityRotation = Quaternion.Euler(-90, 0, 0);
+                            break;
+                        case GravityDirections.BACK:
+                            GravityDirection = Vector3.back;
+                            GravityRotation = Quaternion.Euler(90, 0, 0);
                             break;
                     }
                 }
@@ -82,6 +96,14 @@ public class GravityService : MonoSingleton<IGravityService>, IGravityService
                         case GravityDirections.RIGHT:
                             GravityRotation = Quaternion.Euler(-90, 0, 90);
                             break;
+                        case GravityDirections.FRONT:
+                            GravityDirection = Vector3.forward;
+                            GravityRotation = Quaternion.Euler(-90, 0, 0);
+                            break;
+                        case GravityDirections.BACK:
+                            GravityDirection = Vector3.back;
+                            GravityRotation = Quaternion.Euler(90, 0, 0);
+                            break;
                     }
                 }
                 break;
@@ -98,6 +120,14 @@ public class GravityService : MonoSingleton<IGravityService>, IGravityService
                         case GravityDirections.RIGHT:
                             GravityRotation = Quaternion.Euler(0, 0, 90);
                             break;
+                        case GravityDirections.FRONT:
+                            GravityDirection = Vector3.forward;
+                            GravityRotation = Quaternion.Euler(-90, 0, 0);
+                            break;
+                        case GravityDirections.BACK:
+                            GravityDirection = Vector3.back;
+                            GravityRotation = Quaternion.Euler(90, 0, 0);
+                            break;
                     }
                 }
                 break;
@@ -113,6 +143,62 @@ public class GravityService : MonoSingleton<IGravityService>, IGravityService
                             break;
                         case GravityDirections.LEFT:
                             GravityRotation = Quaternion.Euler(0, 180, 90);
+                            break;
+                        case GravityDirections.FRONT:
+                            GravityDirection = Vector3.forward;
+                            GravityRotation = Quaternion.Euler(-90, 0, 0);
+                            break;
+                        case GravityDirections.BACK:
+                            GravityDirection = Vector3.back;
+                            GravityRotation = Quaternion.Euler(90, 0, 0);
+                            break;
+                    }
+                }
+                break;
+            case GravityDirections.FRONT:
+                {
+                    switch (direction)
+                    {
+                        case GravityDirections.UP:
+                            GravityRotation = Quaternion.Euler(0, 180, 180);
+                            break;
+                        case GravityDirections.DOWN:
+                            GravityRotation = Quaternion.Euler(0, -90, 0);
+                            break;
+                        case GravityDirections.LEFT:
+                            GravityRotation = Quaternion.Euler(0, 180, 90);
+                            break;
+                        case GravityDirections.RIGHT:
+                            GravityDirection = Vector3.forward;
+                            GravityRotation = Quaternion.Euler(-90, 0, 0);
+                            break;
+                        case GravityDirections.BACK:
+                            GravityDirection = Vector3.back;
+                            GravityRotation = Quaternion.Euler(90, 0, 0);
+                            break;
+                    }
+                }
+                break;
+            case GravityDirections.BACK:
+                {
+                    switch (direction)
+                    {
+                        case GravityDirections.UP:
+                            GravityRotation = Quaternion.Euler(0, 180, 180);
+                            break;
+                        case GravityDirections.DOWN:
+                            GravityRotation = Quaternion.Euler(0, -90, 0);
+                            break;
+                        case GravityDirections.LEFT:
+                            GravityRotation = Quaternion.Euler(0, 180, 90);
+                            break;
+                        case GravityDirections.RIGHT:
+                            GravityDirection = Vector3.forward;
+                            GravityRotation = Quaternion.Euler(-90, 0, 0);
+                            break;
+                        case GravityDirections.FRONT:
+                            GravityDirection = Vector3.back;
+                            GravityRotation = Quaternion.Euler(90, 0, 0);
                             break;
                     }
                 }

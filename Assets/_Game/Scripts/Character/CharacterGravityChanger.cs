@@ -32,6 +32,10 @@ public class CharacterGravityChanger : MonoBehaviour
             gravityService.SwitchDirection(GravityDirections.LEFT);
         if (Input.GetKeyDown(KeyCode.Alpha4))
             gravityService.SwitchDirection(GravityDirections.RIGHT);
+        if (Input.GetKeyDown(KeyCode.Alpha5))
+            gravityService.SwitchDirection(GravityDirections.FRONT);
+        if (Input.GetKeyDown(KeyCode.Alpha6))
+            gravityService.SwitchDirection(GravityDirections.BACK);
     }
 
     private void FixedUpdate()
@@ -63,6 +67,10 @@ public class CharacterGravityChanger : MonoBehaviour
                     gravityService.SwitchDirection(GravityDirections.LEFT);
                 else if (MostRecentCollision == "RIGHT")
                     gravityService.SwitchDirection(GravityDirections.RIGHT);
+                else if (MostRecentCollision == "FRONT")
+                    gravityService.SwitchDirection(GravityDirections.FRONT);
+                else if (MostRecentCollision == "BACK")
+                    gravityService.SwitchDirection(GravityDirections.BACK);
                 else return;
 
                 SwitchingBlockCooldown();
