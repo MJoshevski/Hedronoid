@@ -255,7 +255,6 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   Rigidbody: {fileID: 5869925505566868056}
-  Collider: {fileID: 0}
   CharacterDashSettings: {fileID: 11400000, guid: c3596e1d78c26415cac3f469d1320c30,
     type: 2}
 --- !u!114 &2104333297084757660
@@ -270,11 +269,12 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 646322f72c26c9a489f934f4fdb01100, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  CharacterWallRun: {fileID: 4977452173252551547}
   Rigidbody: {fileID: 5869925505566868056}
-  Collider: {fileID: 5191230440869478058}
+  FeetCollider: {fileID: 5191230440869478058}
   CharacterDashSettings: {fileID: 11400000, guid: 75808c1548bf24196935ccc05ecff254,
     type: 2}
-  CharacterWallRun: {fileID: 4977452173252551547}
+  _executions: 0
 --- !u!114 &1623772253456667958
 MonoBehaviour:
   m_ObjectHideFlags: 0

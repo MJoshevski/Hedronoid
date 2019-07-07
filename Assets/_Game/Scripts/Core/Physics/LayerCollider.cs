@@ -7,31 +7,31 @@ public class LayerCollider : MonoBehaviour
     [SerializeField]
     LayerMask LayerMask;
 
-    public event Action<Collision> CollisionEnter;
-    public event Action<Collision> CollisionExit;
+    public event Action<Collider> CollisionEnter;
+    public event Action<Collider> CollisionExit;
 
     public bool IsColliding()
     {
         return _collidingObjects.Count > 0;
     }
 
-    void OnCollisionEnter(Collision collision)
+    void OnTriggerEnter(Collider other)
     {
-        var go = collision.gameObject;
+        var go = other.gameObject;
         if (LayerMask.Contains(go.layer))
         {
             _collidingObjects.Add(go);
-            this.Raise(CollisionEnter, collision);
+            this.Raise(CollisionEnter, other);
         }
     }
 
-    void OnCollisionExit(Collision collision)
+    void OnTriggerExit(Collider other)
     {
-        var go = collision.gameObject;
+        var go = other.gameObject;
         if (LayerMask.Contains(go.layer))
         {
             _collidingObjects.Remove(go);
-            this.Raise(CollisionExit, collision);
+            this.Raise(CollisionExit, other);
         }
     }
 
