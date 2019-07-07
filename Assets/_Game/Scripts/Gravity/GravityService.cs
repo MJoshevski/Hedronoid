@@ -30,7 +30,7 @@ public class GravityService : MonoSingleton<IGravityService>, IGravityService
     void Start()
     {
         Direction = GravityDirections.DOWN;
-        SwitchDirection(GravityDirections.UP);
+        SwitchDirection(GravityDirections.DOWN);
     }
 
     public void SwitchDirection(GravityDirections direction)

@@ -26,10 +26,12 @@ public class CharacterController : MonoSingleton<CharacterController>, IMoveDire
 
         //Apply adequate rotation
         if (Rigidbody.transform.up != gravityService.GravityUp)
+        {
             Rigidbody.rotation = Quaternion.Slerp(
-                Rigidbody.rotation,
-                gravityService.GravityRotation,
-                m_GravityRotationMultiplier * Time.deltaTime);
+               Rigidbody.rotation,
+               gravityService.GravityRotation,
+               m_GravityRotationMultiplier * Time.deltaTime);
+        }
     }
 
 
