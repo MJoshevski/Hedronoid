@@ -5,13 +5,11 @@ using UnityStandardAssets.CrossPlatformInput;
 
 public class CharacterInput : MonoBehaviour
 {
+    [SerializeField] Transform Camera;
+
     void Start()
     {
-        if (UnityEngine.Camera.main != null)
-        {
-            _camera = UnityEngine.Camera.main.transform;
-        }
-        else
+        if (Camera == null)
         {
             Debug.LogError("Warning: no main camera found. Third person character needs a Camera tagged \"MainCamera\", for camera-relative controls.");
         }
@@ -23,7 +21,7 @@ public class CharacterInput : MonoBehaviour
         float h = playerActions.Move.X;
         float v = playerActions.Move.Y;
 
-        var moveDirection = v * _camera.forward + h * _camera.right;
+        var moveDirection = v * Camera.forward + h * Camera.right;
         moveDirection = Vector3.ProjectOnPlane(moveDirection, GravityService.Instance.GravityUp);
         moveDirection.Normalize();
 
@@ -35,6 +33,4 @@ public class CharacterInput : MonoBehaviour
             moveDirectionDependentComponents[i].MoveDirection = moveDirection;
         }
     }
-
-    Transform _camera;
 }
