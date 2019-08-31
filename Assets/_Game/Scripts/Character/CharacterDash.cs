@@ -8,7 +8,6 @@ public class CharacterDash : MonoBehaviour, IMoveDirectionDependent
 {
     [Header("Refs")]
     [SerializeField] Rigidbody Rigidbody;
-    [SerializeField] LayerCollider Collider;
 
     [Header("Settings")]
     [DisplayScriptableObjectPropertiesAttribute]
@@ -26,22 +25,9 @@ public class CharacterDash : MonoBehaviour, IMoveDirectionDependent
         {
             Debug.LogError("Could not find player action with name " + CharacterDashSettings.ActionName);
         }
-
-        if (Collider != null)
-        {
-            Collider.CollisionEnter += OnCollision;
-        }
     }
 
-    void OnDestroy()
-    {
-        if (Collider != null)
-        {
-            Collider.CollisionEnter -= OnCollision;
-        }
-    }
-
-    void FixedUpdate()
+    protected virtual void FixedUpdate()
     {
         if (CharacterDashSettings.ContinuousInput
             && !_playerAction.IsPressed
@@ -62,7 +48,7 @@ public class CharacterDash : MonoBehaviour, IMoveDirectionDependent
         _actionCoroutine = StartCoroutine(DoApplyForceOverTime());
     }
 
-    void OnCollision(Collider other)
+    void OnCollision(Collision collision)
     {
         _executions = 0;
     }
@@ -90,10 +76,7 @@ public class CharacterDash : MonoBehaviour, IMoveDirectionDependent
 
     void AfterApplyForce()
     {
-        if (!Collider)
-        {
-            _executions--;
-        }
+        _executions--;
         _forceApplyCoroutine = null;
     }
 
