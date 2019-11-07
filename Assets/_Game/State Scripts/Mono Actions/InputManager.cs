@@ -10,6 +10,7 @@ namespace SA
     {
         public FloatVariable horizontal;
         public FloatVariable vertical;
+        public BoolVariable jump;
 
         public StateManagerVariable playerStates;
         public ActionBatch inputUpdateBatch;
@@ -25,8 +26,9 @@ namespace SA
 
                 float moveAmount =
                     Mathf.Clamp01(Mathf.Abs(horizontal.value) + Mathf.Abs(vertical.value));
-
                 playerStates.value.movementVariables.MoveAmount = moveAmount;
+                playerStates.value.isJumping = jump.value;
+
             }
         }
     }

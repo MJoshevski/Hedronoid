@@ -9,5 +9,7 @@ namespace SA
         public int Vertical = Animator.StringToHash("Vertical");
         public int Horizontal = Animator.StringToHash("Horizontal");
         public int LeftFootForward = Animator.StringToHash("leftFootForward");
+        public int JumpForward = Animator.StringToHash("JumpForward");
+        public int JumpIdle = Animator.StringToHash("JumpIdle");
     }
 }

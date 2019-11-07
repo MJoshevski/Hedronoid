@@ -24,6 +24,8 @@ namespace SA
         public AnimatorHashes animHashes;
         public AnimatorData animData;
 
+        public bool isJumping;
+
         private void Start()
         {
             m_Transform = this.transform;
