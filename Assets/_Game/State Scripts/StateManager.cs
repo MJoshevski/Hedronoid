@@ -25,6 +25,9 @@ namespace SA
         public AnimatorData animData;
 
         public bool isJumping;
+        public bool isGrounded;
+        [HideInInspector]
+        public float timeSinceJump;
 
         private void Start()
         {

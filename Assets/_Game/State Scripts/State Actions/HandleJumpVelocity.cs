@@ -12,6 +12,8 @@ namespace SA
         {
             states.m_Rb.drag = 0;
             Vector3 currVelocity = states.m_Rb.velocity;
+            states.timeSinceJump = Time.realtimeSinceStartup;
+            states.isGrounded = false;
 
             if (states.movementVariables.MoveAmount > 0.1f)
             {
