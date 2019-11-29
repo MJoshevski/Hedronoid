@@ -13,17 +13,17 @@ namespace HedronoidSP
         {
             if(states.movementVariables.MoveAmount > 0.1f)
             {
-                states.m_Rb.drag = 0;
+                states.Rigidbody.drag = 0;
             }
             else
             {
-                states.m_Rb.drag = 4;
+                states.Rigidbody.drag = 4;
             }
 
             Vector3 targetVelocity = states.Transform.forward * states.movementVariables.MoveAmount *
                 movementSpeed;
-            targetVelocity.y = states.m_Rb.velocity.y;
-            states.m_Rb.velocity = targetVelocity;
+            targetVelocity.y = states.Rigidbody.velocity.y;
+            states.Rigidbody.velocity = targetVelocity;
 
             //Vector3 targetVelocity = MoveDirection * CharacterMoveSettings.MoveSpeedMultiplier;
             //_movementVelocity = Vector3.Lerp(_movementVelocity, targetVelocity, Time.deltaTime * CharacterMoveSettings.MoveVeloctiyChangeRate);

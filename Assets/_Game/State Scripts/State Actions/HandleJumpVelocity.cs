@@ -10,8 +10,8 @@ namespace HedronoidSP
 
         public override void Execute(StateManager states)
         {
-            states.m_Rb.drag = 0;
-            Vector3 currVelocity = states.m_Rb.velocity;
+            states.Rigidbody.drag = 0;
+            Vector3 currVelocity = states.Rigidbody.velocity;
             states.timeSinceJump = Time.realtimeSinceStartup;
             states.isGrounded = false;
 
@@ -25,7 +25,7 @@ namespace HedronoidSP
             }
 
             currVelocity += jumpSpeed * Vector3.up;            
-            states.m_Rb.velocity = currVelocity;
+            states.Rigidbody.velocity = currVelocity;
         }
     }
 }

@@ -17,7 +17,7 @@ namespace HedronoidSP
         [HideInInspector]
         public Transform Transform;
         [HideInInspector]
-        public new Rigidbody m_Rb;
+        public new Rigidbody Rigidbody;
 
         [HideInInspector]
         public Animator Animator;
@@ -32,7 +32,7 @@ namespace HedronoidSP
         private void Start()
         {
             Transform = this.transform;
-            m_Rb = GetComponent<Rigidbody>();
+            Rigidbody = GetComponent<Rigidbody>();
             Animator = GetComponentInChildren<Animator>();
             animHashes = new AnimatorHashes();
             animData = new AnimatorData(Animator);
