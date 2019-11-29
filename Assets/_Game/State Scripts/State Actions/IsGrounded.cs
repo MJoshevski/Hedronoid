@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-namespace SA
+namespace HedronoidSP
 {
     [CreateAssetMenu(menuName = "Actions/State Actions/Is Grounded")]
     public class IsGrounded : StateActions

@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-namespace SA
+namespace HedronoidSP
 {
     [CreateAssetMenu(menuName ="Conditions/Always True")]
     public class AlwaysTrue : Condition

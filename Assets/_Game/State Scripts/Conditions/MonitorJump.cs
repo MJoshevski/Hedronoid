@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using SO;
 
-namespace SA
+namespace HedronoidSP
 {
     [CreateAssetMenu(menuName ="Conditions/Monitor Jump")]
     public class MonitorJump : Condition

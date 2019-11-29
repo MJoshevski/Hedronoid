@@ -2,15 +2,15 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-namespace SA
+namespace HedronoidSP
 {
     public class AnimatorHashes
     {
         public int Vertical = Animator.StringToHash("Vertical");
         public int Horizontal = Animator.StringToHash("Horizontal");
         public int LeftFootForward = Animator.StringToHash("leftFootForward");
-        public int JumpForward = Animator.StringToHash("JumpForward");
-        public int JumpIdle = Animator.StringToHash("JumpIdle");
+        public int JumpForward = Animator.StringToHash("Jump_Forward");
+        public int JumpIdle = Animator.StringToHash("Jump_Idle");
         public int IsGrounded = Animator.StringToHash("isGrounded");
     }
 }

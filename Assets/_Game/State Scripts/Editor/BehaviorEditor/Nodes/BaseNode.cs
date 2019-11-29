@@ -4,7 +4,7 @@ using UnityEditor;
 using UnityEditorInternal;
 using UnityEngine;
 
-namespace SA.BehaviorEditor
+namespace HedronoidSP.BehaviorEditor
 {
     [System.Serializable]
     public class BaseNode 

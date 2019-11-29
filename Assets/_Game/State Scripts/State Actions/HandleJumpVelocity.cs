@@ -1,7 +1,7 @@
 ﻿using UnityEngine;
 using System.Collections;
 
-namespace SA
+namespace HedronoidSP
 {
     [CreateAssetMenu(menuName ="Actions/State Actions/Handle Jump Velocity")]
     public class HandleJumpVelocity : StateActions

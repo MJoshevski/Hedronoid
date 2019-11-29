@@ -1,7 +1,7 @@
 ﻿using System;
 using UnityEngine;
 
-namespace SA
+namespace HedronoidSP
 {
 	[System.Serializable]
 	public class MovementVariables

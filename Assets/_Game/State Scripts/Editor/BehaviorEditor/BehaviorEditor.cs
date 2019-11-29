@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEditor;
 
-namespace SA.BehaviorEditor
+namespace HedronoidSP.BehaviorEditor
 {
     public class BehaviorEditor : EditorWindow
     {
@@ -18,20 +18,20 @@ namespace SA.BehaviorEditor
         Rect mouseRect = new Rect(0, 0, 1, 1);
         Rect all = new Rect(-5, -5, 10000, 10000);
         GUIStyle style;
-		GUIStyle activeStyle;
-		Vector2 scrollPos;
-		Vector2 scrollStartPos;
-		static BehaviorEditor editor;
-		public static StateManager currentStateManager;
-		public static bool forceSetDirty;
-		static StateManager prevStateManager;
-		static State previousState;
-		int nodesToDelete;
+        GUIStyle activeStyle;
+        Vector2 scrollPos;
+        Vector2 scrollStartPos;
+        static BehaviorEditor editor;
+        public static StateManager currentStateManager;
+        public static bool forceSetDirty;
+        static StateManager prevStateManager;
+        static State previousState;
+        int nodesToDelete;
 
 
-		public enum UserActions
+        public enum UserActions
         {
-            addState,addTransitionNode,deleteNode,commentNode,makeTransition,makePortal,resetPan
+            addState, addTransitionNode, deleteNode, commentNode, makeTransition, makePortal, resetPan
         }
         #endregion
 
@@ -41,77 +41,77 @@ namespace SA.BehaviorEditor
         {
             editor = EditorWindow.GetWindow<BehaviorEditor>();
             editor.minSize = new Vector2(800, 600);
-        
+
         }
 
         private void OnEnable()
         {
             settings = Resources.Load("EditorSettings") as EditorSettings;
             style = settings.skin.GetStyle("window");
-			activeStyle = settings.activeSkin.GetStyle("window");
+            activeStyle = settings.activeSkin.GetStyle("window");
 
-		}
-		#endregion
+        }
+        #endregion
 
-		private void Update()
-		{
-			if (currentStateManager != null)
-			{
-				if (previousState != currentStateManager.currentState)
-				{
-					Repaint();
-					previousState = currentStateManager.currentState;
-				}
-			}
-
-			if (nodesToDelete > 0)
-			{
-				if (settings.currentGraph != null)
-				{		
-					settings.currentGraph.DeleteWindowsThatNeedTo();
-					Repaint();
-				}
-				nodesToDelete = 0;
-			}
-		}
-
-		#region GUI Methods
-		private void OnGUI()
+        private void Update()
         {
-			if (Selection.activeTransform != null)
-			{
-				currentStateManager = Selection.activeTransform.GetComponentInChildren<StateManager>();
-				if (prevStateManager != currentStateManager)
-				{
-					prevStateManager = currentStateManager;
-					Repaint();
-				}
-			}
+            if (currentStateManager != null)
+            {
+                if (previousState != currentStateManager.currentState)
+                {
+                    Repaint();
+                    previousState = currentStateManager.currentState;
+                }
+            }
 
-		
+            if (nodesToDelete > 0)
+            {
+                if (settings.currentGraph != null)
+                {
+                    settings.currentGraph.DeleteWindowsThatNeedTo();
+                    Repaint();
+                }
+                nodesToDelete = 0;
+            }
+        }
 
-			Event e = Event.current;
+        #region GUI Methods
+        private void OnGUI()
+        {
+            if (Selection.activeTransform != null)
+            {
+                currentStateManager = Selection.activeTransform.GetComponentInChildren<StateManager>();
+                if (prevStateManager != currentStateManager)
+                {
+                    prevStateManager = currentStateManager;
+                    Repaint();
+                }
+            }
+
+
+
+            Event e = Event.current;
             mousePosition = e.mousePosition;
             UserInput(e);
 
             DrawWindows();
 
-			if (e.type == EventType.MouseDrag)
-			{
-				if (settings.currentGraph != null)
-				{
-					//settings.currentGraph.DeleteWindowsThatNeedTo();
-					Repaint();
-				}
-			}
+            if (e.type == EventType.MouseDrag)
+            {
+                if (settings.currentGraph != null)
+                {
+                    //settings.currentGraph.DeleteWindowsThatNeedTo();
+                    Repaint();
+                }
+            }
 
-			if (GUI.changed)
-			{
-				settings.currentGraph.DeleteWindowsThatNeedTo();
-				Repaint();
-			}
+            if (GUI.changed)
+            {
+                settings.currentGraph.DeleteWindowsThatNeedTo();
+                Repaint();
+            }
 
-            if(settings.makeTransition)
+            if (settings.makeTransition)
             {
                 mouseRect.x = mousePosition.x;
                 mouseRect.y = mousePosition.y;
@@ -120,34 +120,34 @@ namespace SA.BehaviorEditor
                 Repaint();
             }
 
-			if (forceSetDirty)
-			{
-				forceSetDirty = false;
-				EditorUtility.SetDirty(settings);
-				EditorUtility.SetDirty(settings.currentGraph);
+            if (forceSetDirty)
+            {
+                forceSetDirty = false;
+                EditorUtility.SetDirty(settings);
+                EditorUtility.SetDirty(settings.currentGraph);
 
-				for (int i = 0; i < settings.currentGraph.windows.Count; i++)
-				{
-					BaseNode n = settings.currentGraph.windows[i];
-					if(n.stateRef.currentState != null)
-						EditorUtility.SetDirty(n.stateRef.currentState);
-			
-				}
+                for (int i = 0; i < settings.currentGraph.windows.Count; i++)
+                {
+                    BaseNode n = settings.currentGraph.windows[i];
+                    if (n.stateRef.currentState != null)
+                        EditorUtility.SetDirty(n.stateRef.currentState);
 
-			}
-			
-		}
+                }
 
-		void DrawWindows()
+            }
+
+        }
+
+        void DrawWindows()
         {
-			GUILayout.BeginArea(all, style);
-		
-			BeginWindows();
+            GUILayout.BeginArea(all, style);
+
+            BeginWindows();
             EditorGUILayout.LabelField(" ", GUILayout.Width(100));
             EditorGUILayout.LabelField("Assign Graph:", GUILayout.Width(100));
             settings.currentGraph = (BehaviorGraph)EditorGUILayout.ObjectField(settings.currentGraph, typeof(BehaviorGraph), false, GUILayout.Width(200));
 
-			if (settings.currentGraph != null)
+            if (settings.currentGraph != null)
             {
                 foreach (BaseNode n in settings.currentGraph.windows)
                 {
@@ -156,36 +156,36 @@ namespace SA.BehaviorEditor
 
                 for (int i = 0; i < settings.currentGraph.windows.Count; i++)
                 {
-					BaseNode b = settings.currentGraph.windows[i];
+                    BaseNode b = settings.currentGraph.windows[i];
 
-					if (b.drawNode is StateNode)
-					{
-						if (currentStateManager != null && b.stateRef.currentState == currentStateManager.currentState)
-						{
-							b.windowRect = GUI.Window(i, b.windowRect,
-								DrawNodeWindow, b.windowTitle,activeStyle);
-						}
-						else
-						{
-							b.windowRect = GUI.Window(i, b.windowRect,
-								DrawNodeWindow, b.windowTitle);
-						}
-					}
-					else
-					{
-						b.windowRect = GUI.Window(i, b.windowRect,
-							DrawNodeWindow, b.windowTitle);
-					}
+                    if (b.drawNode is StateNode)
+                    {
+                        if (currentStateManager != null && b.stateRef.currentState == currentStateManager.currentState)
+                        {
+                            b.windowRect = GUI.Window(i, b.windowRect,
+                                DrawNodeWindow, b.windowTitle, activeStyle);
+                        }
+                        else
+                        {
+                            b.windowRect = GUI.Window(i, b.windowRect,
+                                DrawNodeWindow, b.windowTitle);
+                        }
+                    }
+                    else
+                    {
+                        b.windowRect = GUI.Window(i, b.windowRect,
+                            DrawNodeWindow, b.windowTitle);
+                    }
                 }
             }
-			EndWindows();
+            EndWindows();
 
-			GUILayout.EndArea();
-			
+            GUILayout.EndArea();
 
-		}
 
-		void DrawNodeWindow(int id)
+        }
+
+        void DrawNodeWindow(int id)
         {
             settings.currentGraph.windows[id].DrawWindow();
             GUI.DragWindow();
@@ -196,12 +196,12 @@ namespace SA.BehaviorEditor
             if (settings.currentGraph == null)
                 return;
 
-            if(e.button == 1 && !settings.makeTransition)
+            if (e.button == 1 && !settings.makeTransition)
             {
-                if(e.type == EventType.MouseDown)
+                if (e.type == EventType.MouseDown)
                 {
                     RightClick(e);
-					
+
                 }
             }
 
@@ -213,57 +213,57 @@ namespace SA.BehaviorEditor
                 }
             }
 
-            if(e.button == 0 && settings.makeTransition)
+            if (e.button == 0 && settings.makeTransition)
             {
-                if(e.type == EventType.MouseDown)
+                if (e.type == EventType.MouseDown)
                 {
                     MakeTransition();
                 }
             }
 
-			if (e.button == 2)
-			{
-				if (e.type == EventType.MouseDown)
-				{
-					scrollStartPos = e.mousePosition;
-				}
-				else if (e.type == EventType.MouseDrag)
-				{
-					HandlePanning(e);
-				}
-				else if (e.type == EventType.MouseUp)
-				{
+            if (e.button == 2)
+            {
+                if (e.type == EventType.MouseDown)
+                {
+                    scrollStartPos = e.mousePosition;
+                }
+                else if (e.type == EventType.MouseDrag)
+                {
+                    HandlePanning(e);
+                }
+                else if (e.type == EventType.MouseUp)
+                {
 
-				}
-			}
+                }
+            }
         }
 
-		void HandlePanning(Event e)
-		{
-			Vector2 diff = e.mousePosition - scrollStartPos;
-			diff *= .6f;
-			scrollStartPos = e.mousePosition;
-			scrollPos += diff;
+        void HandlePanning(Event e)
+        {
+            Vector2 diff = e.mousePosition - scrollStartPos;
+            diff *= .6f;
+            scrollStartPos = e.mousePosition;
+            scrollPos += diff;
 
-			for (int i = 0; i < settings.currentGraph.windows.Count; i++)
-			{
-				BaseNode b = settings.currentGraph.windows[i];
-				b.windowRect.x += diff.x;
-				b.windowRect.y += diff.y;
-			}
-		}
+            for (int i = 0; i < settings.currentGraph.windows.Count; i++)
+            {
+                BaseNode b = settings.currentGraph.windows[i];
+                b.windowRect.x += diff.x;
+                b.windowRect.y += diff.y;
+            }
+        }
 
-		void ResetScroll()
-		{
-			for (int i = 0; i < settings.currentGraph.windows.Count; i++)
-			{
-				BaseNode b = settings.currentGraph.windows[i];
-				b.windowRect.x -= scrollPos.x;
-				b.windowRect.y -= scrollPos.y;
-			}
+        void ResetScroll()
+        {
+            for (int i = 0; i < settings.currentGraph.windows.Count; i++)
+            {
+                BaseNode b = settings.currentGraph.windows[i];
+                b.windowRect.x -= scrollPos.x;
+                b.windowRect.y -= scrollPos.y;
+            }
 
-			scrollPos = Vector2.zero;
-		}
+            scrollPos = Vector2.zero;
+        }
 
         void RightClick(Event e)
         {
@@ -278,7 +278,7 @@ namespace SA.BehaviorEditor
                 }
             }
 
-            if(!clickedOnWindow)
+            if (!clickedOnWindow)
             {
                 AddNewNode(e);
             }
@@ -287,7 +287,7 @@ namespace SA.BehaviorEditor
                 ModifyNode(e);
             }
         }
-       
+
         void MakeTransition()
         {
             settings.makeTransition = false;
@@ -302,11 +302,11 @@ namespace SA.BehaviorEditor
                 }
             }
 
-            if(clickedOnWindow)
+            if (clickedOnWindow)
             {
-                if(selectedNode.drawNode is StateNode || selectedNode.drawNode is PortalNode)
+                if (selectedNode.drawNode is StateNode || selectedNode.drawNode is PortalNode)
                 {
-                    if(selectedNode.id != transitFromId)
+                    if (selectedNode.id != transitFromId)
                     {
                         BaseNode transNode = settings.currentGraph.GetNodeWithIndex(transitFromId);
                         transNode.targetNode = selectedNode.id;
@@ -314,7 +314,7 @@ namespace SA.BehaviorEditor
                         BaseNode enterNode = BehaviorEditor.settings.currentGraph.GetNodeWithIndex(transNode.enterNode);
                         Transition transition = enterNode.stateRef.currentState.GetTransition(transNode.transRef.transitionId);
 
-						transition.targetState = selectedNode.stateRef.currentState;
+                        transition.targetState = selectedNode.stateRef.currentState;
                     }
                 }
             }
@@ -329,11 +329,11 @@ namespace SA.BehaviorEditor
             if (settings.currentGraph != null)
             {
                 menu.AddItem(new GUIContent("Add State"), false, ContextCallback, UserActions.addState);
-				menu.AddItem(new GUIContent("Add Portal"), false, ContextCallback, UserActions.makePortal);
-				menu.AddItem(new GUIContent("Add Comment"), false, ContextCallback, UserActions.commentNode);
-				menu.AddSeparator("");
-				menu.AddItem(new GUIContent("Reset Panning"), false, ContextCallback, UserActions.resetPan);
-			}
+                menu.AddItem(new GUIContent("Add Portal"), false, ContextCallback, UserActions.makePortal);
+                menu.AddItem(new GUIContent("Add Comment"), false, ContextCallback, UserActions.commentNode);
+                menu.AddSeparator("");
+                menu.AddItem(new GUIContent("Reset Panning"), false, ContextCallback, UserActions.resetPan);
+            }
             else
             {
                 menu.AddDisabledItem(new GUIContent("Add State"));
@@ -362,13 +362,13 @@ namespace SA.BehaviorEditor
                 menu.AddItem(new GUIContent("Delete"), false, ContextCallback, UserActions.deleteNode);
             }
 
-			if (selectedNode.drawNode is PortalNode)
-			{
-				menu.AddSeparator("");
-				menu.AddItem(new GUIContent("Delete"), false, ContextCallback, UserActions.deleteNode);
-			}
+            if (selectedNode.drawNode is PortalNode)
+            {
+                menu.AddSeparator("");
+                menu.AddItem(new GUIContent("Delete"), false, ContextCallback, UserActions.deleteNode);
+            }
 
-			if (selectedNode.drawNode is TransitionNode)
+            if (selectedNode.drawNode is TransitionNode)
             {
                 if (selectedNode.isDuplicate || !selectedNode.isAssigned)
                 {
@@ -392,78 +392,78 @@ namespace SA.BehaviorEditor
             menu.ShowAsContext();
             e.Use();
         }
-        
+
         void ContextCallback(object o)
         {
             UserActions a = (UserActions)o;
             switch (a)
             {
                 case UserActions.addState:
-                    settings.AddNodeOnGraph(settings.stateNode, 200, 100, "State", mousePosition);                
+                    settings.AddNodeOnGraph(settings.stateNode, 200, 100, "State", mousePosition);
                     break;
-				case UserActions.makePortal:
-					settings.AddNodeOnGraph(settings.portalNode, 100, 80, "Portal", mousePosition);
-					break;
+                case UserActions.makePortal:
+                    settings.AddNodeOnGraph(settings.portalNode, 100, 80, "Portal", mousePosition);
+                    break;
                 case UserActions.addTransitionNode:
-					AddTransitionNode(selectedNode, mousePosition);
+                    AddTransitionNode(selectedNode, mousePosition);
 
-					break;           
+                    break;
                 case UserActions.commentNode:
                     BaseNode commentNode = settings.AddNodeOnGraph(settings.commentNode, 200, 100, "Comment", mousePosition);
-                    commentNode.comment = "This is a comment";           
+                    commentNode.comment = "This is a comment";
                     break;
                 default:
                     break;
                 case UserActions.deleteNode:
-					if (selectedNode.drawNode is TransitionNode)
-					{
-						BaseNode enterNode = settings.currentGraph.GetNodeWithIndex(selectedNode.enterNode);
-						if (enterNode != null)
-							enterNode.stateRef.currentState.RemoveTransition(selectedNode.transRef.transitionId);
-					}
+                    if (selectedNode.drawNode is TransitionNode)
+                    {
+                        BaseNode enterNode = settings.currentGraph.GetNodeWithIndex(selectedNode.enterNode);
+                        if (enterNode != null)
+                            enterNode.stateRef.currentState.RemoveTransition(selectedNode.transRef.transitionId);
+                    }
 
-					nodesToDelete++;
+                    nodesToDelete++;
                     settings.currentGraph.DeleteNode(selectedNode.id);
                     break;
                 case UserActions.makeTransition:
                     transitFromId = selectedNode.id;
                     settings.makeTransition = true;
                     break;
-				case UserActions.resetPan:
-					ResetScroll();
-					break;
+                case UserActions.resetPan:
+                    ResetScroll();
+                    break;
             }
 
-			forceSetDirty = true;
-        
-		}
+            forceSetDirty = true;
 
-		public static BaseNode AddTransitionNode(BaseNode enterNode, Vector3 pos)
-		{
-			BaseNode transNode = settings.AddNodeOnGraph(settings.transitionNode, 200, 100, "Condition", pos);
-			transNode.enterNode = enterNode.id;
-			Transition t = settings.stateNode.AddTransition(enterNode);
-			transNode.transRef.transitionId = t.id;
-			return transNode;
-		}
+        }
 
-		public static BaseNode AddTransitionNodeFromTransition(Transition transition, BaseNode enterNode, Vector3 pos)
-		{
-			BaseNode transNode = settings.AddNodeOnGraph(settings.transitionNode, 200, 100, "Condition", pos);
-			transNode.enterNode = enterNode.id;
-			transNode.transRef.transitionId = transition.id;
-			return transNode;
+        public static BaseNode AddTransitionNode(BaseNode enterNode, Vector3 pos)
+        {
+            BaseNode transNode = settings.AddNodeOnGraph(settings.transitionNode, 200, 100, "Condition", pos);
+            transNode.enterNode = enterNode.id;
+            Transition t = settings.stateNode.AddTransition(enterNode);
+            transNode.transRef.transitionId = t.id;
+            return transNode;
+        }
 
-		}
+        public static BaseNode AddTransitionNodeFromTransition(Transition transition, BaseNode enterNode, Vector3 pos)
+        {
+            BaseNode transNode = settings.AddNodeOnGraph(settings.transitionNode, 200, 100, "Condition", pos);
+            transNode.enterNode = enterNode.id;
+            transNode.transRef.transitionId = transition.id;
+            return transNode;
 
-		#endregion
+        }
 
-		#region Helper Methods
-		public static void DrawNodeCurve(Rect start, Rect end, bool left, Color curveColor)
+        #endregion
+
+        #region Helper Methods
+        public static void DrawNodeCurve(Rect start, Rect end, bool left, Color curveColor)
         {
             Vector3 startPos = new Vector3(
                 (left) ? start.x + start.width : start.x,
-                start.y + (start.height *.5f),
+                start.y + (start.height * .5f),
                 0);
 
             Vector3 endPos = new Vector3(end.x + (end.width * .5f), end.y + (end.height * .5f), 0);
@@ -479,15 +479,15 @@ namespace SA.BehaviorEditor
             Handles.DrawBezier(startPos, endPos, startTan, endTan, curveColor, null, 3);
         }
 
-        public static void ClearWindowsFromList(List<BaseNode>l)
+        public static void ClearWindowsFromList(List<BaseNode> l)
         {
             for (int i = 0; i < l.Count; i++)
             {
-          //      if (windows.Contains(l[i]))
-            //        windows.Remove(l[i]);
+                //      if (windows.Contains(l[i]))
+                //        windows.Remove(l[i]);
             }
         }
-        
+
         #endregion
 
     }

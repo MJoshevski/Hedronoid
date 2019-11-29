@@ -3,7 +3,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-namespace SA.BehaviorEditor
+namespace HedronoidSP.BehaviorEditor
 {
     [CreateAssetMenu(menuName = "Editor/Comment Node")]
     public class CommentNode :DrawNode

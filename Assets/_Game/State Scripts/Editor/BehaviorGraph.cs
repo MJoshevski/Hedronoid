@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using UnityEngine;
 
 
-namespace SA.BehaviorEditor
+namespace HedronoidSP.BehaviorEditor
 {
     [CreateAssetMenu]
     public class BehaviorGraph : ScriptableObject

@@ -499,6 +499,11 @@ PrefabInstance:
       propertyPath: m_UseGravity
       value: 1
       objectReference: {fileID: 0}
+    - target: {fileID: 3971294731158761431, guid: c9e9f13f901554eadbbf449e8ea69a74,
+        type: 3}
+      propertyPath: m_ApplyRootMotion
+      value: 0
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: c9e9f13f901554eadbbf449e8ea69a74, type: 3}
 --- !u!1 &2047665495
@@ -637,6 +642,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 4959810038519580089}
+  - component: {fileID: 4959810038520076698}
   - component: {fileID: 4959810038520076699}
   m_Layer: 0
   m_Name: Camera_var2
@@ -645,6 +651,19 @@ GameObject:
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
   m_IsActive: 1
+--- !u!114 &4959810038520076698
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 4959810038520076697}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: a7686521045a74747aaea6f1dfcda9a7, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  transformVariable: {fileID: 11400000, guid: f94341b17dc0642849f56a4523bc22f9, type: 2}
 --- !u!114 &4959810038520076699
 MonoBehaviour:
   m_ObjectHideFlags: 0
