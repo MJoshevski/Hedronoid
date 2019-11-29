@@ -19,7 +19,7 @@ namespace HedronoidSP
                 }
             }
 
-            states.m_Animator.SetFloat(
+            states.Animator.SetFloat(
                 states.animHashes.Vertical,
                 states.movementVariables.MoveAmount,
                 0.2f,

@@ -10,16 +10,15 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: e09f12a9b8fb5e44eb81fa499afbecc4, type: 3}
-  m_Name: In Air
+  m_Name: Wait For Animation
   m_EditorClassIdentifier: 
   onFixed: []
-  onUpdate:
-  - {fileID: 11400000, guid: 83273139a6ace4b0a9859a9f2fb04556, type: 2}
+  onUpdate: []
   onEnter: []
   onExit: []
   idCount: 1
   transitions:
   - id: 0
-    condition: {fileID: 11400000, guid: 95da7063ec603492e86f68b0318dccfe, type: 2}
-    targetState: {fileID: 11400000, guid: 46671930342b1454b948f2f50e32ffa8, type: 2}
+    condition: {fileID: 11400000, guid: 456705a90f7ea4cdda8172f5be6fa77f, type: 2}
+    targetState: {fileID: 11400000, guid: fa444fdc218edb14b89d5662b84aa39d, type: 2}
     disable: 0

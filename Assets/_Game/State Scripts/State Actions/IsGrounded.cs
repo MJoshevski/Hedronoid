@@ -9,7 +9,7 @@ namespace HedronoidSP
     {
         public override void Execute(StateManager states)
         {
-            Vector3 origin = states.m_Transform.position;
+            Vector3 origin = states.Transform.position;
 
             origin.y += .7f;
             Vector3 dir = -Vector3.up;
@@ -26,7 +26,7 @@ namespace HedronoidSP
                 states.isGrounded = false;
             }
 
-            states.m_Animator.SetBool(states.animHashes.IsGrounded, states.isGrounded);
+            states.Animator.SetBool(states.animHashes.IsGrounded, states.isGrounded);
         }
     }
 }

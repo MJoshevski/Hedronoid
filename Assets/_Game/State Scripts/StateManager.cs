@@ -15,12 +15,12 @@ namespace HedronoidSP
         [HideInInspector]
         public float delta;
         [HideInInspector]
-        public Transform m_Transform;
+        public Transform Transform;
         [HideInInspector]
         public new Rigidbody m_Rb;
 
         [HideInInspector]
-        public Animator m_Animator;
+        public Animator Animator;
         public AnimatorHashes animHashes;
         public AnimatorData animData;
 
@@ -31,11 +31,11 @@ namespace HedronoidSP
 
         private void Start()
         {
-            m_Transform = this.transform;
+            Transform = this.transform;
             m_Rb = GetComponent<Rigidbody>();
-            m_Animator = GetComponentInChildren<Animator>();
+            Animator = GetComponentInChildren<Animator>();
             animHashes = new AnimatorHashes();
-            animData = new AnimatorData(m_Animator);
+            animData = new AnimatorData(Animator);
         }
 
         private void FixedUpdate()

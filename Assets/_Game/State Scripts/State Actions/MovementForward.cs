@@ -20,7 +20,7 @@ namespace HedronoidSP
                 states.m_Rb.drag = 4;
             }
 
-            Vector3 targetVelocity = states.m_Transform.forward * states.movementVariables.MoveAmount *
+            Vector3 targetVelocity = states.Transform.forward * states.movementVariables.MoveAmount *
                 movementSpeed;
             targetVelocity.y = states.m_Rb.velocity.y;
             states.m_Rb.velocity = targetVelocity;

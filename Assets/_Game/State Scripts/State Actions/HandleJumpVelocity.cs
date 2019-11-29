@@ -17,11 +17,11 @@ namespace HedronoidSP
 
             if (states.movementVariables.MoveAmount > 0.1f)
             {
-                states.m_Animator.CrossFade(states.animHashes.JumpForward, 0.2f);                
+                states.Animator.CrossFade(states.animHashes.JumpForward, 0.2f);                
             }
             else
             {
-                states.m_Animator.CrossFade(states.animHashes.JumpIdle, 0.2f);
+                states.Animator.CrossFade(states.animHashes.JumpIdle, 0.2f);
             }
 
             currVelocity += jumpSpeed * Vector3.up;            

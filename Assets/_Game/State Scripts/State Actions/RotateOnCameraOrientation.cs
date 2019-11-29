@@ -25,15 +25,15 @@ namespace HedronoidSP
             targetDirection.y = 0;
 
             if (targetDirection == Vector3.zero)
-                targetDirection = states.m_Transform.forward;
+                targetDirection = states.Transform.forward;
 
             Quaternion tr = Quaternion.LookRotation(targetDirection);
             Quaternion targetRotation = Quaternion.Slerp(
-                states.m_Transform.rotation,
+                states.Transform.rotation,
                 tr,
                 states.delta * states.movementVariables.MoveAmount * speed);
 
-            states.m_Transform.rotation = targetRotation;
+            states.Transform.rotation = targetRotation;
         }
     }
 }
