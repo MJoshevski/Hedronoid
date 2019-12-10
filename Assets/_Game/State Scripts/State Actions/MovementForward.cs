@@ -21,14 +21,16 @@ namespace HedronoidSP
             }
 
             Vector3 targetVelocity = states.Transform.forward * states.movementVariables.MoveAmount *
-                movementSpeed;
+                movementSpeed;            
+
+            if (states.isGrounded)
+            {
+                targetVelocity.y = 0;
+            }
+
             targetVelocity.y = states.Rigidbody.velocity.y;
+
             states.Rigidbody.velocity = targetVelocity;
-
-            //Vector3 targetVelocity = MoveDirection * CharacterMoveSettings.MoveSpeedMultiplier;
-            //_movementVelocity = Vector3.Lerp(_movementVelocity, targetVelocity, Time.deltaTime * CharacterMoveSettings.MoveVeloctiyChangeRate);
-
-            //transform.position += _movementVelocity * Time.deltaTime;
         }
     }
 }

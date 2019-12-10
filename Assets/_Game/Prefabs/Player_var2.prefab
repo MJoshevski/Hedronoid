@@ -218,7 +218,7 @@ Rigidbody:
   m_Mass: 1
   m_Drag: 0.05
   m_AngularDrag: 999
-  m_UseGravity: 0
+  m_UseGravity: 1
   m_IsKinematic: 0
   m_Interpolate: 0
   m_Constraints: 112
@@ -258,9 +258,12 @@ MonoBehaviour:
     MoveVeloctiyChangeRate: 1
     MoveDirection: {x: 0, y: 0, z: 0}
   delta: 0
-  m_Transform: {fileID: 0}
-  m_Rb: {fileID: 0}
-  m_Animator: {fileID: 0}
+  Transform: {fileID: 0}
+  Rigidbody: {fileID: 0}
+  Animator: {fileID: 0}
+  isJumping: 0
+  isGrounded: 0
+  timeSinceJump: 0
 --- !u!114 &1775900077
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -331,11 +334,6 @@ PrefabInstance:
       propertyPath: m_Name
       value: base model
       objectReference: {fileID: 0}
-    - target: {fileID: -6057140222963153312, guid: 47619a53a1253431da1ca9e5b272ecd3,
-        type: 3}
-      propertyPath: m_Controller
-      value: 
-      objectReference: {fileID: 9100000, guid: 99ecde1eff61e46b5921c329ef77725b, type: 2}
     - target: {fileID: -4216859302048453862, guid: 47619a53a1253431da1ca9e5b272ecd3,
         type: 3}
       propertyPath: m_LocalPosition.x
@@ -389,6 +387,16 @@ PrefabInstance:
     - target: {fileID: -4216859302048453862, guid: 47619a53a1253431da1ca9e5b272ecd3,
         type: 3}
       propertyPath: m_LocalEulerAnglesHint.z
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: -6057140222963153312, guid: 47619a53a1253431da1ca9e5b272ecd3,
+        type: 3}
+      propertyPath: m_Controller
+      value: 
+      objectReference: {fileID: 9100000, guid: 99ecde1eff61e46b5921c329ef77725b, type: 2}
+    - target: {fileID: -6057140222963153312, guid: 47619a53a1253431da1ca9e5b272ecd3,
+        type: 3}
+      propertyPath: m_ApplyRootMotion
       value: 0
       objectReference: {fileID: 0}
     m_RemovedComponents: []
