@@ -10,6 +10,10 @@ namespace HedronoidSP
     {
         public FloatVariable targetDelta;
 
+        public override void Execute_Start()
+        {
+        }
+
         public override void Execute()
         {
             targetDelta.value = Time.deltaTime;

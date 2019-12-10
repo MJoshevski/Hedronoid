@@ -2,58 +2,65 @@
 using System.Collections.Generic;
 using UnityEngine;
 using MDKShooter;
+using SO;
 
-public class CursorLocker : MonoBehaviour
+namespace HedronoidSP
 {
-    [Header("Settings")]
-    [SerializeField]
-    bool LockCursor;
-
-    [Header("Refs")]
-    [SerializeField]
-    ThirdPersonCamera Camera;
-
-    void Start()
+    [CreateAssetMenu(menuName = "Actions/Camera/Cursor Locker")]
+    public class CursorLocker : Action
     {
-        Cursor.lockState = LockCursor ? CursorLockMode.Locked : CursorLockMode.None;
-    }
+        [Header("Settings")]
+        [SerializeField]
+        bool LockCursor;
 
-    void Update()
-    {
-        bool zeroTimeScale = Mathf.Approximately(0, Time.timeScale);
-        if (zeroTimeScale)
+        [Header("Refs")]
+        [SerializeField]
+        TransformVariable Camera;
+
+        public override void Execute_Start()
         {
-            UnlockCursorDisableCamera();
+            Cursor.lockState = LockCursor ? CursorLockMode.Locked : CursorLockMode.None;
         }
-        else
-        {
-            LockCursorEnableCamera();
-        }
-    }
 
-    void OnApplicationFocus(bool hasFocus)
-    {
-        if (hasFocus)
+        public override void Execute()
         {
-            LockCursorEnableCamera();
+            bool zeroTimeScale = Mathf.Approximately(0, Time.timeScale);
+            if (zeroTimeScale)
+            {
+                UnlockCursorDisableCamera();
+            }
+            else
+            {
+                LockCursorEnableCamera();
+            }
         }
-        else
+
+
+        //TODO:(Matej) needs reimplementing using Actions
+        void OnApplicationFocus(bool hasFocus)
         {
-            UnlockCursorDisableCamera();
+            if (hasFocus)
+            {
+                LockCursorEnableCamera();
+            }
+            else
+            {
+                UnlockCursorDisableCamera();
+            }
         }
-    }
 
-    void LockCursorEnableCamera()
-    {
-        Cursor.lockState = LockCursor ? CursorLockMode.Locked : CursorLockMode.None;
-        Cursor.visible = !LockCursor;
-        Camera.enabled = true;
-    }
+        void LockCursorEnableCamera()
+        {
+            Cursor.lockState = LockCursor ? CursorLockMode.Locked : CursorLockMode.None;
+            Cursor.visible = !LockCursor;
+            Camera.value.gameObject.SetActive(true);
+        }
 
-    void UnlockCursorDisableCamera()
-    {
-        Cursor.lockState = CursorLockMode.None;
-        Cursor.visible = true;
-        Camera.enabled = false;
+        void UnlockCursorDisableCamera()
+        {
+            Cursor.lockState = CursorLockMode.None;
+            Cursor.visible = true;
+            Camera.value.gameObject.SetActive(false);
+        }
     }
 }

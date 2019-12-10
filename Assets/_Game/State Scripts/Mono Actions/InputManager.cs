@@ -15,6 +15,10 @@ namespace HedronoidSP
         public StateManagerVariable playerStates;
         public ActionBatch inputUpdateBatch;
 
+        public override void Execute_Start()
+        {
+        }
+
         public override void Execute()
         {
             inputUpdateBatch.Execute();

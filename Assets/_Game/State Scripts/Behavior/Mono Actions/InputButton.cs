@@ -14,6 +14,9 @@ namespace HedronoidSP
 		public bool updateBoolVar = true;
         public BoolVariable targetBoolVariable;
 
+        public override void Execute_Start()
+        {
+        }
 
         public override void Execute()
 		{

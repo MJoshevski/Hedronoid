@@ -9,7 +9,29 @@ namespace HedronoidSP
 		public Action[] fixedUpdateActions;
 		public Action[] updateActions;
 
-		void FixedUpdate()
+        private void Start()
+        {
+            if (fixedUpdateActions == null && updateActions == null)
+                return;
+
+            if (fixedUpdateActions != null)
+            {
+                for (int i = 0; i < fixedUpdateActions.Length; i++)
+                {
+                    fixedUpdateActions[i].Execute_Start();
+                }
+            }
+
+            if (updateActions != null)
+            {
+                for (int i = 0; i < updateActions.Length; i++)
+                {
+                    updateActions[i].Execute_Start();
+                }
+            }
+        }
+
+        void FixedUpdate()
 		{
 			if (fixedUpdateActions == null)
 				return;

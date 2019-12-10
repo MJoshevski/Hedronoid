@@ -14,6 +14,10 @@ namespace HedronoidSP
 
         public float speed = 9;
 
+        public override void Execute_Start()
+        {
+        }
+
         public override void Execute()
         {
             if (targetTransform.value == null ||

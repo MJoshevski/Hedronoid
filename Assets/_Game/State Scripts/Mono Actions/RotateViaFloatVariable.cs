@@ -19,6 +19,10 @@ namespace HedronoidSP
         public float maxClamp = 35f;
         public RotateAxis targetAxis;
 
+        public override void Execute_Start()
+        {
+        }
+
         public override void Execute()
         {
             if (!negative)

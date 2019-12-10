@@ -13,6 +13,10 @@ namespace HedronoidSP
 
         public SO.FloatVariable floatVariable;
 
+        public override void Execute_Start()
+        {
+        }
+
         public override void Execute()
         {
             value = Input.GetAxis(targetString);
