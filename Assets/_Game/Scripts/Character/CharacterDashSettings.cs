@@ -13,7 +13,7 @@ public class CharacterDashSettings : ScriptableObject
 
     public InControl.PlayerAction GetPlayerAction()
     {
-        var playerAction = MDKShooter.InputManager.Instance
+        var playerAction = Hedronoid.InputManager.Instance
             .PlayerActions
             .Actions
             .FirstOrDefault(a => a.Name == ActionName.Trim());

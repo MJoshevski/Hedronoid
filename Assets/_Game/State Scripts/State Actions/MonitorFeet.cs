@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using SO;
 
-namespace HedronoidSP
+namespace Hedronoid
 {
     [CreateAssetMenu(menuName = "Actions/State Actions/Monitor Feet Position")]
     public class MonitorFeet : StateActions

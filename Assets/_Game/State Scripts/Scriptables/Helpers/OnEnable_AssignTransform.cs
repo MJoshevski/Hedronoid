@@ -4,7 +4,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using SO;
 
-namespace HedronoidSP
+namespace Hedronoid
 {
     public class OnEnable_AssignTransform : MonoBehaviour
     {

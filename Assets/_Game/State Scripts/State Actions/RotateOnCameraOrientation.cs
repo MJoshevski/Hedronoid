@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using SO;
 using UnityEngine;
 
-namespace HedronoidSP
+namespace Hedronoid
 {
     [CreateAssetMenu(menuName = "Actions/State Actions/Rotate On Camera Rotation")]
     public class RotateOnCameraOrientation : StateActions

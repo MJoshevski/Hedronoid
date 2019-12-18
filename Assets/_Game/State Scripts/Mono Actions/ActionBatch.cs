@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-namespace HedronoidSP
+namespace Hedronoid
 {
     [CreateAssetMenu(menuName = "Actions/Mono Actions/Action Batch")]
 

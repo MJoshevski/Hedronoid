@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-namespace HedronoidSP
+namespace Hedronoid
 {
     [CreateAssetMenu(menuName = "Actions/State Actions/Anim_UpdateIsGrounded")]
     public class Anim_UpdateIsGrounded : StateActions

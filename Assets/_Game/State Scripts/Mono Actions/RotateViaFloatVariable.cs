@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using SO;
 
-namespace HedronoidSP
+namespace Hedronoid
 {
     [CreateAssetMenu(menuName = "Actions/Mono Actions/Rotate Via FloatVariable")]
     public class RotateViaFloatVariable : Action

@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-namespace HedronoidSP.BehaviorEditor
+namespace Hedronoid.BehaviorEditor
 {
     [CreateAssetMenu(menuName ="Editor/Settings")]
     public class EditorSettings : ScriptableObject

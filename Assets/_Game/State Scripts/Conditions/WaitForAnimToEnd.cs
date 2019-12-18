@@ -1,7 +1,7 @@
 ﻿using UnityEngine;
 using System.Collections;
 
-namespace HedronoidSP
+namespace Hedronoid
 {
 
     [CreateAssetMenu(menuName ="Conditions/Wait For Anim to End")]

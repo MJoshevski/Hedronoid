@@ -2,9 +2,9 @@
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEditor;
-using HedronoidSP;
+using Hedronoid;
 
-namespace HedronoidSP.BehaviorEditor
+namespace Hedronoid.BehaviorEditor
 {
     [CreateAssetMenu(menuName = "Editor/Transition Node")]
     public class TransitionNode : DrawNode

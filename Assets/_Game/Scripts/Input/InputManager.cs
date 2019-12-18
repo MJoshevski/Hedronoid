@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-namespace MDKShooter
+namespace Hedronoid
 {
     public interface IInputManager
     {

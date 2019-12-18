@@ -1,11 +1,11 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
-using HedronoidSP;
+using Hedronoid;
 using UnityEditor;
 using UnityEditorInternal;
 
-namespace HedronoidSP.CustomUI
+namespace Hedronoid.CustomUI
 {
     [CustomEditor(typeof(State))]
     public class StateGUI : Editor

@@ -3,11 +3,11 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEditor;
 using UnityEditorInternal;
-using HedronoidSP;
+using Hedronoid;
 using System;
 using System.IO;
 
-namespace HedronoidSP.BehaviorEditor
+namespace Hedronoid.BehaviorEditor
 {
     [CreateAssetMenu(menuName = "Editor/Nodes/State Node")]
     public class StateNode : DrawNode

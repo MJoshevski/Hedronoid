@@ -1,7 +1,7 @@
 using System;
 using InControl;
 
-namespace MDKShooter
+namespace Hedronoid
 {
     public class PlayerActionSet : InControl.PlayerActionSet
     {

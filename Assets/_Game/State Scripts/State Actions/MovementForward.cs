@@ -2,15 +2,17 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-namespace HedronoidSP
+namespace Hedronoid
 {
     [CreateAssetMenu(menuName = "Actions/State Actions/Movement Forward")]
     public class MovementForward : StateActions
     {
-        public float movementSpeed = 2;
+        private Vector3 _movementVelocity;
 
         public override void Execute(StateManager states)
         {
+            MovementVariables moveVars = states.movementVariables;
+
             if(states.movementVariables.MoveAmount > 0.1f)
             {
                 states.Rigidbody.drag = 0;
@@ -21,7 +23,14 @@ namespace HedronoidSP
             }
 
             Vector3 targetVelocity = states.Transform.forward * states.movementVariables.MoveAmount *
-                movementSpeed;            
+                moveVars.MovementSpeed;
+
+            //Vector3 targetVelocity = moveVars.MoveDirection * states.movementVariables.MoveAmount *
+            //   moveVars.MovementSpeed;
+
+            //_movementVelocity = Vector3.Lerp(_movementVelocity, targetVelocity, states.delta * moveVars.MoveVeloctiyChangeRate);
+
+            //states.Transform.position += _movementVelocity * states.delta;
 
             if (states.isGrounded)
             {

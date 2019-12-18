@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-namespace HedronoidSP
+namespace Hedronoid
 {
     public class StateManager : MonoBehaviour
     {
@@ -24,7 +24,9 @@ namespace HedronoidSP
         public AnimatorHashes animHashes;
         public AnimatorData animData;
 
+        [HideInInspector]
         public bool isJumping;
+        [HideInInspector]
         public bool isGrounded;
         [HideInInspector]
         public float timeSinceJump;

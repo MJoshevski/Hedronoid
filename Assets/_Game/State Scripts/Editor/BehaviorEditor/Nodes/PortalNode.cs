@@ -4,7 +4,7 @@ using UnityEngine;
 using UnityEditor;
 
 
-namespace HedronoidSP.BehaviorEditor
+namespace Hedronoid.BehaviorEditor
 {
 	[CreateAssetMenu(menuName = "Editor/Nodes/Portal Node")]
 	public class PortalNode : DrawNode

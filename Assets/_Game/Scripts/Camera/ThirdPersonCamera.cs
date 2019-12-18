@@ -3,7 +3,7 @@ using UnityEngine;
 using UnityStandardAssets.Cameras;
 using UnityStandardAssets.CrossPlatformInput;
 
-namespace MDKShooter
+namespace Hedronoid
 {
     public class ThirdPersonCamera : PivotBasedCameraRig
     {

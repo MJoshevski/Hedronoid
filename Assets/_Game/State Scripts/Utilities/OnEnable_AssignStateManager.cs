@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using UnityEngine;
 
 
-namespace HedronoidSP
+namespace Hedronoid
 {
     public class OnEnable_AssignStateManager : MonoBehaviour
     {

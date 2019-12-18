@@ -1,7 +1,7 @@
 ﻿using UnityEngine;
 using UnityEngine.UI;
 
-namespace MDKShooter
+namespace Hedronoid
 {
     public class DebugMenu : MonoBehaviour
     {

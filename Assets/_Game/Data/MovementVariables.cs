@@ -1,17 +1,28 @@
 ﻿using System;
 using UnityEngine;
 
-namespace HedronoidSP
+namespace Hedronoid
 {
 	[System.Serializable]
 	public class MovementVariables
 	{
+        [Header("Axes")]
 		public float Horizontal;
 		public float Vertical;
-		public float MoveAmount;
-        public float TurnSpeedMultiplier = 2f;
-        public float MoveSpeedMultiplier = 1f;
+
+        [Header("Movement")]
+        public float MovementSpeed = 2f;
+        public float MoveSpeedMultiplier = 1f; 
         public float MoveVeloctiyChangeRate = 1f;
-        public Vector3 MoveDirection;
+
+        [Header("Rotation")]
+        public float TurnSpeedMultiplier = 2f;
+
+        [Header("Gravity Behavior")]
+        public float GravityRotationMultiplier = 5f;
+
+        [Header("Monitoring")]
+        public float MoveAmount;
+        public Vector3 MoveDirection;        
 	}
 }

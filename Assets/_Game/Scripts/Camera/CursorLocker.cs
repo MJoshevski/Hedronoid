@@ -1,10 +1,10 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
-using MDKShooter;
+using Hedronoid;
 using SO;
 
-namespace HedronoidSP
+namespace Hedronoid
 {
     [CreateAssetMenu(menuName = "Actions/Camera/Cursor Locker")]
     public class CursorLocker : Action
