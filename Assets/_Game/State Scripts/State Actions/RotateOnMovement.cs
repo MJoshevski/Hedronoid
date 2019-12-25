@@ -1,6 +1,5 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
-using SO;
 using UnityEngine;
 
 namespace Hedronoid
@@ -8,28 +7,25 @@ namespace Hedronoid
     [CreateAssetMenu(menuName = "Actions/State Actions/Rotate On Movement")]
     public class RotateOnMovement : StateActions
     {
+        public override void Execute_Start(StateManager states)
+        {
+        }
+
         public override void Execute(StateManager states)
         {
-            Quaternion targetRotation =
-                Quaternion.LookRotation(
-                    states.movementVariables.MoveDirection,
-                    GravityService.Instance.GravityUp);
+            MovementVariables movVars = states.movementVariables;
 
-            float h = states.movementVariables.Horizontal;
-            float v = states.movementVariables.Vertical;
+            if (movVars.MoveDirection.sqrMagnitude < .25f)
+                return;
 
-            Vector3 targetDirection = states.Transform.forward * v;
-            targetDirection += states.Transform.right * h;
-            targetDirection.Normalize();
-            targetDirection.y = 0;
+            var targetRotation = Quaternion.LookRotation(
+                movVars.MoveDirection, GravityService.Instance.GravityUp);
 
             states.Transform.rotation =
                 Quaternion.Slerp(
                     states.Transform.rotation,
                     targetRotation,
-                    states.movementVariables.TurnSpeedMultiplier * states.delta);
-
-            states.Transform.rotation = targetRotation;
+                    movVars.TurnSpeedMultiplier * states.delta);
         }
     }
 }

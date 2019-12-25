@@ -1,13 +1,17 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
-using SO;
+using Hedronoid;
 
 namespace Hedronoid
 {
     [CreateAssetMenu(menuName = "Actions/State Actions/Monitor Feet Position")]
     public class MonitorFeet : StateActions
     {
+        public override void Execute_Start(StateManager states)
+        {
+        }
+
         public override void Execute(StateManager states)
         {
             //Vector3 rightFoot_relative =

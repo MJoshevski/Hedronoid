@@ -4,7 +4,7 @@ using UnityEngine;
 
 namespace Hedronoid
 {
-    public abstract class Action : ScriptableObject
+    public abstract class Action : ScriptableObject 
     {
         public abstract void Execute_Start();
         public abstract void Execute();

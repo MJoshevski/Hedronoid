@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
 
-namespace SO.UI
+namespace Hedronoid.UI
 {
     public class UIPropertyUpdater : GameEventListener
     {

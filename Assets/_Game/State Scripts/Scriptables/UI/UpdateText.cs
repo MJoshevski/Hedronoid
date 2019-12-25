@@ -1,10 +1,10 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
-using SO;
+using Hedronoid;
 using UnityEngine.UI;
 
-namespace SO.UI
+namespace Hedronoid.UI
 {
     public class UpdateText : UIPropertyUpdater
     {

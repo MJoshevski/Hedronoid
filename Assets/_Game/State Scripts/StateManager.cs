@@ -31,6 +31,11 @@ namespace Hedronoid
         [HideInInspector]
         public float timeSinceJump;
 
+        public PlayerActionSet PlayerActions;
+        public float MouseHorizontalSensitivity { get; set; }
+        public float MouseVerticalSensitivity { get; set; }
+        public TransformVariable camera;
+
         private void Start()
         {
             Transform = this.transform;
@@ -38,6 +43,10 @@ namespace Hedronoid
             Animator = GetComponentInChildren<Animator>();
             animHashes = new AnimatorHashes();
             animData = new AnimatorData(Animator);
+
+            PlayerActions = PlayerActionSet.CreateWithDefaultBindings();
+            LoadBindings();
+            LoadSensitivities();
         }
 
         private void FixedUpdate()
@@ -59,5 +68,42 @@ namespace Hedronoid
                 currentState.Tick(this);
             }
         }
+
+        public void SaveBindings()
+        {
+            var saveData = PlayerActions.Save();
+            PlayerPrefs.SetString(KEY_BINDINGS, saveData);
+            PlayerPrefs.SetFloat(KEY_MOUSE_HORIZONTAL_SENSITIVITY, MouseHorizontalSensitivity);
+            PlayerPrefs.SetFloat(KEY_MOUSE_VERTICAL_SENSITIVITY, MouseVerticalSensitivity);
+            PlayerPrefs.Save();
+            Debug.Log("Bindings saved...");
+        }
+
+        public void ResetBindings()
+        {
+            PlayerActions = PlayerActionSet.CreateWithDefaultBindings();
+            Debug.Log("Bindings reset...");
+
+        }
+
+        void LoadBindings()
+        {
+            if (PlayerPrefs.HasKey(KEY_BINDINGS))
+            {
+                var saveData = PlayerPrefs.GetString(KEY_BINDINGS);
+                PlayerActions.Load(saveData);
+                Debug.Log("Bindings loaded...");
+            }
+        }
+
+        void LoadSensitivities()
+        {
+            MouseHorizontalSensitivity = PlayerPrefs.GetFloat(KEY_MOUSE_HORIZONTAL_SENSITIVITY, 50f);
+            MouseVerticalSensitivity = PlayerPrefs.GetFloat(KEY_MOUSE_VERTICAL_SENSITIVITY, 50f);
+        }
+
+        const string KEY_BINDINGS = "Bindings";
+        const string KEY_MOUSE_HORIZONTAL_SENSITIVITY = "MouseHorizontalSensitivity";
+        const string KEY_MOUSE_VERTICAL_SENSITIVITY = "MouseVerticalSensitivity";
     }
 }

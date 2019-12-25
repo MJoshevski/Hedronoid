@@ -2,9 +2,9 @@
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
-using SO;
+using Hedronoid;
 
-namespace SO.UI
+namespace Hedronoid.UI
 {
     public class UpdateToggle : UIPropertyUpdater
     {

@@ -2,7 +2,7 @@
 using UnityEditor;
 using UnityEngine;
 
-namespace SO
+namespace Hedronoid
 {
     [CustomEditor(typeof(GameEvent))]
     public class EventEditor : Editor

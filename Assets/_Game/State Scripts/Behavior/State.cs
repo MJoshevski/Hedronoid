@@ -13,27 +13,32 @@ namespace Hedronoid
         public StateActions[] onExit;
 
         public int idCount;
+
 		[SerializeField]
         public List<Transition> transitions = new List<Transition>();
 
         public void OnEnter(StateManager states)
         {
+            ExecuteStartActions(states, onEnter);
             ExecuteActions(states, onEnter);
         }
 	
 		public void FixedTick(StateManager states)
 		{
-			ExecuteActions(states,onFixed);
+            ExecuteStartActions(states, onFixed);
+            ExecuteActions(states,onFixed);
 		}
 
         public void Tick(StateManager states)
         {
+            ExecuteStartActions(states, onUpdate);
             ExecuteActions(states, onUpdate);
             CheckTransitions(states);
         }
 
         public void OnExit(StateManager states)
         {
+            ExecuteStartActions(states, onExit);
             ExecuteActions(states, onExit);
         }
 
@@ -56,7 +61,16 @@ namespace Hedronoid
                 }
             }
         }
-        
+
+        public void ExecuteStartActions(StateManager states, StateActions[] l)
+        {
+            for (int i = 0; i < l.Length; i++)
+            {
+                if (l[i] != null)
+                    l[i].Execute_Start(states);
+            }
+        }
+
         public void ExecuteActions(StateManager states, StateActions[] l)
         {
             for (int i = 0; i < l.Length; i++)

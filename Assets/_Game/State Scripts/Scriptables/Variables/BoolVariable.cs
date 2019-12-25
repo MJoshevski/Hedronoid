@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-namespace SO
+namespace Hedronoid
 {
     [CreateAssetMenu(menuName = "Variables/Bool")]
     public class BoolVariable : ScriptableObject

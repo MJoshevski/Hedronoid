@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-namespace SO
+namespace Hedronoid
 {
     [CreateAssetMenu(menuName = "Variables/Transform")]
     public class TransformVariable : ScriptableObject

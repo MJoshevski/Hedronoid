@@ -1,7 +1,7 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
-using SO;
+using Hedronoid;
 
 namespace Hedronoid
 {
@@ -9,6 +9,11 @@ namespace Hedronoid
     public class Anim_MovementForward : StateActions
     {
         public StateActions[] stateActions;
+
+        public override void Execute_Start(StateManager states)
+        {
+        }
+
         public override void Execute(StateManager states)
         {
             if (stateActions != null)

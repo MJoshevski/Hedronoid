@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-namespace SO
+namespace Hedronoid
 {
     [CreateAssetMenu(menuName = "Variables/Integer")]
     public class IntVariable : NumberVariable

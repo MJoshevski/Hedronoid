@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.Events;
 
-namespace SO
+namespace Hedronoid
 {
     public class ConditionalEvent_BoolVariable : EventExecutionOnMB
     {

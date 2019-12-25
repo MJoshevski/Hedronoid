@@ -1,6 +1,5 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
-using SO;
 using UnityEngine;
 
 namespace Hedronoid
@@ -10,6 +9,10 @@ namespace Hedronoid
     {
         public TransformVariable cameraTransform;
         public float speed = 8;
+
+        public override void Execute_Start(StateManager states)
+        {
+        }
 
         public override void Execute(StateManager states)
         {

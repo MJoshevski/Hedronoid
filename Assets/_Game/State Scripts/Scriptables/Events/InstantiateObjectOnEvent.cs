@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-namespace SO
+namespace Hedronoid
 {
     /// <summary>
     /// This script works as a game event listener (since it derives from it)

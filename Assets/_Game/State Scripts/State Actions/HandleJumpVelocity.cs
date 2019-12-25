@@ -8,6 +8,10 @@ namespace Hedronoid
     {
         public float jumpSpeed = 4;
 
+        public override void Execute_Start(StateManager states)
+        {
+        }
+
         public override void Execute(StateManager states)
         {
             states.Rigidbody.drag = 0;

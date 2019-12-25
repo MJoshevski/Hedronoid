@@ -252,12 +252,12 @@ MonoBehaviour:
   movementVariables:
     Horizontal: 0
     Vertical: 0
-    MoveAmount: 1
     MovementSpeed: 2
     MoveSpeedMultiplier: 6
     MoveVeloctiyChangeRate: 6.5
     TurnSpeedMultiplier: 4
     GravityRotationMultiplier: 5
+    MoveAmount: 0
     MoveDirection: {x: 0, y: 0, z: 0}
   delta: 0
   Transform: {fileID: 0}
