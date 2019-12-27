@@ -8,11 +8,11 @@ namespace Hedronoid
     [CreateAssetMenu(menuName = "Actions/State Actions/Monitor Feet Position")]
     public class MonitorFeet : StateActions
     {
-        public override void Execute_Start(StateManager states)
+        public override void Execute_Start(PlayerStateManager states)
         {
         }
 
-        public override void Execute(StateManager states)
+        public override void Execute(PlayerStateManager states)
         {
             //Vector3 rightFoot_relative =
             //    states.m_Transform.InverseTransformPoint(states.animData.rightFoot.position);

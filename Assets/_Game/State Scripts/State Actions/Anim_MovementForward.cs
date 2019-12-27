@@ -10,11 +10,11 @@ namespace Hedronoid
     {
         public StateActions[] stateActions;
 
-        public override void Execute_Start(StateManager states)
+        public override void Execute_Start(PlayerStateManager states)
         {
         }
 
-        public override void Execute(StateManager states)
+        public override void Execute(PlayerStateManager states)
         {
             if (stateActions != null)
             {

@@ -11,7 +11,7 @@ namespace Hedronoid
 
         private void OnEnable()
         {
-            targetVariable.value = GetComponent<StateManager>();
+            targetVariable.value = GetComponent<PlayerStateManager>();
             Destroy(this);
         }
     }

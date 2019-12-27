@@ -22,9 +22,9 @@ namespace Hedronoid.BehaviorEditor
         Vector2 scrollPos;
         Vector2 scrollStartPos;
         static BehaviorEditor editor;
-        public static StateManager currentStateManager;
+        public static PlayerStateManager currentStateManager;
         public static bool forceSetDirty;
-        static StateManager prevStateManager;
+        static PlayerStateManager prevStateManager;
         static State previousState;
         int nodesToDelete;
 
@@ -80,7 +80,7 @@ namespace Hedronoid.BehaviorEditor
         {
             if (Selection.activeTransform != null)
             {
-                currentStateManager = Selection.activeTransform.GetComponentInChildren<StateManager>();
+                currentStateManager = Selection.activeTransform.GetComponentInChildren<PlayerStateManager>();
                 if (prevStateManager != currentStateManager)
                 {
                     prevStateManager = currentStateManager;

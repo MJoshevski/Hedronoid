@@ -259,6 +259,14 @@ MonoBehaviour:
     GravityRotationMultiplier: 5
     MoveAmount: 0
     MoveDirection: {x: 0, y: 0, z: 0}
+  jumpVariables:
+    physicalForce: {fileID: 11400000, guid: c90d4d68425094098b735fc5cd211627, type: 2}
+  dashVariables:
+    physicalForce: {fileID: 0}
+  wallRunVariables:
+    GravityNegateMultiplier: 0
+    Duration: 0
+    isWallRunning: 0
   delta: 0
   Transform: {fileID: 0}
   Rigidbody: {fileID: 0}
@@ -266,6 +274,7 @@ MonoBehaviour:
   isJumping: 0
   isGrounded: 1
   timeSinceJump: 0
+  camera: {fileID: 11400000, guid: f94341b17dc0642849f56a4523bc22f9, type: 2}
 --- !u!114 &1775900077
 MonoBehaviour:
   m_ObjectHideFlags: 0

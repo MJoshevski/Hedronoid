@@ -12,7 +12,7 @@ namespace Hedronoid
 
         public State fastLandState;
 
-        public override bool CheckCondition(StateManager state)
+        public override bool CheckCondition(PlayerStateManager state)
         {
             float m_timeDifference = Time.realtimeSinceStartup - state.timeSinceJump;
             if (m_timeDifference > 0.5f)

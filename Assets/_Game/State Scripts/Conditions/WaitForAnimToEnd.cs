@@ -10,7 +10,7 @@ namespace Hedronoid
 
         public string targetBool = "isPlayingAnim";
 
-        public override bool CheckCondition(StateManager state)
+        public override bool CheckCondition(PlayerStateManager state)
         {
             bool retVal = !state.Animator.GetBool(targetBool);
             return retVal;

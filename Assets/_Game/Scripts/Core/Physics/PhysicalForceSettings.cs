@@ -1,9 +1,12 @@
 using UnityEngine;
 
-[CreateAssetMenu(menuName = "Physics/Force")]
-public class PhysicalForceSettings : ScriptableObject
+namespace Hedronoid
 {
-    public Vector3 Direction;
-    public ForceMode ForceMode;
-    public AnimationCurve PowerOverTime;
+    [CreateAssetMenu(menuName = "Physics/Force")]
+    public class PhysicalForceSettings : ScriptableObject
+    {
+        public Vector3 Direction;
+        public ForceMode ForceMode;
+        public AnimationCurve PowerOverTime;
+    }
 }

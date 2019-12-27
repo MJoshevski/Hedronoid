@@ -1,5 +1,6 @@
 using System.Collections;
 using UnityEngine;
+using Hedronoid;
 
 public class CharacterWallJump : MonoBehaviour
 {

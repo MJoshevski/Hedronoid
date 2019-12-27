@@ -7,11 +7,11 @@ namespace Hedronoid
     [CreateAssetMenu(menuName = "Actions/State Actions/Rotate On Movement")]
     public class RotateOnMovement : StateActions
     {
-        public override void Execute_Start(StateManager states)
+        public override void Execute_Start(PlayerStateManager states)
         {
         }
 
-        public override void Execute(StateManager states)
+        public override void Execute(PlayerStateManager states)
         {
             MovementVariables movVars = states.movementVariables;
 

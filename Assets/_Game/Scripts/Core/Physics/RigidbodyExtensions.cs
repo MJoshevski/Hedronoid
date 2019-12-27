@@ -1,30 +1,33 @@
 using UnityEngine;
 using System.Collections;
 
-public static class RigidbodyExtensions
+namespace Hedronoid
 {
-    public static void ApplyForce(this Rigidbody rigidbody, Vector3 force, ForceMode mode = ForceMode.Force)
+    public static class RigidbodyExtensions
     {
-#if UNITY_EDITOR
-        Debug.DrawRay(rigidbody.transform.position, force * .05f, Color.green);
-#endif
-        rigidbody.AddForce(force, mode);
-    }
-
-    public static IEnumerator ApplyForceContinuously(this Rigidbody rigidbody, Vector3 force, PhysicalForceSettings forceSettings)
-    {
-        float time = 0f;
-        AnimationCurve powerOverTime = forceSettings.PowerOverTime;
-        Keyframe lastKeyFrame = powerOverTime[powerOverTime.length - 1];
-        while (time <= lastKeyFrame.time)
+        public static void ApplyForce(this Rigidbody rigidbody, Vector3 force, ForceMode mode = ForceMode.Force)
         {
-            float power = powerOverTime.Evaluate(time);
+#if UNITY_EDITOR
+            Debug.DrawRay(rigidbody.transform.position, force * .05f, Color.green);
+#endif
+            rigidbody.AddForce(force, mode);
+        }
 
-            rigidbody.ApplyForce(force * power, forceSettings.ForceMode);
+        public static IEnumerator ApplyForceContinuously(this Rigidbody rigidbody, Vector3 force, PhysicalForceSettings forceSettings)
+        {
+            float time = 0f;
+            AnimationCurve powerOverTime = forceSettings.PowerOverTime;
+            Keyframe lastKeyFrame = powerOverTime[powerOverTime.length - 1];
+            while (time <= lastKeyFrame.time)
+            {
+                float power = powerOverTime.Evaluate(time);
 
-            yield return new WaitForFixedUpdate();
+                rigidbody.ApplyForce(force * power, forceSettings.ForceMode);
 
-            time += Time.fixedDeltaTime;
+                yield return new WaitForFixedUpdate();
+
+                time += Time.fixedDeltaTime;
+            }
         }
     }
 }

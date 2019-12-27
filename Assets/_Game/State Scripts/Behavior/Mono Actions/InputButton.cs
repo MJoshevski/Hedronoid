@@ -2,6 +2,8 @@
 using System.Collections.Generic;
 using UnityEngine;
 using Hedronoid;
+using System.Linq;
+using InControl;
 
 namespace Hedronoid
 {
@@ -13,24 +15,34 @@ namespace Hedronoid
 		public KeyState keyState;
 		public bool updateBoolVar = true;
         public BoolVariable targetBoolVariable;
+        private PlayerAction _playerAction;
 
         public override void Execute_Start()
         {
+            _playerAction = PlayerStateManager.Instance
+                .PlayerActions
+                .Actions
+                .FirstOrDefault(a => a.Name == targetInput.Trim());
+
+            if (_playerAction == null)
+            {
+                Debug.LogError("Could not find player action with name " + targetInput);
+            }
         }
 
         public override void Execute()
 		{
-			switch (keyState)
+            switch (keyState)
 			{
 				case KeyState.onDown:
-					isPressed = Input.GetButtonDown(targetInput);
+                    isPressed = _playerAction.WasPressed;
 					break;
-				case KeyState.onCurrent:
-					isPressed = Input.GetButton(targetInput);
-					break;
+				case KeyState.onHold:
+					isPressed = _playerAction.IsPressed;
+                    break;
 				case KeyState.onUp:
-					isPressed = Input.GetButtonUp(targetInput);
-					break;
+					isPressed = _playerAction.WasReleased;
+                    break;
 				default:
 					break;
 			}
@@ -46,7 +58,7 @@ namespace Hedronoid
 
 		public enum KeyState
 		{
-			onDown,onCurrent,onUp
+			onDown,onHold,onUp
 		}
 	}
 }

@@ -7,7 +7,7 @@ namespace Hedronoid
     [CreateAssetMenu(menuName ="Conditions/Always True")]
     public class AlwaysTrue : Condition
     {
-        public override bool CheckCondition(StateManager state)
+        public override bool CheckCondition(PlayerStateManager state)
         {
             return true;
         }

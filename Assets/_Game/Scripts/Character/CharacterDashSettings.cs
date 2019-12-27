@@ -1,6 +1,7 @@
 using System.Linq;
 using InControl;
 using UnityEngine;
+using Hedronoid;
 
 [CreateAssetMenu]
 public class CharacterDashSettings : ScriptableObject

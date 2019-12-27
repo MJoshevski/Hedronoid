@@ -12,11 +12,11 @@ namespace Hedronoid
         public float _rayOriginOffset = 0.7f;
         public float _sphereCastRadius = 0.3f;
 
-        public override void Execute_Start(StateManager states)
+        public override void Execute_Start(PlayerStateManager states)
         {
         }
 
-        public override void Execute(StateManager states)
+        public override void Execute(PlayerStateManager states)
         {
             Vector3 origin = states.Transform.position;
 

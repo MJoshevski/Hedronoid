@@ -4,13 +4,16 @@ using UnityEngine;
 
 namespace Hedronoid
 {
-    public class StateManager : MonoBehaviour
+    public class PlayerStateManager : MonoSingleton<PlayerStateManager>
     {
         public float health;
         
         public State currentState;
 
         public MovementVariables movementVariables;
+        public JumpVariables jumpVariables;
+        public DashVariables dashVariables;
+        public WallRunVariables wallRunVariables;
 
         [HideInInspector]
         public float delta;

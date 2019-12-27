@@ -11,13 +11,13 @@ namespace Hedronoid
         private MovementVariables moveVars;
         private PlayerActionSet playerActions;
 
-        public override void Execute_Start(StateManager states)
+        public override void Execute_Start(PlayerStateManager states)
         {
             moveVars = states.movementVariables;
             playerActions = states.PlayerActions;
         }
 
-        public override void Execute(StateManager states)
+        public override void Execute(PlayerStateManager states)
         {
             if (moveVars.MoveAmount > 0.1f)
             {

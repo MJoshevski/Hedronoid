@@ -10,7 +10,7 @@ namespace Hedronoid
 
         public StateActions onTrueAction;
 
-        public override bool CheckCondition(StateManager state)
+        public override bool CheckCondition(PlayerStateManager state)
         {
             bool result = state.isJumping;
 

@@ -8,7 +8,7 @@ namespace Hedronoid
     {
 		public string description;
 
-        public abstract bool CheckCondition(StateManager state);
+        public abstract bool CheckCondition(PlayerStateManager state);
 
     }
 }

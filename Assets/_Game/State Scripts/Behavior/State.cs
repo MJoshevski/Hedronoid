@@ -17,32 +17,32 @@ namespace Hedronoid
 		[SerializeField]
         public List<Transition> transitions = new List<Transition>();
 
-        public void OnEnter(StateManager states)
+        public void OnEnter(PlayerStateManager states)
         {
             ExecuteStartActions(states, onEnter);
             ExecuteActions(states, onEnter);
         }
 	
-		public void FixedTick(StateManager states)
+		public void FixedTick(PlayerStateManager states)
 		{
             ExecuteStartActions(states, onFixed);
             ExecuteActions(states,onFixed);
 		}
 
-        public void Tick(StateManager states)
+        public void Tick(PlayerStateManager states)
         {
             ExecuteStartActions(states, onUpdate);
             ExecuteActions(states, onUpdate);
             CheckTransitions(states);
         }
 
-        public void OnExit(StateManager states)
+        public void OnExit(PlayerStateManager states)
         {
             ExecuteStartActions(states, onExit);
             ExecuteActions(states, onExit);
         }
 
-        public void CheckTransitions(StateManager states)
+        public void CheckTransitions(PlayerStateManager states)
         {
             for (int i = 0; i < transitions.Count; i++)
             {
@@ -62,7 +62,7 @@ namespace Hedronoid
             }
         }
 
-        public void ExecuteStartActions(StateManager states, StateActions[] l)
+        public void ExecuteStartActions(PlayerStateManager states, StateActions[] l)
         {
             for (int i = 0; i < l.Length; i++)
             {
@@ -71,7 +71,7 @@ namespace Hedronoid
             }
         }
 
-        public void ExecuteActions(StateManager states, StateActions[] l)
+        public void ExecuteActions(PlayerStateManager states, StateActions[] l)
         {
             for (int i = 0; i < l.Length; i++)
             {

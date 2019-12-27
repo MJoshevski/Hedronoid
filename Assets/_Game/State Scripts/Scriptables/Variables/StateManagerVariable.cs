@@ -7,9 +7,9 @@ namespace Hedronoid
     [CreateAssetMenu(menuName ="Variables/State Manager")]
     public class StateManagerVariable : ScriptableObject
     {
-        public StateManager value;
+        public PlayerStateManager value;
 
-        public void Set(StateManager sm)
+        public void Set(PlayerStateManager sm)
         {
             value = sm;
         }
