@@ -38,10 +38,10 @@ namespace Hedronoid
                     isPressed = _playerAction.WasPressed;
 					break;
 				case KeyState.onHold:
-					isPressed = _playerAction.IsPressed;
+                    isPressed = _playerAction.IsPressed;
                     break;
 				case KeyState.onUp:
-					isPressed = _playerAction.WasReleased;
+                    isPressed = _playerAction.WasReleased;
                     break;
 				default:
 					break;
@@ -54,7 +54,7 @@ namespace Hedronoid
                     targetBoolVariable.value = isPressed;
                 }
             }
-		}
+        }
 
 		public enum KeyState
 		{

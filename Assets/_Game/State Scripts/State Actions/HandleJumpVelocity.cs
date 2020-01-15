@@ -35,7 +35,8 @@ namespace Hedronoid
             if (moveDirection.sqrMagnitude < .25f)
                 moveDirection = states.Transform.forward;
 
-            Vector3 forceDirection = Quaternion.FromToRotation(Vector3.forward, moveDirection)
+            Vector3 forceDirection =
+                Quaternion.FromToRotation(states.Transform.forward, moveDirection)
                 * GravityService.Instance.GravityRotation
                 * forceSettings.Direction;
 

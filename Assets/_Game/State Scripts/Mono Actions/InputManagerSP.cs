@@ -17,11 +17,13 @@ namespace Hedronoid
 
         public override void Execute_Start()
         {
+            inputUpdateBatch.Execute_Start();
         }
 
         public override void Execute()
         {
             inputUpdateBatch.Execute();
+            playerStates.value.isJumping = jump.value;
         }        
     }
 
