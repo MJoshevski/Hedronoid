@@ -30,17 +30,16 @@ namespace Hedronoid
 
             RaycastHit hit;
 
-            //if(Physics.Raycast(origin, dir, out hit, _rayDistance))
             Debug.DrawRay(origin, dir * dis, Color.red);
-            if (Physics.SphereCast(origin, _sphereCastRadius, dir, out hit, dis,
-                Layers._ignoreLayersController))
-            {
-                states.isGrounded = true;
-            }
-            else
-            {
-                states.isGrounded = false;
-            }        
+
+            states.isGrounded = Physics.SphereCast(
+                origin,
+                _sphereCastRadius,
+                dir,
+                out hit,
+                dis,
+                Layers._ignoreLayersController);
+     
         }
     }
 }

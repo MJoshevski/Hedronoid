@@ -18,9 +18,6 @@ namespace Hedronoid
         [Header("Rotation")]
         public float TurnSpeedMultiplier = 2f;
 
-        [Header("Gravity Behavior")]
-        public float GravityRotationMultiplier = 5f;
-
         [Header("Monitoring")]
         public float MoveAmount;
         public Vector3 MoveDirection;        

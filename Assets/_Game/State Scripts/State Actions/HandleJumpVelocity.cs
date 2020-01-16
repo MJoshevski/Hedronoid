@@ -6,7 +6,6 @@ namespace Hedronoid
     [CreateAssetMenu(menuName ="Actions/State Actions/Handle Jump Velocity")]
     public class HandleJumpVelocity : StateActions
     {
-        public float jumpSpeed = 4;
         private PhysicalForceSettings forceSettings;
 
         public override void Execute_Start(PlayerStateManager states)
@@ -42,8 +41,9 @@ namespace Hedronoid
 
             forceDirection.Normalize();
 
-            states.StartCoroutine(states.Rigidbody.ApplyForceContinuously(forceDirection, forceSettings));
-            //_forceApplyCoroutine = StartCoroutine(Rigidbody.ApplyForceContinuously(forceDirection, forceSettings));
+            states.StartCoroutine(
+                states.Rigidbody.ApplyForceContinuously(forceDirection, forceSettings)
+                );
         }
     }
 }

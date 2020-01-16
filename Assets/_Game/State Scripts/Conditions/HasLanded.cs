@@ -12,6 +12,12 @@ namespace Hedronoid
 
         public State fastLandState;
 
+        public override void InitCondition(PlayerStateManager state)
+        {
+            if (hasInitialized) return;
+            hasInitialized = true;
+        }
+
         public override bool CheckCondition(PlayerStateManager state)
         {
             float m_timeDifference = Time.realtimeSinceStartup - state.timeSinceJump;
@@ -50,9 +56,10 @@ namespace Hedronoid
                     else
                     {
                         state.Animator.CrossFade(state.animHashes.LandFast, 0.2f);
-                    }                    
-                }
+                    }
 
+                    state.jumpVariables.JumpsMade = 0;
+                }
                 return result;
             }
             else

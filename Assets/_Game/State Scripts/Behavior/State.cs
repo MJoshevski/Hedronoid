@@ -49,7 +49,9 @@ namespace Hedronoid
                 if (transitions[i].disable)
                     continue;
 
-                if(transitions[i].condition.CheckCondition(states))
+                transitions[i].condition.InitCondition(states);
+
+                if (transitions[i].condition.CheckCondition(states))
                 {
                     if (transitions[i].targetState != null)
                     {

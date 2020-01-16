@@ -11,6 +11,7 @@ namespace Hedronoid
         public State currentState;
 
         public MovementVariables movementVariables;
+        public GravityVariables gravityVariables;
         public JumpVariables jumpVariables;
         public DashVariables dashVariables;
         public WallRunVariables wallRunVariables;
