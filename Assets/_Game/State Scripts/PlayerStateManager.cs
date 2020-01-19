@@ -40,6 +40,8 @@ namespace Hedronoid
         public float MouseVerticalSensitivity { get; set; }
         public TransformVariable camera;
 
+        private IGravityService gravityService;
+
         private void Start()
         {
             Transform = this.transform;
@@ -51,6 +53,8 @@ namespace Hedronoid
             PlayerActions = PlayerActionSet.CreateWithDefaultBindings();
             LoadBindings();
             LoadSensitivities();
+
+            gravityService = GravityService.Instance;
         }
 
         private void FixedUpdate()
@@ -60,6 +64,15 @@ namespace Hedronoid
             if (currentState != null)
             {
                 currentState.FixedTick(this);
+            }
+
+            //Apply adequate rotation
+            if (Rigidbody.transform.up != gravityService.GravityUp)
+            {
+                Rigidbody.rotation = Quaternion.Slerp(
+                   Rigidbody.rotation,
+                   gravityService.GravityRotation,
+                   gravityVariables.GravityRotationMultiplier * delta);
             }
         }
 
@@ -104,6 +117,12 @@ namespace Hedronoid
         {
             MouseHorizontalSensitivity = PlayerPrefs.GetFloat(KEY_MOUSE_HORIZONTAL_SENSITIVITY, 50f);
             MouseVerticalSensitivity = PlayerPrefs.GetFloat(KEY_MOUSE_VERTICAL_SENSITIVITY, 50f);
+        }
+
+        //Matej: Switch this to SP parameter (figure a way around coroutines)
+        public IEnumerator WaitForSeconds(float duration)
+        {
+            yield return new WaitForSeconds(duration);
         }
 
         const string KEY_BINDINGS = "Bindings";
