@@ -30,7 +30,7 @@ namespace Hedronoid
 
         [HideInInspector]
         public bool isJumping;
-        [HideInInspector]
+        //[HideInInspector]
         public bool isGrounded;
         [HideInInspector]
         public float timeSinceJump;
@@ -40,7 +40,8 @@ namespace Hedronoid
         public float MouseVerticalSensitivity { get; set; }
         public TransformVariable camera;
 
-        private IGravityService gravityService;
+        [HideInInspector]
+        public IGravityService gravityService;
 
         private void Start()
         {

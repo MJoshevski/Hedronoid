@@ -261,7 +261,11 @@ MonoBehaviour:
   gravityVariables:
     GravityForceMultiplier: 3
     GravityRotationMultiplier: 5
+    GravitySwitchCooldown: 1.5
+    ChangeOnKeyPress: 1
   jumpVariables:
+    MaxJumps: 2
+    JumpsMade: 0
     physicalForce: {fileID: 11400000, guid: c90d4d68425094098b735fc5cd211627, type: 2}
   dashVariables:
     physicalForce: {fileID: 11400000, guid: daa6132f98d514641863c74463df569e, type: 2}

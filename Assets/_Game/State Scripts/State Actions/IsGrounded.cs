@@ -21,7 +21,7 @@ namespace Hedronoid
             Vector3 origin = states.Transform.position;
 
             origin.y += _rayOriginOffset;
-            Vector3 dir = -Vector3.up;
+            Vector3 dir = -states.gravityService.GravityUp;
 
             float dis = _rayOnGroundDistance;
 

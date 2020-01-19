@@ -19,14 +19,14 @@ namespace Hedronoid
 
         public override void Execute(PlayerStateManager states)
         {
-            if (moveVars.MoveAmount > 0.1f)
-            {
-                states.Rigidbody.drag = 0;
-            }
-            else
-            {
-                states.Rigidbody.drag = 4;
-            }
+            //if (moveVars.MoveAmount > 0.1f)
+            //{
+            //    states.Rigidbody.drag = 0;
+            //}
+            //else
+            //{
+            //    states.Rigidbody.drag = 4;
+            //}
 
             moveVars.Horizontal = playerActions.Move.X;
             moveVars.Vertical = playerActions.Move.Y;
