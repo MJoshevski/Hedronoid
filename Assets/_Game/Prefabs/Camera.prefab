@@ -11,7 +11,6 @@ GameObject:
   - component: {fileID: 2679362505920283240}
   - component: {fileID: 2679362505917431084}
   - component: {fileID: 8566071669599544002}
-  - component: {fileID: 4483128039469355680}
   - component: {fileID: 2679362505920650825}
   m_Layer: 0
   m_Name: Camera
@@ -67,24 +66,9 @@ MonoBehaviour:
   m_AutoTargetPlayer: 1
   m_UpdateType: 0
   m_MoveSpeed: 60
-  m_TurnSpeed: 4.5
   m_GravityAdaptTurnSpeed: 500
   m_TiltMax: 90
   m_TiltMin: 45
---- !u!114 &4483128039469355680
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 2679362505920650824}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 4a7fee9d55a994799be839fab802f650, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  LockCursor: 1
-  Camera: {fileID: 8566071669599544002}
 --- !u!114 &2679362505920650825
 MonoBehaviour:
   m_ObjectHideFlags: 0
