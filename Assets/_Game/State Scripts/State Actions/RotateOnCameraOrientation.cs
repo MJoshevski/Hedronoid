@@ -19,24 +19,29 @@ namespace Hedronoid
             if (cameraTransform.value == null)
                 return;
 
-            float h = states.movementVariables.Horizontal;
-            float v = states.movementVariables.Vertical;
-
-            Vector3 targetDirection = cameraTransform.value.forward * v;
-            targetDirection += cameraTransform.value.right * h;
-            targetDirection.Normalize();
-            targetDirection.y = 0;
+            Vector3 targetDirection = states.movementVariables.MoveDirection;
 
             if (targetDirection == Vector3.zero)
                 targetDirection = states.Transform.forward;
 
             Quaternion tr = Quaternion.LookRotation(targetDirection);
+
             Quaternion targetRotation = Quaternion.Slerp(
-                states.Transform.rotation,
+                states.Rigidbody.rotation,
                 tr,
                 states.delta * states.movementVariables.MoveAmount * speed);
 
-            states.Transform.rotation = targetRotation;
+            states.Rigidbody.rotation = targetRotation;
+
+
+            //Apply adequate rotation
+            //if (states.Rigidbody.transform.up != states.gravityService.GravityUp)
+            //{
+            //    states.Rigidbody.rotation = Quaternion.Slerp(
+            //       states.Rigidbody.rotation,
+            //       states.gravityService.GravityRotation,
+            //       states.gravityVariables.GravityRotationMultiplier * states.delta);
+            //}
         }
     }
 }

@@ -66,15 +66,6 @@ namespace Hedronoid
             {
                 currentState.FixedTick(this);
             }
-
-            //Apply adequate rotation
-            if (Rigidbody.transform.up != gravityService.GravityUp)
-            {
-                Rigidbody.rotation = Quaternion.Slerp(
-                   Rigidbody.rotation,
-                   gravityService.GravityRotation,
-                   gravityVariables.GravityRotationMultiplier * delta);
-            }
         }
 
         private void Update()
