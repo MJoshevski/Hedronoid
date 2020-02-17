@@ -22,9 +22,9 @@ namespace Hedronoid
             }
             set
             {
-                Position = TransformUtil.GetTranslation(value);
-                Rotation = TransformUtil.GetRotation(value);
-                Scale = TransformUtil.GetScale(value);
+                Position = CustomTransformExtensions.GetTranslation(value);
+                Rotation = CustomTransformExtensions.GetRotation(value);
+                Scale = CustomTransformExtensions.GetScale(value);
             }
         }
 

@@ -2,7 +2,7 @@
 
 namespace Hedronoid
 { 
-    public static class TransformUtil
+    public static class CustomTransformExtensions
     {
 
         public static CustomTransform ToTrans(this Transform trans)
