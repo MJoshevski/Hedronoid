@@ -12,6 +12,6 @@ public class GravityApplier : MonoBehaviour
     void FixedUpdate()
     {
         var gravityService = GravityService.Instance;
-        Rigidbody.AddForce(gravityService.GravityUp * gravityService.Gravity * m_GravityMultiplier);
+        Rigidbody.AddForce(gravityService.GravityDirection * gravityService.Gravity * m_GravityMultiplier);
     }
 }

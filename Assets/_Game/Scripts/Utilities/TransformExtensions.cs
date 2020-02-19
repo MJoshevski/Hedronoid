@@ -25,9 +25,15 @@ namespace Hedronoid
 
             Matrix4x4 matrix = transform.localToWorldMatrix;
             Quaternion rotation = MatrixExtensions.ExtractRotation(ref matrix);
-
-            Transform newTransform = transform;
-            return newTransform;
+            //Debug.LogError("MATRIX: " + matrix.ToString());
+            //Debug.LogError("ROTATION: " + rotation.ToString());
+            Vector3 pos = transform.position;
+            var xCoor = transform.position.x * Mathf.Cos(90) + transform.position.y * Mathf.Sin(90);
+            var yCoor = transform.position.x * Mathf.Cos(90) - transform.position.y * Mathf.Sin(90);
+            pos.x = xCoor;
+            pos.y = yCoor;
+            transform.position = pos;
+            return transform;
         }
 
         /// <summary>

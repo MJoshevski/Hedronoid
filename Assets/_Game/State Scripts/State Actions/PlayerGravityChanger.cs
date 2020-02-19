@@ -33,7 +33,7 @@ namespace Hedronoid
                 if (Input.GetKeyDown(KeyCode.Alpha5))
                     gravityService.SwitchDirection(GravityDirections.FRONT);
                 if (Input.GetKeyDown(KeyCode.Alpha6))
-                    gravityService.SwitchDirection(GravityDirections.BACK);
+                    gravityService.SwitchDirection(GravityDirections.BACK);                
             }
             else
             {

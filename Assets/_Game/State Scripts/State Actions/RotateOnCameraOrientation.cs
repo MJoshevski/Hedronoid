@@ -8,7 +8,6 @@ namespace Hedronoid
     public class RotateOnCameraOrientation : StateActions
     {
         public TransformVariable cameraTransform;
-        public float speed = 8;
 
         public override void Execute_Start(PlayerStateManager states)
         {
@@ -24,23 +23,24 @@ namespace Hedronoid
             if (targetDirection == Vector3.zero)
                 targetDirection = states.Transform.forward;
 
-            Quaternion tr = Quaternion.LookRotation(targetDirection);
+            Quaternion tr =
+                Quaternion.LookRotation(targetDirection, states.gravityService.GravityUp);
 
             Quaternion targetRotation = Quaternion.Slerp(
-                states.Rigidbody.rotation,
+                states.Transform.localRotation,
                 tr,
-                states.delta * states.movementVariables.MoveAmount * speed);
+                states.delta * states.gravityVariables.GravityRotationMultiplier);
 
-            states.Rigidbody.rotation = targetRotation;
-
+            states.Transform.localRotation = targetRotation;
 
             //Apply adequate rotation
             //if (states.Rigidbody.transform.up != states.gravityService.GravityUp)
             //{
-            //    states.Rigidbody.rotation = Quaternion.Slerp(
-            //       states.Rigidbody.rotation,
-            //       states.gravityService.GravityRotation,
-            //       states.gravityVariables.GravityRotationMultiplier * states.delta);
+            //    states.Transform.localRotation =
+            //        Quaternion.Slerp(
+            //        states.Transform.localRotation,
+            //        states.gravityService.GravityRotation,
+            //        states.gravityVariables.GravityRotationMultiplier * states.delta);
             //}
         }
     }

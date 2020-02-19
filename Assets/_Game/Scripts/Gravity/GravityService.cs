@@ -15,7 +15,7 @@ public interface IGravityService
 
 public class GravityService : MonoSingleton<IGravityService>, IGravityService
 {
-    public float Gravity { get { return -9.81f; } }
+    public float Gravity { get { return 9.81f; } }
     public GravityDirections Direction { get; private set; }
     public Vector3 GravityDirection { get; private set; }
     public Quaternion GravityRotation { get; private set; }
@@ -202,7 +202,7 @@ public class GravityService : MonoSingleton<IGravityService>, IGravityService
                             break;
                     }
                 }
-                break;
+                break;              
         }
         Direction = direction;
     }

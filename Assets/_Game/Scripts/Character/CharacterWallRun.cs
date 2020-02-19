@@ -60,7 +60,7 @@ public class CharacterWallRun : MonoBehaviour
     void ApplyNegativeGravity()
     {
         var gravityService = GravityService.Instance;
-        Rigidbody.ApplyForce(gravityService.GravityDirection * gravityService.Gravity * Settings.GravityNegateMultiplier);
+        Rigidbody.ApplyForce(gravityService.GravityUp * gravityService.Gravity * Settings.GravityNegateMultiplier);
     }
 
     [Header("DebugView")]
