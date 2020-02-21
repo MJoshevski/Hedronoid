@@ -29,9 +29,9 @@ namespace Hedronoid
             else if (states.gravityService.Direction == GravityDirections.RIGHT)
                 origin.x -= _rayOriginOffset;
             else if (states.gravityService.Direction == GravityDirections.FRONT)
-                origin.z += _rayOriginOffset;
-            else if (states.gravityService.Direction == GravityDirections.BACK)
                 origin.z -= _rayOriginOffset;
+            else if (states.gravityService.Direction == GravityDirections.BACK)
+                origin.z += _rayOriginOffset;
 
             Vector3 dir = -states.gravityService.GravityUp;
 
