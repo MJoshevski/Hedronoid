@@ -9,7 +9,13 @@ public class TimeController : MonoBehaviour
     Button PlayButton;
 
     [SerializeField]
+    GameObject DebugPanel;
+
+    [SerializeField]
     Text TimeScaleText;
+
+    [SerializeField]
+    int escKeyPresses = 0;
 
     void Start()
     {
@@ -23,13 +29,28 @@ public class TimeController : MonoBehaviour
     {
         TimeScaleText.text = Time.timeScale.ToString();
         bool zeroTimescale = Mathf.Approximately(0, Time.timeScale);
-        PlayButton.gameObject.SetActive(zeroTimescale);
 
         if (Input.GetKeyDown(KeyCode.Escape))
         {
-            _timeScaleBeforePause = Time.timeScale;
+            escKeyPresses++;
+            if(!zeroTimescale)
+            {
+                _timeScaleBeforePause = Time.timeScale;
 
-            Time.timeScale = zeroTimescale ? _timeScaleBeforePause : 0;
+                Time.timeScale = 0;
+            }         
+            else
+            {
+                if (escKeyPresses == 2)
+                    DebugPanel.SetActive(true);
+
+                if (escKeyPresses == 3)
+                {
+                    DebugPanel.SetActive(false);
+                    Time.timeScale = _timeScaleBeforePause;
+                    escKeyPresses = 0;
+                }                    
+            }
         }
 
         if (Input.GetKeyDown(KeyCode.Equals))

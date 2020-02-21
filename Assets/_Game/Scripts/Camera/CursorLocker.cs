@@ -51,14 +51,14 @@ namespace Hedronoid
         {
             Cursor.lockState = LockCursor ? CursorLockMode.Locked : CursorLockMode.None;
             Cursor.visible = !LockCursor;
-            Camera.value.gameObject.SetActive(true);
+            //Camera.value.gameObject.SetActive(true);
         }
 
         void UnlockCursorDisableCamera()
         {
             Cursor.lockState = CursorLockMode.None;
             Cursor.visible = true;
-            Camera.value.gameObject.SetActive(false);
+            //Camera.value.gameObject.SetActive(false);
         }
     }
 }

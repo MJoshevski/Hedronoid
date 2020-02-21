@@ -129,10 +129,30 @@ PrefabInstance:
   m_Modification:
     m_TransformParent: {fileID: 0}
     m_Modifications:
-    - target: {fileID: 1673355011453624891, guid: ffee8eb1def04426b938066cd70993cb,
+    - target: {fileID: 112235463172983546, guid: ffee8eb1def04426b938066cd70993cb,
+        type: 3}
+      propertyPath: m_AnchorMax.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 379126845637404668, guid: ffee8eb1def04426b938066cd70993cb,
         type: 3}
       propertyPath: m_IsActive
       value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 1628458303556199305, guid: ffee8eb1def04426b938066cd70993cb,
+        type: 3}
+      propertyPath: m_AnchorMax.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 1673355010773924808, guid: ffee8eb1def04426b938066cd70993cb,
+        type: 3}
+      propertyPath: DebugPanel
+      value: 
+      objectReference: {fileID: 1499510637}
+    - target: {fileID: 1673355011453624891, guid: ffee8eb1def04426b938066cd70993cb,
+        type: 3}
+      propertyPath: m_IsActive
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 1673355011540225899, guid: ffee8eb1def04426b938066cd70993cb,
         type: 3}
@@ -242,6 +262,31 @@ PrefabInstance:
     - target: {fileID: 1673355011540225911, guid: ffee8eb1def04426b938066cd70993cb,
         type: 3}
       propertyPath: m_Pivot.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 1772530825984408950, guid: ffee8eb1def04426b938066cd70993cb,
+        type: 3}
+      propertyPath: m_SizeDelta.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 3608068340749119388, guid: ffee8eb1def04426b938066cd70993cb,
+        type: 3}
+      propertyPath: m_AnchorMax.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 6767157107121481503, guid: ffee8eb1def04426b938066cd70993cb,
+        type: 3}
+      propertyPath: m_IsActive
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 7252626707773016861, guid: ffee8eb1def04426b938066cd70993cb,
+        type: 3}
+      propertyPath: m_IsActive
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 8740357932057755163, guid: ffee8eb1def04426b938066cd70993cb,
+        type: 3}
+      propertyPath: m_AnchorMax.y
       value: 0
       objectReference: {fileID: 0}
     m_RemovedComponents: []
@@ -477,6 +522,12 @@ MeshFilter:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1251597113}
   m_Mesh: {fileID: 10202, guid: 0000000000000000e000000000000000, type: 0}
+--- !u!1 &1499510637 stripped
+GameObject:
+  m_CorrespondingSourceObject: {fileID: 7252626707773016861, guid: ffee8eb1def04426b938066cd70993cb,
+    type: 3}
+  m_PrefabInstance: {fileID: 14268229}
+  m_PrefabAsset: {fileID: 0}
 --- !u!1001 &1577695696
 PrefabInstance:
   m_ObjectHideFlags: 0
