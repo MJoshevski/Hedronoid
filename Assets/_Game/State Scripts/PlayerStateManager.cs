@@ -29,7 +29,9 @@ namespace Hedronoid
         public AnimatorData animData;
 
         [HideInInspector]
-        public bool isJumping;
+        public bool jumpPressed;
+        [HideInInspector]
+        public bool jumpReleased;
         //[HideInInspector]
         public bool isGrounded;
         [HideInInspector]

@@ -10,7 +10,8 @@ namespace Hedronoid
     {
         public FloatVariable horizontal;
         public FloatVariable vertical;
-        public BoolVariable jump;
+        public BoolVariable jumpBtnDown;
+        public BoolVariable jumpBtnUp;
 
         public StateManagerVariable playerStates;
         public ActionBatch inputUpdateBatch;
@@ -23,7 +24,8 @@ namespace Hedronoid
         public override void Execute()
         {
             inputUpdateBatch.Execute();
-            playerStates.value.isJumping = jump.value;
+            playerStates.value.jumpPressed = jumpBtnDown.value;
+            playerStates.value.jumpReleased = jumpBtnUp.value;
         }        
     }
 

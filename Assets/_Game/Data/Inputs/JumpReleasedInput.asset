@@ -9,7 +9,11 @@ MonoBehaviour:
   m_GameObject: {fileID: 0}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 7b70bab822f15f64f9e4f622f615213e, type: 3}
-  m_Name: _Jump
+  m_Script: {fileID: 11500000, guid: 0b81bb7f5c63640ca9bcce36bec0fa53, type: 3}
+  m_Name: JumpReleasedInput
   m_EditorClassIdentifier: 
-  value: 0
+  targetInput: Jump
+  isPressed: 0
+  keyState: 2
+  updateBoolVar: 1
+  targetBoolVariable: {fileID: 11400000, guid: 035d48b9486064cadb4a455c4feefabf, type: 2}

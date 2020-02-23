@@ -8,7 +8,7 @@ namespace Hedronoid
     public class MonitorJump : Condition
     {
         public StateActions onTrueAction;
-
+        private bool jumpMade = false;
         public override void InitCondition(PlayerStateManager state)
         {
             if (hasInitialized) return;
@@ -18,17 +18,25 @@ namespace Hedronoid
         }
         public override bool CheckCondition(PlayerStateManager state)
         {
-            bool result = state.isJumping;
+            bool resultPressed = state.jumpPressed;
+            bool resultReleased = state.jumpReleased;
 
-            if (state.isJumping &&
-                state.jumpVariables.JumpsMade < state.jumpVariables.MaxJumps)
+            if (resultPressed && !jumpMade &&
+                state.jumpVariables.JumpsMade < 
+                state.jumpVariables.MaxJumps)
             {
-                state.isJumping = false;
                 state.jumpVariables.JumpsMade++;
+                resultPressed = false;
+                jumpMade = true;
                 onTrueAction.Execute(state);
             }
 
-            return result;
+            if(resultReleased)
+            {
+                jumpMade = false;
+                resultReleased = false;
+            }
+            return resultPressed;
         }
     }
 }
