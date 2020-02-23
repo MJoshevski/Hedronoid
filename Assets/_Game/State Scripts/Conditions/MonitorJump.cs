@@ -18,25 +18,18 @@ namespace Hedronoid
         }
         public override bool CheckCondition(PlayerStateManager state)
         {
-            bool resultPressed = state.jumpPressed;
-            bool resultReleased = state.jumpReleased;
+            bool result = state.jumpPressed;
 
-            if (resultPressed && !jumpMade &&
+            if (state.jumpPressed &&
                 state.jumpVariables.JumpsMade < 
                 state.jumpVariables.MaxJumps)
             {
                 state.jumpVariables.JumpsMade++;
-                resultPressed = false;
                 jumpMade = true;
                 onTrueAction.Execute(state);
             }
 
-            if(resultReleased)
-            {
-                jumpMade = false;
-                resultReleased = false;
-            }
-            return resultPressed;
+            return result;
         }
     }
 }
