@@ -44,9 +44,8 @@ namespace Hedronoid
 
             Debug.DrawRay(origin, dir * dis, Color.red);
 
-            states.isGrounded = Physics.SphereCast(
+            states.isGrounded = Physics.Raycast(
                 origin,
-                _sphereCastRadius,
                 dir,
                 out hit,
                 dis,
