@@ -9,27 +9,27 @@ namespace Hedronoid
     {
         public StateActions onTrueAction;
         private bool jumpMade = false;
+
         public override void InitCondition(PlayerStateManager state)
         {
-            if (hasInitialized) return;
-
             onTrueAction.Execute_Start(state);
-            hasInitialized = true;
         }
+
         public override bool CheckCondition(PlayerStateManager state)
         {
-            bool result = state.jumpPressed;
+            bool isPressed = state.jumpPressed;
+            jumpMade = jumpMade && !state.jumpReleased;
 
-            if (state.jumpPressed &&
+            if (isPressed && !jumpMade &&
                 state.jumpVariables.JumpsMade < 
                 state.jumpVariables.MaxJumps)
             {
+                onTrueAction.Execute(state);
                 state.jumpVariables.JumpsMade++;
                 jumpMade = true;
-                onTrueAction.Execute(state);
-            }
+            } 
 
-            return result;
+            return isPressed;
         }
     }
 }

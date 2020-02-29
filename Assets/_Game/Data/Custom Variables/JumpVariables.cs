@@ -8,6 +8,8 @@ namespace Hedronoid
 	{
 		public int MaxJumps = 2;
 		public int JumpsMade = 0;
-        public PhysicalForceSettings physicalForce;
-	}
+        public PhysicalForceSettings firstJumpForceSettings;
+        public PhysicalForceSettings secondJumpForceSettings;
+
+    }
 }

@@ -6,11 +6,14 @@ namespace Hedronoid
     [CreateAssetMenu(menuName ="Actions/State Actions/Handle Jump Velocity")]
     public class HandleJumpVelocity : StateActions
     {
-        private PhysicalForceSettings forceSettings;
+        private PhysicalForceSettings firstJumpSettings, secondJumpSettings;
 
         public override void Execute_Start(PlayerStateManager states)
         {
-            forceSettings = states.jumpVariables.physicalForce;
+            Debug.LogError("START");
+            firstJumpSettings = states.jumpVariables.firstJumpForceSettings;
+            secondJumpSettings = states.jumpVariables.secondJumpForceSettings;
+
             IGravityService gravityService = GravityService.Instance;
         }
 
@@ -34,16 +37,33 @@ namespace Hedronoid
             if (moveDirection.sqrMagnitude < .25f)
                 moveDirection = states.Transform.forward;
 
-            Vector3 forceDirection =
-                Quaternion.FromToRotation(states.Transform.forward, moveDirection)
-                * GravityService.Instance.GravityRotation
-                * forceSettings.Direction;
+            if (states.jumpVariables.JumpsMade < states.jumpVariables.MaxJumps)
+            {
+                Vector3 forceDirection =
+                    Quaternion.FromToRotation(states.Transform.forward, moveDirection)
+                    * GravityService.Instance.GravityRotation
+                    * firstJumpSettings.Direction;
 
-            forceDirection.Normalize();
+                forceDirection.Normalize();
 
-            states.StartCoroutine(
-                states.Rigidbody.ApplyForceContinuously(forceDirection, forceSettings)
-                );
+                states.StartCoroutine(
+                    states.Rigidbody.ApplyForceContinuously(forceDirection, firstJumpSettings)
+                    );
+            }
+            else if (states.jumpVariables.JumpsMade == states.jumpVariables.MaxJumps)
+            {
+                Debug.LogError("SECOND");
+                Vector3 forceDirection =
+                    Quaternion.FromToRotation(states.Transform.forward, moveDirection)
+                    * GravityService.Instance.GravityRotation
+                    * secondJumpSettings.Direction;
+
+                forceDirection.Normalize();
+
+                states.StartCoroutine(
+                    states.Rigidbody.ApplyForceContinuously(forceDirection, secondJumpSettings)
+                    );
+            }
         }
     }
 }

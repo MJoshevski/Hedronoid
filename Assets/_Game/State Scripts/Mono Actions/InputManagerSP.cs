@@ -24,6 +24,7 @@ namespace Hedronoid
         public override void Execute()
         {
             inputUpdateBatch.Execute();
+
             playerStates.value.jumpPressed = jumpBtnDown.value;
             playerStates.value.jumpReleased = jumpBtnUp.value;
         }        

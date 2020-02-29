@@ -14,8 +14,6 @@ namespace Hedronoid
 
         public override void InitCondition(PlayerStateManager state)
         {
-            if (hasInitialized) return;
-            hasInitialized = true;
         }
 
         public override bool CheckCondition(PlayerStateManager state)

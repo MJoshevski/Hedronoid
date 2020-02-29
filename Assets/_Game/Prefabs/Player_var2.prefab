@@ -10,7 +10,7 @@ GameObject:
   m_Component:
   - component: {fileID: 3560993769845328667}
   - component: {fileID: 8092752766933039461}
-  m_Layer: 9
+  m_Layer: 0
   m_Name: Point Light
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -24,13 +24,13 @@ Transform:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1301799418825966928}
-  m_LocalRotation: {x: 0.43233135, y: -0, z: -0, w: 0.9017148}
-  m_LocalPosition: {x: 0, y: 1.575, z: -0.603}
+  m_LocalRotation: {x: 0.49999917, y: -0, z: -0, w: 0.8660259}
+  m_LocalPosition: {x: -1.15, y: 4.101, z: -2.08}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children: []
   m_Father: {fileID: 6092352731727703243}
   m_RootOrder: 1
-  m_LocalEulerAnglesHint: {x: 51.231003, y: 0, z: 0}
+  m_LocalEulerAnglesHint: {x: 60.000004, y: 0, z: 0}
 --- !u!108 &8092752766933039461
 Light:
   m_ObjectHideFlags: 0
@@ -39,16 +39,17 @@ Light:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1301799418825966928}
   m_Enabled: 1
-  serializedVersion: 9
+  serializedVersion: 10
   m_Type: 0
+  m_Shape: 0
   m_Color: {r: 1, g: 1, b: 1, a: 1}
-  m_Intensity: 3.05
-  m_Range: 1.59
-  m_SpotAngle: 70.1
-  m_InnerSpotAngle: 21.80208
+  m_Intensity: 8.07
+  m_Range: 18.3
+  m_SpotAngle: 113.78074
+  m_InnerSpotAngle: 65.48281
   m_CookieSize: 10
   m_Shadows:
-    m_Type: 0
+    m_Type: 1
     m_Resolution: -1
     m_CustomResolution: -1
     m_Strength: 1
@@ -145,6 +146,7 @@ MeshRenderer:
   m_MotionVectors: 1
   m_LightProbeUsage: 1
   m_ReflectionProbeUsage: 1
+  m_RayTracingMode: 2
   m_RenderingLayerMask: 1
   m_RendererPriority: 0
   m_Materials:
@@ -156,6 +158,7 @@ MeshRenderer:
   m_ProbeAnchor: {fileID: 0}
   m_LightProbeVolumeOverride: {fileID: 0}
   m_ScaleInLightmap: 1
+  m_ReceiveGI: 1
   m_PreserveUVs: 0
   m_IgnoreNormalsForChartDetection: 0
   m_ImportantGI: 0
@@ -217,7 +220,7 @@ Rigidbody:
   serializedVersion: 2
   m_Mass: 1
   m_Drag: 0.05
-  m_AngularDrag: 999
+  m_AngularDrag: 1
   m_UseGravity: 0
   m_IsKinematic: 0
   m_Interpolate: 0
@@ -252,21 +255,24 @@ MonoBehaviour:
   movementVariables:
     Horizontal: 0
     Vertical: 0
-    MovementSpeed: 7
+    MovementSpeed: 10
     MoveSpeedMultiplier: 6
-    MoveVeloctiyChangeRate: 6.5
-    TurnSpeedMultiplier: 4
+    MoveVeloctiyChangeRate: 10
+    TurnSpeedMultiplier: 16
     MoveAmount: 0
     MoveDirection: {x: 0, y: 0, z: 0}
   gravityVariables:
-    GravityForceMultiplier: 3
+    GravityForceMultiplier: 4
     GravityRotationMultiplier: 5
     GravitySwitchCooldown: 1.5
-    ChangeOnKeyPress: 1
+    ChangeOnKeyPress: 0
   jumpVariables:
     MaxJumps: 2
     JumpsMade: 0
-    physicalForce: {fileID: 11400000, guid: c90d4d68425094098b735fc5cd211627, type: 2}
+    firstJumpForceSettings: {fileID: 11400000, guid: c90d4d68425094098b735fc5cd211627,
+      type: 2}
+    secondJumpForceSettings: {fileID: 11400000, guid: c90d4d68425094098b735fc5cd211627,
+      type: 2}
   dashVariables:
     physicalForce: {fileID: 11400000, guid: daa6132f98d514641863c74463df569e, type: 2}
   wallRunVariables:
@@ -277,7 +283,8 @@ MonoBehaviour:
   Transform: {fileID: 0}
   Rigidbody: {fileID: 0}
   Animator: {fileID: 0}
-  isJumping: 0
+  jumpPressed: 0
+  jumpReleased: 0
   isGrounded: 1
   timeSinceJump: 0
   camera: {fileID: 11400000, guid: f94341b17dc0642849f56a4523bc22f9, type: 2}
@@ -328,7 +335,7 @@ MonoBehaviour:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 8056242218406211774}
-  m_Enabled: 1
+  m_Enabled: 0
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 5fea29bb7c508c244a1f805a5fd3fc4d, type: 3}
   m_Name: 
@@ -346,10 +353,15 @@ PrefabInstance:
   m_Modification:
     m_TransformParent: {fileID: 6092352731727703243}
     m_Modifications:
-    - target: {fileID: -927199367670048503, guid: 47619a53a1253431da1ca9e5b272ecd3,
+    - target: {fileID: -6057140222963153312, guid: 47619a53a1253431da1ca9e5b272ecd3,
         type: 3}
-      propertyPath: m_Name
-      value: base model
+      propertyPath: m_Controller
+      value: 
+      objectReference: {fileID: 9100000, guid: 99ecde1eff61e46b5921c329ef77725b, type: 2}
+    - target: {fileID: -6057140222963153312, guid: 47619a53a1253431da1ca9e5b272ecd3,
+        type: 3}
+      propertyPath: m_ApplyRootMotion
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: -4216859302048453862, guid: 47619a53a1253431da1ca9e5b272ecd3,
         type: 3}
@@ -406,16 +418,21 @@ PrefabInstance:
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
       objectReference: {fileID: 0}
-    - target: {fileID: -6057140222963153312, guid: 47619a53a1253431da1ca9e5b272ecd3,
+    - target: {fileID: -927199367670048503, guid: 47619a53a1253431da1ca9e5b272ecd3,
         type: 3}
-      propertyPath: m_Controller
-      value: 
-      objectReference: {fileID: 9100000, guid: 99ecde1eff61e46b5921c329ef77725b, type: 2}
-    - target: {fileID: -6057140222963153312, guid: 47619a53a1253431da1ca9e5b272ecd3,
-        type: 3}
-      propertyPath: m_ApplyRootMotion
-      value: 0
+      propertyPath: m_Name
+      value: base model
       objectReference: {fileID: 0}
+    - target: {fileID: 1513352704009848583, guid: 47619a53a1253431da1ca9e5b272ecd3,
+        type: 3}
+      propertyPath: m_Materials.Array.data[0]
+      value: 
+      objectReference: {fileID: 2100000, guid: 31321ba15b8f8eb4c954353edc038b1d, type: 2}
+    - target: {fileID: 4137360376990707587, guid: 47619a53a1253431da1ca9e5b272ecd3,
+        type: 3}
+      propertyPath: m_Materials.Array.data[0]
+      value: 
+      objectReference: {fileID: 2100000, guid: 31321ba15b8f8eb4c954353edc038b1d, type: 2}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 47619a53a1253431da1ca9e5b272ecd3, type: 3}
 --- !u!1 &8056242218406211774 stripped

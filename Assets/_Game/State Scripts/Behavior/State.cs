@@ -27,12 +27,15 @@ namespace Hedronoid
 		{
             ExecuteStartActions(states, onFixed);
             ExecuteActions(states,onFixed);
-		}
+            InitTransitions(states);
+            CheckTransitions(states);
+        }
 
         public void Tick(PlayerStateManager states)
         {
             ExecuteStartActions(states, onUpdate);
             ExecuteActions(states, onUpdate);
+            InitTransitions(states);
             CheckTransitions(states);
         }
 
@@ -42,7 +45,7 @@ namespace Hedronoid
             ExecuteActions(states, onExit);
         }
 
-        public void CheckTransitions(PlayerStateManager states)
+        public void InitTransitions(PlayerStateManager states)
         {
             for (int i = 0; i < transitions.Count; i++)
             {
@@ -50,6 +53,15 @@ namespace Hedronoid
                     continue;
 
                 transitions[i].condition.InitCondition(states);
+            }
+        }
+
+        public void CheckTransitions(PlayerStateManager states)
+        {
+            for (int i = 0; i < transitions.Count; i++)
+            {
+                if (transitions[i].disable)
+                    continue;
 
                 if (transitions[i].condition.CheckCondition(states))
                 {

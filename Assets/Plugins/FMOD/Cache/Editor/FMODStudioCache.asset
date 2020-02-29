@@ -14,7 +14,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   Path: Assets/.FMOD/MDK/Build/Desktop/Master.strings.bank
   SubDir: 
-  lastModified: 637186126335564086
+  lastModified: 637186129851078582
   LoadResult: 0
   FileSizes:
   - Name: Desktop
@@ -116,6 +116,24 @@ MonoBehaviour:
   MinDistance: 1
   MaxDistance: 20
   Length: 0
+--- !u!114 &-4115586505958860338
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: c18180ecb35941f4682ae60107b85b7c, type: 3}
+  m_Name: bank:/Master.bank
+  m_EditorClassIdentifier: 
+  Path: Assets/.FMOD/MDK/Build/Desktop/Master.bank
+  SubDir: 
+  lastModified: 637186129851038621
+  LoadResult: 0
+  FileSizes: []
+  Exists: 1
 --- !u!114 &-3611698734807662566
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -169,7 +187,7 @@ MonoBehaviour:
   lastModified: 637186126335519446
   LoadResult: 0
   FileSizes: []
-  Exists: 1
+  Exists: 0
 --- !u!114 &-1292215263712526515
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -240,7 +258,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   EditorBanks:
   - {fileID: -8438643454556620783}
-  - {fileID: -2951807465747120290}
+  - {fileID: -4115586505958860338}
   EditorEvents:
   - {fileID: 7164017514546020266}
   - {fileID: 4266092190095017012}
@@ -248,10 +266,10 @@ MonoBehaviour:
   - {fileID: 2847071857926268170}
   EditorParameters: []
   MasterBanks:
-  - {fileID: -2951807465747120290}
+  - {fileID: -4115586505958860338}
   StringsBanks:
   - {fileID: -8438643454556620783}
-  stringsBankWriteTime: 637186126335564086
+  stringsBankWriteTime: 637186129851078582
   cacheVersion: 3
 --- !u!114 &285952124980657344
 MonoBehaviour:
@@ -268,7 +286,7 @@ MonoBehaviour:
   Path: event:/Ambience/Ambience
   guid: a4871e9fb014d8489f0805a08d03aad0
   Banks:
-  - {fileID: -2951807465747120290}
+  - {fileID: -4115586505958860338}
   IsStream: 0
   Is3D: 0
   IsOneShot: 1
@@ -309,7 +327,7 @@ MonoBehaviour:
   Path: event:/SFX/Foley/FootSteps
   guid: d76c777890ccad48a0ed59864561b0e3
   Banks:
-  - {fileID: -2951807465747120290}
+  - {fileID: -4115586505958860338}
   IsStream: 0
   Is3D: 1
   IsOneShot: 1
@@ -350,7 +368,7 @@ MonoBehaviour:
   Path: event:/SFX/Weapons/Ranged
   guid: 6df5b9b325ae2d4a8fc66dac9c923e0e
   Banks:
-  - {fileID: -2951807465747120290}
+  - {fileID: -4115586505958860338}
   IsStream: 0
   Is3D: 1
   IsOneShot: 1
@@ -391,7 +409,7 @@ MonoBehaviour:
   Path: event:/Music/Music
   guid: 44f2475a90b65347b550d55117298bc9
   Banks:
-  - {fileID: -2951807465747120290}
+  - {fileID: -4115586505958860338}
   IsStream: 0
   Is3D: 0
   IsOneShot: 1
