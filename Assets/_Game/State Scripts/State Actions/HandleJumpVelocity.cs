@@ -10,11 +10,8 @@ namespace Hedronoid
 
         public override void Execute_Start(PlayerStateManager states)
         {
-            Debug.LogError("START");
             firstJumpSettings = states.jumpVariables.firstJumpForceSettings;
             secondJumpSettings = states.jumpVariables.secondJumpForceSettings;
-
-            IGravityService gravityService = GravityService.Instance;
         }
 
         public override void Execute(PlayerStateManager states)
@@ -52,7 +49,6 @@ namespace Hedronoid
             }
             else if (states.jumpVariables.JumpsMade == states.jumpVariables.MaxJumps)
             {
-                Debug.LogError("SECOND");
                 Vector3 forceDirection =
                     Quaternion.FromToRotation(states.Transform.forward, moveDirection)
                     * GravityService.Instance.GravityRotation

@@ -6,6 +6,8 @@ namespace Hedronoid
 	[System.Serializable]
 	public class DashVariables
 	{
-        public PhysicalForceSettings physicalForce;
+        public int ExecutionsBeforeReset = 0;
+        public bool ContinuousInput = false;
+        public PhysicalForceSettings PhysicalForce;
 	}
 }

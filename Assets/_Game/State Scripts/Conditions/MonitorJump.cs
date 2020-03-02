@@ -19,11 +19,15 @@ namespace Hedronoid
         {
             bool isPressed = state.jumpPressed;
             jumpMade = jumpMade && !state.jumpReleased;
+            Debug.LogError("IS RELEASED: " + state.jumpReleased);
 
+            Debug.LogError("JUMP MADE: "+ jumpMade);
             if (isPressed && !jumpMade &&
                 state.jumpVariables.JumpsMade < 
                 state.jumpVariables.MaxJumps)
             {
+                //Debug.LogError("JUMP MADE: " + jumpMade);
+
                 onTrueAction.Execute(state);
                 state.jumpVariables.JumpsMade++;
                 jumpMade = true;

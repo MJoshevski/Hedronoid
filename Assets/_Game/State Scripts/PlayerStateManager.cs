@@ -28,10 +28,10 @@ namespace Hedronoid
         public AnimatorHashes animHashes;
         public AnimatorData animData;
 
-        [HideInInspector]
-        public bool jumpPressed;
-        [HideInInspector]
-        public bool jumpReleased;
+        [HideInInspector] public bool jumpPressed;
+        [HideInInspector] public bool jumpReleased;
+        [HideInInspector] public bool dashPressed;
+        [HideInInspector] public bool dashReleased;
         //[HideInInspector]
         public bool isGrounded;
         [HideInInspector]

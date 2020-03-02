@@ -10091,6 +10091,22 @@ PrefabInstance:
   m_Modification:
     m_TransformParent: {fileID: 0}
     m_Modifications:
+    - target: {fileID: 2917728978657191866, guid: c9e9f13f901554eadbbf449e8ea69a74,
+        type: 3}
+      propertyPath: dashVariables.ActionName
+      value: Dash
+      objectReference: {fileID: 0}
+    - target: {fileID: 2917728978657191866, guid: c9e9f13f901554eadbbf449e8ea69a74,
+        type: 3}
+      propertyPath: dashVariables.PhysicalForce
+      value: 
+      objectReference: {fileID: 11400000, guid: c55d33c596c554fa3926ae3d481dfef0,
+        type: 2}
+    - target: {fileID: 2917728978657191866, guid: c9e9f13f901554eadbbf449e8ea69a74,
+        type: 3}
+      propertyPath: dashVariables.ExecutionsBeforeReset
+      value: 1
+      objectReference: {fileID: 0}
     - target: {fileID: 6092352731727703243, guid: c9e9f13f901554eadbbf449e8ea69a74,
         type: 3}
       propertyPath: m_LocalPosition.x

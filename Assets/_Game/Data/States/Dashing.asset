@@ -10,7 +10,7 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: e09f12a9b8fb5e44eb81fa499afbecc4, type: 3}
-  m_Name: In Air
+  m_Name: Dashing
   m_EditorClassIdentifier: 
   onFixed:
   - {fileID: 11400000, guid: e554c3a8b3da340f0808d471a3cd2f84, type: 2}
@@ -21,17 +21,13 @@ MonoBehaviour:
   - {fileID: 11400000, guid: 83273139a6ace4b0a9859a9f2fb04556, type: 2}
   onEnter: []
   onExit: []
-  idCount: 7
+  idCount: 3
   transitions:
-  - id: 0
+  - id: 1
     condition: {fileID: 11400000, guid: 95da7063ec603492e86f68b0318dccfe, type: 2}
     targetState: {fileID: 11400000, guid: fa444fdc218edb14b89d5662b84aa39d, type: 2}
     disable: 0
-  - id: 5
-    condition: {fileID: 11400000, guid: 263ad0c23725f43a28b1df6988712fec, type: 2}
-    targetState: {fileID: 11400000, guid: 49709c2677a7942709ee376382cdb568, type: 2}
-    disable: 0
-  - id: 6
-    condition: {fileID: 11400000, guid: b6dffb8e4a7434896b8f9f6e5d37aa0c, type: 2}
-    targetState: {fileID: 11400000}
+  - id: 2
+    condition: {fileID: 11400000, guid: 1e0b1bcd866564f4daef666f3b359510, type: 2}
+    targetState: {fileID: 11400000, guid: accb287c681474d8283ead60cabc2010, type: 2}
     disable: 0

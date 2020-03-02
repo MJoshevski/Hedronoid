@@ -12,6 +12,8 @@ namespace Hedronoid
         public FloatVariable vertical;
         public BoolVariable jumpBtnDown;
         public BoolVariable jumpBtnUp;
+        public BoolVariable dashBtnDown;
+        public BoolVariable dashBtnUp;
 
         public StateManagerVariable playerStates;
         public ActionBatch inputUpdateBatch;
@@ -27,6 +29,9 @@ namespace Hedronoid
 
             playerStates.value.jumpPressed = jumpBtnDown.value;
             playerStates.value.jumpReleased = jumpBtnUp.value;
+
+            playerStates.value.dashPressed = dashBtnDown.value;
+            playerStates.value.dashReleased = dashBtnUp.value;
         }        
     }
 
