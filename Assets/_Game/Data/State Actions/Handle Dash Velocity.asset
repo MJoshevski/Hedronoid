@@ -9,8 +9,7 @@ MonoBehaviour:
   m_GameObject: {fileID: 0}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 9e3212a3551684710be94af9d83b5427, type: 3}
-  m_Name: Monitor Dash
+  m_Script: {fileID: 11500000, guid: 8b7ad28c765ad4f97a6f429c340c080a, type: 3}
+  m_Name: Handle Dash Velocity
   m_EditorClassIdentifier: 
-  description: Checks dash input & plays anim.
-  onTrueAction: {fileID: 11400000, guid: e0f9eb391756d4142928b472edfcf4ac, type: 2}
+  _executions: 0

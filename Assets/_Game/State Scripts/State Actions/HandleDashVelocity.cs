@@ -7,8 +7,8 @@ namespace Hedronoid
     public class HandleDashVelocity : StateActions
     {
         Coroutine _forceApplyCoroutine = null;
+        [SerializeField]
         int _executions = 0;
-        Coroutine _actionCoroutine = null;
         DashVariables dashVariables;
         IGravityService gravityService;
 
@@ -20,31 +20,29 @@ namespace Hedronoid
 
         public override void Execute(PlayerStateManager states)
         {
-            Debug.LogError("DAAAASHING");
             Vector3 moveDirection = states.movementVariables.MoveDirection;
+
             if (moveDirection.sqrMagnitude < .25f)
                 moveDirection = states.Transform.forward;
 
-            var forceDirection = Quaternion.FromToRotation(Vector3.forward, moveDirection)
-                * gravityService.GravityRotation
-                * dashVariables.PhysicalForce.Direction;
+            Vector3 forceDirection = states.Transform.forward;
 
             forceDirection.Normalize();
 
             if (states.dashVariables.ContinuousInput
             && _forceApplyCoroutine != null)
-        {
-            states.StopCoroutine(_forceApplyCoroutine);
-            _forceApplyCoroutine = null;
-            AfterApplyForce();
-        }
+            {
+                states.StopCoroutine(_forceApplyCoroutine);
+                _forceApplyCoroutine = null;
+                AfterApplyForce();
+            }
+            
+            if (_executions >= dashVariables.ExecutionsBeforeReset)
+                return;
 
-        if (_executions >= dashVariables.ExecutionsBeforeReset)
-            return;
+            states.StartCoroutine(
+                DoApplyForceOverTime(states, forceDirection, dashVariables.PhysicalForce));
 
-        var forceSettings = dashVariables.PhysicalForce;
-        _actionCoroutine = states.StartCoroutine(
-            DoApplyForceOverTime(states, forceDirection, dashVariables.PhysicalForce));
         }
 
         IEnumerator DoApplyForceOverTime(PlayerStateManager states, Vector3 forceDirection, PhysicalForceSettings forceSettings)

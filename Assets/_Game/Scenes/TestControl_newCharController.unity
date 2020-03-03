@@ -10093,20 +10093,16 @@ PrefabInstance:
     m_Modifications:
     - target: {fileID: 2917728978657191866, guid: c9e9f13f901554eadbbf449e8ea69a74,
         type: 3}
-      propertyPath: dashVariables.ActionName
-      value: Dash
-      objectReference: {fileID: 0}
+      propertyPath: jumpVariables.firstJumpForceSettings
+      value: 
+      objectReference: {fileID: 11400000, guid: e8e492410aa8f4932ae51bb23ed1688d,
+        type: 2}
     - target: {fileID: 2917728978657191866, guid: c9e9f13f901554eadbbf449e8ea69a74,
         type: 3}
       propertyPath: dashVariables.PhysicalForce
       value: 
-      objectReference: {fileID: 11400000, guid: c55d33c596c554fa3926ae3d481dfef0,
+      objectReference: {fileID: 11400000, guid: 002679e5d113047b09c1a29efbd4bbd2,
         type: 2}
-    - target: {fileID: 2917728978657191866, guid: c9e9f13f901554eadbbf449e8ea69a74,
-        type: 3}
-      propertyPath: dashVariables.ExecutionsBeforeReset
-      value: 1
-      objectReference: {fileID: 0}
     - target: {fileID: 6092352731727703243, guid: c9e9f13f901554eadbbf449e8ea69a74,
         type: 3}
       propertyPath: m_LocalPosition.x

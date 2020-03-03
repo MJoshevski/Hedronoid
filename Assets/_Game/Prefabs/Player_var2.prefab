@@ -274,7 +274,9 @@ MonoBehaviour:
     secondJumpForceSettings: {fileID: 11400000, guid: c90d4d68425094098b735fc5cd211627,
       type: 2}
   dashVariables:
-    physicalForce: {fileID: 11400000, guid: daa6132f98d514641863c74463df569e, type: 2}
+    ExecutionsBeforeReset: 1
+    ContinuousInput: 0
+    PhysicalForce: {fileID: 11400000, guid: c55d33c596c554fa3926ae3d481dfef0, type: 2}
   wallRunVariables:
     GravityNegateMultiplier: 0
     Duration: 0
@@ -285,6 +287,8 @@ MonoBehaviour:
   Animator: {fileID: 0}
   jumpPressed: 0
   jumpReleased: 0
+  dashPressed: 0
+  dashReleased: 0
   isGrounded: 1
   timeSinceJump: 0
   camera: {fileID: 11400000, guid: f94341b17dc0642849f56a4523bc22f9, type: 2}
@@ -321,7 +325,7 @@ CapsuleCollider:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 6092352731727976783}
-  m_Material: {fileID: 0}
+  m_Material: {fileID: 13400000, guid: c2815a7ab32e42c4bb42f59caacb8ec1, type: 2}
   m_IsTrigger: 0
   m_Enabled: 1
   m_Radius: 0.32

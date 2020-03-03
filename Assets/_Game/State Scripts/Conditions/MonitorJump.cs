@@ -8,6 +8,7 @@ namespace Hedronoid
     public class MonitorJump : Condition
     {
         public StateActions onTrueAction;
+        [SerializeField]
         private bool jumpMade = false;
 
         public override void InitCondition(PlayerStateManager state)
@@ -19,9 +20,7 @@ namespace Hedronoid
         {
             bool isPressed = state.jumpPressed;
             jumpMade = jumpMade && !state.jumpReleased;
-            Debug.LogError("IS RELEASED: " + state.jumpReleased);
 
-            Debug.LogError("JUMP MADE: "+ jumpMade);
             if (isPressed && !jumpMade &&
                 state.jumpVariables.JumpsMade < 
                 state.jumpVariables.MaxJumps)

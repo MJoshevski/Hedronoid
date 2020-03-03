@@ -12,7 +12,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 4071a19767ade481e9f0d80b4fe47942, type: 3}
   m_Name: DashForceOverTime
   m_EditorClassIdentifier: 
-  Direction: {x: 0, y: 0.75, z: 100}
+  Direction: {x: 0, y: 0, z: 0}
   ForceMode: 5
   PowerOverTime:
     serializedVersion: 2
@@ -27,8 +27,8 @@ MonoBehaviour:
       inWeight: 0.33333334
       outWeight: 0.33333334
     - serializedVersion: 3
-      time: 0.050891116
-      value: 149.5838
+      time: 0.07340288
+      value: 1985.6422
       inSlope: -1.647721
       outSlope: -1.647721
       tangentMode: 0
