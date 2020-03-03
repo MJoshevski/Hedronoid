@@ -8,7 +8,6 @@ namespace Hedronoid
     {
         Coroutine _forceApplyCoroutine = null;
         [SerializeField]
-        int _executions = 0;
         DashVariables dashVariables;
         IGravityService gravityService;
 
@@ -37,7 +36,7 @@ namespace Hedronoid
                 AfterApplyForce();
             }
             
-            if (_executions >= dashVariables.ExecutionsBeforeReset)
+            if (dashVariables.DashesMade >= dashVariables.MaxDashes)
                 return;
 
             states.StartCoroutine(
@@ -47,7 +46,7 @@ namespace Hedronoid
 
         IEnumerator DoApplyForceOverTime(PlayerStateManager states, Vector3 forceDirection, PhysicalForceSettings forceSettings)
         {
-            _executions++;
+            dashVariables.DashesMade++;
 
             _forceApplyCoroutine = states.StartCoroutine(
                 states.Rigidbody.ApplyForceContinuously(forceDirection, forceSettings));
@@ -58,7 +57,7 @@ namespace Hedronoid
 
         void AfterApplyForce()
         {
-            _executions--;
+            dashVariables.DashesMade--;
             _forceApplyCoroutine = null;
         }
     }

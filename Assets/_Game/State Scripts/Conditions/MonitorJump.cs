@@ -10,10 +10,12 @@ namespace Hedronoid
         public StateActions onTrueAction;
         [SerializeField]
         private bool jumpMade = false;
+        private JumpVariables jumpVariables;
 
         public override void InitCondition(PlayerStateManager state)
         {
             onTrueAction.Execute_Start(state);
+            jumpVariables = state.jumpVariables;
         }
 
         public override bool CheckCondition(PlayerStateManager state)
@@ -22,13 +24,13 @@ namespace Hedronoid
             jumpMade = jumpMade && !state.jumpReleased;
 
             if (isPressed && !jumpMade &&
-                state.jumpVariables.JumpsMade < 
-                state.jumpVariables.MaxJumps)
+                jumpVariables.JumpsMade < 
+                jumpVariables.MaxJumps)
             {
                 //Debug.LogError("JUMP MADE: " + jumpMade);
 
                 onTrueAction.Execute(state);
-                state.jumpVariables.JumpsMade++;
+                jumpVariables.JumpsMade++;
                 jumpMade = true;
             } 
 

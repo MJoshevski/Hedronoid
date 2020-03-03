@@ -269,14 +269,15 @@ MonoBehaviour:
   jumpVariables:
     MaxJumps: 2
     JumpsMade: 0
-    firstJumpForceSettings: {fileID: 11400000, guid: c90d4d68425094098b735fc5cd211627,
+    firstJumpForceSettings: {fileID: 11400000, guid: e8e492410aa8f4932ae51bb23ed1688d,
       type: 2}
     secondJumpForceSettings: {fileID: 11400000, guid: c90d4d68425094098b735fc5cd211627,
       type: 2}
   dashVariables:
-    ExecutionsBeforeReset: 1
+    MaxDashes: 1
+    DashesMade: 0
     ContinuousInput: 0
-    PhysicalForce: {fileID: 11400000, guid: c55d33c596c554fa3926ae3d481dfef0, type: 2}
+    PhysicalForce: {fileID: 11400000, guid: 002679e5d113047b09c1a29efbd4bbd2, type: 2}
   wallRunVariables:
     GravityNegateMultiplier: 0
     Duration: 0
