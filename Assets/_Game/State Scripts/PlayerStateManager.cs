@@ -11,6 +11,7 @@ namespace Hedronoid
         public State currentState;
 
         public MovementVariables movementVariables;
+        public CollisionVariables collisionVariables;
         public GravityVariables gravityVariables;
         public JumpVariables jumpVariables;
         public DashVariables dashVariables;
@@ -32,6 +33,7 @@ namespace Hedronoid
         [HideInInspector] public bool jumpReleased;
         [HideInInspector] public bool dashPressed;
         [HideInInspector] public bool dashReleased;
+
         //[HideInInspector]
         public bool isGrounded;
         [HideInInspector]
