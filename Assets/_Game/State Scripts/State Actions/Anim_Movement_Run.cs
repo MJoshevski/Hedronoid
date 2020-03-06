@@ -5,8 +5,8 @@ using Hedronoid;
 
 namespace Hedronoid
 {
-    [CreateAssetMenu(menuName = "Actions/State Actions/Anim_MovementForward")]
-    public class Anim_MovementForward : StateActions
+    [CreateAssetMenu(menuName = "Actions/State Actions/Anim_Movement Run")]
+    public class Anim_Movement_Run: StateActions
     {
         public StateActions[] stateActions;
 

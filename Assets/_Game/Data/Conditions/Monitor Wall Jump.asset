@@ -9,9 +9,8 @@ MonoBehaviour:
   m_GameObject: {fileID: 0}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: c4dce4bf6d4414601a6c595b141fcee9, type: 3}
-  m_Name: Monitor Wall Run
+  m_Script: {fileID: 11500000, guid: e1f927bddc06d4dc284ef16f494d2ccf, type: 3}
+  m_Name: Monitor Wall Jump
   m_EditorClassIdentifier: 
-  description: Checks for wall run & plays anim.
-  onTrueAction: {fileID: 11400000, guid: 9edaa71d1779341a692e04e3710f3ef4, type: 2}
-  onFalseAction: {fileID: 0}
+  description: Checks wall jump & plays anim
+  onTrueAction: {fileID: 11400000, guid: a50ed73df01ba4926b30dd84ca6f53b7, type: 2}

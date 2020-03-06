@@ -7,13 +7,12 @@ namespace Hedronoid
 	public class WallRunVariables
 	{
         [Tooltip("To negate gravity must be equal to GravityApplier on object")]
-        [Range(0f, 10f)]
-        public float GravityNegateMultiplier;
+        public float GravityNegateMultiplier = 3f;
 
         [Tooltip("How long the wall run applies.")]
-        public float Duration;
+        public float Duration = 0.75f;
 
         [Header("Debug")]
-        public bool isWallRunning; 
-	}
+        public bool WallRunning = false;
+    }
 }

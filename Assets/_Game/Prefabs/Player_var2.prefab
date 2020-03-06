@@ -261,12 +261,16 @@ MonoBehaviour:
     TurnSpeedMultiplier: 16
     MoveAmount: 0
     MoveDirection: {x: 0, y: 0, z: 0}
+  collisionVariables:
+    RaySize: 2
+    ArrayFlags: 
   gravityVariables:
     GravityForceMultiplier: 4
     GravityRotationMultiplier: 5
     GravitySwitchCooldown: 1.5
     ChangeOnKeyPress: 0
   jumpVariables:
+    JumpMade: 0
     MaxJumps: 2
     JumpsMade: 0
     firstJumpForceSettings: {fileID: 11400000, guid: e8e492410aa8f4932ae51bb23ed1688d,
@@ -274,14 +278,17 @@ MonoBehaviour:
     secondJumpForceSettings: {fileID: 11400000, guid: c90d4d68425094098b735fc5cd211627,
       type: 2}
   dashVariables:
+    DashMade: 0
     MaxDashes: 1
     DashesMade: 0
     ContinuousInput: 0
     PhysicalForce: {fileID: 11400000, guid: 002679e5d113047b09c1a29efbd4bbd2, type: 2}
   wallRunVariables:
-    GravityNegateMultiplier: 0
-    Duration: 0
-    isWallRunning: 0
+    GravityNegateMultiplier: 5
+    Duration: 213.43
+    WallRunning: 0
+  wallJumpVariables:
+    WallJumpForce: {fileID: 11400000, guid: cf82a9d8c9c6c764daece30b60db074e, type: 2}
   delta: 0
   Transform: {fileID: 0}
   Rigidbody: {fileID: 0}

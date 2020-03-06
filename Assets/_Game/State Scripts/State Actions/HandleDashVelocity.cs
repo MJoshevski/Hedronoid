@@ -39,6 +39,8 @@ namespace Hedronoid
             if (dashVariables.DashesMade >= dashVariables.MaxDashes)
                 return;
 
+            dashVariables.DashMade = true;
+
             states.StartCoroutine(
                 DoApplyForceOverTime(states, forceDirection, dashVariables.PhysicalForce));
 

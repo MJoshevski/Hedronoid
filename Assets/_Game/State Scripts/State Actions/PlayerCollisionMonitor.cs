@@ -57,6 +57,9 @@ namespace Hedronoid
             Debug.DrawRay(originOffseted, states.Transform.right * 1, Color.green);
             Debug.DrawRay(originOffseted, states.Transform.right * -1, Color.green);
 
+            raycastHitDictionary.Clear();
+            raycastFlagDictionary.Clear();
+
             //----------UP----------
             hitFlag = Physics.Raycast(
                 originOffseted,

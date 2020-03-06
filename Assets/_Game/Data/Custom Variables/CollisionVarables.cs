@@ -18,4 +18,5 @@ namespace Hedronoid
         [HideInInspector]
         public bool[] ArrayFlags;
     }
+
 }

@@ -7,11 +7,13 @@ namespace Hedronoid
     public class HandleJumpVelocity : StateActions
     {
         private PhysicalForceSettings firstJumpSettings, secondJumpSettings;
-
+        private JumpVariables jumpVariables;
         public override void Execute_Start(PlayerStateManager states)
         {
-            firstJumpSettings = states.jumpVariables.firstJumpForceSettings;
-            secondJumpSettings = states.jumpVariables.secondJumpForceSettings;
+            jumpVariables = states.jumpVariables;
+
+            firstJumpSettings = jumpVariables.firstJumpForceSettings;
+            secondJumpSettings = jumpVariables.secondJumpForceSettings;
         }
 
         public override void Execute(PlayerStateManager states)
@@ -43,6 +45,9 @@ namespace Hedronoid
 
                 forceDirection.Normalize();
 
+                jumpVariables.JumpsMade++;
+                jumpVariables.JumpMade = true;
+
                 states.StartCoroutine(
                     states.Rigidbody.ApplyForceContinuously(forceDirection, firstJumpSettings)
                     );
@@ -55,6 +60,9 @@ namespace Hedronoid
                     * secondJumpSettings.Direction;
 
                 forceDirection.Normalize();
+
+                jumpVariables.JumpsMade++;
+                jumpVariables.JumpMade = true;
 
                 states.StartCoroutine(
                     states.Rigidbody.ApplyForceContinuously(forceDirection, secondJumpSettings)

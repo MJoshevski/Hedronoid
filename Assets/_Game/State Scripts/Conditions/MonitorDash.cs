@@ -8,8 +8,6 @@ namespace Hedronoid
     public class MonitorDash : Condition
     {
         public StateActions onTrueAction;
-        [SerializeField]
-        private bool dashMade = false;
         private DashVariables dashVariables;
 
         public override void InitCondition(PlayerStateManager state)
@@ -20,18 +18,20 @@ namespace Hedronoid
 
         public override bool CheckCondition(PlayerStateManager state)
         {
-            bool isPressed = state.dashPressed;
-            dashMade = dashMade && !state.dashReleased;
+            dashVariables.DashMade = dashVariables.DashMade && !state.dashReleased;
 
-            if (isPressed && !dashMade &&
-                dashVariables.DashesMade <
-                dashVariables.MaxDashes)
+            bool dashMade = dashVariables.DashMade;
+
+            if (dashMade && !state.jumpReleased && !state.dashPressed)
+                dashMade = dashVariables.DashMade = false;
+
+            if (state.dashPressed && !dashMade &&
+                dashVariables.DashesMade < dashVariables.MaxDashes)
             {
                 onTrueAction.Execute(state);
-                dashMade = true;
+                return true;
             }
-
-            return isPressed;
+            return false;
         }
     }
 }

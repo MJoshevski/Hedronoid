@@ -22,20 +22,28 @@ namespace Hedronoid
             ExecuteStartActions(states, onEnter);
             ExecuteActions(states, onEnter);
         }
-	
-		public void FixedTick(PlayerStateManager states)
-		{
+
+        public void FixedTickStart(PlayerStateManager states)
+        {
             ExecuteStartActions(states, onFixed);
-            ExecuteActions(states,onFixed);
             InitTransitions(states);
+        }
+
+        public void TickStart(PlayerStateManager states)
+        {
+            ExecuteStartActions(states, onUpdate);
+            InitTransitions(states);
+        }
+
+        public void FixedTick(PlayerStateManager states)
+		{
+            ExecuteActions(states,onFixed);
             CheckTransitions(states);
         }
 
         public void Tick(PlayerStateManager states)
         {
-            ExecuteStartActions(states, onUpdate);
             ExecuteActions(states, onUpdate);
-            InitTransitions(states);
             CheckTransitions(states);
         }
 

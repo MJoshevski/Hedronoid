@@ -16,6 +16,7 @@ namespace Hedronoid
         public JumpVariables jumpVariables;
         public DashVariables dashVariables;
         public WallRunVariables wallRunVariables;
+        public WallJumpVariables wallJumpVariables;
 
         [HideInInspector]
         public float delta;
@@ -60,6 +61,9 @@ namespace Hedronoid
             LoadSensitivities();
 
             gravityService = GravityService.Instance;
+
+            currentState.FixedTickStart(this);
+            currentState.TickStart(this);
         }
 
         private void FixedUpdate()

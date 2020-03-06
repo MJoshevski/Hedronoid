@@ -14,24 +14,27 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   onFixed:
   - {fileID: 11400000, guid: eef89ebbdf8a6419880a732bc2d07850, type: 2}
-  - {fileID: 11400000, guid: 5f3a660fd947e7e4eacc3f78f4cd067d, type: 2}
+  - {fileID: 11400000, guid: 06b54278c29da4b9287a8e937aa54226, type: 2}
   - {fileID: 11400000, guid: 0128f262fb2eb478a9076a213d4cdb0b, type: 2}
+  - {fileID: 11400000, guid: 0303c3e6091434855b8fea070f597782, type: 2}
   - {fileID: 11400000, guid: e554c3a8b3da340f0808d471a3cd2f84, type: 2}
+  - {fileID: 11400000, guid: 9edaa71d1779341a692e04e3710f3ef4, type: 2}
+  - {fileID: 11400000, guid: 5f3a660fd947e7e4eacc3f78f4cd067d, type: 2}
   onUpdate:
   - {fileID: 11400000, guid: 83273139a6ace4b0a9859a9f2fb04556, type: 2}
   onEnter: []
   onExit: []
-  idCount: 4
+  idCount: 11
   transitions:
-  - id: 0
-    condition: {fileID: 11400000, guid: b6dffb8e4a7434896b8f9f6e5d37aa0c, type: 2}
-    targetState: {fileID: 11400000, guid: accb287c681474d8283ead60cabc2010, type: 2}
-    disable: 0
-  - id: 1
-    condition: {fileID: 11400000, guid: 95da7063ec603492e86f68b0318dccfe, type: 2}
-    targetState: {fileID: 11400000, guid: fa444fdc218edb14b89d5662b84aa39d, type: 2}
-    disable: 0
   - id: 3
     condition: {fileID: 11400000, guid: 263ad0c23725f43a28b1df6988712fec, type: 2}
     targetState: {fileID: 11400000, guid: 49709c2677a7942709ee376382cdb568, type: 2}
+    disable: 0
+  - id: 8
+    condition: {fileID: 11400000, guid: a65266015ea7b4cc287f62807ba65b1a, type: 2}
+    targetState: {fileID: 11400000, guid: accb287c681474d8283ead60cabc2010, type: 2}
+    disable: 0
+  - id: 10
+    condition: {fileID: 11400000, guid: 95da7063ec603492e86f68b0318dccfe, type: 2}
+    targetState: {fileID: 11400000, guid: accb287c681474d8283ead60cabc2010, type: 2}
     disable: 0

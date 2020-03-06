@@ -5,7 +5,7 @@ using UnityEngine;
 namespace Hedronoid
 {
     [CreateAssetMenu(menuName = "Actions/State Actions/Movement Forward")]
-    public class MovementForward : StateActions
+    public class Movement_Run : StateActions
     {
         private Vector3 _movementVelocity;
         private MovementVariables moveVars;
