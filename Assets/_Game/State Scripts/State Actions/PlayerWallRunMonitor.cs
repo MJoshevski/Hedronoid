@@ -29,6 +29,7 @@ namespace Hedronoid
                 {
                     var contact = arrayHits[i].normal;
                     var dot = Vector3.Dot(GravityService.Instance.GravityUp, contact);
+                    var cross = Vector3.Cross(contact, GravityService.Instance.GravityUp);
 
                     if (Mathf.Approximately(0f, dot))
                     {

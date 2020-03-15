@@ -26,7 +26,7 @@ namespace Hedronoid
 
             if (_runCounter > 0f && wallRunVariables.WallRunning)
             {
-                Debug.LogError("RUNNING - HANDLE");
+                //Debug.LogError("RUNNING - HANDLE");
                 //Applying negative gravity
                 states.
                     Rigidbody.
