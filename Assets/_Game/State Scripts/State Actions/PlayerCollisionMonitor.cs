@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using UnityEngine;
+using Gizmos = Popcron.Gizmos;
 
 namespace Hedronoid
 {
@@ -50,12 +51,19 @@ namespace Hedronoid
             else if (states.gravityService.Direction == GravityDirections.BACK)
                 originOffseted = new Vector3(origin.x, origin.y, origin.z + 1f);
 
-            Debug.DrawRay(originOffseted, states.Transform.forward * 1, Color.green);
-            Debug.DrawRay(originOffseted, states.Transform.forward * -1, Color.green);
-            Debug.DrawRay(originOffseted, states.Transform.up * 1, Color.green);
-            Debug.DrawRay(originOffseted, states.Transform.up * -1, Color.green);
-            Debug.DrawRay(originOffseted, states.Transform.right * 1, Color.green);
-            Debug.DrawRay(originOffseted, states.Transform.right * -1, Color.green);
+            float raySize = collisionVariables.RaySize;
+            float velMagnitudeClamped = Mathf.Clamp01(states.Rigidbody.velocity.sqrMagnitude);
+
+            if (velMagnitudeClamped > 0)
+                raySize = collisionVariables.RaySize * velMagnitudeClamped;
+            else raySize = raySize / 2;
+
+            Gizmos.Line(originOffseted, originOffseted + (states.Transform.forward * raySize), Color.green);
+            Gizmos.Line(originOffseted, originOffseted + (states.Transform.forward * -raySize), Color.green);
+            Gizmos.Line(originOffseted, originOffseted + (states.Transform.up * raySize), Color.green);
+            Gizmos.Line(originOffseted, originOffseted + (states.Transform.up * -raySize), Color.green);
+            Gizmos.Line(originOffseted, originOffseted + (states.Transform.right * raySize), Color.green);
+            Gizmos.Line(originOffseted, originOffseted + (states.Transform.right * -raySize), Color.green);
 
             raycastHitDictionary.Clear();
             raycastFlagDictionary.Clear();
@@ -65,7 +73,7 @@ namespace Hedronoid
                 originOffseted,
                 states.Transform.up,
                 out hit,
-                collisionVariables.RaySize,
+                raySize,
                 Layers._ignoreLayersController);
 
             raycastHitDictionary.Add("UP", hit);
@@ -76,7 +84,7 @@ namespace Hedronoid
                 originOffseted,
                 states.Transform.up * -1,
                 out hit,
-                collisionVariables.RaySize,
+                raySize,
                 Layers._ignoreLayersController);
 
             raycastHitDictionary.Add("DOWN", hit);
@@ -87,7 +95,7 @@ namespace Hedronoid
                 originOffseted,
                 states.Transform.right * -1,
                 out hit,
-                collisionVariables.RaySize,
+                raySize,
                 Layers._ignoreLayersController);
             raycastHitDictionary.Add("LEFT", hit);
             raycastFlagDictionary.Add("LEFT", hitFlag);
@@ -97,7 +105,7 @@ namespace Hedronoid
                 originOffseted,
                 states.Transform.right,
                 out hit,
-                collisionVariables.RaySize,
+                raySize,
                 Layers._ignoreLayersController);
 
             raycastHitDictionary.Add("RIGHT", hit);
@@ -108,7 +116,7 @@ namespace Hedronoid
                 originOffseted,
                 playerTransform.forward,
                 out hit,
-                collisionVariables.RaySize,
+                raySize,
                 Layers._ignoreLayersController);
 
             raycastHitDictionary.Add("FORWARD", hit);
@@ -119,7 +127,7 @@ namespace Hedronoid
                 originOffseted,
                 states.Transform.forward * -1,
                 out hit,
-                collisionVariables.RaySize,
+                raySize,
                 Layers._ignoreLayersController);
 
             raycastHitDictionary.Add("BACK", hit);

@@ -1,6 +1,7 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using Gizmos = Popcron.Gizmos;
 
 namespace Hedronoid
 {
@@ -69,6 +70,13 @@ namespace Hedronoid
         private void FixedUpdate()
         {
             delta = Time.fixedDeltaTime;
+
+            //DEBUG
+            //
+            if (Input.GetKeyDown(KeyCode.F3))
+                Gizmos.Enabled = !Gizmos.Enabled;
+            //
+            //
 
             if (currentState != null)
             {
