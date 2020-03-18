@@ -22,7 +22,7 @@ namespace Hedronoid
             {
                 float power = powerOverTime.Evaluate(time);
 
-                rigidbody.ApplyForce(force * power, forceSettings.ForceMode);
+                rigidbody.ApplyForce(force * power * forceSettings.Multiplier, forceSettings.ForceMode);
 
                 yield return new WaitForFixedUpdate();
 
