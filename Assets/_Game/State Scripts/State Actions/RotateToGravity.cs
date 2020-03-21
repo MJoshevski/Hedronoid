@@ -22,21 +22,11 @@ namespace Hedronoid
                 Quaternion.LookRotation(targetDirection, states.gravityService.GravityUp);
 
             Quaternion targetRotation = Quaternion.Slerp(
-                states.Transform.localRotation,
+                states.Transform.rotation,
                 tr,
                 states.delta * states.gravityVariables.GravityRotationMultiplier);
 
-            states.Transform.localRotation = targetRotation;
-
-            //Apply adequate rotation
-            //if (states.Rigidbody.transform.up != states.gravityService.GravityUp)
-            //{
-            //    states.Transform.localRotation =
-            //        Quaternion.Slerp(
-            //        states.Transform.localRotation,
-            //        states.gravityService.GravityRotation,
-            //        states.gravityVariables.GravityRotationMultiplier * states.delta);
-            //}
+            states.Transform.rotation = targetRotation;
         }
     }
 }

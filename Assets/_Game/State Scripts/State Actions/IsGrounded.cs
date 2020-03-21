@@ -18,7 +18,7 @@ namespace Hedronoid
 
         public override void Execute(PlayerStateManager states)
         {
-            Vector3 origin = states.Transform.localPosition;
+            Vector3 origin = states.Transform.position;
 
             if (states.gravityService.Direction == GravityDirections.DOWN)
                 origin.y += _rayOriginOffset;

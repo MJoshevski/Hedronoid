@@ -35,7 +35,7 @@ namespace Hedronoid
 
         public override void Execute(PlayerStateManager states)
         {
-            var origin = states.Transform.localPosition;
+            var origin = states.Transform.position;
             Vector3 originOffseted = origin;
 
             if (states.gravityService.Direction == GravityDirections.DOWN)
@@ -52,6 +52,8 @@ namespace Hedronoid
                 originOffseted = new Vector3(origin.x, origin.y, origin.z + 1f);
 
             float raySize = collisionVariables.RaySize;
+
+            //for now useless - refactor when we introduce global velocity change
             float velMagnitudeClamped = Mathf.Clamp01(states.Rigidbody.velocity.sqrMagnitude);
 
             if (velMagnitudeClamped > 0)

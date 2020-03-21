@@ -40,6 +40,16 @@ namespace Hedronoid
             }
             wallRunVariables.WallRunning = false;
         }
+
+        //private void CheckForRunnableSurface(PlayerStateManager states, RaycastHit hit)
+        //{
+        //    var hitFlag = Physics.Raycast(
+        //        originOffseted,
+        //        states.Transform.up * -1,
+        //        out hit,
+        //        raySize,
+        //        Layers._ignoreLayersController);
+        //}
     }
 }
 
