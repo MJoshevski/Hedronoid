@@ -34,12 +34,12 @@ namespace Hedronoid
             Vector3 moveDirection = states.movementVariables.MoveDirection;
 
             if (moveDirection.sqrMagnitude < .25f)
-                moveDirection = states.Transform.forward;
+                moveDirection = states.RelativeTransform.GetNonRelativeTrans.forward;
 
             if (states.jumpVariables.JumpsMade < states.jumpVariables.MaxJumps)
             {
                 Vector3 forceDirection =
-                    Quaternion.FromToRotation(states.Transform.forward, moveDirection)
+                    Quaternion.FromToRotation(states.RelativeTransform.GetNonRelativeTrans.forward, moveDirection)
                     * GravityService.Instance.GravityRotation
                     * firstJumpSettings.Direction;
 
@@ -55,7 +55,7 @@ namespace Hedronoid
             else if (states.jumpVariables.JumpsMade == states.jumpVariables.MaxJumps)
             {
                 Vector3 forceDirection =
-                    Quaternion.FromToRotation(states.Transform.forward, moveDirection)
+                    Quaternion.FromToRotation(states.RelativeTransform.GetNonRelativeTrans.forward, moveDirection)
                     * GravityService.Instance.GravityRotation
                     * secondJumpSettings.Direction;
 

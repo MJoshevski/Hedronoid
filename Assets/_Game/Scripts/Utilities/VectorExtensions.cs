@@ -43,6 +43,151 @@ namespace Hedronoid
             return (a - b).sqrMagnitude;
         }
 
+        #region Vector Relativity
+        public static Vector3 relativePosition(this Transform transform)
+        {
+            return new Vector3(relX(transform), relY(transform), relZ(transform));
+        }
+
+        public static float relX(this Transform transform)
+        {
+            IGravityService gravityService = GravityService.Instance;
+            if (gravityService == null)
+                Debug.LogError("No gravity service initialized.");
+
+            float relX = 0;
+            Vector3 pos = transform.position;
+
+            if (gravityService.Direction == GravityDirections.DOWN)
+                relX += pos.x;
+            else if (gravityService.Direction == GravityDirections.UP)
+                relX -= pos.x;
+            else if (gravityService.Direction == GravityDirections.LEFT)
+                relX -= pos.z;
+            else if (gravityService.Direction == GravityDirections.RIGHT)
+                relX += pos.z;
+            else if (gravityService.Direction == GravityDirections.FRONT)
+                relX -= pos.y;
+            else if (gravityService.Direction == GravityDirections.BACK)
+                relX += pos.y;
+
+            return relX;
+        }
+
+        public static int relXDir(this Transform transform)
+        {
+            IGravityService gravityService = GravityService.Instance;
+            if (gravityService == null)
+                Debug.LogError("No gravity service initialized.");
+
+            if (gravityService.Direction == GravityDirections.DOWN)
+                return 1;
+            else if (gravityService.Direction == GravityDirections.UP)
+                return -1;
+            else if (gravityService.Direction == GravityDirections.LEFT)
+                return -1;
+            else if (gravityService.Direction == GravityDirections.RIGHT)
+                return 1;
+            else if (gravityService.Direction == GravityDirections.FRONT)
+                return -1;
+            else if (gravityService.Direction == GravityDirections.BACK)
+                return 1;
+            return 1;
+        }
+
+        public static float relY(this Transform transform)
+        {
+            IGravityService gravityService = GravityService.Instance;
+            if (gravityService == null)
+                Debug.LogError("No gravity service initialized.");
+
+            float relY = 0;
+            Vector3 pos = transform.position;
+
+            if (gravityService.Direction == GravityDirections.DOWN)
+                relY += pos.y;
+            else if (gravityService.Direction == GravityDirections.UP)
+                relY -= pos.y;
+            else if (gravityService.Direction == GravityDirections.LEFT)
+                relY += pos.x;
+            else if (gravityService.Direction == GravityDirections.RIGHT)
+                relY -= pos.x;
+            else if (gravityService.Direction == GravityDirections.FRONT)
+                relY -= pos.z;
+            else if (gravityService.Direction == GravityDirections.BACK)
+                relY += pos.z;
+
+            return relY;
+        }
+
+        public static int relYDir(this Transform transform)
+        {
+            IGravityService gravityService = GravityService.Instance;
+            if (gravityService == null)
+                Debug.LogError("No gravity service initialized.");
+
+            if (gravityService.Direction == GravityDirections.DOWN)
+                return 1;
+            else if (gravityService.Direction == GravityDirections.UP)
+                return -1;
+            else if (gravityService.Direction == GravityDirections.LEFT)
+                return 1;
+            else if (gravityService.Direction == GravityDirections.RIGHT)
+                return -1;
+            else if (gravityService.Direction == GravityDirections.FRONT)
+                return -1;
+            else if (gravityService.Direction == GravityDirections.BACK)
+                return 1;
+            return 1;
+        }
+
+        public static float relZ(this Transform transform)
+        {
+            IGravityService gravityService = GravityService.Instance;
+            if (gravityService == null)
+                Debug.LogError("No gravity service initialized.");
+
+            float relZ = 0;
+            Vector3 pos = transform.position;
+
+            if (gravityService.Direction == GravityDirections.DOWN)
+                relZ += pos.z;
+            else if (gravityService.Direction == GravityDirections.UP)
+                relZ -= pos.z;
+            else if (gravityService.Direction == GravityDirections.LEFT)
+                relZ -= pos.y;
+            else if (gravityService.Direction == GravityDirections.RIGHT)
+                relZ += pos.y;
+            else if (gravityService.Direction == GravityDirections.FRONT)
+                relZ -= pos.x;
+            else if (gravityService.Direction == GravityDirections.BACK)
+                relZ += pos.x;
+
+            return relZ;
+        }
+
+        public static int relZDir(this Transform transform)
+        {
+            IGravityService gravityService = GravityService.Instance;
+            if (gravityService == null)
+                Debug.LogError("No gravity service initialized.");
+
+            if (gravityService.Direction == GravityDirections.DOWN)
+                return 1;
+            else if (gravityService.Direction == GravityDirections.UP)
+                return -1;
+            else if (gravityService.Direction == GravityDirections.LEFT)
+                return -1;
+            else if (gravityService.Direction == GravityDirections.RIGHT)
+                return 1;
+            else if (gravityService.Direction == GravityDirections.FRONT)
+                return -1;
+            else if (gravityService.Direction == GravityDirections.BACK)
+                return 1;
+            return 1;
+        }
+        #endregion
+
         #region Vector Convert
 
         public static string Stringify(Vector2 v)

@@ -18,7 +18,7 @@ namespace Hedronoid
         public RaycastHit[] arrayHits;
         public bool[] arrayFlags;
 
-        private Transform playerTransform;
+        private Transform nonRelativeTransform;
 
         private RaycastHit hit;
         private bool hitFlag;
@@ -30,42 +30,42 @@ namespace Hedronoid
 
             gravityVariables = states.gravityVariables;
             collisionVariables = states.collisionVariables;
-            playerTransform = states.Transform;
+            nonRelativeTransform = states.RelativeTransform.GetNonRelativeTrans;
         }
 
         public override void Execute(PlayerStateManager states)
         {
-            var origin = states.Transform.position;
+            var origin = nonRelativeTransform.position;
             Vector3 originOffseted = origin;
 
-            if (states.gravityService.Direction == GravityDirections.DOWN)
-                originOffseted = new Vector3(origin.x, origin.y + 1f, origin.z);
-            else if (states.gravityService.Direction == GravityDirections.UP)
-                originOffseted = new Vector3(origin.x, origin.y - 1f, origin.z);
-            else if (states.gravityService.Direction == GravityDirections.LEFT)
-                originOffseted = new Vector3(origin.x + 1f, origin.y, origin.z);
-            else if (states.gravityService.Direction == GravityDirections.RIGHT)
-                originOffseted = new Vector3(origin.x - 1f, origin.y, origin.z);
-            else if (states.gravityService.Direction == GravityDirections.FRONT)
-                originOffseted = new Vector3(origin.x, origin.y, origin.z - 1f);
-            else if (states.gravityService.Direction == GravityDirections.BACK)
-                originOffseted = new Vector3(origin.x, origin.y, origin.z + 1f);
+            //if (states.gravityService.Direction == GravityDirections.DOWN)
+            //    originOffseted = new Vector3(origin.x, origin.y + 1f, origin.z);
+            //else if (states.gravityService.Direction == GravityDirections.UP)
+            //    originOffseted = new Vector3(origin.x, origin.y - 1f, origin.z);
+            //else if (states.gravityService.Direction == GravityDirections.LEFT)
+            //    originOffseted = new Vector3(origin.x + 1f, origin.y, origin.z);
+            //else if (states.gravityService.Direction == GravityDirections.RIGHT)
+            //    originOffseted = new Vector3(origin.x - 1f, origin.y, origin.z);
+            //else if (states.gravityService.Direction == GravityDirections.FRONT)
+            //    originOffseted = new Vector3(origin.x, origin.y, origin.z - 1f);
+            //else if (states.gravityService.Direction == GravityDirections.BACK)
+            //    originOffseted = new Vector3(origin.x, origin.y, origin.z + 1f);
 
-            float raySize = collisionVariables.RaySize;
+            float raySize = collisionVariables.RaySize * 10;
 
             //for now useless - refactor when we introduce global velocity change
             float velMagnitudeClamped = Mathf.Clamp01(states.Rigidbody.velocity.sqrMagnitude);
 
             if (velMagnitudeClamped > 0)
-                raySize = collisionVariables.RaySize * velMagnitudeClamped;
+                raySize = collisionVariables.RaySize;
             else raySize = raySize / 2;
 
-            Gizmos.Line(originOffseted, originOffseted + (states.Transform.forward * raySize), Color.green);
-            Gizmos.Line(originOffseted, originOffseted + (states.Transform.forward * -raySize), Color.green);
-            Gizmos.Line(originOffseted, originOffseted + (states.Transform.up * raySize), Color.green);
-            Gizmos.Line(originOffseted, originOffseted + (states.Transform.up * -raySize), Color.green);
-            Gizmos.Line(originOffseted, originOffseted + (states.Transform.right * raySize), Color.green);
-            Gizmos.Line(originOffseted, originOffseted + (states.Transform.right * -raySize), Color.green);
+            Gizmos.Line(originOffseted, originOffseted + (nonRelativeTransform.forward * raySize), Color.green);
+            Gizmos.Line(originOffseted, originOffseted + (nonRelativeTransform.forward * -raySize), Color.green);
+            Gizmos.Line(originOffseted, originOffseted + (nonRelativeTransform.up * raySize), Color.green);
+            Gizmos.Line(originOffseted, originOffseted + (nonRelativeTransform.up * -raySize), Color.green);
+            Gizmos.Line(originOffseted, originOffseted + (nonRelativeTransform.right * raySize), Color.green);
+            Gizmos.Line(originOffseted, originOffseted + (nonRelativeTransform.right * -raySize), Color.green);
 
             raycastHitDictionary.Clear();
             raycastFlagDictionary.Clear();
@@ -73,7 +73,7 @@ namespace Hedronoid
             //----------UP----------
             hitFlag = Physics.Raycast(
                 originOffseted,
-                states.Transform.up,
+                nonRelativeTransform.up,
                 out hit,
                 raySize,
                 Layers._ignoreLayersController);
@@ -84,7 +84,7 @@ namespace Hedronoid
             //----------DOWN----------
             hitFlag = Physics.Raycast(
                 originOffseted,
-                states.Transform.up * -1,
+                nonRelativeTransform.up * -1,
                 out hit,
                 raySize,
                 Layers._ignoreLayersController);
@@ -95,7 +95,7 @@ namespace Hedronoid
             //----------LEFT----------
             hitFlag = Physics.Raycast(
                 originOffseted,
-                states.Transform.right * -1,
+                nonRelativeTransform.right * -1,
                 out hit,
                 raySize,
                 Layers._ignoreLayersController);
@@ -105,7 +105,7 @@ namespace Hedronoid
             //----------RIGHT----------
             hitFlag = Physics.Raycast(
                 originOffseted,
-                states.Transform.right,
+                nonRelativeTransform.right,
                 out hit,
                 raySize,
                 Layers._ignoreLayersController);
@@ -116,7 +116,7 @@ namespace Hedronoid
             //----------FORWARD----------
             hitFlag = Physics.Raycast(
                 originOffseted,
-                playerTransform.forward,
+                nonRelativeTransform.forward,
                 out hit,
                 raySize,
                 Layers._ignoreLayersController);
@@ -127,7 +127,7 @@ namespace Hedronoid
             //----------BACK----------
             hitFlag = Physics.Raycast(
                 originOffseted,
-                states.Transform.forward * -1,
+                nonRelativeTransform.forward * -1,
                 out hit,
                 raySize,
                 Layers._ignoreLayersController);

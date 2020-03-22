@@ -45,7 +45,7 @@ namespace Hedronoid
         //{
         //    var hitFlag = Physics.Raycast(
         //        originOffseted,
-        //        states.Transform.up * -1,
+        //        states.Transform.NonRelativeTransform.up * -1,
         //        out hit,
         //        raySize,
         //        Layers._ignoreLayersController);

@@ -25,7 +25,7 @@ namespace Hedronoid
             _collisionNormal = GetCollisionNormal();
 
             var forceDirection = Quaternion.FromToRotation(
-                states.Transform.forward, _collisionNormal)
+                states.RelativeTransform.GetNonRelativeTrans.forward, _collisionNormal)
                 * GravityService.Instance.GravityRotation
                 * wallJumpVariables.WallJumpForce.Direction;
 

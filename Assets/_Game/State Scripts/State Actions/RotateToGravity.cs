@@ -16,17 +16,17 @@ namespace Hedronoid
             Vector3 targetDirection = states.movementVariables.MoveDirection;
 
             if (targetDirection == Vector3.zero)
-                targetDirection = states.Transform.forward;
+                targetDirection = states.RelativeTransform.GetNonRelativeTrans.forward;
 
             Quaternion tr =
                 Quaternion.LookRotation(targetDirection, states.gravityService.GravityUp);
 
             Quaternion targetRotation = Quaternion.Slerp(
-                states.Transform.rotation,
+                states.RelativeTransform.GetNonRelativeTrans.rotation,
                 tr,
                 states.delta * states.gravityVariables.GravityRotationMultiplier);
 
-            states.Transform.rotation = targetRotation;
+            states.RelativeTransform.GetNonRelativeTrans.rotation = targetRotation;
         }
     }
 }

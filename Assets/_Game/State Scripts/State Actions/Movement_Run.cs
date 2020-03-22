@@ -26,7 +26,7 @@ namespace Hedronoid
                 Mathf.Clamp01(Mathf.Abs(moveVars.Horizontal) + Mathf.Abs(moveVars.Vertical));
             moveVars.MoveAmount = moveAmount;
 
-            Vector3 targetVelocity = states.Transform.forward * states.movementVariables.MoveAmount *
+            Vector3 targetVelocity = states.RelativeTransform.GetNonRelativeTrans.forward * states.movementVariables.MoveAmount *
                 moveVars.MovementSpeed;
 
             Vector3 moveDirection =
@@ -36,7 +36,7 @@ namespace Hedronoid
             moveDirection = Vector3.ProjectOnPlane(moveDirection, GravityService.Instance.GravityUp);
             moveDirection.Normalize();
 
-            Debug.DrawRay(states.Transform.position, moveDirection, Color.yellow);
+            Debug.DrawRay(states.RelativeTransform.GetNonRelativeTrans.position, moveDirection, Color.yellow);
 
             moveVars.MoveDirection = moveDirection;
 

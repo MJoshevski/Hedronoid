@@ -22,9 +22,9 @@ namespace Hedronoid
             Vector3 moveDirection = states.movementVariables.MoveDirection;
 
             if (moveDirection.sqrMagnitude < .25f)
-                moveDirection = states.Transform.forward;
+                moveDirection = states.RelativeTransform.GetNonRelativeTrans.forward;
 
-            Vector3 forceDirection = states.Transform.forward;
+            Vector3 forceDirection = states.RelativeTransform.GetNonRelativeTrans.forward;
 
             forceDirection.Normalize();
 

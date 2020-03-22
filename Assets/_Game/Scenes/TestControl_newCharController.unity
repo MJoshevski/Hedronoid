@@ -311,6 +311,35 @@ PrefabInstance:
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: ffee8eb1def04426b938066cd70993cb, type: 3}
+--- !u!1 &30472211 stripped
+GameObject:
+  m_CorrespondingSourceObject: {fileID: 6092352731727976783, guid: c9e9f13f901554eadbbf449e8ea69a74,
+    type: 3}
+  m_PrefabInstance: {fileID: 1664520224}
+  m_PrefabAsset: {fileID: 0}
+--- !u!114 &30472219
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 30472211}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: cf219326d2292de48a0c671da18d402b, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  m_Weight: 1
+  m_Data:
+    m_ConstrainedObject: {fileID: 0}
+    m_OverrideSource: {fileID: 0}
+    m_OverridePosition: {x: 0, y: 0, z: 0}
+    m_OverrideRotation: {x: 0, y: 0, z: 0}
+    m_PositionWeight: 1
+    m_RotationWeight: 1
+    m_Space: 2
+  m_SourceObjectsGUIToggle: 1
+  m_SettingsGUIToggle: 1
 --- !u!1 &62435077
 GameObject:
   m_ObjectHideFlags: 0
@@ -950,7 +979,7 @@ Mesh:
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
-  m_Name: pb_Mesh241976
+  m_Name: pb_Mesh492176
   serializedVersion: 10
   m_SubMeshes:
   - serializedVersion: 2
@@ -1862,6 +1891,11 @@ PrefabInstance:
         type: 3}
       propertyPath: m_Layer
       value: 9
+      objectReference: {fileID: 0}
+    - target: {fileID: 2917728978657191866, guid: c9e9f13f901554eadbbf449e8ea69a74,
+        type: 3}
+      propertyPath: gravityVariables.ChangeOnKeyPress
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 3560993769845328667, guid: c9e9f13f901554eadbbf449e8ea69a74,
         type: 3}

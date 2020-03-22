@@ -22,7 +22,7 @@ namespace Hedronoid
         [HideInInspector]
         public float delta;
         [HideInInspector]
-        public Transform Transform;
+        public RelativeTransform RelativeTransform;
         [HideInInspector]
         public new Rigidbody Rigidbody;
 
@@ -51,7 +51,7 @@ namespace Hedronoid
 
         private void Start()
         {
-            Transform = this.transform;
+            RelativeTransform = new RelativeTransform(this.transform);
             Rigidbody = GetComponent<Rigidbody>();
             Animator = GetComponentInChildren<Animator>();
             animHashes = new AnimatorHashes();
