@@ -21,9 +21,9 @@ namespace Hedronoid
             var targetRotation = Quaternion.LookRotation(
                 movVars.MoveDirection, GravityService.Instance.GravityUp);
 
-            states.RelativeTransform.GetNonRelativeTrans.rotation =
+            states.Transform.rotation =
                 Quaternion.Slerp(
-                    states.RelativeTransform.GetNonRelativeTrans.rotation,
+                    states.Transform.rotation,
                     targetRotation,
                     movVars.TurnSpeedMultiplier * states.delta);
         }
