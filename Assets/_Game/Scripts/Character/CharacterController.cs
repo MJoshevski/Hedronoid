@@ -1,6 +1,7 @@
 using System.Collections.Generic;
 using UnityEngine;
 using Unity.Collections;
+using Hedronoid;
 
 public class CharacterController : MonoSingleton<CharacterController>, IMoveDirectionDependent
 {

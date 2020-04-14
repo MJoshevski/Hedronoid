@@ -1,6 +1,7 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using Hedronoid;
 
 public class GravityApplier : MonoBehaviour
 {
@@ -12,6 +13,6 @@ public class GravityApplier : MonoBehaviour
     void FixedUpdate()
     {
         var gravityService = GravityService.Instance;
-        Rigidbody.AddForce(gravityService.GravityDirection * gravityService.Gravity * m_GravityMultiplier);
+        Rigidbody.AddForce(gravityService.GravityDirection * gravityService.GravityAmount * m_GravityMultiplier);
     }
 }

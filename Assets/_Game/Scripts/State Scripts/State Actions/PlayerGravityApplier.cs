@@ -18,7 +18,7 @@ namespace Hedronoid
 
             states.Rigidbody.AddForce(
                 gravityService.GravityDirection *
-                gravityService.Gravity *
+                gravityService.GravityAmount *
                 states.gravityVariables.GravityForceMultiplier);;
         }
     }

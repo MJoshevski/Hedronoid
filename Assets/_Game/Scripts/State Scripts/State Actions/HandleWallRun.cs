@@ -32,7 +32,7 @@ namespace Hedronoid
                     Rigidbody.
                     ApplyForce(
                     gravityService.GravityUp * 
-                    gravityService.Gravity *
+                    gravityService.GravityAmount *
                     wallRunVariables.GravityNegateMultiplier);
             }
         }

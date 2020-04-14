@@ -8,10 +8,13 @@ namespace Hedronoid
     {
 		public Action[] fixedUpdateActions;
 		public Action[] updateActions;
+        public Action[] lateUpdateActions;
 
         private void Start()
         {
-            if (fixedUpdateActions == null && updateActions == null)
+            if (fixedUpdateActions == null && 
+                updateActions == null && 
+                lateUpdateActions == null)
                 return;
 
             if (fixedUpdateActions != null)
@@ -27,6 +30,14 @@ namespace Hedronoid
                 for (int i = 0; i < updateActions.Length; i++)
                 {
                     updateActions[i].Execute_Start();
+                }
+            }
+
+            if (lateUpdateActions != null)
+            {
+                for (int i = 0; i < lateUpdateActions.Length; i++)
+                {
+                    lateUpdateActions[i].Execute_Start();
                 }
             }
         }
@@ -50,6 +61,17 @@ namespace Hedronoid
             for (int i = 0; i < updateActions.Length; i++)
             {
                 updateActions[i].Execute();
+            }
+        }
+
+        private void LateUpdate()
+        {
+            if (lateUpdateActions == null)
+                return;
+
+            for (int i = 0; i < lateUpdateActions.Length; i++)
+            {
+                lateUpdateActions[i].Execute();
             }
         }
     }

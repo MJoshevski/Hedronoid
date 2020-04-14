@@ -9,6 +9,7 @@ namespace Hedronoid
     public class TimeManager : Action
     {
         public FloatVariable targetDelta;
+        public FloatVariable targetUnscaledDelta;
 
         public override void Execute_Start()
         {
@@ -17,6 +18,7 @@ namespace Hedronoid
         public override void Execute()
         {
             targetDelta.value = Time.deltaTime;
+            targetUnscaledDelta.value = Time.unscaledDeltaTime;
         }
     }
 }

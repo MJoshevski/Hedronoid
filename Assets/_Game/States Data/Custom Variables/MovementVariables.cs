@@ -12,8 +12,10 @@ namespace Hedronoid
 
         [Header("Movement")]
         public float MovementSpeed = 2f;
-        public float MoveSpeedMultiplier = 1f; 
-        public float MoveVeloctiyChangeRate = 1f;
+        [Range(0f, 100f)]
+        public float MaxAcceleration = 10f;
+        [HideInInspector]
+        public Vector3 desiredVelocity;
 
         [Header("Rotation")]
         public float TurnSpeedMultiplier = 2f;

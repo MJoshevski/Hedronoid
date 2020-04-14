@@ -4,7 +4,7 @@ using UnityEngine;
 
 namespace Hedronoid
 {
-    [CreateAssetMenu(menuName = "Actions/Mono Actions/Follow Transform")]
+    [CreateAssetMenu(menuName = "Actions/Camera/Follow Transform")]
     public class FollowTransform : Action
     {
         public TransformVariable targetTransform;

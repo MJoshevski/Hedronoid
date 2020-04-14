@@ -43,6 +43,13 @@ namespace Hedronoid
             return (a - b).sqrMagnitude;
         }
 
+        #region Vector3 Projections
+        public static Vector3 ProjectDirectionOnPlane(Vector3 direction, Vector3 normal)
+        {
+            return (direction - normal * Vector3.Dot(direction, normal)).normalized;
+        }
+        #endregion
+
         #region Vector Convert
 
         public static string Stringify(Vector2 v)

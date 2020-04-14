@@ -18,9 +18,12 @@ namespace Hedronoid
         public StateManagerVariable playerStates;
         public ActionBatch inputUpdateBatch;
 
+        private PlayerActionSet playerActions;
+
         public override void Execute_Start()
         {
             inputUpdateBatch.Execute_Start();
+            playerActions = playerStates.value.PlayerActions;
         }
 
         public override void Execute()
@@ -32,6 +35,14 @@ namespace Hedronoid
 
             playerStates.value.dashPressed = dashBtnDown.value;
             playerStates.value.dashReleased = dashBtnUp.value;
+
+            playerStates.value.movementVariables.Horizontal = horizontal.value = playerActions.Move.X;
+            playerStates.value.movementVariables.Vertical = vertical.value = playerActions.Move.Y;
+
+
+            playerStates.value.movementVariables.desiredVelocity =
+                new Vector3(horizontal.value, 0f, vertical.value) *
+            playerStates.value.movementVariables.MovementSpeed;
         }        
     }
 
