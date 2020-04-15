@@ -44,7 +44,7 @@ namespace Hedronoid
         public PlayerActionSet PlayerActions;
         public float MouseHorizontalSensitivity { get; set; }
         public float MouseVerticalSensitivity { get; set; }
-        public TransformVariable camera;
+        public new TransformVariable camera;
 
         [HideInInspector]
         public IGravityService gravityService;

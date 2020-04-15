@@ -20,10 +20,6 @@ namespace Hedronoid
         // How fast the rig will adapt to the newly changed gravity
         [Range(100f, 1000f)] [SerializeField] private float m_GravityAdaptTurnSpeed = 500f;
 
-        // The maximum value of the x axis rotation of the pivot.
-        [SerializeField] private float m_TiltMax = 75f;                                     
-        [SerializeField] private float m_TiltMin = 45f;
-
         public override void Execute_Start()
         {
         }

@@ -9,8 +9,13 @@ namespace Hedronoid
     {
         public TransformVariable focus;
         public TransformVariable cameraTransform;
+        public TransformVariable pivotTransform;
         public CameraVariable camera;
         public FloatVariable delta, unscaledDelta;
+
+        // How fast the rig will adapt to the newly changed gravity
+        [SerializeField, Range(100f, 1000f)]
+        private float m_GravityAdaptTurnSpeed = 500f;
 
         [Range(1f, 20f)]
 	    public float distance = 5f;
@@ -24,6 +29,8 @@ namespace Hedronoid
         public float followSpeed = 9;
         [Range(-89f, 89f)]
 	    public float minVerticalAngle = -30f, maxVerticalAngle = 60f;
+        [Range(-89f, 89f)]
+        public float minHorizontalAngle = 45f, maxHorizontalAngle = 75f;
         [Min(0f)]
         public float alignDelay = 5f;
         [Range(0f, 90f)]
@@ -69,13 +76,14 @@ namespace Hedronoid
             ) * gravityAlignment;
 
             UpdateFocusPoint();
-            ManualRotation();
+            GravityRotation();
 
-            if (ManualRotation() || AutomaticRotation())
-            {
-                ConstrainAngles();
-                orbitRotation = Quaternion.Euler(orbitAngles);
-            }
+            //if (ManualRotation() || AutomaticRotation())
+            //{
+            //    ConstrainAngles();
+            //    orbitRotation = Quaternion.Euler(orbitAngles);
+            //}
+
             Quaternion lookRotation = gravityAlignment * orbitRotation;
 
             Vector3 lookDirection = lookRotation * Vector3.forward;
@@ -97,7 +105,8 @@ namespace Hedronoid
                 lookPosition = rectPosition - rectOffset;
             }
 
-            cameraTransform.value.SetPositionAndRotation(lookPosition, lookRotation);
+            //cameraTransform.value.SetPositionAndRotation(lookPosition, lookRotation);
+            cameraTransform.value.SetPositionAndRotation(lookPosition, cameraTransform.value.rotation);
         }
 
         void UpdateFocusPoint()
@@ -212,6 +221,37 @@ namespace Hedronoid
         {
             float angle = Mathf.Acos(direction.y) * Mathf.Rad2Deg;
             return direction.x < 0f ? 360f - angle : angle;
+        }
+
+        //OLD SYSTEM
+        public void GravityRotation()
+        {
+            if (Time.timeScale < float.Epsilon)
+                return;
+
+            var playerAction = InputManager.Instance.PlayerActions;
+
+            var x = playerAction.Look.X;
+            var y = playerAction.Look.Y;
+
+            var horizontalAngle = x * Time.deltaTime * InputManager.Instance.MouseHorizontalSensitivity;
+            cameraTransform.value.Rotate(new Vector3(0, horizontalAngle, 0), Space.Self);
+
+            float verticalAngle = -y * Time.deltaTime * InputManager.Instance.MouseVerticalSensitivity;
+            pivotTransform.value.Rotate(new Vector3(verticalAngle, 0, 0), Space.Self);
+
+            //TODO: add clamping
+            // var angles = m_Pivot.localRotation.eulerAngles;
+            // clampedX = Mathf.Clamp(angles.x, m_TiltMin, m_TiltMax);
+            // m_Pivot.localRotation = Quaternion.Euler(angles);
+
+            if (cameraTransform.value.up != gravityService.GravityUp)
+            {
+                cameraTransform.value.rotation = Quaternion.RotateTowards(
+                    cameraTransform.value.rotation,
+                    gravityService.GravityRotation,
+                    m_GravityAdaptTurnSpeed * Time.deltaTime);
+            }
         }
     }
 }

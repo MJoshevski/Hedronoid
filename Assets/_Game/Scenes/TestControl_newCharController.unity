@@ -1972,6 +1972,11 @@ PrefabInstance:
       propertyPath: movementVariables.MovementSpeed
       value: 800
       objectReference: {fileID: 0}
+    - target: {fileID: 2917728978657191866, guid: c9e9f13f901554eadbbf449e8ea69a74,
+        type: 3}
+      propertyPath: gravityVariables.ChangeOnKeyPress
+      value: 1
+      objectReference: {fileID: 0}
     - target: {fileID: 3560993769845328667, guid: c9e9f13f901554eadbbf449e8ea69a74,
         type: 3}
       propertyPath: m_LocalPosition.y
@@ -26577,7 +26582,6 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   fixedUpdateActions: []
   updateActions:
-  - {fileID: 11400000, guid: e0221bdf06ca98c419675ab1750f2ba2, type: 2}
   - {fileID: 11400000, guid: 5030de53cc14e40949da59c3369ba7bc, type: 2}
   lateUpdateActions:
   - {fileID: 11400000, guid: 54468029f18fdc543b6b48d52399cdb7, type: 2}

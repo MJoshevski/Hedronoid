@@ -13,8 +13,10 @@ namespace Hedronoid
         [Header("Gravity Switch")]
         [Tooltip("How much time (seconds) should we wait before we can switch again?")]
         public float GravitySwitchCooldown = 1.5f;
-
         [Tooltip("If checked, gravity switching will be handled by key presses. If uncheked, switching will be triggered on wall collision.")]
         public bool ChangeOnKeyPress = true;
+
+        [Header("Misc.")]
+        public bool floatToSleep = false;
     }
 }
