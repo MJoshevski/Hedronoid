@@ -256,8 +256,8 @@ MonoBehaviour:
     Horizontal: 0
     Vertical: 0
     MovementSpeed: 10
-    MoveSpeedMultiplier: 6
-    MoveVeloctiyChangeRate: 10
+    MaxAcceleration: 10
+    desiredVelocity: {x: 0, y: 0, z: 0}
     TurnSpeedMultiplier: 16
     MoveAmount: 0
     MoveDirection: {x: 0, y: 0, z: 0}
@@ -269,6 +269,7 @@ MonoBehaviour:
     GravityRotationMultiplier: 5
     GravitySwitchCooldown: 1.5
     ChangeOnKeyPress: 0
+    floatToSleep: 0
   jumpVariables:
     JumpMade: 0
     MaxJumps: 2

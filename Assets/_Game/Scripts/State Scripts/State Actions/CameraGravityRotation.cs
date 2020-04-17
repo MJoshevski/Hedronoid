@@ -18,7 +18,8 @@ namespace Hedronoid
         public TransformVariable pivotTransform;
 
         // How fast the rig will adapt to the newly changed gravity
-        [Range(100f, 1000f)] [SerializeField] private float m_GravityAdaptTurnSpeed = 500f;
+        [SerializeField, Range(100f, 1000f)]
+        private float m_GravityAdaptTurnSpeed = 500f;
 
         public override void Execute_Start()
         {

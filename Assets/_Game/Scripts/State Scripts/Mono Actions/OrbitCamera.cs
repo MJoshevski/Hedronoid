@@ -23,6 +23,8 @@ namespace Hedronoid
         public float focusRadius = 1f;
         [Range(0f, 1f)]
 	    public float focusCentering = 0.5f;
+        [Min(0f)]
+        public float upAlignmentSpeed = 360f;
         [Min(0f), Range(1f, 360f)]
 	    public float rotationSpeed = 90f;
         [Min(0f)]
@@ -64,31 +66,28 @@ namespace Hedronoid
         {
             focusPoint = focus.value.position;
             gravityService = GravityService.Instance;
-            gravityAlignment = gravityService.GravityRotation;
+            gravityAlignment = Quaternion.identity;
             cameraTransform.value.localRotation = orbitRotation = Quaternion.Euler(orbitAngles);
         }
 
         public override void Execute()
         {
-            gravityAlignment =
-            Quaternion.FromToRotation(
-                gravityAlignment * Vector3.up, gravityService.GravityUp
-            ) * gravityAlignment;
-
+            UpdateGravityAlignment();
             UpdateFocusPoint();
-            GravityRotation();
+            //GravityRotation();
 
-            //if (ManualRotation() || AutomaticRotation())
-            //{
-            //    ConstrainAngles();
-            //    orbitRotation = Quaternion.Euler(orbitAngles);
-            //}
+            if (ManualRotation() || AutomaticRotation())
+            {
+                ConstrainAngles();
+                orbitRotation = Quaternion.Euler(orbitAngles);
+            }
 
             Quaternion lookRotation = gravityAlignment * orbitRotation;
 
             Vector3 lookDirection = lookRotation * Vector3.forward;
             Vector3 lookPosition = focusPoint - lookDirection * distance;
 
+            //Camera collisions
             Vector3 rectOffset = lookDirection * camera.value.nearClipPlane;
             Vector3 rectPosition = lookPosition + rectOffset;
             Vector3 castFrom = focusPoint;
@@ -104,9 +103,33 @@ namespace Hedronoid
                 rectPosition = castFrom + castDirection * hit.distance;
                 lookPosition = rectPosition - rectOffset;
             }
+            //
 
-            //cameraTransform.value.SetPositionAndRotation(lookPosition, lookRotation);
-            cameraTransform.value.SetPositionAndRotation(lookPosition, cameraTransform.value.rotation);
+            cameraTransform.value.SetPositionAndRotation(lookPosition, lookRotation);
+            //cameraTransform.value.SetPositionAndRotation(lookPosition, cameraTransform.value.rotation);
+        }
+
+        void UpdateGravityAlignment()
+        {
+            Vector3 fromUp = gravityAlignment * Vector3.up;
+            Vector3 toUp = GravityService.GetUpAxis(focusPoint);
+            float dot = Mathf.Clamp(Vector3.Dot(fromUp, toUp), -1f, 1f);
+            float angle = Mathf.Acos(dot) * Mathf.Rad2Deg;
+            float maxAngle = upAlignmentSpeed * Time.deltaTime;
+
+            Quaternion newAlignment =
+                Quaternion.FromToRotation(fromUp, toUp) * gravityAlignment;
+
+            if (angle <= maxAngle)
+            {
+                gravityAlignment = newAlignment;
+            }
+            else
+            {
+                gravityAlignment = Quaternion.SlerpUnclamped(
+                    gravityAlignment, newAlignment, maxAngle / angle
+                );
+            }
         }
 
         void UpdateFocusPoint()
@@ -155,28 +178,6 @@ namespace Hedronoid
             return false;
         }
 
-        void OnValidate()
-        {
-            if (maxVerticalAngle < minVerticalAngle)
-            {
-                maxVerticalAngle = minVerticalAngle;
-            }
-        }
-
-        void ConstrainAngles()
-        {
-            orbitAngles.x =
-                Mathf.Clamp(orbitAngles.x, minVerticalAngle, maxVerticalAngle);
-
-            if (orbitAngles.y < 0f)
-            {
-                orbitAngles.y += 360f;
-            }
-            else if (orbitAngles.y >= 360f)
-            {
-                orbitAngles.y -= 360f;
-            }
-        }
 
         bool AutomaticRotation()
         {
@@ -199,7 +200,7 @@ namespace Hedronoid
 
             float headingAngle = GetAngle(movement / Mathf.Sqrt(movementDeltaSqr));
             float deltaAbs = Mathf.Abs(Mathf.DeltaAngle(orbitAngles.y, headingAngle));
-            float rotationChange = rotationSpeed * 
+            float rotationChange = rotationSpeed *
                 Mathf.Min(Time.unscaledDeltaTime, movementDeltaSqr);
 
             if (deltaAbs < alignSmoothRange)
@@ -211,10 +212,33 @@ namespace Hedronoid
                 rotationChange *= (180f - deltaAbs) / alignSmoothRange;
             }
 
-            orbitAngles.y = 
+            orbitAngles.y =
                 Mathf.MoveTowardsAngle(orbitAngles.y, headingAngle, rotationChange);
 
             return true;
+        }
+
+        void OnValidate()
+        {
+            if (maxVerticalAngle < minVerticalAngle)
+            {
+                maxVerticalAngle = minVerticalAngle;
+            }
+        }
+
+        void ConstrainAngles()
+        {
+            orbitAngles.x =
+                Mathf.Clamp(orbitAngles.x, minVerticalAngle, maxVerticalAngle);
+
+            if (orbitAngles.y < 0f)
+            {
+                orbitAngles.y += 360f;
+            }
+            else if (orbitAngles.y >= 360f)
+            {
+                orbitAngles.y -= 360f;
+            }
         }
 
         static float GetAngle(Vector2 direction)
