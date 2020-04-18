@@ -16,10 +16,10 @@ namespace Hedronoid
             Vector3 targetDirection = states.movementVariables.MoveDirection;
 
             if (targetDirection == Vector3.zero)
-                targetDirection = states.Transform.forward;
+                targetDirection = states.forwardAxis;
 
             Quaternion tr =
-                Quaternion.LookRotation(targetDirection, states.gravityService.GravityUp);
+                Quaternion.LookRotation(targetDirection, states.upAxis);
 
             Quaternion targetRotation = Quaternion.Slerp(
                 states.Transform.rotation,

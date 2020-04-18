@@ -18,8 +18,6 @@ namespace Hedronoid
         Vector3 GravityDirection { get; }
         Quaternion GravityRotation { get; }
         Vector3 GravityUp { get; }
-        Vector3 GravityRight { get; }
-        Vector3 GravityForward { get; }
 
         void SwitchDirection(GravityDirections direction);
     }
@@ -69,28 +67,12 @@ namespace Hedronoid
                 return GravityDirection * -1;
             }
         }
-        public Vector3 GravityRight { get; private set; }
-        public Vector3 GravityForward { get; private set; }
 
         void Start()
         {
             Direction = GravityDirections.DOWN;
             SwitchDirection(GravityDirections.DOWN);
             Origin = GravityOrigin.Global;
-        }
-
-        void Update()
-        {
-            if (playerInputSpace)
-            {
-                GravityRight = VectorExtensions.ProjectDirectionOnPlane(playerInputSpace.right, GravityUp);
-                GravityForward = VectorExtensions.ProjectDirectionOnPlane(playerInputSpace.forward, GravityUp);
-            }
-            else
-            {
-                GravityRight = VectorExtensions.ProjectDirectionOnPlane(Vector3.right, GravityUp);
-                GravityForward = VectorExtensions.ProjectDirectionOnPlane(Vector3.forward, GravityUp);
-            }
         }
 
         public static void Register(GravitySource source)

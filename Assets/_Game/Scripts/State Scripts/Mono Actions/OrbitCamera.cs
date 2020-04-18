@@ -72,9 +72,10 @@ namespace Hedronoid
 
         public override void Execute()
         {
+            OnValidate();
             UpdateGravityAlignment();
             UpdateFocusPoint();
-            //GravityRotation();
+            GravityRotation();
 
             if (ManualRotation() || AutomaticRotation())
             {
@@ -163,17 +164,39 @@ namespace Hedronoid
 
         bool ManualRotation()
         {
-            Vector2 input = new Vector2(
-                Input.GetAxis("Vertical Camera"),
-                Input.GetAxis("Horizontal Camera")
-            );
+            if (Time.timeScale < float.Epsilon)
+                return false;
+
+            var playerAction = InputManager.Instance.PlayerActions;
+
+            var x = playerAction.Look.X;
+            var y = playerAction.Look.Y;
+
+            var horizontalAngle = x * Time.deltaTime * InputManager.Instance.MouseHorizontalSensitivity;
+            //cameraTransform.value.Rotate(new Vector3(0, horizontalAngle, 0), Space.Self);
+
+            float verticalAngle = -y * Time.deltaTime * InputManager.Instance.MouseVerticalSensitivity;
+            //pivotTransform.value.Rotate(new Vector3(verticalAngle, 0, 0), Space.Self);
+
             const float e = 0.001f;
-            if (input.x < -e || input.x > e || input.y < -e || input.y > e)
+            if (horizontalAngle < -e || horizontalAngle > e || verticalAngle < -e || verticalAngle > e)
             {
-                orbitAngles += rotationSpeed * unscaledDelta.value * input;
+                orbitAngles += rotationSpeed * unscaledDelta.value * new Vector2(verticalAngle, horizontalAngle);
                 lastManualRotationTime = unscaledDelta.value;
                 return true;
             }
+
+            //Vector2 input = new Vector2(
+            //    Input.GetAxis("Vertical Camera"),
+            //    Input.GetAxis("Horizontal Camera")
+            //);
+            //const float e = 0.001f;
+            //if (input.x < -e || input.x > e || input.y < -e || input.y > e)
+            //{
+            //    orbitAngles += rotationSpeed * unscaledDelta.value * input;
+            //    lastManualRotationTime = unscaledDelta.value;
+            //    return true;
+            //}
 
             return false;
         }
@@ -269,13 +292,13 @@ namespace Hedronoid
             // clampedX = Mathf.Clamp(angles.x, m_TiltMin, m_TiltMax);
             // m_Pivot.localRotation = Quaternion.Euler(angles);
 
-            if (cameraTransform.value.up != gravityService.GravityUp)
-            {
-                cameraTransform.value.rotation = Quaternion.RotateTowards(
-                    cameraTransform.value.rotation,
-                    gravityService.GravityRotation,
-                    m_GravityAdaptTurnSpeed * Time.deltaTime);
-            }
+            //if (cameraTransform.value.up != gravityService.GravityUp)
+            //{
+            //    cameraTransform.value.rotation = Quaternion.RotateTowards(
+            //        cameraTransform.value.rotation,
+            //        gravityService.GravityRotation,
+            //        m_GravityAdaptTurnSpeed * Time.deltaTime);
+            //}
         }
     }
 }

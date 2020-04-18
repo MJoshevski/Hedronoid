@@ -49,6 +49,42 @@ namespace Hedronoid
         [HideInInspector]
         public IGravityService gravityService;
 
+        [HideInInspector]
+        public Vector3 upAxis, rightAxis, forwardAxis;
+        [HideInInspector]
+        public Vector3 velocity, desiredVelocity;
+        [Range(0f, 100f)]
+        public float maxAcceleration = 10f, maxAirAcceleration = 1f;
+        [HideInInspector]
+        public bool OnGround => groundContactCount > 0;
+        [HideInInspector]
+        public bool OnSteep => steepContactCount > 0;
+        [HideInInspector]
+        public int groundContactCount, steepContactCount;
+        [HideInInspector]
+        public Vector3 contactNormal, steepNormal;
+        [HideInInspector]
+        public int jumpPhase;
+        [Range(0, 5)]
+        public int maxAirJumps = 0;
+        [HideInInspector]
+        public int stepsSinceLastGrounded, stepsSinceLastJump;
+        [Range(0f, 100f)]
+        public float maxSnapSpeed = 100f;
+        [Min(0f)]
+        public float probeDistance = 1f;
+        [Range(0, 90)]
+        public float maxGroundAngle = 25f, maxStairsAngle = 50f;
+
+        [Range(0f, 10f)]
+        public float jumpHeight = 2f;
+
+        void OnValidate()
+        {
+            minGroundDotProduct = Mathf.Cos(maxGroundAngle * Mathf.Deg2Rad);
+            minStairsDotProduct = Mathf.Cos(maxStairsAngle * Mathf.Deg2Rad);
+        }
+
         private void Start()
         {
             Transform = this.transform;
@@ -84,6 +120,7 @@ namespace Hedronoid
             }
         }
 
+        public bool desiredJump;
         private void Update()
         {
             delta = Time.deltaTime;
@@ -92,7 +129,25 @@ namespace Hedronoid
             {
                 currentState.Tick(this);
             }
+
+            if (camera.value)
+            {
+                rightAxis = VectorExtensions.ProjectDirectionOnPlane(camera.value.right, upAxis);
+                forwardAxis =
+                    VectorExtensions.ProjectDirectionOnPlane(camera.value.forward, upAxis);
+            }
+            else
+            {
+                rightAxis = VectorExtensions.ProjectDirectionOnPlane(Vector3.right, upAxis);
+                forwardAxis = VectorExtensions.ProjectDirectionOnPlane(Vector3.forward, upAxis);
+            }
+            desiredVelocity =
+                new Vector3(movementVariables.Horizontal, 0f, movementVariables.Vertical) * 
+                movementVariables.MaxAcceleration;
+
+            desiredJump |= Input.GetButtonDown("Jump");
         }
+
 
         public void SaveBindings()
         {
@@ -131,6 +186,82 @@ namespace Hedronoid
         public IEnumerator WaitForSeconds(float duration)
         {
             yield return new WaitForSeconds(duration);
+        }
+
+        void Jump(Vector3 gravity)
+        {
+            Vector3 jumpDirection;
+            if (OnGround)
+            {
+                jumpDirection = contactNormal;
+            }
+            else if (OnSteep)
+            {
+                jumpDirection = steepNormal;
+                jumpPhase = 0;
+            }
+            else if (maxAirJumps > 0 && jumpPhase <= maxAirJumps)
+            {
+                if (jumpPhase == 0)
+                {
+                    jumpPhase = 1;
+                }
+                jumpDirection = contactNormal;
+            }
+            else
+            {
+                return;
+            }
+
+            stepsSinceLastJump = 0;
+            jumpPhase += 1;
+            float jumpSpeed = Mathf.Sqrt(2f * gravity.magnitude * jumpHeight);
+            jumpDirection = (jumpDirection + upAxis).normalized;
+            float alignedSpeed = Vector3.Dot(velocity, jumpDirection);
+            if (alignedSpeed > 0f)
+            {
+                jumpSpeed = Mathf.Max(jumpSpeed - alignedSpeed, 0f);
+            }
+            velocity += jumpDirection * jumpSpeed;
+        }
+
+        void OnCollisionEnter(Collision collision)
+        {
+            EvaluateCollision(collision);
+        }
+
+        void OnCollisionStay(Collision collision)
+        {
+            EvaluateCollision(collision);
+        }
+
+        void EvaluateCollision(Collision collision)
+        {
+            float minDot = GetMinDot(collision.gameObject.layer);
+            for (int i = 0; i < collision.contactCount; i++)
+            {
+                Vector3 normal = collision.GetContact(i).normal;
+                float upDot = Vector3.Dot(upAxis, normal);
+                if (upDot >= minDot)
+                {
+                    groundContactCount += 1;
+                    contactNormal += normal;
+                }
+                else if (upDot > -0.01f)
+                {
+                    steepContactCount += 1;
+                    steepNormal += normal;
+                }
+            }
+        }
+
+        public LayerMask probeMask = -1, stairsMask = -1;
+        [HideInInspector]
+        public float minGroundDotProduct, minStairsDotProduct;
+        public float GetMinDot(int layer)
+        {
+            return (stairsMask & (1 << layer)) == 0 ?
+                minGroundDotProduct : minStairsDotProduct;
         }
 
         const string KEY_BINDINGS = "Bindings";

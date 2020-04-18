@@ -33,7 +33,7 @@ namespace Hedronoid
             else if (states.gravityService.Direction == GravityDirections.BACK)
                 origin.z += _rayOriginOffset;
 
-            Vector3 dir = -states.gravityService.GravityUp;
+            Vector3 dir = -states.upAxis;
 
             float dis = _rayOnGroundDistance;
 

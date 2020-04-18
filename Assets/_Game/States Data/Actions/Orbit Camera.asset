@@ -19,9 +19,10 @@ MonoBehaviour:
   delta: {fileID: 11400000, guid: 843090a45fe084eb6bb3c6785d32745e, type: 2}
   unscaledDelta: {fileID: 11400000, guid: 5ffe7763c0f715a40b1dd59aeeccb5a2, type: 2}
   m_GravityAdaptTurnSpeed: 500
-  distance: 1
+  distance: 5
   focusRadius: 1
-  focusCentering: 0.5
+  focusCentering: 0.75
+  upAlignmentSpeed: 360
   rotationSpeed: 90
   followSpeed: 9
   minVerticalAngle: -30
@@ -32,4 +33,4 @@ MonoBehaviour:
   alignSmoothRange: 45
   obstructionMask:
     serializedVersion: 2
-    m_Bits: 0
+    m_Bits: 4294967295
