@@ -75,7 +75,7 @@ namespace Hedronoid
             OnValidate();
             UpdateGravityAlignment();
             UpdateFocusPoint();
-            GravityRotation();
+            //GravityRotation();
 
             if (ManualRotation() || AutomaticRotation())
             {
