@@ -107,7 +107,6 @@ namespace Hedronoid
             //
 
             cameraTransform.value.SetPositionAndRotation(lookPosition, lookRotation);
-            //cameraTransform.value.SetPositionAndRotation(lookPosition, cameraTransform.value.rotation);
         }
 
         void UpdateGravityAlignment()
@@ -270,7 +269,7 @@ namespace Hedronoid
             return direction.x < 0f ? 360f - angle : angle;
         }
 
-        //OLD SYSTEM
+        //GLOBAL GRAVITY SYSTEM
         public void GravityRotation()
         {
             if (Time.timeScale < float.Epsilon)
@@ -292,13 +291,13 @@ namespace Hedronoid
             // clampedX = Mathf.Clamp(angles.x, m_TiltMin, m_TiltMax);
             // m_Pivot.localRotation = Quaternion.Euler(angles);
 
-            //if (cameraTransform.value.up != gravityService.GravityUp)
-            //{
-            //    cameraTransform.value.rotation = Quaternion.RotateTowards(
-            //        cameraTransform.value.rotation,
-            //        gravityService.GravityRotation,
-            //        m_GravityAdaptTurnSpeed * Time.deltaTime);
-            //}
+            if (cameraTransform.value.up != gravityService.GravityUp)
+            {
+                cameraTransform.value.rotation = Quaternion.RotateTowards(
+                    cameraTransform.value.rotation,
+                    gravityService.GravityRotation,
+                    m_GravityAdaptTurnSpeed * Time.deltaTime);
+            }
         }
     }
 }

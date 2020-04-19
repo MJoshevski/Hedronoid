@@ -125,7 +125,10 @@ namespace Hedronoid
         {
             delta = Time.deltaTime;
 
-            if(currentState != null)
+            Vector2 playerInput = new Vector2(movementVariables.Horizontal, movementVariables.Vertical);
+            playerInput = Vector2.ClampMagnitude(playerInput, 1f);
+
+            if (currentState != null)
             {
                 currentState.Tick(this);
             }
@@ -141,8 +144,9 @@ namespace Hedronoid
                 rightAxis = VectorExtensions.ProjectDirectionOnPlane(Vector3.right, upAxis);
                 forwardAxis = VectorExtensions.ProjectDirectionOnPlane(Vector3.forward, upAxis);
             }
+
             desiredVelocity =
-                new Vector3(movementVariables.Horizontal, 0f, movementVariables.Vertical) * 
+                new Vector3(playerInput.x, 0f, playerInput.y) * 
                 movementVariables.MaxAcceleration;
 
             desiredJump |= Input.GetButtonDown("Jump");
