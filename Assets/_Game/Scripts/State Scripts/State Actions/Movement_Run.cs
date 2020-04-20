@@ -26,7 +26,6 @@ namespace Hedronoid
                 Mathf.Clamp01(Mathf.Abs(moveVars.Horizontal) + Mathf.Abs(moveVars.Vertical));
             moveVars.MoveAmount = moveAmount;
 
-            Vector3 velocity = states.velocity;
             Vector3 gravity = GravityService.GetGravity(states.Rigidbody.position, out states.upAxis);
 
             UpdateState();
@@ -40,7 +39,7 @@ namespace Hedronoid
 
             Debug.LogError("GRAVITY: " + gravity.ToString());
 
-            velocity += gravity * states.delta;
+            states.velocity += gravity * states.delta * states.gravityVariables.GravityForceMultiplier;
 
             states.Rigidbody.velocity = states.velocity;
             ClearState();
