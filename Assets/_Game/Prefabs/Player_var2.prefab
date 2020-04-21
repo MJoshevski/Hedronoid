@@ -266,7 +266,7 @@ MonoBehaviour:
     RaySize: 2
     ArrayFlags: 
   gravityVariables:
-    GravityForceMultiplier: 2
+    GravityForceMultiplier: 5
     GravityRotationMultiplier: 5
     GravitySwitchCooldown: 1.5
     ChangeOnKeyPress: 1
@@ -308,7 +308,7 @@ MonoBehaviour:
   velocity: {x: 0, y: 0, z: 0}
   desiredVelocity: {x: 0, y: 0, z: 0}
   maxAcceleration: 100
-  maxAirAcceleration: 100
+  maxAirAcceleration: 50
   groundContactCount: 0
   steepContactCount: 0
   contactNormal: {x: 0, y: 0, z: 0}
