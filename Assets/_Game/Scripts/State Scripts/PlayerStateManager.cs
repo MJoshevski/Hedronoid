@@ -76,7 +76,7 @@ namespace Hedronoid
         [Range(0, 90)]
         public float maxGroundAngle = 25f, maxStairsAngle = 50f;
 
-        [Range(0f, 10f)]
+        [Range(0f, 50f)]
         public float jumpHeight = 2f;
 
         void OnValidate()

@@ -317,11 +317,11 @@ MonoBehaviour:
   maxAirJumps: 2
   stepsSinceLastGrounded: 0
   stepsSinceLastJump: 0
-  maxSnapSpeed: 100
-  probeDistance: 1
+  maxSnapSpeed: 20
+  probeDistance: 0.1
   maxGroundAngle: 40
   maxStairsAngle: 50
-  jumpHeight: 2
+  jumpHeight: 15
   desiredJump: 0
   probeMask:
     serializedVersion: 2

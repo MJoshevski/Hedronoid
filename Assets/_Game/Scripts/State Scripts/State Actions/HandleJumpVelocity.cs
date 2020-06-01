@@ -29,45 +29,45 @@ namespace Hedronoid
             else
             {
                 states.Animator.CrossFade(states.animHashes.JumpIdle, 0.2f);
-            }      
-
-            Vector3 moveDirection = states.movementVariables.MoveDirection;
-
-            if (moveDirection.sqrMagnitude < .25f)
-                moveDirection = states.Transform.forward;
-
-            if (states.jumpVariables.JumpsMade < states.jumpVariables.MaxJumps)
-            {
-                Vector3 forceDirection =
-                    Quaternion.FromToRotation(states.Transform.forward, moveDirection)
-                    * GravityService.Instance.GravityRotation
-                    * firstJumpSettings.Direction;
-
-                forceDirection.Normalize();
-
-                jumpVariables.JumpsMade++;
-                jumpVariables.JumpMade = true;
-
-                states.StartCoroutine(
-                    states.Rigidbody.ApplyForceContinuously(forceDirection, firstJumpSettings)
-                    );
             }
-            else if (states.jumpVariables.JumpsMade == states.jumpVariables.MaxJumps)
-            {
-                Vector3 forceDirection =
-                    Quaternion.FromToRotation(states.Transform.forward, moveDirection)
-                    * GravityService.Instance.GravityRotation
-                    * secondJumpSettings.Direction;
 
-                forceDirection.Normalize();
+            //Vector3 moveDirection = states.movementVariables.MoveDirection;
 
-                jumpVariables.JumpsMade++;
-                jumpVariables.JumpMade = true;
+            //if (moveDirection.sqrMagnitude < .25f)
+            //    moveDirection = states.Transform.forward;
 
-                states.StartCoroutine(
-                    states.Rigidbody.ApplyForceContinuously(forceDirection, secondJumpSettings)
-                    );
-            }
+            //if (states.jumpVariables.JumpsMade < states.jumpVariables.MaxJumps)
+            //{
+            //    Vector3 forceDirection =
+            //        Quaternion.FromToRotation(states.Transform.forward, moveDirection)
+            //        * GravityService.Instance.GravityRotation
+            //        * firstJumpSettings.Direction;
+
+            //    forceDirection.Normalize();
+
+            //    jumpVariables.JumpsMade++;
+            //    jumpVariables.JumpMade = true;
+
+            //    states.StartCoroutine(
+            //        states.Rigidbody.ApplyForceContinuously(forceDirection, firstJumpSettings)
+            //        );
+            //}
+            //else if (states.jumpVariables.JumpsMade == states.jumpVariables.MaxJumps)
+            //{
+            //    Vector3 forceDirection =
+            //        Quaternion.FromToRotation(states.Transform.forward, moveDirection)
+            //        * GravityService.Instance.GravityRotation
+            //        * secondJumpSettings.Direction;
+
+            //    forceDirection.Normalize();
+
+            //    jumpVariables.JumpsMade++;
+            //    jumpVariables.JumpMade = true;
+
+            //    states.StartCoroutine(
+            //        states.Rigidbody.ApplyForceContinuously(forceDirection, secondJumpSettings)
+            //        );
+            //}
         }
     }
 }
