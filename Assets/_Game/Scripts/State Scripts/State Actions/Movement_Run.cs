@@ -120,6 +120,7 @@ namespace Hedronoid
             if (states.OnGround || SnapToGround() || CheckSteepContacts())
             {
                 states.stepsSinceLastGrounded = 0;
+                states.isGrounded = true;
                 if (states.stepsSinceLastJump > 1)
                 {
                     states.jumpPhase = 0;
@@ -132,6 +133,7 @@ namespace Hedronoid
             else
             {
                 states.contactNormal = states.upAxis;
+                states.isGrounded = false;
             }
         }
 

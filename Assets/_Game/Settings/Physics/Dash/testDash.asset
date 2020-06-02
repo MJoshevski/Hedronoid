@@ -10,7 +10,7 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 4071a19767ade481e9f0d80b4fe47942, type: 3}
-  m_Name: DASH A lot of acceleration over time
+  m_Name: testDash
   m_EditorClassIdentifier: 
   Direction: {x: 0, y: 1, z: 150}
   Multiplier: 1
@@ -19,8 +19,8 @@ MonoBehaviour:
     serializedVersion: 2
     m_Curve:
     - serializedVersion: 3
-      time: 0
-      value: 100
+      time: 0.0031585693
+      value: -0.00061035156
       inSlope: 0
       outSlope: 0
       tangentMode: 0
@@ -28,8 +28,17 @@ MonoBehaviour:
       inWeight: 0.33333334
       outWeight: 0.33333334
     - serializedVersion: 3
-      time: 5
-      value: 100
+      time: 3.744423
+      value: 0.9545649
+      inSlope: 0.00018246009
+      outSlope: 0.00018246009
+      tangentMode: 0
+      weightedMode: 0
+      inWeight: 0.33333334
+      outWeight: 0.33333334
+    - serializedVersion: 3
+      time: 5.020833
+      value: 0
       inSlope: 0
       outSlope: 0
       tangentMode: 0
