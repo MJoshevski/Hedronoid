@@ -13,7 +13,7 @@ MonoBehaviour:
   m_Name: DashForceOverTime
   m_EditorClassIdentifier: 
   Direction: {x: 0, y: 0, z: 0}
-  Multiplier: 1
+  Multiplier: 0.1
   ForceMode: 5
   PowerOverTime:
     serializedVersion: 2
@@ -28,8 +28,8 @@ MonoBehaviour:
       inWeight: 0.33333334
       outWeight: 0.33333334
     - serializedVersion: 3
-      time: 0.09928942
-      value: 2054.7969
+      time: 0.037064075
+      value: 2064.2554
       inSlope: -1.647721
       outSlope: -1.647721
       tangentMode: 0
@@ -37,8 +37,8 @@ MonoBehaviour:
       inWeight: 0.072395205
       outWeight: 0.19385181
     - serializedVersion: 3
-      time: 0.3842609
-      value: 983.9674
+      time: 0.3265674
+      value: 1399.3876
       inSlope: 1749.8956
       outSlope: 1749.8956
       tangentMode: 0

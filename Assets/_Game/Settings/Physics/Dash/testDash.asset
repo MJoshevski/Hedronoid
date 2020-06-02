@@ -12,7 +12,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 4071a19767ade481e9f0d80b4fe47942, type: 3}
   m_Name: testDash
   m_EditorClassIdentifier: 
-  Direction: {x: 0, y: 1, z: 150}
+  Direction: {x: 0, y: 0, z: 0}
   Multiplier: 1
   ForceMode: 5
   PowerOverTime:
@@ -28,8 +28,8 @@ MonoBehaviour:
       inWeight: 0.33333334
       outWeight: 0.33333334
     - serializedVersion: 3
-      time: 3.744423
-      value: 0.9545649
+      time: 1.5049133
+      value: 2.0284672
       inSlope: 0.00018246009
       outSlope: 0.00018246009
       tangentMode: 0
@@ -37,8 +37,8 @@ MonoBehaviour:
       inWeight: 0.33333334
       outWeight: 0.33333334
     - serializedVersion: 3
-      time: 5.020833
-      value: 0
+      time: 4.017293
+      value: 1.1038513
       inSlope: 0
       outSlope: 0
       tangentMode: 0
