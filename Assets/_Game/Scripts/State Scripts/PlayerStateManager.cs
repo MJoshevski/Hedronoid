@@ -55,7 +55,8 @@ namespace Hedronoid
         public Vector3 velocity, desiredVelocity;
         [Range(0f, 100f)]
         public float maxAcceleration = 10f, maxAirAcceleration = 1f;
-        public float maxVelocityMagnitudeInVacuum;
+        [Range(0f, 200f)]
+        public float maxVelocityMagnitudeInVacuum = 80f;
         [HideInInspector]
         public bool OnGround => groundContactCount > 0;
         [HideInInspector]
