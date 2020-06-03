@@ -18,6 +18,7 @@ namespace Hedronoid
         Vector3 GravityDirection { get; }
         Quaternion GravityRotation { get; }
         Vector3 GravityUp { get; }
+        Vector3 CurrentGravity { get; set; }
 
         void SwitchDirection(GravityDirections direction);
     }
@@ -25,6 +26,7 @@ namespace Hedronoid
     public class GravityService : MonoSingleton<IGravityService>, IGravityService
     {
         public Transform playerInputSpace;
+        public Vector3 CurrentGravity { get; set; }
         public float GravityAmount { get { return 9.81f; } }
         static List<GravitySource> sources = new List<GravitySource>();
         public static Vector3 GetGravity(Vector3 position)

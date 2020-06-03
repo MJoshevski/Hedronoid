@@ -27,6 +27,7 @@ namespace Hedronoid
             moveVars.MoveAmount = moveAmount;
 
             Vector3 gravity = GravityService.GetGravity(states.Rigidbody.position, out states.upAxis);
+            GravityService.Instance.CurrentGravity = gravity;
 
             UpdateState();
             AdjustVelocity();
@@ -36,12 +37,11 @@ namespace Hedronoid
                 states.desiredJump = false;
                 Jump(gravity);
             }
-
-            Debug.LogError("GRAVITY: " + gravity.ToString());
-
+            
             states.velocity += gravity * states.delta * states.gravityVariables.GravityForceMultiplier;
 
             states.Rigidbody.velocity = states.velocity;
+
             ClearState();
 
             //DIRECTION GIZMO

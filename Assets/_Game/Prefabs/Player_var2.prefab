@@ -308,7 +308,8 @@ MonoBehaviour:
   velocity: {x: 0, y: 0, z: 0}
   desiredVelocity: {x: 0, y: 0, z: 0}
   maxAcceleration: 100
-  maxAirAcceleration: 50
+  maxAirAcceleration: 100
+  maxVelocityMagnitudeInVacuum: 80
   groundContactCount: 0
   steepContactCount: 0
   contactNormal: {x: 0, y: 0, z: 0}

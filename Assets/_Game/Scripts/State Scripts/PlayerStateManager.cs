@@ -55,6 +55,7 @@ namespace Hedronoid
         public Vector3 velocity, desiredVelocity;
         [Range(0f, 100f)]
         public float maxAcceleration = 10f, maxAirAcceleration = 1f;
+        public float maxVelocityMagnitudeInVacuum;
         [HideInInspector]
         public bool OnGround => groundContactCount > 0;
         [HideInInspector]
@@ -150,6 +151,18 @@ namespace Hedronoid
                 movementVariables.MaxAcceleration;
 
             desiredJump |= Input.GetButtonDown("Jump");
+
+            //Debug.LogError("GRAVITY: " + gravityService.CurrentGravity.ToString());
+
+            if (gravityService.CurrentGravity == Vector3.zero)
+            {
+                Rigidbody.velocity =
+                    Vector3.ClampMagnitude(
+                        Rigidbody.velocity,maxVelocityMagnitudeInVacuum);
+            }
+
+            //Debug.LogError("VELO MAG: " + Rigidbody.velocity.magnitude);
+
         }
 
 
