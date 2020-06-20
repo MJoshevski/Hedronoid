@@ -103,6 +103,7 @@ GameObject:
   - component: {fileID: 2522724792926179311}
   - component: {fileID: 6243650511604480929}
   - component: {fileID: 8419621875084879109}
+  - component: {fileID: 7620941800562128578}
   m_Layer: 9
   m_Name: Look@CameraObj
   m_TagString: Untagged
@@ -118,8 +119,8 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 3604792516411171506}
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
-  m_LocalPosition: {x: 0, y: 0.52199996, z: 0.42300004}
-  m_LocalScale: {x: 0.5, y: 0.5, z: 0.5}
+  m_LocalPosition: {x: -0.17, y: 1.88, z: 0.398}
+  m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children: []
   m_Father: {fileID: 6092352731727703243}
   m_RootOrder: 2
@@ -171,6 +172,19 @@ MeshRenderer:
   m_SortingLayerID: 0
   m_SortingLayer: 0
   m_SortingOrder: 0
+--- !u!114 &7620941800562128578
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 3604792516411171506}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: a7686521045a74747aaea6f1dfcda9a7, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  transformVariable: {fileID: 11400000, guid: 54f55834073dedc45899164268cc5e6d, type: 2}
 --- !u!1 &6092352731727976783
 GameObject:
   m_ObjectHideFlags: 0
@@ -301,7 +315,8 @@ MonoBehaviour:
   dashReleased: 0
   isGrounded: 1
   timeSinceJump: 0
-  camera: {fileID: 11400000, guid: f94341b17dc0642849f56a4523bc22f9, type: 2}
+  cameraTransform: {fileID: 11400000, guid: f94341b17dc0642849f56a4523bc22f9, type: 2}
+  camera: {fileID: 11400000, guid: aa2c50c644a816b4481848ec6de8f1f4, type: 2}
   upAxis: {x: 0, y: 0, z: 0}
   rightAxis: {x: 0, y: 0, z: 0}
   forwardAxis: {x: 0, y: 0, z: 0}
@@ -323,6 +338,9 @@ MonoBehaviour:
   maxGroundAngle: 40
   maxStairsAngle: 50
   jumpHeight: 15
+  lastFired_Auto: 0
+  lastFired_Shotgun: 0
+  lastFired_Rail: 0
   desiredJump: 0
   probeMask:
     serializedVersion: 2

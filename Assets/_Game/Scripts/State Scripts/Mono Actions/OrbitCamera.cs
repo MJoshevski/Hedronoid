@@ -39,6 +39,10 @@ namespace Hedronoid
 	    public float alignSmoothRange = 45f;
         public LayerMask obstructionMask = -1;
 
+        [Header("Manual Offsets")]
+        public Vector3 manualPositionOffset = Vector3.zero;
+        public Vector3 manualRotationOffset = Vector3.zero;
+
         private Vector3 focusPoint, previousFocusPoint;
         private Vector2 orbitAngles = new Vector2(45f, 0f);
         private float lastManualRotationTime;
@@ -75,7 +79,6 @@ namespace Hedronoid
             OnValidate();
             UpdateGravityAlignment();
             UpdateFocusPoint();
-            //GravityRotation();
 
             if (ManualRotation() || AutomaticRotation())
             {
@@ -105,6 +108,11 @@ namespace Hedronoid
                 lookPosition = rectPosition - rectOffset;
             }
             //
+
+            lookPosition += manualPositionOffset;
+
+            Quaternion manualRotation = Quaternion.Euler(manualRotationOffset);
+            lookRotation *= manualRotation;
 
             cameraTransform.value.SetPositionAndRotation(lookPosition, lookRotation);
         }

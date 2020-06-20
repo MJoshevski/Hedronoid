@@ -15,7 +15,7 @@ namespace Hedronoid
         public override void Execute_Start(PlayerStateManager states)
         {
             moveVars = states.movementVariables;
-            cameraTransform = states.camera.value;
+            cameraTransform = states.cameraTransform.value;
             this.states = states;
         }
 
@@ -46,8 +46,8 @@ namespace Hedronoid
 
             //DIRECTION GIZMO
             Vector3 moveDirection =
-                states.movementVariables.Vertical * states.camera.value.forward +
-                states.movementVariables.Horizontal * states.camera.value.right;
+                states.movementVariables.Vertical * states.cameraTransform.value.forward +
+                states.movementVariables.Horizontal * states.cameraTransform.value.right;
             moveDirection = Vector3.ProjectOnPlane(moveDirection, states.upAxis);
             moveDirection.Normalize();
             Debug.DrawRay(states.Transform.position, moveDirection, Color.yellow);

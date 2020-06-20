@@ -44,7 +44,8 @@ namespace Hedronoid
         public PlayerActionSet PlayerActions;
         public float MouseHorizontalSensitivity { get; set; }
         public float MouseVerticalSensitivity { get; set; }
-        public new TransformVariable camera;
+        public new TransformVariable cameraTransform;
+        public new CameraVariable camera;
 
         [HideInInspector]
         public IGravityService gravityService;
@@ -81,6 +82,14 @@ namespace Hedronoid
         [Range(0f, 50f)]
         public float jumpHeight = 2f;
 
+        // SHOOTING
+        [HideInInspector]
+        public float lastFired_Auto = 0f;
+        [HideInInspector]
+        public float lastFired_Shotgun = 0f;
+        [HideInInspector]
+        public float lastFired_Rail = 0f;
+
         void OnValidate()
         {
             minGroundDotProduct = Mathf.Cos(maxGroundAngle * Mathf.Deg2Rad);
@@ -103,6 +112,8 @@ namespace Hedronoid
 
             currentState.FixedTickStart(this);
             currentState.TickStart(this);
+
+            lastFired_Auto = lastFired_Rail = lastFired_Shotgun = 0;
         }
 
         private void FixedUpdate()
@@ -135,11 +146,11 @@ namespace Hedronoid
                 currentState.Tick(this);
             }
 
-            if (camera.value)
+            if (cameraTransform.value)
             {
-                rightAxis = VectorExtensions.ProjectDirectionOnPlane(camera.value.right, upAxis);
+                rightAxis = VectorExtensions.ProjectDirectionOnPlane(cameraTransform.value.right, upAxis);
                 forwardAxis =
-                    VectorExtensions.ProjectDirectionOnPlane(camera.value.forward, upAxis);
+                    VectorExtensions.ProjectDirectionOnPlane(cameraTransform.value.forward, upAxis);
             }
             else
             {
