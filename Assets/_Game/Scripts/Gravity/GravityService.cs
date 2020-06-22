@@ -29,6 +29,7 @@ namespace Hedronoid
         public Vector3 CurrentGravity { get; set; }
         public float GravityAmount { get { return 9.81f; } }
         static List<GravitySource> sources = new List<GravitySource>();
+
         public static Vector3 GetGravity(Vector3 position)
         {
             Vector3 g = Vector3.zero;
@@ -38,6 +39,7 @@ namespace Hedronoid
             }
             return g;
         }
+
         public static Vector3 GetGravity(Vector3 position, out Vector3 upAxis)
         {
             Vector3 g = Vector3.zero;
@@ -48,6 +50,7 @@ namespace Hedronoid
             upAxis = -g.normalized;
             return g;
         }
+
         public static Vector3 GetUpAxis(Vector3 position)
         {
             Vector3 g = Vector3.zero;

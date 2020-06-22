@@ -109,10 +109,11 @@ namespace Hedronoid
             }
             //
 
-            lookPosition += manualPositionOffset;
-
             Quaternion manualRotation = Quaternion.Euler(manualRotationOffset);
             lookRotation *= manualRotation;
+
+            Vector3 alignedOffsetVector = gravityAlignment * manualPositionOffset;
+            lookPosition += alignedOffsetVector;
 
             cameraTransform.value.SetPositionAndRotation(lookPosition, lookRotation);
         }
