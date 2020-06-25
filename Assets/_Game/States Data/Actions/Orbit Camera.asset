@@ -18,9 +18,11 @@ MonoBehaviour:
   camera: {fileID: 11400000, guid: aa2c50c644a816b4481848ec6de8f1f4, type: 2}
   delta: {fileID: 11400000, guid: 843090a45fe084eb6bb3c6785d32745e, type: 2}
   unscaledDelta: {fileID: 11400000, guid: 5ffe7763c0f715a40b1dd59aeeccb5a2, type: 2}
+  cameraTypes: 1
   m_GravityAdaptTurnSpeed: 500
   distance: 6
-  focusRadius: 1
+  focusXYRadius: 2
+  focusZRadius: 0.2
   focusCentering: 1
   upAlignmentSpeed: 360
   rotationSpeed: 90
@@ -34,5 +36,6 @@ MonoBehaviour:
   obstructionMask:
     serializedVersion: 2
     m_Bits: 0
-  manualPositionOffset: {x: 0, y: 2, z: 0}
+  manualPositionOffset: {x: 2, y: 2}
   manualRotationOffset: {x: 0, y: 0, z: 0}
+  distanceOffset: 0
