@@ -1,6 +1,7 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using Gizmos = Popcron.Gizmos;
 
 namespace Hedronoid
 {
@@ -32,8 +33,16 @@ namespace Hedronoid
         public float focusXYRadius = 1f;
         [Min(0f)]
         public float focusZRadius = 0.2f;
+        [Header("Shoulder-focus Variables")]
+        [Tooltip("How fast does the camera center to the shoulder focus when moving?")]
         [Range(0f, 1f)]
 	    public float focusCentering = 0.5f;
+        [Tooltip("How fast does the camera catch-up to the shoulder focus when moving?")]
+        [Range(0f, 1f)]
+        public float catchupFactor = 0.2f;
+        [Tooltip("How fast do we need to be going for the catch-up factor to take effect?")]
+        [Range(0f, 100f)]
+        public float catchupVeloThreshold = 10f;
         [Min(0f)]
         public float upAlignmentSpeed = 360f;
         [Min(0f), Range(1f, 360f)]
@@ -84,6 +93,7 @@ namespace Hedronoid
         public override void Execute_Start()
         {
             focusPoint = focus.value.position;
+            distanceThreshold = manualPositionOffset.x * 2f;
             gravityService = GravityService.Instance;
             gravityAlignment = Quaternion.identity;
             cameraTransform.value.localRotation = orbitRotation = Quaternion.Euler(orbitAngles);
@@ -156,7 +166,11 @@ namespace Hedronoid
         {
             previousFocusPoint = focusPoint;
             Vector3 targetPoint = focus.value.position;
-            
+
+            Gizmos.Cube(previousFocusPoint, Quaternion.identity, Vector3.one / 2f, Color.red);
+            Gizmos.Cube(focusPoint, Quaternion.identity, Vector3.one / 2f, Color.magenta);
+            Gizmos.Cube(targetPoint, Quaternion.identity, Vector3.one / 2f, Color.green);
+
             switch (cameraTypes)
             {
                 case OrbitCameraTypes.SimpleCenterFollow:
@@ -164,7 +178,10 @@ namespace Hedronoid
                     break;
                 case OrbitCameraTypes.ManualShoulderSwitch:
                     if (Input.GetButtonDown("Fire3"))
+                    {
+                        distanceThreshold = 0.01f;
                         manualPositionOffset.x *= -1;
+                    }
   
                     UpdateShoulderPosition(targetPoint);      
                     break;
@@ -180,9 +197,14 @@ namespace Hedronoid
                     break;           
             }
         }
-        [SerializeField]
+        //[SerializeField]
+        private float distanceThreshold = 0;
+        //[SerializeField]
         private float distanceOffset;
-
+        //[SerializeField]
+        private float movMag;
+        //[SerializeField]
+        private float centeringFactor;
 
         void UpdateShoulderPosition(Vector3 targetPoint)
         {
@@ -191,15 +213,30 @@ namespace Hedronoid
 
             distanceOffset =
                 Vector3.Distance(targetPointOffset, focusPoint);
-            
-            if (distanceOffset > 0.01f && focusCentering > 0f)
+
+            Gizmos.Cube(targetPointOffset, Quaternion.identity, Vector3.one / 2f, Color.blue);
+
+            if (distanceOffset > Mathf.Abs(distanceThreshold) && 
+                focusCentering > 0f)
             {
+                centeringFactor = focusCentering;
+                movMag = PlayerStateManager.Instance.Rigidbody.velocity.sqrMagnitude;
+
+                float factor = 1;
+                if (movMag > catchupVeloThreshold)
+                    factor = movMag * catchupFactor / 10f;
+
                 focusPoint = Vector3.Lerp(
                         targetPointOffset, focusPoint,
-                        Mathf.Pow(1f - focusCentering, unscaledDelta.value)
-                    );
+                        Mathf.Pow(1f - centeringFactor,
+                        unscaledDelta.value) / factor
+                        );          
             }
-            else focusPoint = targetPoint + alignedOffsetVector;
+            else
+            {
+                focusPoint = targetPoint + alignedOffsetVector;
+                distanceThreshold = manualPositionOffset.x * 2f;
+            }
         }
 
         bool ManualRotation()
@@ -213,10 +250,8 @@ namespace Hedronoid
             var y = playerAction.Look.Y;
 
             var horizontalAngle = x * Time.deltaTime * InputManager.Instance.MouseHorizontalSensitivity;
-            //cameraTransform.value.Rotate(new Vector3(0, horizontalAngle, 0), Space.Self);
 
             float verticalAngle = -y * Time.deltaTime * InputManager.Instance.MouseVerticalSensitivity;
-            //pivotTransform.value.Rotate(new Vector3(verticalAngle, 0, 0), Space.Self);
 
             const float e = 0.001f;
             if (horizontalAngle < -e || horizontalAngle > e || verticalAngle < -e || verticalAngle > e)
@@ -225,18 +260,6 @@ namespace Hedronoid
                 lastManualRotationTime = unscaledDelta.value;
                 return true;
             }
-
-            //Vector2 input = new Vector2(
-            //    Input.GetAxis("Vertical Camera"),
-            //    Input.GetAxis("Horizontal Camera")
-            //);
-            //const float e = 0.001f;
-            //if (input.x < -e || input.x > e || input.y < -e || input.y > e)
-            //{
-            //    orbitAngles += rotationSpeed * unscaledDelta.value * input;
-            //    lastManualRotationTime = unscaledDelta.value;
-            //    return true;
-            //}
 
             return false;
         }
