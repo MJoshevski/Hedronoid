@@ -24,7 +24,7 @@ MonoBehaviour:
   focusXYRadius: 2
   focusZRadius: 0.2
   focusCentering: 0.998
-  catchupFactor: 0.12
+  catchupFactor: 0.2
   catchupVeloThreshold: 10
   upAlignmentSpeed: 360
   rotationSpeed: 90
@@ -38,5 +38,5 @@ MonoBehaviour:
   obstructionMask:
     serializedVersion: 2
     m_Bits: 0
-  manualPositionOffset: {x: 1.5, y: 2}
+  manualPositionOffset: {x: -1.5, y: 2}
   manualRotationOffset: {x: 0, y: 0, z: 0}

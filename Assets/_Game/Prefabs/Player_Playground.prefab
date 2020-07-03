@@ -227,7 +227,6 @@ GameObject:
   - component: {fileID: 4215501520570609839}
   - component: {fileID: 6055788498595503573}
   - component: {fileID: 7140074619954063957}
-  - component: {fileID: 6535713367839160852}
   m_Layer: 0
   m_Name: base model
   m_TagString: Untagged
@@ -283,24 +282,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 7e714861d7b0f12468ac5f8c17d2a252, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
---- !u!114 &6535713367839160852
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 926371070916428476}
-  m_Enabled: 0
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 5fea29bb7c508c244a1f805a5fd3fc4d, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  outlineMode: 0
-  outlineColor: {r: 0, g: 0, b: 0, a: 1}
-  outlineWidth: 8.08
-  precomputeOutline: 0
-  bakeKeys: []
-  bakeValues: []
 --- !u!1 &1319956314880605740
 GameObject:
   m_ObjectHideFlags: 0
@@ -536,7 +517,7 @@ SkinnedMeshRenderer:
   m_RenderingLayerMask: 1
   m_RendererPriority: 0
   m_Materials:
-  - {fileID: 2100000, guid: 621e901dcf5ebaf46bce29d18f67194c, type: 2}
+  - {fileID: 0}
   m_StaticBatchInfo:
     firstSubMesh: 0
     subMeshCount: 0
@@ -1044,7 +1025,8 @@ MonoBehaviour:
   dashReleased: 0
   isGrounded: 1
   timeSinceJump: 0
-  camera: {fileID: 11400000, guid: f94341b17dc0642849f56a4523bc22f9, type: 2}
+  cameraTransform: {fileID: 0}
+  camera: {fileID: 0}
   upAxis: {x: 0, y: 0, z: 0}
   rightAxis: {x: 0, y: 0, z: 0}
   forwardAxis: {x: 0, y: 0, z: 0}
@@ -1066,6 +1048,9 @@ MonoBehaviour:
   maxGroundAngle: 40
   maxStairsAngle: 50
   jumpHeight: 7.5
+  lastFired_Auto: 0
+  lastFired_Shotgun: 0
+  lastFired_Rail: 0
   desiredJump: 0
   probeMask:
     serializedVersion: 2
@@ -1134,7 +1119,7 @@ TrailRenderer:
   m_RenderingLayerMask: 1
   m_RendererPriority: 0
   m_Materials:
-  - {fileID: 2100000, guid: 04569be6f6124e14ca5155cfc4a5abdc, type: 2}
+  - {fileID: 0}
   m_StaticBatchInfo:
     firstSubMesh: 0
     subMeshCount: 0
@@ -1527,7 +1512,7 @@ MeshRenderer:
   m_RenderingLayerMask: 1
   m_RendererPriority: 0
   m_Materials:
-  - {fileID: 2100000, guid: 8c1755df5f552e843b9f8485f72e71f8, type: 2}
+  - {fileID: 0}
   m_StaticBatchInfo:
     firstSubMesh: 0
     subMeshCount: 0
@@ -2341,7 +2326,7 @@ SkinnedMeshRenderer:
   m_RenderingLayerMask: 1
   m_RendererPriority: 0
   m_Materials:
-  - {fileID: 2100000, guid: 621e901dcf5ebaf46bce29d18f67194c, type: 2}
+  - {fileID: 0}
   m_StaticBatchInfo:
     firstSubMesh: 0
     subMeshCount: 0
