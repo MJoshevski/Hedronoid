@@ -28,13 +28,14 @@ namespace Hedronoid
 
         public override void Execute(PlayerStateManager states)
         {
-            PlayerActionSet playerAction = InputManager.Instance.PlayerActions;
             Ray LookRay =
                 states.camera.value.ScreenPointToRay(
                     new Vector3(Screen.width / 2, Screen.height / 2, 0));
 
+            states.LookRay = LookRay;
             RaycastHit hit;
             Physics.Raycast(LookRay, out hit, 10000f);
+            states.RayHit = hit;
 
             Gizmos.Line(bulletOrigin.value.position, hit.point, Color.yellow);
             Vector3 shootDirection = hit.point - bulletOrigin.value.position;

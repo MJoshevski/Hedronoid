@@ -63,14 +63,20 @@ namespace Hedronoid
         public Vector2 manualPositionOffset = Vector2.zero;
         public Vector3 manualRotationOffset = Vector3.zero;
 
+        [SerializeField]
         private Vector3 focusPoint, previousFocusPoint;
+        [SerializeField]
         private Vector2 orbitAngles = new Vector2(45f, 0f);
         private float lastManualRotationTime;
 
         private Quaternion gravityAlignment = Quaternion.identity;
+        [SerializeField]
         private Quaternion orbitRotation;
+        [SerializeField]
         private Quaternion lookRotation;
+        [SerializeField]
         private Vector3 lookPosition;
+        [SerializeField]
         private Vector3 lookDirection;
 
 
@@ -108,9 +114,11 @@ namespace Hedronoid
             if (ManualRotation() || AutomaticRotation())
             {
                 ConstrainAngles();
-                orbitRotation = Quaternion.Euler(orbitAngles);
+                prevHitPoint = Vector3.zero;
+                //orbitRotation = Quaternion.Euler(orbitAngles);
             }
 
+            orbitRotation = Quaternion.Euler(orbitAngles);
             lookRotation = gravityAlignment * orbitRotation;
             lookDirection = lookRotation * Vector3.forward;
             lookPosition = focusPoint - lookDirection * distance;
@@ -181,8 +189,10 @@ namespace Hedronoid
                     {
                         distanceThreshold = 0.01f;
                         manualPositionOffset.x *= -1;
+                        prevHitPoint = PlayerStateManager.Instance.RayHit.point;
+                        prevRay = PlayerStateManager.Instance.LookRay;
                     }
-  
+
                     UpdateShoulderPosition(targetPoint);      
                     break;
 
@@ -203,38 +213,48 @@ namespace Hedronoid
         private float distanceOffset;
         //[SerializeField]
         private float movMag;
-        //[SerializeField]
-        private float centeringFactor;
+        [SerializeField]
+        private Vector3 targetPointOffset;
+        [SerializeField]
+        Vector3 prevHitPoint;
+        [SerializeField]
+        Vector3 hitPoint;
+        Ray prevRay, currRay;
 
         void UpdateShoulderPosition(Vector3 targetPoint)
         {
             Vector3 alignedOffsetVector = lookRotation * manualPositionOffset;
-            Vector3 targetPointOffset = targetPoint + alignedOffsetVector;
+            targetPointOffset = targetPoint + alignedOffsetVector;
+
+            Vector3 targetDirection = prevHitPoint - targetPointOffset;
+            Gizmos.Line(targetPointOffset, prevHitPoint, Color.magenta);
 
             distanceOffset =
-                Vector3.Distance(targetPointOffset, focusPoint);
+                Vector3.Distance(targetPointOffset, focusPoint);            
 
             Gizmos.Cube(targetPointOffset, Quaternion.identity, Vector3.one / 2f, Color.blue);
+            Gizmos.Cube(prevHitPoint, Quaternion.identity, Vector3.one * 4f, Color.black);
 
             if (distanceOffset > Mathf.Abs(distanceThreshold) && 
                 focusCentering > 0f)
             {
-                centeringFactor = focusCentering;
                 movMag = PlayerStateManager.Instance.Rigidbody.velocity.sqrMagnitude;
 
                 float factor = 1;
                 if (movMag > catchupVeloThreshold)
                     factor = movMag * catchupFactor / 10f;
-
+                 
                 focusPoint = Vector3.Lerp(
                         targetPointOffset, focusPoint,
-                        Mathf.Pow(1f - centeringFactor,
+                        Mathf.Pow(1f - focusCentering,
                         unscaledDelta.value) / factor
-                        );          
+                        );
+
+                AutomaticCentering();
             }
             else
             {
-                focusPoint = targetPoint + alignedOffsetVector;
+                focusPoint = targetPointOffset;
                 distanceThreshold = manualPositionOffset.x * 2f;
             }
         }
@@ -246,12 +266,11 @@ namespace Hedronoid
 
             var playerAction = InputManager.Instance.PlayerActions;
 
-            var x = playerAction.Look.X;
-            var y = playerAction.Look.Y;
+            float x = playerAction.Look.X;
+            float y = playerAction.Look.Y;
 
-            var horizontalAngle = x * Time.deltaTime * InputManager.Instance.MouseHorizontalSensitivity;
-
-            float verticalAngle = -y * Time.deltaTime * InputManager.Instance.MouseVerticalSensitivity;
+            float horizontalAngle = x * delta.value * InputManager.Instance.MouseHorizontalSensitivity;
+            float verticalAngle = -y * delta.value * InputManager.Instance.MouseVerticalSensitivity;
 
             const float e = 0.001f;
             if (horizontalAngle < -e || horizontalAngle > e || verticalAngle < -e || verticalAngle > e)
@@ -264,6 +283,38 @@ namespace Hedronoid
             return false;
         }
 
+        void AutomaticCentering ()
+        {
+            hitPoint = PlayerStateManager.Instance.RayHit.point;
+
+            if (prevHitPoint != Vector3.zero)
+            {
+                Vector3 dir = (prevHitPoint - hitPoint).normalized;
+                float distance = Vector3.Distance(hitPoint, prevHitPoint);
+                dir.z = 0;
+
+                if (distance > 1f)
+                {
+                    float headingAngle = GetAngle(new Vector2(dir.x, dir.y));
+                    float deltaAbs =
+                        Mathf.Abs(Mathf.DeltaAngle(orbitAngles.y, headingAngle));
+                    float rotationChange = rotationSpeed * unscaledDelta.value;
+
+                    if (deltaAbs < alignSmoothRange)
+                    {
+                        rotationChange *= deltaAbs / alignSmoothRange;
+                    }
+                    else if (180f - deltaAbs < alignSmoothRange)
+                    {
+                        rotationChange *= (180f - deltaAbs) / alignSmoothRange;
+                    }
+
+                    orbitAngles.y =
+                        Mathf.MoveTowardsAngle(orbitAngles.y, headingAngle, rotationChange);
+                }
+                //else prevHitPoint = Vector3.zero;
+            }
+        }
 
         bool AutomaticRotation()
         {

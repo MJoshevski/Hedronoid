@@ -41,6 +41,11 @@ namespace Hedronoid
         [HideInInspector]
         public float timeSinceJump;
 
+        [HideInInspector]
+        public Ray LookRay;
+        [HideInInspector]
+        public RaycastHit RayHit;
+
         public PlayerActionSet PlayerActions;
         public float MouseHorizontalSensitivity { get; set; }
         public float MouseVerticalSensitivity { get; set; }
