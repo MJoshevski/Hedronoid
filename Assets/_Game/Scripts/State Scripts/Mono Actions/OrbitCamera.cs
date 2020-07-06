@@ -47,6 +47,8 @@ namespace Hedronoid
         public float upAlignmentSpeed = 360f;
         [Min(0f), Range(1f, 360f)]
 	    public float rotationSpeed = 90f;
+        [Min(0f), Range(1f, 360f)]
+        public float shoulderCenteringSpeed = 90f;
         [Min(0f)]
         public float followSpeed = 9;
         [Range(-89f, 89f)]
@@ -57,26 +59,29 @@ namespace Hedronoid
         public float alignDelay = 5f;
         [Range(0f, 90f)]
 	    public float alignSmoothRange = 45f;
+        [Range(0f, 90f)]
+        public float shoulderAlignSmoothRange = 45f;
         public LayerMask obstructionMask = -1;
 
         [Header("Manual Offsets")]
         public Vector2 manualPositionOffset = Vector2.zero;
         public Vector3 manualRotationOffset = Vector3.zero;
 
-        [SerializeField]
+        //[SerializeField]
         private Vector3 focusPoint, previousFocusPoint;
         [SerializeField]
         private Vector2 orbitAngles = new Vector2(45f, 0f);
         private float lastManualRotationTime;
 
+        [SerializeField]
         private Quaternion gravityAlignment = Quaternion.identity;
-        [SerializeField]
+        //[SerializeField]
         private Quaternion orbitRotation;
-        [SerializeField]
+        //[SerializeField]
         private Quaternion lookRotation;
-        [SerializeField]
+        //[SerializeField]
         private Vector3 lookPosition;
-        [SerializeField]
+        //[SerializeField]
         private Vector3 lookDirection;
 
 
@@ -115,10 +120,9 @@ namespace Hedronoid
             {
                 ConstrainAngles();
                 prevHitPoint = Vector3.zero;
-                //orbitRotation = Quaternion.Euler(orbitAngles);
+                orbitRotation = Quaternion.Euler(orbitAngles);
             }
 
-            orbitRotation = Quaternion.Euler(orbitAngles);
             lookRotation = gravityAlignment * orbitRotation;
             lookDirection = lookRotation * Vector3.forward;
             lookPosition = focusPoint - lookDirection * distance;
@@ -190,7 +194,6 @@ namespace Hedronoid
                         distanceThreshold = 0.01f;
                         manualPositionOffset.x *= -1;
                         prevHitPoint = PlayerStateManager.Instance.RayHit.point;
-                        prevRay = PlayerStateManager.Instance.LookRay;
                     }
 
                     UpdateShoulderPosition(targetPoint);      
@@ -213,12 +216,10 @@ namespace Hedronoid
         private float distanceOffset;
         //[SerializeField]
         private float movMag;
-        [SerializeField]
+        //[SerializeField]
         private Vector3 targetPointOffset;
-        [SerializeField]
+        //[SerializeField]
         Vector3 prevHitPoint;
-        [SerializeField]
-        Vector3 hitPoint;
         Ray prevRay, currRay;
 
         void UpdateShoulderPosition(Vector3 targetPoint)
@@ -250,7 +251,11 @@ namespace Hedronoid
                         unscaledDelta.value) / factor
                         );
 
-                AutomaticCentering();
+
+                if (prevHitPoint != Vector3.zero)
+                    AutomaticCentering();
+
+                orbitRotation = Quaternion.Euler(orbitAngles);
             }
             else
             {
@@ -285,35 +290,32 @@ namespace Hedronoid
 
         void AutomaticCentering ()
         {
-            hitPoint = PlayerStateManager.Instance.RayHit.point;
+            Vector3 hitPoint = PlayerStateManager.Instance.RayHit.point;
 
-            if (prevHitPoint != Vector3.zero)
+            Vector3 alignedDelta = prevHitPoint - hitPoint;
+            Vector2 movement = new Vector2(alignedDelta.x, alignedDelta.z);
+
+            float movementDeltaSqr = movement.sqrMagnitude;
+            if (movementDeltaSqr < 0.000001f)
+                return;
+
+            float headingAngle = GetAngle(movement / Mathf.Sqrt(movementDeltaSqr));
+            float deltaAbs =
+                Mathf.Abs(Mathf.DeltaAngle(orbitAngles.y, headingAngle));
+            float rotationChange = shoulderCenteringSpeed *
+                Mathf.Min(unscaledDelta.value, movementDeltaSqr);
+
+            if (deltaAbs < shoulderAlignSmoothRange)
             {
-                Vector3 dir = (prevHitPoint - hitPoint).normalized;
-                float distance = Vector3.Distance(hitPoint, prevHitPoint);
-                dir.z = 0;
-
-                if (distance > 1f)
-                {
-                    float headingAngle = GetAngle(new Vector2(dir.x, dir.y));
-                    float deltaAbs =
-                        Mathf.Abs(Mathf.DeltaAngle(orbitAngles.y, headingAngle));
-                    float rotationChange = rotationSpeed * unscaledDelta.value;
-
-                    if (deltaAbs < alignSmoothRange)
-                    {
-                        rotationChange *= deltaAbs / alignSmoothRange;
-                    }
-                    else if (180f - deltaAbs < alignSmoothRange)
-                    {
-                        rotationChange *= (180f - deltaAbs) / alignSmoothRange;
-                    }
-
-                    orbitAngles.y =
-                        Mathf.MoveTowardsAngle(orbitAngles.y, headingAngle, rotationChange);
-                }
-                //else prevHitPoint = Vector3.zero;
+                rotationChange *= deltaAbs / shoulderAlignSmoothRange;
             }
+            else if (180f - deltaAbs < shoulderAlignSmoothRange)
+            {
+                rotationChange *= (180f - deltaAbs) / shoulderAlignSmoothRange;
+            }
+
+            orbitAngles.y =
+                Mathf.MoveTowardsAngle(orbitAngles.y, headingAngle, rotationChange);                    
         }
 
         bool AutomaticRotation()

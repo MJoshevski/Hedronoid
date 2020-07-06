@@ -24,29 +24,26 @@ MonoBehaviour:
   focusXYRadius: 2
   focusZRadius: 0.2
   focusCentering: 0.998
-  catchupFactor: 0.2
+  catchupFactor: 0.18
   catchupVeloThreshold: 10
   upAlignmentSpeed: 360
   rotationSpeed: 90
+  shoulderCenteringSpeed: 90
   followSpeed: 9
   minVerticalAngle: -89
   maxVerticalAngle: 89
   minHorizontalAngle: -89
   maxHorizontalAngle: 89
   alignDelay: 5
-  alignSmoothRange: 0
+  alignSmoothRange: 90
+  shoulderAlignSmoothRange: 90
   obstructionMask:
     serializedVersion: 2
     m_Bits: 0
   manualPositionOffset: {x: -1.5, y: 2}
   manualRotationOffset: {x: 0, y: 0, z: 0}
-  focusPoint: {x: 10.418083, y: 11.980333, z: -15.469125}
-  previousFocusPoint: {x: 10.418083, y: 11.980333, z: -15.469125}
-  orbitAngles: {x: 17.109999, y: 334.6601}
-  orbitRotation: {x: -0.14513639, y: 0.2168942, z: -0.032627936, w: -0.96479416}
-  lookRotation: {x: -0.14513637, y: 0.21689427, z: -0.03262798, w: -0.9647945}
-  lookPosition: {x: 12.872358, y: 13.745577, z: -20.651833}
-  lookDirection: {x: -0.40904582, y: -0.29420722, z: 0.8637846}
-  targetPointOffset: {x: 10.418083, y: 11.980333, z: -15.469125}
-  prevHitPoint: {x: 5.3866444, y: 7.8660326, z: -2.9985018}
-  hitPoint: {x: 4.829789, y: 7.9521823, z: -3.6411672}
+  orbitAngles: {x: -3.6799974, y: 47.9768}
+  gravityAlignment: {x: -0.000000016401362, y: 0.0000000010544653, z: 0.000000016763794,
+    w: 1.0000007}
+  distanceCenteringThreshold: 5
+  focusAngle: 21.314865
