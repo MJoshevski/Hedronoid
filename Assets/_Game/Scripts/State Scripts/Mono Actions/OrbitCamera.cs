@@ -116,10 +116,9 @@ namespace Hedronoid
             UpdateGravityAlignment();
             UpdateFocusPoint();
 
-            if (ManualRotation() || AutomaticRotation())
+            if (ManualRotation() /*|| AutomaticRotation()*/)
             {
                 ConstrainAngles();
-                prevHitPoint = Vector3.zero;
                 orbitRotation = Quaternion.Euler(orbitAngles);
             }
 
@@ -281,7 +280,8 @@ namespace Hedronoid
             if (horizontalAngle < -e || horizontalAngle > e || verticalAngle < -e || verticalAngle > e)
             {
                 orbitAngles += rotationSpeed * unscaledDelta.value * new Vector2(verticalAngle, horizontalAngle);
-                lastManualRotationTime = unscaledDelta.value;
+                prevHitPoint = Vector3.zero;
+                lastManualRotationTime = Time.unscaledTime;
                 return true;
             }
 
@@ -292,7 +292,8 @@ namespace Hedronoid
         {
             Vector3 hitPoint = PlayerStateManager.Instance.RayHit.point;
 
-            Vector3 alignedDelta = prevHitPoint - hitPoint;
+            Vector3 alignedDelta = Quaternion.Inverse(gravityAlignment) * 
+                (prevHitPoint - hitPoint);
             Vector2 movement = new Vector2(alignedDelta.x, alignedDelta.z);
 
             float movementDeltaSqr = movement.sqrMagnitude;
@@ -320,7 +321,7 @@ namespace Hedronoid
 
         bool AutomaticRotation()
         {
-            if (unscaledDelta.value - lastManualRotationTime < alignDelay)
+            if (Time.unscaledTime - lastManualRotationTime < alignDelay)
             {
                 return false;
             }

@@ -35,15 +35,12 @@ MonoBehaviour:
   minHorizontalAngle: -89
   maxHorizontalAngle: 89
   alignDelay: 5
-  alignSmoothRange: 90
-  shoulderAlignSmoothRange: 90
+  alignSmoothRange: 45
+  shoulderAlignSmoothRange: 45
   obstructionMask:
     serializedVersion: 2
     m_Bits: 0
-  manualPositionOffset: {x: -1.5, y: 2}
+  manualPositionOffset: {x: 1.5, y: 2}
   manualRotationOffset: {x: 0, y: 0, z: 0}
-  orbitAngles: {x: -3.6799974, y: 47.9768}
-  gravityAlignment: {x: -0.000000016401362, y: 0.0000000010544653, z: 0.000000016763794,
-    w: 1.0000007}
-  distanceCenteringThreshold: 5
-  focusAngle: 21.314865
+  orbitAngles: {x: 30.33992, y: 255.67406}
+  gravityAlignment: {x: 0, y: 0, z: 0, w: 1}
