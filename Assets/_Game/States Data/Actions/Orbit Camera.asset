@@ -21,26 +21,23 @@ MonoBehaviour:
   cameraTypes: 1
   m_GravityAdaptTurnSpeed: 500
   distance: 6
-  focusXYRadius: 2
-  focusZRadius: 0.2
-  focusCentering: 0.998
+  upAlignmentSpeed: 360
+  followSpeed: 9
+  rotationSpeed: 90
+  shoulderCentering: 0.998
+  shoulderCenteringSpeed: 90
+  shoulderAlignSmoothRange: 45
   catchupFactor: 0.18
   catchupVeloThreshold: 10
-  upAlignmentSpeed: 360
-  rotationSpeed: 90
-  shoulderCenteringSpeed: 90
-  followSpeed: 9
   minVerticalAngle: -89
   maxVerticalAngle: 89
   minHorizontalAngle: -89
   maxHorizontalAngle: 89
-  alignDelay: 5
-  alignSmoothRange: 45
-  shoulderAlignSmoothRange: 45
   obstructionMask:
     serializedVersion: 2
     m_Bits: 0
+  alignDelay: 5
+  alignSmoothRange: 45
   manualPositionOffset: {x: 1.5, y: 2}
   manualRotationOffset: {x: 0, y: 0, z: 0}
-  orbitAngles: {x: 30.33992, y: 255.67406}
-  gravityAlignment: {x: 0, y: 0, z: 0, w: 1}
+  angle: 0

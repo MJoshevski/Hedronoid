@@ -121,15 +121,24 @@ namespace Hedronoid
             lastFired_Auto = lastFired_Rail = lastFired_Shotgun = 0;
         }
 
+        public Vector3 charRay;
         private void FixedUpdate()
         {
             delta = Time.fixedDeltaTime;
 
+            LookRay =
+                camera.value.ScreenPointToRay(
+                new Vector3(Screen.width / 2, Screen.height / 2, 0));
+
+            Physics.Raycast(LookRay, out RayHit, 10000f);
+            Vector3 charDirRay = RayHit.point - Transform.position;
+            float charDisRay = Vector3.Distance(Transform.position, RayHit.point);
+            charRay = Transform.position + charDirRay * charDisRay;
+            Gizmos.Line(Transform.position, RayHit.point, Color.green);
+
             //DEBUG
-            //
             if (Input.GetKeyDown(KeyCode.F3))
                 Gizmos.Enabled = !Gizmos.Enabled;
-            //
             //
 
             if (currentState != null)

@@ -8,84 +8,91 @@ namespace Hedronoid
     public enum OrbitCameraTypes
     {
         SimpleCenterFollow = 0,
-        ManualShoulderSwitch = 1,
-        AutomaticShoulderSwitch = 2,
-        FocusPointOriented = 3
+        ManualShoulderSwitch = 1
     }
 
     [CreateAssetMenu(menuName = "Actions/Camera/Orbit Camera")]
     public class OrbitCamera : Action
     {
+        #region PUBLIC VARS
+        [Header("References")]
         public TransformVariable focus;
         public TransformVariable cameraTransform;
         public TransformVariable pivotTransform;
         public CameraVariable camera;
         public FloatVariable delta, unscaledDelta;
-        public OrbitCameraTypes cameraTypes = OrbitCameraTypes.ManualShoulderSwitch;
 
-        // How fast the rig will adapt to the newly changed gravity
+        [Header("General Behaviour")]
+        public OrbitCameraTypes cameraTypes = OrbitCameraTypes.ManualShoulderSwitch;
+        [Tooltip("How fast the rig will adapt to the newly changed gravity?")]
         [SerializeField, Range(100f, 1000f)]
         private float m_GravityAdaptTurnSpeed = 500f;
-
+        [Tooltip("How far away from the focus point should the camera be?")]
         [Range(1f, 20f)]
 	    public float distance = 5f;
+        [Tooltip("How fast should the camera align it's up vector to the player's?")]
         [Min(0f)]
-        public float focusXYRadius = 1f;
+        public float upAlignmentSpeed = 360f;
+        [Tooltip("How fast should the camera follow the player?")]
         [Min(0f)]
-        public float focusZRadius = 0.2f;
+        public float followSpeed = 9;
+        [Tooltip("How fast should the camera handle rotations?")]
+        [Min(0f), Range(1f, 360f)]
+        public float rotationSpeed = 90f;
+
         [Header("Shoulder-focus Variables")]
         [Tooltip("How fast does the camera center to the shoulder focus when moving?")]
         [Range(0f, 1f)]
-	    public float focusCentering = 0.5f;
+	    public float shoulderCentering = 0.5f;
+        [Tooltip("How fast do we center on the newly switched shoulder?")]
+        [Min(0f), Range(1f, 360f)]
+        public float shoulderCenteringSpeed = 90f;
+        [Range(0f, 90f)]
+        public float shoulderAlignSmoothRange = 45f;
         [Tooltip("How fast does the camera catch-up to the shoulder focus when moving?")]
         [Range(0f, 1f)]
         public float catchupFactor = 0.2f;
         [Tooltip("How fast do we need to be going for the catch-up factor to take effect?")]
         [Range(0f, 100f)]
         public float catchupVeloThreshold = 10f;
-        [Min(0f)]
-        public float upAlignmentSpeed = 360f;
-        [Min(0f), Range(1f, 360f)]
-	    public float rotationSpeed = 90f;
-        [Min(0f), Range(1f, 360f)]
-        public float shoulderCenteringSpeed = 90f;
-        [Min(0f)]
-        public float followSpeed = 9;
+
+        [Header("Camera obstructions")]
         [Range(-89f, 89f)]
-	    public float minVerticalAngle = -30f, maxVerticalAngle = 60f;
+        public float minVerticalAngle = -30f;
+        [Range(-89f, 89f)]
+        public float maxVerticalAngle = 60f;
         [Range(-89f, 89f)]
         public float minHorizontalAngle = 45f, maxHorizontalAngle = 75f;
+        public LayerMask obstructionMask = -1;
+
+        [Header("Automatic rotation")]
         [Min(0f)]
         public float alignDelay = 5f;
         [Range(0f, 90f)]
 	    public float alignSmoothRange = 45f;
-        [Range(0f, 90f)]
-        public float shoulderAlignSmoothRange = 45f;
-        public LayerMask obstructionMask = -1;
 
         [Header("Manual Offsets")]
         public Vector2 manualPositionOffset = Vector2.zero;
         public Vector3 manualRotationOffset = Vector3.zero;
+        #endregion
 
-        //[SerializeField]
+        #region PRIVATE VARS
         private Vector3 focusPoint, previousFocusPoint;
-        [SerializeField]
         private Vector2 orbitAngles = new Vector2(45f, 0f);
         private float lastManualRotationTime;
+        private float distanceThreshold;
 
-        [SerializeField]
         private Quaternion gravityAlignment = Quaternion.identity;
-        //[SerializeField]
         private Quaternion orbitRotation;
-        //[SerializeField]
         private Quaternion lookRotation;
-        //[SerializeField]
         private Vector3 lookPosition;
-        //[SerializeField]
         private Vector3 lookDirection;
 
-
         private IGravityService gravityService;
+
+        // RAYCASTING
+        private Vector3 currRay, prevRay;
+        private Vector3 currHit, prevHitPoint;
 
         Vector3 CameraHalfExtends
         {
@@ -101,6 +108,9 @@ namespace Hedronoid
             }
         }
 
+        #endregion
+
+        #region UNITY LIFECYCLE
         public override void Execute_Start()
         {
             focusPoint = focus.value.position;
@@ -149,6 +159,7 @@ namespace Hedronoid
 
             cameraTransform.value.SetPositionAndRotation(lookPosition, lookRotation);
         }
+        #endregion
 
         void UpdateGravityAlignment()
         {
@@ -191,54 +202,34 @@ namespace Hedronoid
                     if (Input.GetButtonDown("Fire3"))
                     {
                         distanceThreshold = 0.01f;
-                        manualPositionOffset.x *= -1;
                         prevHitPoint = PlayerStateManager.Instance.RayHit.point;
+                        prevRay = PlayerStateManager.Instance.charRay;
+                        manualPositionOffset.x *= -1;
                     }
 
                     UpdateShoulderPosition(targetPoint);      
-                    break;
-
-                case OrbitCameraTypes.AutomaticShoulderSwitch:
-                    manualPositionOffset.x = 0;
-                    AutomaticShoulderSwitching(targetPoint);
-                    break;
-
-                case OrbitCameraTypes.FocusPointOriented:
-                    manualPositionOffset.x = 0;
-                    FocusPointOrientation(targetPoint);
-                    break;           
+                    break;       
             }
         }
-        //[SerializeField]
-        private float distanceThreshold = 0;
-        //[SerializeField]
-        private float distanceOffset;
-        //[SerializeField]
-        private float movMag;
-        //[SerializeField]
-        private Vector3 targetPointOffset;
-        //[SerializeField]
-        Vector3 prevHitPoint;
-        Ray prevRay, currRay;
 
         void UpdateShoulderPosition(Vector3 targetPoint)
         {
             Vector3 alignedOffsetVector = lookRotation * manualPositionOffset;
-            targetPointOffset = targetPoint + alignedOffsetVector;
+            Vector3 targetPointOffset = targetPoint + alignedOffsetVector;
 
             Vector3 targetDirection = prevHitPoint - targetPointOffset;
             Gizmos.Line(targetPointOffset, prevHitPoint, Color.magenta);
 
-            distanceOffset =
+            float distanceOffset =
                 Vector3.Distance(targetPointOffset, focusPoint);            
 
             Gizmos.Cube(targetPointOffset, Quaternion.identity, Vector3.one / 2f, Color.blue);
             Gizmos.Cube(prevHitPoint, Quaternion.identity, Vector3.one * 4f, Color.black);
 
             if (distanceOffset > Mathf.Abs(distanceThreshold) && 
-                focusCentering > 0f)
+                shoulderCentering > 0f)
             {
-                movMag = PlayerStateManager.Instance.Rigidbody.velocity.sqrMagnitude;
+                float movMag = PlayerStateManager.Instance.Rigidbody.velocity.sqrMagnitude;
 
                 float factor = 1;
                 if (movMag > catchupVeloThreshold)
@@ -246,10 +237,9 @@ namespace Hedronoid
                  
                 focusPoint = Vector3.Lerp(
                         targetPointOffset, focusPoint,
-                        Mathf.Pow(1f - focusCentering,
+                        Mathf.Pow(1f - shoulderCentering,
                         unscaledDelta.value) / factor
                         );
-
 
                 if (prevHitPoint != Vector3.zero)
                     AutomaticCentering();
@@ -287,23 +277,30 @@ namespace Hedronoid
 
             return false;
         }
-
+        public float angle;
         void AutomaticCentering ()
         {
             Vector3 hitPoint = PlayerStateManager.Instance.RayHit.point;
+            currRay = PlayerStateManager.Instance.charRay;
 
             Vector3 alignedDelta = Quaternion.Inverse(gravityAlignment) * 
                 (prevHitPoint - hitPoint);
+
+            float dot =
+                Mathf.Clamp(Vector3.Dot(currRay, prevRay), -1f, 1f);
+            angle = Mathf.Acos(dot) * Mathf.Rad2Deg;
+            if (alignedDelta.x < 0) angle *= -1;
+
             Vector2 movement = new Vector2(alignedDelta.x, alignedDelta.z);
 
             float movementDeltaSqr = movement.sqrMagnitude;
-            if (movementDeltaSqr < 0.000001f)
+            if (movementDeltaSqr < 0.000001f/* || angle < 5f*/)
                 return;
 
-            float headingAngle = GetAngle(movement / Mathf.Sqrt(movementDeltaSqr));
-            float deltaAbs =
+             float headingAngle = GetAngle(movement / Mathf.Sqrt(movementDeltaSqr));
+             float deltaAbs =
                 Mathf.Abs(Mathf.DeltaAngle(orbitAngles.y, headingAngle));
-            float rotationChange = shoulderCenteringSpeed *
+             float rotationChange = shoulderCenteringSpeed *
                 Mathf.Min(unscaledDelta.value, movementDeltaSqr);
 
             if (deltaAbs < shoulderAlignSmoothRange)
@@ -316,7 +313,7 @@ namespace Hedronoid
             }
 
             orbitAngles.y =
-                Mathf.MoveTowardsAngle(orbitAngles.y, headingAngle, rotationChange);                    
+                Mathf.MoveTowardsAngle(orbitAngles.y, headingAngle,rotationChange);                    
         }
 
         bool AutomaticRotation()
@@ -356,75 +353,6 @@ namespace Hedronoid
                 Mathf.MoveTowardsAngle(orbitAngles.y, headingAngle, rotationChange);
 
             return true;
-        }
-
-        public void AutomaticShoulderSwitching(Vector3 targetPoint)
-        {
-            Vector3 alignedOffsetVector = lookRotation * manualPositionOffset;
-            Vector3 lookPosOffset = lookPosition + alignedOffsetVector;
-
-            float distanceOffset =
-                Vector3.Distance(targetPoint + alignedOffsetVector, focusPoint);
-
-            if (distanceOffset > 0.01f)
-                focusPoint =
-                        Vector3.Lerp(targetPoint + alignedOffsetVector, focusPoint, 1f / distanceOffset);
-            //else
-            //    lookPosition = lookPositionOffset;
-        }
-
-        public void FocusPointOrientation(Vector3 targetPoint)
-        {
-            Vector3 alignedTargetPoint = lookRotation * targetPoint;
-            Vector3 alignedFocusPoint = lookRotation * focusPoint;
-            float alignedZDistance = Mathf.Abs(
-                Mathf.Abs(alignedTargetPoint.z) - Mathf.Abs(alignedFocusPoint.z)
-                );
-
-            Vector2 alignedTargetXY = 
-                new Vector2(alignedTargetPoint.x, alignedTargetPoint.y);
-            Vector2 alignedFocusXY = 
-                new Vector2(alignedFocusPoint.x, alignedFocusPoint.y);
-            float alignedXYDistance = 
-                Vector2.Distance(alignedTargetXY, alignedFocusXY);
-
-            if (focusXYRadius > 0f && focusZRadius > 0f)
-            {
-                if (alignedZDistance >= focusZRadius &&
-                    alignedXYDistance <= focusXYRadius)
-                {
-                    focusPoint = Quaternion.Inverse(lookRotation) * new Vector3(
-                        alignedFocusPoint.x,
-                        alignedFocusPoint.y,
-                        Mathf.Lerp(alignedTargetPoint.z, alignedFocusPoint.z, focusZRadius / alignedZDistance));
-                }
-                else if (alignedZDistance >= focusZRadius &&
-                    alignedXYDistance > focusXYRadius)
-                {
-                    focusPoint = Quaternion.Inverse(lookRotation) * new Vector3(
-                       Mathf.Lerp(alignedTargetPoint.x, alignedFocusPoint.x, focusXYRadius / alignedXYDistance),
-                       Mathf.Lerp(alignedTargetPoint.y, alignedFocusPoint.y, focusXYRadius / alignedXYDistance),
-                       Mathf.Lerp(alignedTargetPoint.z, alignedFocusPoint.z, focusZRadius / alignedZDistance));
-                }
-                else if (alignedZDistance < focusZRadius &&
-                    alignedXYDistance > focusXYRadius)
-                {
-                    focusPoint = Quaternion.Inverse(lookRotation) * new Vector3(
-                       Mathf.Lerp(alignedTargetPoint.x, alignedFocusPoint.x, focusXYRadius / alignedXYDistance),
-                       Mathf.Lerp(alignedTargetPoint.y, alignedFocusPoint.y, focusXYRadius / alignedXYDistance),
-                       alignedFocusPoint.z);
-                }
-                Debug.LogErrorFormat("TP: {0}, FP: {1}", alignedTargetPoint.ToString(), alignedFocusPoint.ToString());
-                
-                // CENTERING: Keeping just in case we decide to have some of it
-                //if (distance > 0.01f && focusCentering > 0f)
-                //{
-                //    focusPoint = Vector3.Lerp(
-                //        targetPoint, focusPoint,
-                //        Mathf.Pow(1f - focusCentering, unscaledDelta.value)
-                //    );
-                //}
-            }
         }
 
         void OnValidate()
