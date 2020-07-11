@@ -277,7 +277,7 @@ namespace Hedronoid
 
             return false;
         }
-        public float angle;
+
         void AutomaticCentering ()
         {
             Vector3 hitPoint = PlayerStateManager.Instance.RayHit.point;
@@ -286,21 +286,20 @@ namespace Hedronoid
             Vector3 alignedDelta = Quaternion.Inverse(gravityAlignment) * 
                 (prevHitPoint - hitPoint);
 
-            float dot =
-                Mathf.Clamp(Vector3.Dot(currRay, prevRay), -1f, 1f);
-            angle = Mathf.Acos(dot) * Mathf.Rad2Deg;
-            if (alignedDelta.x < 0) angle *= -1;
-
             Vector2 movement = new Vector2(alignedDelta.x, alignedDelta.z);
 
             float movementDeltaSqr = movement.sqrMagnitude;
-            if (movementDeltaSqr < 0.000001f/* || angle < 5f*/)
+            if (movementDeltaSqr < 0.000001f)
                 return;
 
-             float headingAngle = GetAngle(movement / Mathf.Sqrt(movementDeltaSqr));
-             float deltaAbs =
+            float headingAngle = GetAngle(movement / Mathf.Sqrt(movementDeltaSqr));
+            float deltaAbs =
                 Mathf.Abs(Mathf.DeltaAngle(orbitAngles.y, headingAngle));
-             float rotationChange = shoulderCenteringSpeed *
+
+            float centeringSpeed = 
+                shoulderCenteringSpeed / Vector3.Distance(focusPoint, hitPoint);
+
+            float rotationChange = centeringSpeed *
                 Mathf.Min(unscaledDelta.value, movementDeltaSqr);
 
             if (deltaAbs < shoulderAlignSmoothRange)
@@ -313,7 +312,7 @@ namespace Hedronoid
             }
 
             orbitAngles.y =
-                Mathf.MoveTowardsAngle(orbitAngles.y, headingAngle,rotationChange);                    
+                Mathf.MoveTowardsAngle(orbitAngles.y, headingAngle, rotationChange);                    
         }
 
         bool AutomaticRotation()
