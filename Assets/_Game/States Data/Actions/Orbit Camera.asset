@@ -25,7 +25,7 @@ MonoBehaviour:
   followSpeed: 9
   rotationSpeed: 90
   shoulderCentering: 0.998
-  shoulderCenteringSpeed: 90
+  shoulderCenteringSpeed: 300
   shoulderAlignSmoothRange: 90
   catchupFactor: 0.18
   catchupVeloThreshold: 10
@@ -38,5 +38,5 @@ MonoBehaviour:
     m_Bits: 0
   alignDelay: 5
   alignSmoothRange: 45
-  manualPositionOffset: {x: -1.5, y: 2}
+  manualPositionOffset: {x: 1.5, y: 2}
   manualRotationOffset: {x: 0, y: 0, z: 0}

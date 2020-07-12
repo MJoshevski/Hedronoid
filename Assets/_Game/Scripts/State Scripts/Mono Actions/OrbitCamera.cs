@@ -72,9 +72,21 @@ namespace Hedronoid
 	    public float alignSmoothRange = 45f;
 
         [Header("Manual Offsets")]
-        public Vector2 manualPositionOffset = Vector2.zero;
-        public Vector3 manualRotationOffset = Vector3.zero;
-        #endregion
+        [SerializeField]
+        private Vector2 manualPositionOffset = Vector3.zero;
+        public Vector2 ManualPositionOffset
+        {
+            get { return manualPositionOffset; }
+            private set { manualPositionOffset = value; }
+        }
+        [SerializeField]
+        private Vector3 manualRotationOffset = Vector3.zero;
+        public Vector3 ManualRotationOffset
+        {
+            get { return manualPositionOffset; }
+            private set { manualPositionOffset = value; }
+        }
+    #endregion
 
         #region PRIVATE VARS
         private Vector3 focusPoint, previousFocusPoint;
@@ -91,8 +103,8 @@ namespace Hedronoid
         private IGravityService gravityService;
 
         // RAYCASTING
-        private Vector3 currRay, prevRay;
-        private Vector3 currHit, prevHitPoint;
+        private RaycastHit prevHitPoint;
+        private Ray prevRay;
 
         Vector3 CameraHalfExtends
         {
@@ -202,8 +214,8 @@ namespace Hedronoid
                     if (Input.GetButtonDown("Fire3"))
                     {
                         distanceThreshold = 0.01f;
-                        prevHitPoint = PlayerStateManager.Instance.RayHit.point;
-                        prevRay = PlayerStateManager.Instance.charRay;
+                        prevHitPoint = PlayerStateManager.Instance.RayHit;
+                        prevRay = PlayerStateManager.Instance.LookRay;
                         manualPositionOffset.x *= -1;
                     }
 
@@ -217,14 +229,14 @@ namespace Hedronoid
             Vector3 alignedOffsetVector = lookRotation * manualPositionOffset;
             Vector3 targetPointOffset = targetPoint + alignedOffsetVector;
 
-            Vector3 targetDirection = prevHitPoint - targetPointOffset;
-            Gizmos.Line(targetPointOffset, prevHitPoint, Color.magenta);
+            Vector3 targetDirection = prevHitPoint.point - targetPointOffset;
+            Gizmos.Line(targetPointOffset, prevHitPoint.point, Color.magenta);
 
             float distanceOffset =
                 Vector3.Distance(targetPointOffset, focusPoint);            
 
             Gizmos.Cube(targetPointOffset, Quaternion.identity, Vector3.one / 2f, Color.blue);
-            Gizmos.Cube(prevHitPoint, Quaternion.identity, Vector3.one * 4f, Color.black);
+            Gizmos.Cube(prevHitPoint.point, Quaternion.identity, Vector3.one * 4f, Color.black);
 
             if (distanceOffset > Mathf.Abs(distanceThreshold) && 
                 shoulderCentering > 0f)
@@ -241,7 +253,7 @@ namespace Hedronoid
                         unscaledDelta.value) / factor
                         );
 
-                if (prevHitPoint != Vector3.zero)
+                if (prevHitPoint.point != Vector3.zero)
                     AutomaticCentering();
 
                 orbitRotation = Quaternion.Euler(orbitAngles);
@@ -270,7 +282,7 @@ namespace Hedronoid
             if (horizontalAngle < -e || horizontalAngle > e || verticalAngle < -e || verticalAngle > e)
             {
                 orbitAngles += rotationSpeed * unscaledDelta.value * new Vector2(verticalAngle, horizontalAngle);
-                prevHitPoint = Vector3.zero;
+                prevHitPoint.point = Vector3.zero;
                 lastManualRotationTime = Time.unscaledTime;
                 return true;
             }
@@ -280,28 +292,45 @@ namespace Hedronoid
 
         void AutomaticCentering ()
         {
-            Vector3 hitPoint = PlayerStateManager.Instance.RayHit.point;
-            currRay = PlayerStateManager.Instance.charRay;
+            // Change last hit ray magnitude to be identical to the previous hit ray
+            Ray hitRay = PlayerStateManager.Instance.LookRay;
+            Vector3 hitPoint = hitRay.GetPoint(prevHitPoint.distance);
 
+            // Aligned delta/direction between the two hit points
             Vector3 alignedDelta = Quaternion.Inverse(gravityAlignment) * 
-                (prevHitPoint - hitPoint);
+                (prevHitPoint.point - hitPoint);
 
+            // Movement direction magnitude of XZ (horizontal) plane
             Vector2 movement = new Vector2(alignedDelta.x, alignedDelta.z);
 
             float movementDeltaSqr = movement.sqrMagnitude;
             if (movementDeltaSqr < 0.000001f)
                 return;
 
+            // Angle from movement direction
             float headingAngle = GetAngle(movement / Mathf.Sqrt(movementDeltaSqr));
+
+            // Delta/smallest angle required to rotate to reaching heading
             float deltaAbs =
                 Mathf.Abs(Mathf.DeltaAngle(orbitAngles.y, headingAngle));
 
-            float centeringSpeed = 
-                shoulderCenteringSpeed / Vector3.Distance(focusPoint, hitPoint);
+            // Scale centering speed with distance between the hit point and focus
+            float focusHitDis = Vector3.Distance(focusPoint, prevHitPoint.point);
 
+            float centeringSpeed;
+
+            // If the focus-hitPoint distance is less than 0, than multiply factor to avoid
+            // really fast rotations at close proximity
+            if (focusHitDis > 1f)
+                centeringSpeed = shoulderCenteringSpeed / focusHitDis;
+            else centeringSpeed = shoulderCenteringSpeed * focusHitDis;
+
+            // Rotation change is the product of the centering factor plus the minimum
+            // between delta time and movement direction delta
             float rotationChange = centeringSpeed *
                 Mathf.Min(unscaledDelta.value, movementDeltaSqr);
 
+            // Proper smooth aligning according to a set threshold angle
             if (deltaAbs < shoulderAlignSmoothRange)
             {
                 rotationChange *= deltaAbs / shoulderAlignSmoothRange;
