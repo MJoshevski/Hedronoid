@@ -47,6 +47,7 @@ namespace Hedronoid
         [Tooltip("How fast do we center on the newly switched shoulder?")]
         [Min(0f), Range(1f, 360f)]
         public float shoulderCenteringSpeed = 90f;
+        [Tooltip("At what point between the rotation of angles should we engage full speed smoothing?")]
         [Range(0f, 90f)]
         public float shoulderAlignSmoothRange = 45f;
         [Tooltip("How fast does the camera catch-up to the shoulder focus when moving?")]
@@ -55,21 +56,31 @@ namespace Hedronoid
         [Tooltip("How fast do we need to be going for the catch-up factor to take effect?")]
         [Range(0f, 100f)]
         public float catchupVeloThreshold = 10f;
+        [Tooltip("How much mouse/camera look intensity we need to apply to interrupt shoulder centering and return camera control to player?")]
         [Range(0.001f, 10f)]
         public float lookReleaseThreshold = 10f;
 
         [Header("Camera obstructions")]
+        [Tooltip("Minimum angle for the vertical orbit rotation")]
         [Range(-89f, 89f)]
         public float minVerticalAngle = -30f;
+        [Tooltip("Maximum angle for the vertical orbit rotation")]
         [Range(-89f, 89f)]
         public float maxVerticalAngle = 60f;
+        [Tooltip("Minimum angle for the horizontal orbit rotation")]
         [Range(-89f, 89f)]
-        public float minHorizontalAngle = 45f, maxHorizontalAngle = 75f;
+        public float minHorizontalAngle = 45f;
+        [Tooltip("Maximum angle for the horizontal orbit rotation")]
+        [Range(-89f, 89f)]
+        public float maxHorizontalAngle = 75f;
+        [Tooltip("Which layers obstruct the camera?")]
         public LayerMask obstructionMask = -1;
 
         [Header("Automatic rotation")]
+        [Tooltip("How long (seconds) do we wait before automatic focus alignment kicks in?")]
         [Min(0f)]
         public float alignDelay = 5f;
+        [Tooltip("At what point between the rotation of angles should we engage full speed smoothing?")]
         [Range(0f, 90f)]
 	    public float alignSmoothRange = 45f;
 
@@ -283,14 +294,8 @@ namespace Hedronoid
 
             float e = lookReleaseThreshold;
 
-            if (!shoulderFocused && ( 
-                horizontalAngle < -e ||
-                horizontalAngle > e ||
-                verticalAngle < -e ||
-                verticalAngle > e))
-            {
+            if (!shoulderFocused && (horizontalAngle < -e || horizontalAngle > e || verticalAngle < -e || verticalAngle > e))
                 shoulderFocused = true;
-            }
 
             if (!shoulderFocused) return false;
 
