@@ -29,6 +29,7 @@ MonoBehaviour:
   shoulderAlignSmoothRange: 90
   catchupFactor: 0.18
   catchupVeloThreshold: 10
+  lookReleaseThreshold: 0.001
   minVerticalAngle: -89
   maxVerticalAngle: 89
   minHorizontalAngle: -89
@@ -38,5 +39,6 @@ MonoBehaviour:
     m_Bits: 0
   alignDelay: 5
   alignSmoothRange: 45
-  manualPositionOffset: {x: 1.5, y: 2}
+  manualPositionOffset: {x: -1.5, y: 2}
   manualRotationOffset: {x: 0, y: 0, z: 0}
+  focused: 1

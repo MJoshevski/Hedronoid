@@ -55,6 +55,8 @@ namespace Hedronoid
         [Tooltip("How fast do we need to be going for the catch-up factor to take effect?")]
         [Range(0f, 100f)]
         public float catchupVeloThreshold = 10f;
+        [Range(0.001f, 10f)]
+        public float lookReleaseThreshold = 10f;
 
         [Header("Camera obstructions")]
         [Range(-89f, 89f)]
@@ -86,13 +88,14 @@ namespace Hedronoid
             get { return manualPositionOffset; }
             private set { manualPositionOffset = value; }
         }
-    #endregion
+        #endregion
 
         #region PRIVATE VARS
         private Vector3 focusPoint, previousFocusPoint;
         private Vector2 orbitAngles = new Vector2(45f, 0f);
         private float lastManualRotationTime;
         private float distanceThreshold;
+        private bool shoulderFocused = true;
 
         private Quaternion gravityAlignment = Quaternion.identity;
         private Quaternion orbitRotation;
@@ -104,7 +107,6 @@ namespace Hedronoid
 
         // RAYCASTING
         private RaycastHit prevHitPoint;
-        private Ray prevRay;
 
         Vector3 CameraHalfExtends
         {
@@ -201,9 +203,9 @@ namespace Hedronoid
             previousFocusPoint = focusPoint;
             Vector3 targetPoint = focus.value.position;
 
-            Gizmos.Cube(previousFocusPoint, Quaternion.identity, Vector3.one / 2f, Color.red);
-            Gizmos.Cube(focusPoint, Quaternion.identity, Vector3.one / 2f, Color.magenta);
-            Gizmos.Cube(targetPoint, Quaternion.identity, Vector3.one / 2f, Color.green);
+            //Gizmos.Cube(previousFocusPoint, Quaternion.identity, Vector3.one / 2f, Color.red);
+            //Gizmos.Cube(focusPoint, Quaternion.identity, Vector3.one / 2f, Color.magenta);
+            //Gizmos.Cube(targetPoint, Quaternion.identity, Vector3.one / 2f, Color.green);
 
             switch (cameraTypes)
             {
@@ -215,7 +217,7 @@ namespace Hedronoid
                     {
                         distanceThreshold = 0.01f;
                         prevHitPoint = PlayerStateManager.Instance.RayHit;
-                        prevRay = PlayerStateManager.Instance.LookRay;
+                        shoulderFocused = false;
                         manualPositionOffset.x *= -1;
                     }
 
@@ -230,7 +232,7 @@ namespace Hedronoid
             Vector3 targetPointOffset = targetPoint + alignedOffsetVector;
 
             Vector3 targetDirection = prevHitPoint.point - targetPointOffset;
-            Gizmos.Line(targetPointOffset, prevHitPoint.point, Color.magenta);
+            //Gizmos.Line(targetPointOffset, prevHitPoint.point, Color.magenta);
 
             float distanceOffset =
                 Vector3.Distance(targetPointOffset, focusPoint);            
@@ -261,6 +263,7 @@ namespace Hedronoid
             else
             {
                 focusPoint = targetPointOffset;
+                shoulderFocused = true;
                 distanceThreshold = manualPositionOffset.x * 2f;
             }
         }
@@ -278,12 +281,25 @@ namespace Hedronoid
             float horizontalAngle = x * delta.value * InputManager.Instance.MouseHorizontalSensitivity;
             float verticalAngle = -y * delta.value * InputManager.Instance.MouseVerticalSensitivity;
 
-            const float e = 0.001f;
+            float e = lookReleaseThreshold;
+
+            if (!shoulderFocused && ( 
+                horizontalAngle < -e ||
+                horizontalAngle > e ||
+                verticalAngle < -e ||
+                verticalAngle > e))
+            {
+                shoulderFocused = true;
+            }
+
+            if (!shoulderFocused) return false;
+
+            e = 0.001f;
             if (horizontalAngle < -e || horizontalAngle > e || verticalAngle < -e || verticalAngle > e)
             {
                 orbitAngles += rotationSpeed * unscaledDelta.value * new Vector2(verticalAngle, horizontalAngle);
-                prevHitPoint.point = Vector3.zero;
                 lastManualRotationTime = Time.unscaledTime;
+                prevHitPoint.point = Vector3.zero;
                 return true;
             }
 
