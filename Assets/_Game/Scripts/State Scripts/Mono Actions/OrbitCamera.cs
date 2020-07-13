@@ -189,7 +189,7 @@ namespace Hedronoid
         void UpdateGravityAlignment()
         {
             Vector3 fromUp = gravityAlignment * Vector3.up;
-            Vector3 toUp = GravityService.GetUpAxis(focusPoint);
+            Vector3 toUp = GravityService.GetUpAxis(focus.value.position);
             float dot = Mathf.Clamp(Vector3.Dot(fromUp, toUp), -1f, 1f);
             float angle = Mathf.Acos(dot) * Mathf.Rad2Deg;
             float maxAngle = upAlignmentSpeed * Time.deltaTime;
@@ -248,8 +248,8 @@ namespace Hedronoid
             float distanceOffset =
                 Vector3.Distance(targetPointOffset, focusPoint);            
 
-            Gizmos.Cube(targetPointOffset, Quaternion.identity, Vector3.one / 2f, Color.blue);
-            Gizmos.Cube(prevHitPoint.point, Quaternion.identity, Vector3.one * 4f, Color.black);
+            //Gizmos.Cube(targetPointOffset, Quaternion.identity, Vector3.one / 2f, Color.blue);
+            //Gizmos.Cube(prevHitPoint.point, Quaternion.identity, Vector3.one * 4f, Color.black);
 
             if (distanceOffset > Mathf.Abs(distanceThreshold) && 
                 shoulderCentering > 0f)
