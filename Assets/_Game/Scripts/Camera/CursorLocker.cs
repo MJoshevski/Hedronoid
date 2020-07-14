@@ -8,12 +8,10 @@ namespace Hedronoid
     public class CursorLocker : Action
     {
         [Header("Settings")]
-        [SerializeField]
-        bool LockCursor;
+        public bool LockCursor;
 
         [Header("Refs")]
-        [SerializeField]
-        TransformVariable Camera;
+        public TransformVariable Camera;
 
         public override void Execute_Start()
         {

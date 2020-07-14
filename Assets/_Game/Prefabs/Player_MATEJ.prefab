@@ -195,7 +195,6 @@ GameObject:
   m_Component:
   - component: {fileID: 6092352731727703243}
   - component: {fileID: 6092352731733187871}
-  - component: {fileID: 25409004517871848}
   - component: {fileID: 2917728978657191866}
   - component: {fileID: 1775900077}
   - component: {fileID: 1741631595539028789}
@@ -241,18 +240,6 @@ Rigidbody:
   m_Interpolate: 1
   m_Constraints: 112
   m_CollisionDetection: 3
---- !u!114 &25409004517871848
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 6092352731727976783}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: c06083159a2f8b14d88e1289b296b230, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
 --- !u!114 &2917728978657191866
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -276,9 +263,6 @@ MonoBehaviour:
     TurnSpeedMultiplier: 16
     MoveAmount: 0
     MoveDirection: {x: 0, y: 0, z: 0}
-  collisionVariables:
-    RaySize: 2
-    ArrayFlags: 
   gravityVariables:
     GravityForceMultiplier: 5
     GravityRotationMultiplier: 5
@@ -299,12 +283,6 @@ MonoBehaviour:
     DashesMade: 0
     ContinuousInput: 0
     PhysicalForce: {fileID: 11400000, guid: 002679e5d113047b09c1a29efbd4bbd2, type: 2}
-  wallRunVariables:
-    GravityNegateMultiplier: 5
-    Duration: 213.43
-    WallRunning: 0
-  wallJumpVariables:
-    WallJumpForce: {fileID: 11400000, guid: cf82a9d8c9c6c764daece30b60db074e, type: 2}
   delta: 0
   Transform: {fileID: 0}
   Rigidbody: {fileID: 0}
@@ -341,6 +319,7 @@ MonoBehaviour:
   lastFired_Auto: 0
   lastFired_Shotgun: 0
   lastFired_Rail: 0
+  charRay: {x: 0, y: 0, z: 0}
   desiredJump: 0
   probeMask:
     serializedVersion: 2

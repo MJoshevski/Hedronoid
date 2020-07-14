@@ -6,22 +6,22 @@ namespace Hedronoid
     public class DebugMenu : MonoBehaviour
     {
         [Header("Refs")]
-        [SerializeField] GameObject Panel;
-        [SerializeField] Button DebugButton;
-        [SerializeField] Button CloseButton;
-        [SerializeField] Button ResetBindingsButton;
-        [SerializeField] Button SaveBindingsButton;
+        public GameObject Panel;
+        public Button DebugButton;
+        public Button CloseButton;
+        public Button ResetBindingsButton;
+        public Button SaveBindingsButton;
 
-        [SerializeField] InputField VerticalSensitivityInputField;
-        [SerializeField] Slider VerticalSensitivitySlider;
-        [SerializeField] InputField HorizontalSensitivityInputField;
-        [SerializeField] Slider HorizontalSensitivitySlider;
+        public InputField VerticalSensitivityInputField;
+        public Slider VerticalSensitivitySlider;
+        public InputField HorizontalSensitivityInputField;
+        public Slider HorizontalSensitivitySlider;
 
 
-        [SerializeField] Transform BindingViewsPanel;
+        public Transform BindingViewsPanel;
 
         [Header("Prefabs")]
-        [SerializeField] GameObject BindingView;
+        public GameObject BindingView;
 
         void Start()
         {

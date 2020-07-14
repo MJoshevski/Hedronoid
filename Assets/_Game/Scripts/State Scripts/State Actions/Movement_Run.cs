@@ -53,38 +53,6 @@ namespace Hedronoid
             Debug.DrawRay(states.Transform.position, moveDirection, Color.yellow);
             moveVars.MoveDirection = moveDirection;
             //
-
-
-            //GLOBAL GRAVITY SYSTEM
-            //if (states.isGrounded)
-            //{
-            //    if (states.gravityService.Direction == GravityDirections.DOWN ||
-            //    states.gravityService.Direction == GravityDirections.UP)
-            //    {
-            //        acceleration.y = 0;
-            //    }
-            //    else if (states.gravityService.Direction == GravityDirections.LEFT ||
-            //      states.gravityService.Direction == GravityDirections.RIGHT)
-            //    {
-            //        acceleration.x = 0;
-            //    }
-            //    else if (states.gravityService.Direction == GravityDirections.FRONT ||
-            //   states.gravityService.Direction == GravityDirections.BACK)
-            //    {
-            //        acceleration.z = 0;
-            //    }
-            //}
-
-            //if (states.gravityService.Direction == GravityDirections.DOWN ||
-            //    states.gravityService.Direction == GravityDirections.UP)
-            //    acceleration.y = states.Rigidbody.velocity.y;
-            //else if (states.gravityService.Direction == GravityDirections.LEFT ||
-            //    states.gravityService.Direction == GravityDirections.RIGHT)
-            //    acceleration.x = states.Rigidbody.velocity.x;
-            //else if (states.gravityService.Direction == GravityDirections.FRONT ||
-            //    states.gravityService.Direction == GravityDirections.BACK)
-            //    acceleration.z = states.Rigidbody.velocity.z;
-            //
         }
 
         void AdjustVelocity()

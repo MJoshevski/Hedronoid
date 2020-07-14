@@ -12,19 +12,16 @@ namespace Hedronoid
         public State currentState;
 
         public MovementVariables movementVariables;
-        public CollisionVariables collisionVariables;
         public GravityVariables gravityVariables;
         public JumpVariables jumpVariables;
         public DashVariables dashVariables;
-        public WallRunVariables wallRunVariables;
-        public WallJumpVariables wallJumpVariables;
 
         [HideInInspector]
         public float delta;
         [HideInInspector]
         public Transform Transform;
         [HideInInspector]
-        public new Rigidbody Rigidbody;
+        public Rigidbody Rigidbody;
 
         [HideInInspector]
         public Animator Animator;
@@ -49,7 +46,7 @@ namespace Hedronoid
         public PlayerActionSet PlayerActions;
         public float MouseHorizontalSensitivity { get; set; }
         public float MouseVerticalSensitivity { get; set; }
-        public new TransformVariable cameraTransform;
+        public TransformVariable cameraTransform;
         public new CameraVariable camera;
 
         [HideInInspector]

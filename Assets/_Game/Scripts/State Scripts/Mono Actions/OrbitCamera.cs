@@ -24,9 +24,6 @@ namespace Hedronoid
 
         [Header("General Behaviour")]
         public OrbitCameraTypes cameraTypes = OrbitCameraTypes.ManualShoulderSwitch;
-        [Tooltip("How fast the rig will adapt to the newly changed gravity?")]
-        [SerializeField, Range(100f, 1000f)]
-        private float m_GravityAdaptTurnSpeed = 500f;
         [Tooltip("How far away from the focus point should the camera be?")]
         [Range(1f, 20f)]
 	    public float distance = 5f;

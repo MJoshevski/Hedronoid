@@ -5,14 +5,11 @@ using UnityEngine.UI;
 
 public class TimeController : MonoBehaviour
 {
-    [SerializeField]
-    Button PlayButton;
+    public Button PlayButton;
 
-    [SerializeField]
-    GameObject DebugPanel;
+    public GameObject DebugPanel;
 
-    [SerializeField]
-    Text TimeScaleText;
+    public Text TimeScaleText;
 
     [SerializeField]
     int escKeyPresses = 0;

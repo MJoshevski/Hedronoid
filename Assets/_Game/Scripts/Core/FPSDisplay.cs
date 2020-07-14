@@ -5,14 +5,10 @@ using UnityEngine.UI;
 public class FPSDisplay : MonoBehaviour
 {
     [Header("Settings")]
-
-    [SerializeField]
-    float UpdateInterval = 1f;
-
+    public float UpdateInterval = 1f;
 
     [Header("Refs")]
-    [SerializeField]
-    Text Text;
+    public Text Text;
 
     float _accumulator = 0.0f; // FPS accumulated over the interval
     int _frames = 0; // Frames drawn over the interval
