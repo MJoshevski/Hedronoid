@@ -11,18 +11,19 @@ public class PursuerController : MonoBehaviour
     Pursuer thisPursuerInstance;
     public Transform target;
     Vector3 targetOldPos;
-    public DefenderController dCInstance;
+    bool graphIsReady = false;
     public float targetLesionAreaRadius;
     public float targetPathUpdateOffset;
-
     public float circleRadius = 30;
     private void Start()
     {
         thisPursuerInstance = gameObject.GetComponent<Pursuer>();
+        graphIsReady = false;
     }
 
     public void TheGraphIsReady()
     {
+        graphIsReady = true;
         targetOldPos = target.transform.position;
         targetPathUpdateOffset = 8;
         thisPursuerInstance.MoveTo(target.transform);
@@ -30,6 +31,8 @@ public class PursuerController : MonoBehaviour
 
     public void Update()
     {
+        if (!graphIsReady) return;
+
         if (Vector3.Distance(targetOldPos, target.position) > targetPathUpdateOffset)
         {
             targetOldPos = target.position;
