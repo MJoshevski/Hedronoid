@@ -19,7 +19,6 @@ MonoBehaviour:
   delta: {fileID: 11400000, guid: 843090a45fe084eb6bb3c6785d32745e, type: 2}
   unscaledDelta: {fileID: 11400000, guid: 5ffe7763c0f715a40b1dd59aeeccb5a2, type: 2}
   cameraTypes: 1
-  m_GravityAdaptTurnSpeed: 500
   distance: 6
   upAlignmentSpeed: 360
   followSpeed: 9
@@ -30,15 +29,14 @@ MonoBehaviour:
   catchupFactor: 0.18
   catchupVeloThreshold: 10
   lookReleaseThreshold: 0.001
-  minVerticalAngle: -89
-  maxVerticalAngle: 89
+  minVerticalAngle: -60
+  maxVerticalAngle: 60
   minHorizontalAngle: -89
   maxHorizontalAngle: 89
   obstructionMask:
     serializedVersion: 2
-    m_Bits: 0
+    m_Bits: 1024
   alignDelay: 5
   alignSmoothRange: 45
-  manualPositionOffset: {x: -1.5, y: 2}
+  manualPositionOffset: {x: 1.5, y: 2}
   manualRotationOffset: {x: 0, y: 0, z: 0}
-  focused: 1
