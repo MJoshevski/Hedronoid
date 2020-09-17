@@ -1,7 +1,7 @@
 using UnityEditor;
 using UnityEngine;
 using System.Collections.Generic;
-
+using Hedronoid;
 
 [CustomEditor( typeof( TrashMan ) )]
 public class TrashManEditor : Editor

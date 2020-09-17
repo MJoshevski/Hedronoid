@@ -21,7 +21,8 @@ namespace Hedronoid
 
         public TransformVariable bulletOrigin;
         public Rigidbody rb_auto;
-        public GameObject auto;
+
+        private System.Action onDespawnAction;
 
         public override void Execute_Start(PlayerStateManager states)
         {
@@ -35,9 +36,9 @@ namespace Hedronoid
             if (Input.GetButton("Fire1") && 
                 Time.realtimeSinceStartup - states.lastFired_Auto > fireRate_Auto)
             {
-                auto = TrashMan.spawn(
+                GameObject auto = TrashMan.spawn(
                     bullets_Auto, bulletOrigin.value.position, Quaternion.identity);
-                TrashMan.despawnAfterDelay(auto, 5f);
+                TrashMan.despawnAfterDelay(auto, 1f, () => onDespawnReset(auto));
 
                 rb_auto = auto.GetComponent<Rigidbody>();
                 rb_auto.AddForce(shootDirection.normalized * shootForce_Auto);
@@ -54,6 +55,15 @@ namespace Hedronoid
                 rb_shot.AddForce(shootDirection.normalized * shootForce_Shotgun);
                 states.lastFired_Shotgun = Time.realtimeSinceStartup;
             }
+        }
+
+        private System.Action onDespawnReset(GameObject bullet)
+        {
+            bullet.SetActive(false);
+            bullet.transform.SetPositionAndRotation(bulletOrigin.value.position, Quaternion.identity);
+            bullet.SetActive(true);
+
+            return null;
         }
     }
 }
