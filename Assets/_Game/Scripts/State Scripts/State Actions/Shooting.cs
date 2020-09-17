@@ -38,7 +38,7 @@ namespace Hedronoid
             {
                 GameObject auto = TrashMan.spawn(
                     bullets_Auto, bulletOrigin.value.position, Quaternion.identity);
-                TrashMan.despawnAfterDelay(auto, 1f, () => onDespawnReset(auto));
+                TrashMan.despawnAfterDelay(auto, 5f, () => onDespawnReset(auto));
 
                 rb_auto = auto.GetComponent<Rigidbody>();
                 rb_auto.AddForce(shootDirection.normalized * shootForce_Auto);
@@ -49,7 +49,7 @@ namespace Hedronoid
             {
                 GameObject shot = TrashMan.spawn(
                     bullets_Shotgun, bulletOrigin.value.position, Quaternion.identity);
-                TrashMan.despawnAfterDelay(shot, 5f);
+                TrashMan.despawnAfterDelay(shot, 5f, () => onDespawnReset(shot));
 
                 Rigidbody rb_shot = shot.GetComponent<Rigidbody>();
                 rb_shot.AddForce(shootDirection.normalized * shootForce_Shotgun);
