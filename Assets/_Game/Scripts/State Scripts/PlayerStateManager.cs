@@ -140,7 +140,10 @@ namespace Hedronoid
             }
         }
 
+        [HideInInspector]
         public bool desiredJump;
+        private bool inVacuum;
+
         private void Update()
         {
             delta = Time.deltaTime;
@@ -174,11 +177,25 @@ namespace Hedronoid
             //Debug.LogError("GRAVITY: " + gravityService.CurrentGravity.ToString());
 
             if (gravityService.CurrentGravity == Vector3.zero)
-            {
+            {                
                 Rigidbody.velocity =
                     Vector3.ClampMagnitude(
-                        Rigidbody.velocity,maxVelocityMagnitudeInVacuum);
+                        Rigidbody.velocity, maxVelocityMagnitudeInVacuum);
+
+                if (!inVacuum)
+                {
+                    inVacuum = true;
+                    Animator.CrossFade(animHashes.Flying, 0.2f);
+                    Debug.LogError("IS FLYING 1: " + Animator.GetCurrentAnimatorStateInfo(1).IsName("Flying"));
+                }               
             }
+            else if (inVacuum == true)
+            {
+                inVacuum = false;
+                Debug.LogError("BRUH");
+                Animator.CrossFade(animHashes.Falling, 0.2f);
+            }
+
 
             //Debug.LogError("VELO MAG: " + Rigidbody.velocity.magnitude);
 

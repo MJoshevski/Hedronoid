@@ -18,9 +18,9 @@ namespace Hedronoid
 
         public override void Execute(PlayerStateManager states)
         {
-            //states.Rigidbody.drag = 0;
-            //states.timeSinceJump = Time.realtimeSinceStartup;
-            //states.isGrounded = false;
+            states.Rigidbody.drag = 0;
+            states.timeSinceJump = Time.realtimeSinceStartup;
+            states.isGrounded = false;
 
             //if (states.jumpPhase > 1 && states.jumpPhase < states.maxAirJumps)
             //{
