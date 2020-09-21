@@ -139,6 +139,20 @@ namespace Hedronoid
             {
                 jumpSpeed = Mathf.Max(jumpSpeed - alignedSpeed, 0f);
             }
+
+            if(states.jumpPhase == 1)
+            {
+                if (states.movementVariables.MoveAmount > 0.1f)
+                {
+                    states.Animator.CrossFade(states.animHashes.JumpForward, 0.2f);
+                }
+                else
+                {
+                    states.Animator.CrossFade(states.animHashes.JumpIdle, 0.2f);
+                }
+            } else if (states.jumpPhase > 1)
+                states.Animator.CrossFade(states.animHashes.DoubleJump, 0.2f);
+
             states.velocity += jumpDirection * jumpSpeed;
         }
 

@@ -18,55 +18,24 @@ namespace Hedronoid
 
         public override void Execute(PlayerStateManager states)
         {
-            states.Rigidbody.drag = 0;
-            states.timeSinceJump = Time.realtimeSinceStartup;
-            states.isGrounded = false;
+            //states.Rigidbody.drag = 0;
+            //states.timeSinceJump = Time.realtimeSinceStartup;
+            //states.isGrounded = false;
 
-            if (states.movementVariables.MoveAmount > 0.1f)
-            {
-                states.Animator.CrossFade(states.animHashes.JumpForward, 0.2f);
-            }
-            else
-            {
-                states.Animator.CrossFade(states.animHashes.JumpIdle, 0.2f);
-            }
-
-            //Vector3 moveDirection = states.movementVariables.MoveDirection;
-
-            //if (moveDirection.sqrMagnitude < .25f)
-            //    moveDirection = states.Transform.forward;
-
-            //if (states.jumpVariables.JumpsMade < states.jumpVariables.MaxJumps)
+            //if (states.jumpPhase > 1 && states.jumpPhase < states.maxAirJumps)
             //{
-            //    Vector3 forceDirection =
-            //        Quaternion.FromToRotation(states.Transform.forward, moveDirection)
-            //        * GravityService.Instance.GravityRotation
-            //        * firstJumpSettings.Direction;
-
-            //    forceDirection.Normalize();
-
-            //    jumpVariables.JumpsMade++;
-            //    jumpVariables.JumpMade = true;
-
-            //    states.StartCoroutine(
-            //        states.Rigidbody.ApplyForceContinuously(forceDirection, firstJumpSettings)
-            //        );
+            //    states.Animator.CrossFade(states.animHashes.DoubleJump, 0.2f);
             //}
-            //else if (states.jumpVariables.JumpsMade == states.jumpVariables.MaxJumps)
+            //else if (states.jumpPhase == 1)
             //{
-            //    Vector3 forceDirection =
-            //        Quaternion.FromToRotation(states.Transform.forward, moveDirection)
-            //        * GravityService.Instance.GravityRotation
-            //        * secondJumpSettings.Direction;
-
-            //    forceDirection.Normalize();
-
-            //    jumpVariables.JumpsMade++;
-            //    jumpVariables.JumpMade = true;
-
-            //    states.StartCoroutine(
-            //        states.Rigidbody.ApplyForceContinuously(forceDirection, secondJumpSettings)
-            //        );
+            //    if (states.movementVariables.MoveAmount > 0.1f)
+            //    {
+            //        states.Animator.CrossFade(states.animHashes.JumpForward, 0.2f);
+            //    }
+            //    else
+            //    {
+            //        states.Animator.CrossFade(states.animHashes.JumpIdle, 0.2f);
+            //    }
             //}
         }
     }

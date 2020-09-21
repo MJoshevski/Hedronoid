@@ -223,44 +223,6 @@ namespace Hedronoid
         {
             yield return new WaitForSeconds(duration);
         }
-
-        void Jump(Vector3 gravity)
-        {
-            Vector3 jumpDirection;
-            if (OnGround)
-            {
-                jumpDirection = contactNormal;
-            }
-            else if (OnSteep)
-            {
-                jumpDirection = steepNormal;
-                jumpPhase = 0;
-            }
-            else if (maxAirJumps > 0 && jumpPhase <= maxAirJumps)
-            {
-                if (jumpPhase == 0)
-                {
-                    jumpPhase = 1;
-                }
-                jumpDirection = contactNormal;
-            }
-            else
-            {
-                return;
-            }
-
-            stepsSinceLastJump = 0;
-            jumpPhase += 1;
-            float jumpSpeed = Mathf.Sqrt(2f * gravity.magnitude * jumpHeight);
-            jumpDirection = (jumpDirection + upAxis).normalized;
-            float alignedSpeed = Vector3.Dot(velocity, jumpDirection);
-            if (alignedSpeed > 0f)
-            {
-                jumpSpeed = Mathf.Max(jumpSpeed - alignedSpeed, 0f);
-            }
-            velocity += jumpDirection * jumpSpeed;
-        }
-
         void OnCollisionEnter(Collision collision)
         {
             EvaluateCollision(collision);
