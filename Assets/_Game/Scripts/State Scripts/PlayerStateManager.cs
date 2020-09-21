@@ -186,13 +186,11 @@ namespace Hedronoid
                 {
                     inVacuum = true;
                     Animator.CrossFade(animHashes.Flying, 0.2f);
-                    Debug.LogError("IS FLYING 1: " + Animator.GetCurrentAnimatorStateInfo(1).IsName("Flying"));
                 }               
             }
             else if (inVacuum == true)
             {
                 inVacuum = false;
-                Debug.LogError("BRUH");
                 Animator.CrossFade(animHashes.Falling, 0.2f);
             }
 

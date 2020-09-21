@@ -80,14 +80,30 @@ namespace Hedronoid
             states.contactNormal = states.steepNormal = Vector3.zero;
         }
 
+        private bool hasLanded;
         void UpdateState()
         {
             states.stepsSinceLastGrounded += 1;
             states.stepsSinceLastJump += 1;
             states.velocity = states.Rigidbody.velocity;
+
             if (states.OnGround || SnapToGround() || CheckSteepContacts())
             {
                 states.stepsSinceLastGrounded = 0;
+
+                if (!hasLanded && !states.isGrounded)
+                {
+                    if (states.movementVariables.MoveAmount > 0.3f)
+                    {
+                        states.Animator.CrossFade(states.animHashes.LandRun, 0.2f);
+                    }
+                    else
+                    {
+                        states.Animator.CrossFade(states.animHashes.LandFast, 0.2f);
+                    }
+                    hasLanded = true;
+                }
+
                 states.isGrounded = true;
                 if (states.stepsSinceLastJump > 1)
                 {
@@ -102,6 +118,7 @@ namespace Hedronoid
             {
                 states.contactNormal = states.upAxis;
                 states.isGrounded = false;
+                hasLanded = false;
             }
         }
 

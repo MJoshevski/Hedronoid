@@ -16,8 +16,7 @@ namespace Hedronoid
         public int Flying = Animator.StringToHash("Flying");
         public int Falling = Animator.StringToHash("Falling");
         public int LandFast = Animator.StringToHash("Land_Fast");
-        public int LandHard = Animator.StringToHash("Land_Hard");
-        public int LandRoll = Animator.StringToHash("Land_Roll");
+        public int LandRun = Animator.StringToHash("Land_Run");
         public int Dash = Animator.StringToHash("Dash");
         public int IsPlayingAnim = Animator.StringToHash("isPlayingAnim");
     }

@@ -30,7 +30,7 @@ namespace Hedronoid
                     {
                         if(state.movementVariables.MoveAmount > 0.3f)
                         {
-                            state.Animator.CrossFade(state.animHashes.LandRoll, 0.2f);
+                            state.Animator.CrossFade(state.animHashes.LandRun, 0.2f);
                         }
                         else
                         {
@@ -39,7 +39,6 @@ namespace Hedronoid
                             //can be reworked later.
                             state.Animator.SetBool(state.animHashes.IsPlayingAnim, true);
                             //
-                            state.Animator.CrossFade(state.animHashes.LandHard, 0.2f);
                         }
                     }
                     else if (m_timeDifference > maxLandThreshold)
@@ -49,7 +48,6 @@ namespace Hedronoid
                         //can be reworked later.
                         state.Animator.SetBool(state.animHashes.IsPlayingAnim, true);
                         //
-                        state.Animator.CrossFade(state.animHashes.LandHard, 0.2f);
                     }
                     else
                     {
