@@ -29,8 +29,8 @@ MonoBehaviour:
   catchupFactor: 0.18
   catchupVeloThreshold: 10
   lookReleaseThreshold: 0.001
-  minVerticalAngle: -60
-  maxVerticalAngle: 60
+  minVerticalAngle: -75
+  maxVerticalAngle: 75
   minHorizontalAngle: -89
   maxHorizontalAngle: 89
   obstructionMask:
@@ -38,5 +38,5 @@ MonoBehaviour:
     m_Bits: 1024
   alignDelay: 5
   alignSmoothRange: 45
-  manualPositionOffset: {x: 1.5, y: 2}
+  manualPositionOffset: {x: -1.5, y: 2}
   manualRotationOffset: {x: 0, y: 0, z: 0}

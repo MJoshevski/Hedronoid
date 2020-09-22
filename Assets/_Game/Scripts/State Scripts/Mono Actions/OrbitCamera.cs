@@ -110,6 +110,8 @@ namespace Hedronoid
         private Quaternion lookRotation;
         private Vector3 lookPosition;
         private Vector3 lookDirection;
+        private float minVerticalAnglePrev;
+        private float maxVerticalAnglePrev;
 
         private IGravityService gravityService;
 
@@ -140,6 +142,8 @@ namespace Hedronoid
             gravityService = GravityService.Instance;
             gravityAlignment = Quaternion.identity;
             cameraTransform.value.localRotation = orbitRotation = Quaternion.Euler(orbitAngles);
+            minVerticalAnglePrev = minVerticalAngle;
+            maxVerticalAnglePrev = maxVerticalAngle;
         }
 
         public override void Execute()
