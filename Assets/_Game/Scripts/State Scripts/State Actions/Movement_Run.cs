@@ -29,6 +29,12 @@ namespace Hedronoid
             Vector3 gravity = GravityService.GetGravity(states.Rigidbody.position, out states.upAxis);
             GravityService.Instance.CurrentGravity = gravity;
 
+            // In Vacuum Behaviour (get up-axis from camera instead of gravity)
+            if (gravity == Vector3.zero)
+            {
+                states.upAxis = states.cameraTransform.value.up;
+            }
+
             UpdateState();
             AdjustVelocity();
 
