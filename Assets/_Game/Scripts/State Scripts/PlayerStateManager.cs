@@ -21,7 +21,7 @@ namespace Hedronoid
         [HideInInspector]
         public Transform Transform;
         [HideInInspector]
-        public Rigidbody Rigidbody;
+        public Rigidbody Rigidbody, connectedRb, prevConnectedRb;
 
         [HideInInspector]
         public Animator Animator;
@@ -32,6 +32,7 @@ namespace Hedronoid
         [HideInInspector] public bool jumpReleased;
         [HideInInspector] public bool dashPressed;
         [HideInInspector] public bool dashReleased;
+        public bool isDashing;
 
         //[HideInInspector]
         public bool isGrounded;
@@ -55,7 +56,7 @@ namespace Hedronoid
         [HideInInspector]
         public Vector3 upAxis, rightAxis, forwardAxis;
         [HideInInspector]
-        public Vector3 velocity, desiredVelocity;
+        public Vector3 velocity, desiredVelocity, connectionVelocity;
         [Range(0f, 100f)]
         public float maxAcceleration = 10f, maxAirAcceleration = 1f;
         [Range(0f, 200f)]
@@ -259,11 +260,16 @@ namespace Hedronoid
                 {
                     groundContactCount += 1;
                     contactNormal += normal;
+                    connectedRb = collision.rigidbody;
                 }
                 else if (upDot > -0.01f)
                 {
                     steepContactCount += 1;
                     steepNormal += normal;
+                    if (groundContactCount == 0)
+                    {
+                        connectedRb = collision.rigidbody;
+                    }
                 }
             }
         }

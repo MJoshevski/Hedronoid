@@ -21,6 +21,8 @@ namespace Hedronoid
         {
             Vector3 moveDirection = states.movementVariables.MoveDirection;
 
+            GravityService.Instance.CurrentGravity = Vector3.zero;
+
             if (moveDirection.sqrMagnitude < .25f)
                 moveDirection = states.Transform.forward;
 
@@ -50,9 +52,17 @@ namespace Hedronoid
         {
             dashVariables.DashesMade++;
 
+            //Zero out vertical velocity on dash
+            states.isDashing = true;
+            states.velocity.y = 0;
+
             _forceApplyCoroutine = states.StartCoroutine(
                 states.Rigidbody.ApplyForceContinuously(forceDirection, forceSettings));
             yield return _forceApplyCoroutine;
+
+            //Dead stop on dash-end
+            states.isDashing = false;
+            states.velocity = Vector3.zero;
 
             AfterApplyForce();
         }

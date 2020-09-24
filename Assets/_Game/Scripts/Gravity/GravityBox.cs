@@ -139,7 +139,7 @@ namespace Hedronoid
             return coordinate > 0f ? -g : g;
         }
 
-        void OnDrawGizmos()
+        void OnDrawGizmosSelected()
         {
             Gizmos.matrix =
                 Matrix4x4.TRS(transform.position, transform.rotation, Vector3.one);

@@ -28,7 +28,7 @@ namespace Hedronoid
             return -gravity * up;
         }
 
-        void OnDrawGizmos()
+        void OnDrawGizmosSelected()
         {
             Vector3 scale = transform.localScale;
             scale.y = range;

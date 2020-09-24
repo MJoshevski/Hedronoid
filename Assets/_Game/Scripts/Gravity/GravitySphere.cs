@@ -51,7 +51,7 @@ namespace Hedronoid
             return g * vector;
         }
 
-        void OnDrawGizmos()
+        void OnDrawGizmosSelected()
         {
             Vector3 p = transform.position;
             if (innerFalloffRadius > 0f && innerFalloffRadius < innerRadius)

@@ -27,13 +27,16 @@ namespace Hedronoid
             moveVars.MoveAmount = moveAmount;
 
             Vector3 gravity = GravityService.GetGravity(states.Rigidbody.position, out states.upAxis);
-            GravityService.Instance.CurrentGravity = gravity;
 
             // In Vacuum Behaviour (get up-axis from camera instead of gravity)
             if (gravity == Vector3.zero)
             {
                 states.upAxis = states.cameraTransform.value.up;
             }
+
+            if (states.isDashing) gravity = Vector3.zero;
+
+            GravityService.Instance.CurrentGravity = gravity;
 
             UpdateState();
             AdjustVelocity();
@@ -63,11 +66,12 @@ namespace Hedronoid
 
         void AdjustVelocity()
         {
+            Vector3 relativeVelocity = states.velocity - states.connectionVelocity;
             Vector3 xAxis = VectorExtensions.ProjectDirectionOnPlane(states.rightAxis, states.contactNormal);
             Vector3 zAxis = VectorExtensions.ProjectDirectionOnPlane(states.forwardAxis, states.contactNormal);
 
-            float currentX = Vector3.Dot(states.velocity, xAxis);
-            float currentZ = Vector3.Dot(states.velocity, zAxis);
+            float currentX = Vector3.Dot(relativeVelocity, xAxis);
+            float currentZ = Vector3.Dot(relativeVelocity, zAxis);
 
             float acceleration = states.OnGround ? states.maxAcceleration : states.maxAirAcceleration;
             float maxSpeedChange = acceleration * Time.deltaTime;
@@ -83,10 +87,14 @@ namespace Hedronoid
         void ClearState()
         {
             states.groundContactCount = states.steepContactCount = 0;
-            states.contactNormal = states.steepNormal = Vector3.zero;
+            states.contactNormal = states.steepNormal = states.connectionVelocity = Vector3.zero;
+            states.prevConnectedRb = states.connectedRb;
+            states.connectedRb = null;
         }
 
         private bool hasLanded;
+        private Vector3 connectionWorldPosition, connectionLocalPosition;
+
         void UpdateState()
         {
             states.stepsSinceLastGrounded += 1;
@@ -126,6 +134,30 @@ namespace Hedronoid
                 states.isGrounded = false;
                 hasLanded = false;
             }
+
+            if (states.connectedRb)
+            {
+                if (states.connectedRb.isKinematic || states.connectedRb.mass >= states.Rigidbody.mass)
+                {
+                    UpdateConnectionState();
+                }
+            }
+        }
+
+        void UpdateConnectionState()
+        {
+            if (states.connectedRb == states.prevConnectedRb)
+            {
+                Vector3 connectionMovement =
+                    states.connectedRb.transform.TransformPoint(connectionLocalPosition) -
+                    connectionWorldPosition;
+
+                states.connectionVelocity = connectionMovement / Time.deltaTime;
+            }
+
+            connectionWorldPosition = states.Rigidbody.position;
+            connectionLocalPosition = states.connectedRb.transform.InverseTransformPoint(
+                connectionWorldPosition);
         }
 
         void Jump(Vector3 gravity)
@@ -153,17 +185,22 @@ namespace Hedronoid
                 return;
             }
 
+            // Zero out the previous up-velocity
+            states.velocity.y = 0;
+
             states.stepsSinceLastJump = 0;
             states.jumpPhase += 1;
             float jumpSpeed = Mathf.Sqrt(2f * gravity.magnitude * states.jumpHeight);
             jumpDirection = (jumpDirection + states.upAxis).normalized;
             float alignedSpeed = Vector3.Dot(states.velocity, jumpDirection);
+
             if (alignedSpeed > 0f)
             {
                 jumpSpeed = Mathf.Max(jumpSpeed - alignedSpeed, 0f);
             }
 
-            if(states.jumpPhase == 1)
+            // JUMPS ANIMATION
+            if (states.jumpPhase == 1)
             {
                 if (states.movementVariables.MoveAmount > 0.1f)
                 {
@@ -211,6 +248,8 @@ namespace Hedronoid
             {
                 states.velocity = (states.velocity - hit.normal * dot).normalized * speed;
             }
+
+            states.connectedRb = hit.rigidbody;
             return true;
         }
 
