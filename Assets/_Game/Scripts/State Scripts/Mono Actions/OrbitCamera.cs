@@ -105,6 +105,7 @@ namespace Hedronoid
         private float distanceThreshold;
         private bool shoulderFocused = true;
 
+        [SerializeField]
         private Quaternion gravityAlignment = Quaternion.identity;
         private Quaternion orbitRotation;
         private Quaternion lookRotation;
@@ -187,26 +188,44 @@ namespace Hedronoid
         }
         #endregion
 
+        public Vector3 fromUp, toUp, fromForward, toForward;
         void UpdateGravityAlignment()
         {
-            Vector3 fromUp = gravityAlignment * Vector3.up;
-            Vector3 toUp = GravityService.GetUpAxis(focus.value.position);
+            /*Vector3*/ fromUp = gravityAlignment * Vector3.up;
+            /*Vector3*/ toUp = GravityService.GetUpAxis(focus.value.position);
+
+            /*Vector3*/ fromForward = gravityAlignment * Vector3.forward;
+            /*Vector3*/ toForward = GravityService.GetForwardAxis(focus.value.position);
+
             float dot = Mathf.Clamp(Vector3.Dot(fromUp, toUp), -1f, 1f);
             float angle = Mathf.Acos(dot) * Mathf.Rad2Deg;
             float maxAngle = upAlignmentSpeed * Time.deltaTime;
 
-            Quaternion newAlignment =
+            //if (angle > maxAngle)
+            //{
+                toUp.x *= -1;
+                toUp.z *= -1;
+            //}
+
+            Quaternion upAlignment =
                 Quaternion.FromToRotation(fromUp, toUp) * gravityAlignment;
+
+            Quaternion forwardAlignment =
+                Quaternion.FromToRotation(fromForward, toForward) * gravityAlignment;
 
             if (angle <= maxAngle)
             {
-                gravityAlignment = newAlignment;
+                //gravityAlignment = forwardAlignment;
+                gravityAlignment = upAlignment;
             }
             else
             {
                 gravityAlignment = Quaternion.SlerpUnclamped(
-                    gravityAlignment, newAlignment, maxAngle / angle
+                    gravityAlignment, upAlignment, maxAngle / angle
                 );
+                //gravityAlignment = Quaternion.SlerpUnclamped(
+                //    gravityAlignment, forwardAlignment, maxAngleF / angleF
+                //);
             }
         }
 

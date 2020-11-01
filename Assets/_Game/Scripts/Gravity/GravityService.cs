@@ -51,6 +51,16 @@ namespace Hedronoid
             return -g.normalized;
         }
 
+        public static Vector3 GetForwardAxis(Vector3 position)
+        {
+            Vector3 g = Vector3.zero;
+            for (int i = 0; i < sources.Count; i++)
+            {
+                g += sources[i].GetGravity(position);
+            }
+            return new Vector3(0, 0, g.normalized.z);
+        }
+
         public Vector3 GravityDirection { get; private set; }
         public Quaternion GravityRotation { get; private set; }
         public Vector3 GravityUp
