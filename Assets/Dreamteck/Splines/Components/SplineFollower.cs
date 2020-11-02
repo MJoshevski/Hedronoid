@@ -83,6 +83,10 @@ namespace Dreamteck.Splines
         private double lastClippedPercent = -1.0;
         private bool followStarted = false;
 
+        [Header("Local motion settings")]
+        public Vector3 rotationAxisVector = Vector3.up;
+        public float angularMagnitude = 90f;
+        [Space(20)]
 #if UNITY_EDITOR
         public bool editorSetPosition = true;
 #endif
@@ -214,6 +218,7 @@ namespace Dreamteck.Splines
             CheckTriggers(startPercent, p);
             CheckNodes(startPercent, p);
             Evaluate(p, _result);
+            RotateOnAxis();
             ApplyMotion();
             if (callOnEndReached) onEndReached();
             else if (callOnBeginningReached) onBeginningReached();
@@ -279,11 +284,17 @@ namespace Dreamteck.Splines
                 }
             }
             Evaluate(_result.percent, _result);
+            RotateOnAxis();
             ApplyMotion();
             if (endReached && onEndReached != null) onEndReached();
             else if (beginningReached && onBeginningReached != null) onBeginningReached();
             InvokeTriggers();
             InvokeNodes();
+        }
+
+        private void RotateOnAxis()
+        {
+            transform.Rotate(rotationAxisVector.normalized, angularMagnitude * Time.deltaTime);
         }
     }
 }
