@@ -201,12 +201,6 @@ namespace Hedronoid
             float angle = Mathf.Acos(dot) * Mathf.Rad2Deg;
             float maxAngle = upAlignmentSpeed * Time.deltaTime;
 
-            //if (angle > maxAngle)
-            //{
-                toUp.x *= -1;
-                toUp.z *= -1;
-            //}
-
             Quaternion upAlignment =
                 Quaternion.FromToRotation(fromUp, toUp) * gravityAlignment;
 
