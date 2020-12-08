@@ -19,10 +19,10 @@ namespace Hedronoid
         float boundaryHeight = 6f, boundaryRadius = 4f;
 
         [SerializeField, Min(0f)]
-        float innerHeight = 0f, innerRadius = 5f;
+        float innerFalloffHeight = 0, innerFalloffRadius = 1f;
 
         [SerializeField, Min(0f)]
-        float innerFalloffHeight = 0, innerFalloffRadius = 1f;
+        float innerHeight = 0f, innerRadius = 5f;
 
         [SerializeField, Min(0f)]
         float outerHeight = 0f, outerRadius = 10f;
@@ -39,6 +39,24 @@ namespace Hedronoid
 
         void OnValidate()
         {
+            boundaryHeight = Mathf.Max(boundaryHeight, 0f);
+            boundaryRadius = Mathf.Max(boundaryRadius, 0f);
+
+            innerHeight = Mathf.Min(innerHeight, boundaryHeight);
+            innerRadius = Mathf.Min(innerRadius, boundaryRadius);
+
+            innerFalloffHeight = Mathf.Min(innerFalloffHeight, innerHeight);
+            innerFalloffRadius = Mathf.Min(innerFalloffRadius, innerRadius);
+            
+            outerRadius = Mathf.Max(outerRadius, innerRadius);
+            outerFalloffRadius = Mathf.Max(outerFalloffRadius, outerRadius);
+            outerFalloffHeight = Mathf.Max(outerFalloffHeight, outerHeight);
+
+            innerFalloffFactor = 1f / (innerRadius - innerFalloffRadius);
+            outerFalloffFactor = 1f / (outerFalloffRadius - outerRadius);
+
+            innerFalloffFactor = 1f / (innerFalloffHeight - innerHeight);
+            outerFalloffFactor = 1f / (outerFalloffHeight - outerHeight);
         }
 
         public override Vector3 GetGravity(Vector3 position)
