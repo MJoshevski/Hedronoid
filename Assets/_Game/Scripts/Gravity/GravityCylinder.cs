@@ -62,13 +62,17 @@ namespace Hedronoid
         public override Vector3 GetGravity(Vector3 position)
         {
             Vector3 vector = transform.position - position;
-            float distance = vector.magnitude;
 
+            if (transform.position.y + boundaryHeight >= position.y || 
+                transform.position.y - boundaryHeight <= position.y)
+                vector = new Vector3(transform.position.x, position.y, transform.position.z) -
+                    position;
+    
+            float distance = vector.magnitude;
             if (distance > outerFalloffRadius || distance < innerFalloffRadius)
             {
                 return Vector3.zero;
             }
-
             float g = gravity / distance;
             if (distance > outerRadius)
             {
@@ -79,20 +83,6 @@ namespace Hedronoid
                 g *= 1f - (innerRadius - distance) * innerFalloffFactor;
             }
             return g * vector;
-        }
-
-        float GetGravityComponent(float coordinate, float distance)
-        {
-            if (distance > innerFalloffHeight)
-            {
-                return 0f;
-            }
-            float g = gravity;
-            if (distance > innerHeight)
-            {
-                g *= 1f - (distance - innerHeight) * innerFalloffFactor;
-            }
-            return coordinate > 0f ? -g : g;
         }
 
         void OnDrawGizmosSelected()
