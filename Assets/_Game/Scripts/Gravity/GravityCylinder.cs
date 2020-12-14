@@ -1,7 +1,7 @@
 ﻿using System.Collections.Generic;
 using UnityEditor;
 using UnityEngine;
-
+using Gizmos = Popcron.Gizmos;
 namespace Hedronoid
 {
     public class GravityCylinder : GravitySource
@@ -39,7 +39,7 @@ namespace Hedronoid
             innerRadius = Mathf.Min(innerRadius, boundaryRadius);
             innerFalloffRadius = Mathf.Min(innerFalloffRadius, innerRadius);
             
-            outerRadius = Mathf.Max(outerRadius, innerRadius);
+            outerRadius = Mathf.Max(outerRadius, boundaryRadius);
             outerFalloffRadius = Mathf.Max(outerFalloffRadius, outerRadius);
 
             innerFalloffFactor = 1f / (innerRadius - innerFalloffRadius);
@@ -49,12 +49,16 @@ namespace Hedronoid
         public override Vector3 GetGravity(Vector3 position)
         {
             Vector3 vector = transform.position - position;
+            position =
+               transform.InverseTransformDirection(position - transform.position);
 
-            if (transform.position.y + (boundaryHeight / 2f) >= position.y && 
-                transform.position.y - (boundaryHeight / 2f) <= position.y)
-                vector = new Vector3(transform.position.x, position.y, transform.position.z) -
+            if (transform.up.y + (boundaryHeight / 2f) >= position.y &&
+                transform.up.y - (boundaryHeight / 2f) <= position.y)
+            {
+                vector = new Vector3(transform.up.x, position.y, transform.up.z) -
                     position;
-    
+            }
+
             float distance = vector.magnitude;
             if (distance > outerFalloffRadius || distance < innerFalloffRadius)
             {
@@ -69,7 +73,7 @@ namespace Hedronoid
             {
                 g *= 1f - (innerRadius - distance) * innerFalloffFactor;
             }
-            return g * vector;
+            return transform.TransformDirection(g * vector);
         }
 
         void OnDrawGizmosSelected()
