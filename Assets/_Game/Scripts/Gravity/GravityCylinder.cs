@@ -48,18 +48,13 @@ namespace Hedronoid
 
         public override Vector3 GetGravity(Vector3 position)
         {
-            position = transform.InverseTransformPoint(position);
-            Vector3 localPosition = transform.localPosition;
+            Vector3 vector = transform.position - position;
 
-            Vector3 vector = localPosition - position;
-           
-            if (localPosition.y + (boundaryHeight / 2f) >= position.y &&
-                localPosition.y - (boundaryHeight / 2f) <= position.y)
-                vector = new Vector3(localPosition.x, position.y, localPosition.z) -
+            if (transform.position.y + (boundaryHeight / 2f) >= position.y && 
+                transform.position.y - (boundaryHeight / 2f) <= position.y)
+                vector = new Vector3(transform.position.x, position.y, transform.position.z) -
                     position;
-
-            vector = transform.TransformPoint(vector);
-
+    
             float distance = vector.magnitude;
             if (distance > outerFalloffRadius || distance < innerFalloffRadius)
             {
