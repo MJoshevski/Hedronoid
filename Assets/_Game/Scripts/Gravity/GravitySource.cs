@@ -56,35 +56,28 @@ namespace Hedronoid
 
         public void EnableDisableOnCollisionEnter()
         {
-            foreach (GravitySource gs in enableOnEnter)
-                if (!gs.enabled)
-                    gs.enabled = true;
-
-            foreach (GravitySource gs in disableOnEnter)
-                if (gs.enabled)
-                    gs.enabled = false;
+            EnableDisableSources(enableOnEnter, true);
+            EnableDisableSources(disableOnEnter, false);
         }
 
         public void EnableDisableOnCollisionStay()
         {
-            foreach (GravitySource gs in enableOnStay)
-                if (!gs.enabled)
-                    gs.enabled = true;
-
-            foreach (GravitySource gs in disableOnStay)
-                if (gs.enabled)
-                    gs.enabled = false;
+            EnableDisableSources(enableOnStay, true);
+            EnableDisableSources(disableOnStay, false);
         }
 
         public void EnableDisableOnCollisionExit()
         {
-            foreach (GravitySource gs in enableOnExit)
-                if (!gs.enabled)
-                    gs.enabled = true;
+            EnableDisableSources(enableOnExit, true);
+            EnableDisableSources(disableOnExit, false);
+        }
 
-            foreach (GravitySource gs in disableOnExit)
-                if (gs.enabled)
-                    gs.enabled = false;
+        private void EnableDisableSources(List<GravitySource> sources, bool enable)
+        {
+            if (sources.Count > 0)
+                foreach (GravitySource gs in sources)
+                    if ((enable && !gs.enabled) || (!enable && gs.enabled))
+                        gs.enabled = enable;
         }
 
         private bool IsInLayerMaskOrTag(Collider other)

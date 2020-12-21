@@ -986,7 +986,7 @@ Mesh:
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
-  m_Name: pb_Mesh-53242
+  m_Name: pb_Mesh124052
   serializedVersion: 10
   m_SubMeshes:
   - serializedVersion: 2
@@ -3504,6 +3504,8 @@ MonoBehaviour:
   - {fileID: 1097016547}
   disableOnEnter:
   - {fileID: 1614155818}
+  enableOnStay: []
+  disableOnStay: []
   enableOnExit:
   - {fileID: 1614155818}
   disableOnExit:
@@ -4263,6 +4265,8 @@ MonoBehaviour:
   - {fileID: 1372654312}
   disableOnEnter:
   - {fileID: 1614155818}
+  enableOnStay: []
+  disableOnStay: []
   enableOnExit:
   - {fileID: 1614155818}
   disableOnExit:
@@ -5130,7 +5134,7 @@ PrefabInstance:
     - target: {fileID: 5654940747461758264, guid: 992d6c277be4e1f46b1dfb09659605eb,
         type: 3}
       propertyPath: m_Enabled
-      value: 0
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 5654940747461758265, guid: 992d6c277be4e1f46b1dfb09659605eb,
         type: 3}
@@ -5197,7 +5201,7 @@ MonoBehaviour:
   m_PrefabInstance: {fileID: 1614155816}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1614155817}
-  m_Enabled: 0
+  m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 280accdea1833e54696eb8086f863a68, type: 3}
   m_Name: 
