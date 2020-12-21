@@ -7,9 +7,6 @@ namespace Hedronoid
     public interface IGravityService
     {
         float GravityAmount { get; }
-        Vector3 GravityDirection { get; }
-        Quaternion GravityRotation { get; }
-        Vector3 GravityUp { get; }
         Vector3 CurrentGravity { get; set; }
     }
 
@@ -59,16 +56,6 @@ namespace Hedronoid
                 g += sources[i].GetGravity(position);
             }
             return new Vector3(0, 0, g.normalized.z);
-        }
-
-        public Vector3 GravityDirection { get; private set; }
-        public Quaternion GravityRotation { get; private set; }
-        public Vector3 GravityUp
-        {
-            get
-            {
-                return GravityDirection * -1;
-            }
         }
 
         public static void Register(GravitySource source)

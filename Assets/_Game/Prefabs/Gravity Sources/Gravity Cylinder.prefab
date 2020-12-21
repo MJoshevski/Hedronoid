@@ -4129,6 +4129,14 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 280accdea1833e54696eb8086f863a68, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  triggerLayers:
+    serializedVersion: 2
+    m_Bits: 512
+  triggerTag: Player
+  enableOnEnter: []
+  disableOnEnter: []
+  enableOnExit: []
+  disableOnExit: []
   gravity: 9.81
   boundaryHeight: 32.2
   boundaryRadius: 11.2
