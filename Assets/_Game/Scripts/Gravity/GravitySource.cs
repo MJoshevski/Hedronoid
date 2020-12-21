@@ -37,37 +37,22 @@ namespace Hedronoid
         {
             if (!IsInLayerMaskOrTag(other)) return;
 
-            EnableDisableOnCollisionEnter();
+            EnableDisableSources(enableOnEnter, true);
+            EnableDisableSources(disableOnEnter, false);
         }
 
         public virtual void OnTriggerStay(Collider other)
         {
             if (!IsInLayerMaskOrTag(other)) return;
 
-            EnableDisableOnCollisionStay();
+            EnableDisableSources(enableOnStay, true);
+            EnableDisableSources(disableOnStay, false);
         }
 
         public virtual void OnTriggerExit(Collider other)
         {
             if (!IsInLayerMaskOrTag(other)) return;
 
-            EnableDisableOnCollisionExit();
-        }
-
-        public void EnableDisableOnCollisionEnter()
-        {
-            EnableDisableSources(enableOnEnter, true);
-            EnableDisableSources(disableOnEnter, false);
-        }
-
-        public void EnableDisableOnCollisionStay()
-        {
-            EnableDisableSources(enableOnStay, true);
-            EnableDisableSources(disableOnStay, false);
-        }
-
-        public void EnableDisableOnCollisionExit()
-        {
             EnableDisableSources(enableOnExit, true);
             EnableDisableSources(disableOnExit, false);
         }
