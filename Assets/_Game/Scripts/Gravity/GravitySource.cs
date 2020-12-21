@@ -5,19 +5,22 @@ namespace Hedronoid
 {
     public class GravitySource : MonoBehaviour
     {
-        [Header("Layer trigger actions")]
+        [Header("Collision Layer/Tag")]
         public LayerMask triggerLayers;
         public string triggerTag;
 
+        [Header("On Enter")]
         public List<GravitySource> enableOnEnter = new List<GravitySource>();
         public List<GravitySource> disableOnEnter = new List<GravitySource>();
 
+        [Header("On Stay")]
         public List<GravitySource> enableOnStay = new List<GravitySource>();
         public List<GravitySource> disableOnStay = new List<GravitySource>();
 
+        [Header("On Exit")]
         public List<GravitySource> enableOnExit = new List<GravitySource>();
         public List<GravitySource> disableOnExit = new List<GravitySource>();
- 
+
         void OnEnable()
         {
             GravityService.Register(this);

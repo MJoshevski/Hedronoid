@@ -6,6 +6,7 @@ namespace Hedronoid
 {
     public class GravityCylinder : GravitySource
     {
+        [Header("Gravity Variables")]
         [SerializeField]
         float gravity = 9.81f;
 
