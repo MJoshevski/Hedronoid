@@ -12,9 +12,12 @@ namespace Hedronoid
         public List<GravitySource> enableOnEnter = new List<GravitySource>();
         public List<GravitySource> disableOnEnter = new List<GravitySource>();
 
+        public List<GravitySource> enableOnStay = new List<GravitySource>();
+        public List<GravitySource> disableOnStay = new List<GravitySource>();
+
         public List<GravitySource> enableOnExit = new List<GravitySource>();
         public List<GravitySource> disableOnExit = new List<GravitySource>();
-
+ 
         void OnEnable()
         {
             GravityService.Register(this);
@@ -40,6 +43,8 @@ namespace Hedronoid
         public virtual void OnTriggerStay(Collider other)
         {
             if (!IsInLayerMaskOrTag(other)) return;
+
+            EnableDisableOnCollisionStay();
         }
 
         public virtual void OnTriggerExit(Collider other)
@@ -52,19 +57,34 @@ namespace Hedronoid
         public void EnableDisableOnCollisionEnter()
         {
             foreach (GravitySource gs in enableOnEnter)
-                gs.enabled = true;
+                if (!gs.enabled)
+                    gs.enabled = true;
 
             foreach (GravitySource gs in disableOnEnter)
-                gs.enabled = false;
+                if (gs.enabled)
+                    gs.enabled = false;
+        }
+
+        public void EnableDisableOnCollisionStay()
+        {
+            foreach (GravitySource gs in enableOnStay)
+                if (!gs.enabled)
+                    gs.enabled = true;
+
+            foreach (GravitySource gs in disableOnStay)
+                if (gs.enabled)
+                    gs.enabled = false;
         }
 
         public void EnableDisableOnCollisionExit()
         {
             foreach (GravitySource gs in enableOnExit)
-                gs.enabled = true;
+                if (!gs.enabled)
+                    gs.enabled = true;
 
             foreach (GravitySource gs in disableOnExit)
-                gs.enabled = false;
+                if (gs.enabled)
+                    gs.enabled = false;
         }
 
         private bool IsInLayerMaskOrTag(Collider other)
