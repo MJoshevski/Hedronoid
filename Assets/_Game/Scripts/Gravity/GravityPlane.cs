@@ -8,42 +8,116 @@ namespace Hedronoid
         [SerializeField]
         float gravity = 9.81f;
 
+        [SerializeField]
+        Vector2 boundaryDistance = Vector2.one;
+
         [SerializeField, Min(0f)]
-        float range = 1f;
+        float outerDistance = 0f, outerFalloffDistance = 0f;
+
+        float outerFalloffFactor;
+
+        void OnValidate()
+        {
+            boundaryDistance = Vector2.Max(boundaryDistance, Vector2.zero);
+            outerFalloffDistance = Mathf.Max(outerFalloffDistance, outerDistance);
+            outerFalloffFactor = 1f / (outerFalloffDistance - outerDistance);
+        }
 
         public override Vector3 GetGravity(Vector3 position)
         {
-            Vector3 up = transform.up;
-            float distance = Vector3.Dot(up, position - transform.position);
-            if (distance > range)
+            position =
+               transform.InverseTransformDirection(position - transform.position);
+
+            Vector3 vector = Vector3.zero;
+            int outside = 0;
+
+            if (position.x > boundaryDistance.x)
+            {
+                vector.x = boundaryDistance.x - position.x;
+                outside = 1;
+            }
+            else if (position.x < -boundaryDistance.x)
+            {
+                vector.x = -boundaryDistance.x - position.x;
+                outside = 1;
+            }
+
+            if (position.y > 0)
+            {
+                vector.y = -position.y;
+                outside += 1;
+            }
+            else return Vector3.zero;
+
+            if (position.z > boundaryDistance.y)
+            {
+                vector.z = boundaryDistance.y - position.z;
+                outside += 1;
+            }
+            else if (position.z < -boundaryDistance.y)
+            {
+                vector.z = -boundaryDistance.y - position.z;
+                outside += 1;
+            }
+
+            float distance = outside == 1 ?
+                    Mathf.Abs(vector.x + vector.y + vector.z) : vector.magnitude;
+
+            if (distance > outerFalloffDistance)
             {
                 return Vector3.zero;
             }
 
-            float g = -gravity;
-            if (distance > 0f)
+            float g = gravity / distance;
+            if (distance > outerDistance)
             {
-                g *= 1f - distance / range;
+                g *= 1f - (distance - outerDistance) * outerFalloffFactor;
             }
-
-            return -gravity * up;
+            return transform.TransformDirection(g * vector);
         }
 
         void OnDrawGizmosSelected()
         {
-            Vector3 scale = transform.localScale;
-            scale.y = range;
             Gizmos.matrix =
-                Matrix4x4.TRS(transform.position, transform.rotation, scale);
-            Vector3 size = new Vector3(1f, 0f, 1f);
-            Gizmos.color = Color.yellow;
-            Gizmos.DrawWireCube(Vector3.zero, size);
+                Matrix4x4.TRS(transform.position, transform.rotation, Vector3.one);
+            Gizmos.color = Color.red;
+            Gizmos.DrawWireCube(
+                Vector3.zero, 
+                2f * new Vector3(boundaryDistance.x, 0 ,boundaryDistance.y)
+                );
 
-            if (range > 0f)
+            if (outerDistance > 0f)
+            {
+                Gizmos.color = Color.yellow;
+                DrawGizmosOuterRect(outerDistance);
+            }
+            if (outerFalloffDistance > outerDistance)
             {
                 Gizmos.color = Color.cyan;
-                Gizmos.DrawWireCube(Vector3.up, size);
+                DrawGizmosOuterRect(outerFalloffDistance);
             }
+        }
+
+        void DrawGizmosOuterRect(float distance)
+        {
+            Vector3 a, b, c, d;
+            Vector2 boundaryDistanceHalved = boundaryDistance / 2f;
+
+            a.x = d.x = boundaryDistanceHalved.x;
+            b.x = c.x = -boundaryDistanceHalved.x;
+            a.z = b.z = boundaryDistanceHalved.y;
+            c.z = d.z = -boundaryDistanceHalved.y;
+            a.y = b.y = c.y = d.y = distance;
+
+            DrawGizmosRect(a, b, c, d);
+        }
+
+        void DrawGizmosRect(Vector3 a, Vector3 b, Vector3 c, Vector3 d)
+        {
+            Gizmos.DrawLine(a, b);
+            Gizmos.DrawLine(b, c);
+            Gizmos.DrawLine(c, d);
+            Gizmos.DrawLine(d, a);
         }
     }
 }
