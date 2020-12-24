@@ -6,7 +6,6 @@ namespace Hedronoid
 {
     public interface IGravityService
     {
-        float GravityAmount { get; }
         Vector3 CurrentGravity { get; set; }
     }
 
@@ -14,7 +13,6 @@ namespace Hedronoid
     {
         public Transform playerInputSpace;
         public Vector3 CurrentGravity { get; set; }
-        public float GravityAmount { get { return 9.81f; } }
         static List<GravitySource> sources = new List<GravitySource>();
 
         public static Vector3 GetGravity(Vector3 position)

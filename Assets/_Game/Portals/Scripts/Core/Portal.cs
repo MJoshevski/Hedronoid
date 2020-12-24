@@ -50,9 +50,9 @@ public class Portal : MonoBehaviour {
                 traveller.Teleport (transform, linkedPortal.transform, m.GetColumn (3), m.rotation);
                 traveller.graphicsClone.transform.SetPositionAndRotation (positionOld, rotOld);
                 // Can't rely on OnTriggerEnter/Exit to be called next frame since it depends on when FixedUpdate runs
-                //linkedPortal.OnTravellerEnterPortal (traveller);
-                //trackedTravellers.RemoveAt (i);
-                //i--;
+                linkedPortal.OnTravellerEnterPortal(traveller);
+                trackedTravellers.RemoveAt(i);
+                i--;
 
             } else {
                 traveller.graphicsClone.transform.SetPositionAndRotation (m.GetColumn (3), m.rotation);

@@ -105,7 +105,6 @@ namespace Hedronoid
         private float distanceThreshold;
         private bool shoulderFocused = true;
 
-        [SerializeField]
         private Quaternion gravityAlignment = Quaternion.identity;
         private Quaternion orbitRotation;
         private Quaternion lookRotation;
@@ -188,14 +187,13 @@ namespace Hedronoid
         }
         #endregion
 
-        public Vector3 fromUp, toUp, fromForward, toForward;
         void UpdateGravityAlignment()
         {
-            /*Vector3*/ fromUp = gravityAlignment * Vector3.up;
-            /*Vector3*/ toUp = GravityService.GetUpAxis(focus.value.position);
+            Vector3 fromUp = gravityAlignment * Vector3.up;
+            Vector3 toUp = GravityService.GetUpAxis(focus.value.position);
 
-            /*Vector3*/ fromForward = gravityAlignment * Vector3.forward;
-            /*Vector3*/ toForward = GravityService.GetForwardAxis(focus.value.position);
+            Vector3 fromForward = gravityAlignment * Vector3.forward;
+            Vector3 toForward = GravityService.GetForwardAxis(focus.value.position);
 
             float dot = Mathf.Clamp(Vector3.Dot(fromUp, toUp), -1f, 1f);
             float angle = Mathf.Acos(dot) * Mathf.Rad2Deg;
