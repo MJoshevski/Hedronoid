@@ -74,7 +74,8 @@ public class Portal : MonoBehaviour {
     public void Render () {
 
         // Skip rendering the view from this portal if player is not looking at the linked portal
-        if (!CameraUtility.VisibleFromCamera (linkedPortal.screen, playerCam)) {
+        if (!CameraUtility.VisibleFromCamera(linkedPortal.screen, playerCam))
+        {
             return;
         }
 
@@ -89,7 +90,8 @@ public class Portal : MonoBehaviour {
         for (int i = 0; i < recursionLimit; i++) {
             if (i > 0) {
                 // No need for recursive rendering if linked portal is not visible through this portal
-                if (!CameraUtility.BoundsOverlap (screenMeshFilter, linkedPortal.screenMeshFilter, portalCam)) {
+                if (!CameraUtility.BoundsOverlap(screenMeshFilter, linkedPortal.screenMeshFilter, portalCam))
+                {
                     break;
                 }
             }
