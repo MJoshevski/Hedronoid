@@ -77,6 +77,7 @@ namespace Hedronoid
             return transform.TransformDirection(g * vector);
         }
 
+#if UNITY_EDITOR
         void OnDrawGizmosSelected()
         {
             // Draw boundary cylinder: RED
@@ -120,7 +121,7 @@ namespace Hedronoid
                Color.yellow);
 
         }
-
+#endif
 
 #if UNITY_EDITOR
         public static void DrawWireCylinder(Vector3 _pos, Quaternion _rot, float _height, float _radius, Color _color = default(Color))
