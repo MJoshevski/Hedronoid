@@ -60,8 +60,15 @@ namespace Hedronoid
         private System.Action onDespawnReset(GameObject bullet)
         {
             bullet.SetActive(false);
-            bullet.gameObject.GetComponent<Rigidbody>().velocity = Vector3.zero;
+
+            // Zero out previous velocity
+            Rigidbody bulletRb = bullet.gameObject.GetComponent<Rigidbody>();
+            if (bulletRb)
+                bulletRb.velocity = Vector3.zero;
+
+            // Return bullet pos/rot to origin
             bullet.transform.SetPositionAndRotation(bulletOrigin.value.position, Quaternion.identity);
+
             bullet.SetActive(true);
 
             return null;
