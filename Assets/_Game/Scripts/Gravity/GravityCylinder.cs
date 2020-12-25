@@ -121,6 +121,8 @@ namespace Hedronoid
 
         }
 
+
+#if UNITY_EDITOR
         public static void DrawWireCylinder(Vector3 _pos, Quaternion _rot, float _height, float _radius, Color _color = default(Color))
         {
             if (_color != default(Color))
@@ -143,6 +145,7 @@ namespace Hedronoid
                     Handles.DrawLine(stack[i], stack2[i]);
             }
         }
+#endif
 
         // generate a unit circle on XY-plane
         public static List<Vector3> GenerateUnitCircleVertices(float height, float radius)

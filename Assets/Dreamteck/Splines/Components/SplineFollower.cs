@@ -86,8 +86,8 @@ namespace Dreamteck.Splines
         [Header("Local motion settings")]
         public Vector3 rotationAxisVector = Vector3.up;
         public float angularMagnitude = 90f;
-        [Space(20)]
 #if UNITY_EDITOR
+        [Space(20)]
         public bool editorSetPosition = true;
 #endif
 
