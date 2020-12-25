@@ -1,4 +1,5 @@
-﻿using UnityEngine;
+﻿using Hedronoid;
+using UnityEngine;
 using UnityEngine.UI;
 
 [RequireComponent(typeof(Pursuer))]
@@ -15,6 +16,8 @@ public class PursuerController : MonoBehaviour
     public float targetLesionAreaRadius;
     public float targetPathUpdateOffset;
     public float circleRadius = 30;
+    public ParticleSystem deathPfx;
+
     private void Start()
     {
         thisPursuerInstance = gameObject.GetComponent<Pursuer>();
@@ -42,6 +45,17 @@ public class PursuerController : MonoBehaviour
                 thisPursuerInstance.MoveTo(target, true);
         }
     }
+
+    public void OnCollisionEnter(Collision collision)
+    {
+        if (collision.gameObject.layer == LayerMask.NameToLayer("PlayerBullet"))
+        {
+            if (deathPfx) deathPfx.Play();
+
+            TrashMan.despawnAfterDelay(gameObject, 0.5f);
+        }
+    }
+
 
     public void EventTargetReached()
     {
