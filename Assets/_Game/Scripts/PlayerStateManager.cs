@@ -155,16 +155,6 @@ namespace Hedronoid
             desiredDash |= Input.GetButtonDown("Dash");
             desiredJump |= Input.GetButtonDown("Jump");
 
-            //RUNNING ANIM
-            Animator.SetFloat(
-                animHashes.Vertical, 
-                movementVariables.MoveAmount,
-                0.2f,
-                Time.deltaTime);
-            //
-
-            //Debug.LogError("GRAVITY: " + gravityService.CurrentGravity.ToString());
-
             if (gravityService.CurrentGravity == Vector3.zero)
             {
                 Rigidbody.velocity =
@@ -177,7 +167,7 @@ namespace Hedronoid
                     Animator.CrossFade(animHashes.Flying, 0.2f);
                 }
             }
-            else if (inVacuum == true)
+            else if (inVacuum)
             {
                 inVacuum = false;
                 Animator.CrossFade(animHashes.Falling, 0.2f);
@@ -208,6 +198,15 @@ namespace Hedronoid
             float moveAmount =
                 Mathf.Clamp01(Mathf.Abs(movementVariables.Horizontal) + Mathf.Abs(movementVariables.Vertical));
             movementVariables.MoveAmount = moveAmount;
+
+            //RUNNING ANIM
+            if (isGrounded)
+                Animator.SetFloat(
+                    animHashes.Vertical,
+                    movementVariables.MoveAmount,
+                    0.2f,
+                    Time.deltaTime);
+            //
 
             Vector3 gravity = GravityService.GetGravity(Rigidbody.position, out upAxis);
 
