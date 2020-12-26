@@ -64,7 +64,7 @@ namespace Hedronoid
         {
             if (sources.Count > 0)
                 foreach (GravitySource gs in sources)
-                    if ((enable && !gs.enabled) || (!enable && gs.enabled))
+                    if (gs && ((enable && !gs.enabled) || (!enable && gs.enabled)))
                         gs.enabled = enable;
         }
 

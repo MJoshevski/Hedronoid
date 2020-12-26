@@ -8,17 +8,22 @@ public class PortalCulling : MonoBehaviour
 
     void OnPreCull()
     {
+        if (portals.Count == 0) return;
+
         for (int i = 0; i < portals.Count; i++)
         {
-            portals[i].PrePortalRender();
+            if(portals[i])
+                portals[i].PrePortalRender();
         }
         for (int i = 0; i < portals.Count; i++)
         {
-            portals[i].Render();
+            if (portals[i])
+                portals[i].Render();
         }
         for (int i = 0; i < portals.Count; i++)
         {
-            portals[i].PostPortalRender();
+            if (portals[i])
+                portals[i].PostPortalRender();
         }
     }
 }

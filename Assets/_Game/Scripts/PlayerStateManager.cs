@@ -45,7 +45,7 @@ namespace Hedronoid
         public PlayerActionSet PlayerActions;
         public float MouseHorizontalSensitivity { get; set; }
         public float MouseVerticalSensitivity { get; set; }
-        private Camera orbitCamera;
+        public Camera orbitCamera;
 
         [HideInInspector]
         public IGravityService gravityService;
@@ -99,7 +99,7 @@ namespace Hedronoid
         private void Start()
         {
             Transform = this.transform;
-            orbitCamera = OrbitCamera.Instance.orbitCamera;
+            orbitCamera = OrbitCamera.Instance.GetComponent<Camera>();
             Rigidbody = GetComponent<Rigidbody>();
             Animator = GetComponentInChildren<Animator>();
             animHashes = new AnimatorHashes();
