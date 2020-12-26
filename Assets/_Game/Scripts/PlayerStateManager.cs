@@ -8,8 +8,6 @@ namespace Hedronoid
     public class PlayerStateManager : MonoSingleton<PlayerStateManager>
     {
         public float health;
-        
-        public State currentState;
 
         public MovementVariables movementVariables;
         public GravityVariables gravityVariables;
@@ -113,9 +111,6 @@ namespace Hedronoid
 
             gravityService = GravityService.Instance;
 
-            currentState.FixedTickStart(this);
-            currentState.TickStart(this);
-
             lastFired_Auto = lastFired_Rail = lastFired_Shotgun = 0;
 
         }
@@ -140,11 +135,6 @@ namespace Hedronoid
                 movementVariables.MovementSpeed;
             //
 
-            if (currentState != null)
-            {
-                currentState.Tick(this);
-            }
-
             if (orbitCamera.transform)
             {
                 rightAxis = VectorExtensions.ProjectDirectionOnPlane(orbitCamera.transform.right, upAxis);
@@ -161,6 +151,7 @@ namespace Hedronoid
                 new Vector3(playerInput.x, 0f, playerInput.y) *
                 movementVariables.MaxAcceleration;
 
+            Shoot();
             desiredDash |= Input.GetButtonDown("Dash");
             desiredJump |= Input.GetButtonDown("Jump");
 
@@ -212,11 +203,6 @@ namespace Hedronoid
             if (Input.GetKeyDown(KeyCode.F3))
                 Gizmos.Enabled = !Gizmos.Enabled;
             //
-
-            if (currentState != null)
-            {
-                currentState.FixedTick(this);
-            }
 
             //ANIMATION PURPOSE 
             float moveAmount =
