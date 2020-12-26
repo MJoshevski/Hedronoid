@@ -11,16 +11,13 @@ namespace Hedronoid
         ManualShoulderSwitch = 1
     }
 
-    [CreateAssetMenu(menuName = "Actions/Camera/Orbit Camera")]
-    public class OrbitCamera : Action
+    public class OrbitCamera : MonoSingleton<OrbitCamera>
     {
         #region PUBLIC VARS
         [Header("References")]
-        public TransformVariable focus;
-        public TransformVariable cameraTransform;
-        public TransformVariable pivotTransform;
-        public CameraVariable camera;
-        public FloatVariable delta, unscaledDelta;
+        public Transform focus;
+        [HideInInspector]
+        public Camera orbitCamera;
 
         [Header("General Behaviour")]
         public OrbitCameraTypes cameraTypes = OrbitCameraTypes.ManualShoulderSwitch;
@@ -81,6 +78,10 @@ namespace Hedronoid
         [Range(0f, 90f)]
 	    public float alignSmoothRange = 45f;
 
+        // CURSOR
+        [Header("Cursor Settings")]
+        public bool LockCursor;
+
         [Header("Manual Offsets")]
         [SerializeField]
         private Vector2 manualPositionOffset = Vector3.zero;
@@ -124,9 +125,9 @@ namespace Hedronoid
             {
                 Vector3 halfExtends;
                 halfExtends.y =
-                    camera.value.nearClipPlane *
-                    Mathf.Tan(0.5f * Mathf.Deg2Rad * camera.value.fieldOfView);
-                halfExtends.x = halfExtends.y * camera.value.aspect;
+                    orbitCamera.nearClipPlane *
+                    Mathf.Tan(0.5f * Mathf.Deg2Rad * orbitCamera.fieldOfView);
+                halfExtends.x = halfExtends.y * orbitCamera.aspect;
                 halfExtends.z = 0f;
                 return halfExtends;
             }
@@ -135,18 +136,25 @@ namespace Hedronoid
         #endregion
 
         #region UNITY LIFECYCLE
-        public override void Execute_Start()
+        public void Start()
         {
-            focusPoint = focus.value.position;
+            focusPoint = focus.position;
             distanceThreshold = manualPositionOffset.x * 2f;
             gravityService = GravityService.Instance;
             gravityAlignment = Quaternion.identity;
-            cameraTransform.value.localRotation = orbitRotation = Quaternion.Euler(orbitAngles);
+            orbitCamera = GetComponent<Camera>();
+            orbitCamera.transform.localRotation = orbitRotation = Quaternion.Euler(orbitAngles);
             minVerticalAnglePrev = minVerticalAngle;
             maxVerticalAnglePrev = maxVerticalAngle;
+
+            Cursor.lockState = LockCursor ? CursorLockMode.Locked : CursorLockMode.None;
         }
 
-        public override void Execute()
+        public void Update()
+        {            
+        }
+
+        public void LateUpdate()
         {
             OnValidate();
             UpdateGravityAlignment();
@@ -163,7 +171,7 @@ namespace Hedronoid
             lookPosition = focusPoint - lookDirection * distance;
 
             //Camera collisions
-            Vector3 rectOffset = lookDirection * camera.value.nearClipPlane;
+            Vector3 rectOffset = lookDirection * orbitCamera.nearClipPlane;
             Vector3 rectPosition = lookPosition + rectOffset;
             Vector3 castFrom = focusPoint;
             Vector3 castLine = rectPosition - castFrom;
@@ -172,7 +180,7 @@ namespace Hedronoid
 
             if (Physics.BoxCast(
                 castFrom, CameraHalfExtends, castDirection, out RaycastHit hit,
-                lookRotation, castDistance - camera.value.nearClipPlane, obstructionMask, 
+                lookRotation, castDistance - orbitCamera.nearClipPlane, obstructionMask, 
                 QueryTriggerInteraction.Ignore))
             {
                 rectPosition = castFrom + castDirection * hit.distance;
@@ -183,17 +191,17 @@ namespace Hedronoid
             Quaternion manualRotation = Quaternion.Euler(manualRotationOffset);
             lookRotation *= manualRotation;
 
-            cameraTransform.value.SetPositionAndRotation(lookPosition, lookRotation);
+            orbitCamera.transform.SetPositionAndRotation(lookPosition, lookRotation);
         }
         #endregion
 
         void UpdateGravityAlignment()
         {
             Vector3 fromUp = gravityAlignment * Vector3.up;
-            Vector3 toUp = GravityService.GetUpAxis(focus.value.position);
+            Vector3 toUp = GravityService.GetUpAxis(focus.position);
 
             Vector3 fromForward = gravityAlignment * Vector3.forward;
-            Vector3 toForward = GravityService.GetForwardAxis(focus.value.position);
+            Vector3 toForward = GravityService.GetForwardAxis(focus.position);
 
             float dot = Mathf.Clamp(Vector3.Dot(fromUp, toUp), -1f, 1f);
             float angle = Mathf.Acos(dot) * Mathf.Rad2Deg;
@@ -224,7 +232,7 @@ namespace Hedronoid
         void UpdateFocusPoint()
         {
             previousFocusPoint = focusPoint;
-            Vector3 targetPoint = focus.value.position;
+            Vector3 targetPoint = focus.position;
 
             //Gizmos.Cube(previousFocusPoint, Quaternion.identity, Vector3.one / 2f, Color.red);
             //Gizmos.Cube(focusPoint, Quaternion.identity, Vector3.one / 2f, Color.magenta);
@@ -275,7 +283,7 @@ namespace Hedronoid
                 focusPoint = Vector3.Lerp(
                         targetPointOffset, focusPoint,
                         Mathf.Pow(1f - shoulderCentering,
-                        unscaledDelta.value) / factor
+                        Time.unscaledDeltaTime) / factor
                         );
 
                 if (prevHitPoint.point != Vector3.zero)
@@ -291,6 +299,45 @@ namespace Hedronoid
             }
         }
 
+        public void CursorLock()
+        {
+            bool zeroTimeScale = Mathf.Approximately(0, Time.timeScale);
+            if (zeroTimeScale)
+            {
+                UnlockCursorDisableCamera();
+            }
+            else
+            {
+                LockCursorEnableCamera();
+            }
+        }
+
+        void OnApplicationFocus(bool hasFocus)
+        {
+            if (hasFocus)
+            {
+                LockCursorEnableCamera();
+            }
+            else
+            {
+                UnlockCursorDisableCamera();
+            }
+        }
+
+        void LockCursorEnableCamera()
+        {
+            Cursor.lockState = LockCursor ? CursorLockMode.Locked : CursorLockMode.None;
+            Cursor.visible = !LockCursor;
+            //Camera.value.gameObject.SetActive(true);
+        }
+
+        void UnlockCursorDisableCamera()
+        {
+            Cursor.lockState = CursorLockMode.None;
+            Cursor.visible = true;
+            //Camera.value.gameObject.SetActive(false);
+        }
+
         bool ManualRotation()
         {
             if (Time.timeScale < float.Epsilon)
@@ -301,8 +348,8 @@ namespace Hedronoid
             float x = playerAction.Look.X;
             float y = playerAction.Look.Y;
 
-            float horizontalAngle = x * delta.value * InputManager.Instance.MouseHorizontalSensitivity;
-            float verticalAngle = -y * delta.value * InputManager.Instance.MouseVerticalSensitivity;
+            float horizontalAngle = x * Time.deltaTime * InputManager.Instance.MouseHorizontalSensitivity;
+            float verticalAngle = -y * Time.deltaTime * InputManager.Instance.MouseVerticalSensitivity;
 
             float e = lookReleaseThreshold;
 
@@ -314,7 +361,7 @@ namespace Hedronoid
             e = 0.001f;
             if (horizontalAngle < -e || horizontalAngle > e || verticalAngle < -e || verticalAngle > e)
             {
-                orbitAngles += rotationSpeed * unscaledDelta.value * new Vector2(verticalAngle, horizontalAngle);
+                orbitAngles += rotationSpeed * Time.unscaledDeltaTime * new Vector2(verticalAngle, horizontalAngle);
                 lastManualRotationTime = Time.unscaledTime;
                 prevHitPoint.point = Vector3.zero;
                 return true;
@@ -361,7 +408,7 @@ namespace Hedronoid
             // Rotation change is the product of the centering factor plus the minimum
             // between delta time and movement direction delta
             float rotationChange = centeringSpeed *
-                Mathf.Min(unscaledDelta.value, movementDeltaSqr);
+                Mathf.Min(Time.unscaledDeltaTime, movementDeltaSqr);
 
             // Proper smooth aligning according to a set threshold angle
             if (deltaAbs < shoulderAlignSmoothRange)
@@ -399,7 +446,7 @@ namespace Hedronoid
             float headingAngle = GetAngle(movement / Mathf.Sqrt(movementDeltaSqr));
             float deltaAbs = Mathf.Abs(Mathf.DeltaAngle(orbitAngles.y, headingAngle));
             float rotationChange = rotationSpeed *
-                Mathf.Min(unscaledDelta.value, movementDeltaSqr);
+                Mathf.Min(Time.unscaledDeltaTime, movementDeltaSqr);
 
             if (deltaAbs < alignSmoothRange)
             {

@@ -33,7 +33,7 @@ MonoBehaviour:
   Path: event:/SFX/Shoot
   guid: 371aae3100515047b5a330cbb8743600
   Banks:
-  - {fileID: -8495673475507578860}
+  - {fileID: -5130146240151972463}
   IsStream: 0
   Is3D: 1
   IsOneShot: 1
@@ -58,7 +58,7 @@ MonoBehaviour:
   lastModified: 637357814179570766
   LoadResult: 0
   FileSizes: []
-  Exists: 1
+  Exists: 0
 --- !u!114 &-8494132045486660465
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -164,7 +164,7 @@ MonoBehaviour:
   Path: event:/Ambience/Ambience
   guid: 365199fac0d43844945bbba07340d9bf
   Banks:
-  - {fileID: -8495673475507578860}
+  - {fileID: -5130146240151972463}
   IsStream: 0
   Is3D: 0
   IsOneShot: 1
@@ -172,6 +172,24 @@ MonoBehaviour:
   MinDistance: 0
   MaxDistance: 0
   Length: 0
+--- !u!114 &-5130146240151972463
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: c18180ecb35941f4682ae60107b85b7c, type: 3}
+  m_Name: bank:/Master.bank
+  m_EditorClassIdentifier: 
+  Path: Assets/StreamingAssets/Master.bank
+  SubDir: 
+  lastModified: 637201414160227679
+  LoadResult: 0
+  FileSizes: []
+  Exists: 1
 --- !u!114 &-2471781103946338923
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -187,7 +205,7 @@ MonoBehaviour:
   Path: event:/Music/Music
   guid: c68cc15b4f7da0488a6889721d9d0756
   Banks:
-  - {fileID: -8495673475507578860}
+  - {fileID: -5130146240151972463}
   IsStream: 1
   Is3D: 0
   IsOneShot: 0
@@ -227,7 +245,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   Path: Assets/StreamingAssets/Master.strings.bank
   SubDir: 
-  lastModified: 637357814177266685
+  lastModified: 637201414160247655
   LoadResult: 0
   FileSizes:
   - Name: 
@@ -247,7 +265,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   EditorBanks:
   - {fileID: -1015487276561646703}
-  - {fileID: -8495673475507578860}
+  - {fileID: -5130146240151972463}
   EditorEvents:
   - {fileID: -5315955746966582836}
   - {fileID: -8762819071792499840}
@@ -256,10 +274,10 @@ MonoBehaviour:
   - {fileID: 755779757135141713}
   EditorParameters: []
   MasterBanks:
-  - {fileID: -8495673475507578860}
+  - {fileID: -5130146240151972463}
   StringsBanks:
   - {fileID: -1015487276561646703}
-  stringsBankWriteTime: 637357814177266685
+  stringsBankWriteTime: 637201414160247655
   cacheVersion: 3
 --- !u!114 &277322528662279774
 MonoBehaviour:
@@ -332,7 +350,7 @@ MonoBehaviour:
   Path: event:/SFX/Explosion
   guid: bc36f4ab5c65f146910c442456fda94a
   Banks:
-  - {fileID: -8495673475507578860}
+  - {fileID: -5130146240151972463}
   IsStream: 0
   Is3D: 1
   IsOneShot: 1
@@ -409,7 +427,7 @@ MonoBehaviour:
   Path: event:/Foley/Footsteps
   guid: b6927a8e11689b46b06b5588777757b4
   Banks:
-  - {fileID: -8495673475507578860}
+  - {fileID: -5130146240151972463}
   IsStream: 0
   Is3D: 1
   IsOneShot: 1
