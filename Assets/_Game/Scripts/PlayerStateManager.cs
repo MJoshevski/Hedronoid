@@ -200,12 +200,11 @@ namespace Hedronoid
             movementVariables.MoveAmount = moveAmount;
 
             //RUNNING ANIM
-            if (isGrounded)
-                Animator.SetFloat(
-                    animHashes.Vertical,
-                    movementVariables.MoveAmount,
-                    0.2f,
-                    Time.deltaTime);
+            Animator.SetFloat(
+                animHashes.Vertical,
+                movementVariables.MoveAmount,
+                0.2f,
+                Time.deltaTime);
             //
 
             Vector3 gravity = GravityService.GetGravity(Rigidbody.position, out upAxis);
