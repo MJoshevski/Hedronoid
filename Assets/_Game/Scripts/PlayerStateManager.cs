@@ -503,7 +503,12 @@ namespace Hedronoid
         public void Shoot()
         {
             Gizmos.Line(bulletOrigin.position, RayHit.point, Color.yellow);
-            Vector3 shootDirection = RayHit.point - bulletOrigin.position;
+
+            Vector3 shootDirection;
+
+            if (RayHit.point != Vector3.zero)
+                shootDirection = RayHit.point - bulletOrigin.position;
+            else shootDirection = LookRay.direction;
 
             if (Input.GetButton("Fire1") &&
                 Time.realtimeSinceStartup - lastFired_Auto > fireRatePrimary)
