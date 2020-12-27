@@ -10,39 +10,52 @@ namespace Hedronoid
         #region PUBLIC/VISIBLE VARS
         [Header("Character Controller Settings")]
         public float health;
+        [Tooltip("Maximum allowed acceleration/movement while on ground.")]
         [Range(0f, 100f)]
-        public float maxAcceleration = 10f, maxAirAcceleration = 1f;
+        public float maxAcceleration = 10f;
+        [Tooltip("Maximum allowed acceleration/movement while NOT on ground.")]
+        [Range(0f, 100f)]
+        public float maxAirAcceleration = 1f;
+        [Tooltip("Maximum allowed velocity while in vacuum.")]
         [Range(0f, 200f)]
         public float maxVelocityMagnitudeInVacuum = 80f;
+        [Tooltip("Height of the jump.")]
         [Range(0f, 50f)]
         public float jumpHeight = 2f;
+        [Tooltip("Number of jumps possible in air.")]
         [Range(0, 5)]
         public int maxAirJumps = 0;
-        public LayerMask probeMask = -1, stairsMask = -1;
+        [Tooltip("Layer mask for ground contact probing and stairs.")]
+        public LayerMask probeMask = -1;
+        [Tooltip("Layer mask for detecting stairs.")]
+        public LayerMask stairsMask = -1;
+        [Tooltip("Speed of snapping player to ground.")]
         [Range(0f, 100f)]
         public float maxSnapSpeed = 100f;
+        [Tooltip("Distance of the ground contact probe.")]
         [Min(0f)]
         public float probeDistance = 1f;
+        [Tooltip("Maximum allowed angle for walking on ground.")]
         [Range(0, 90)]
-        public float maxGroundAngle = 25f, maxStairsAngle = 50f;
+        public float maxGroundAngle = 25f;
+        [Tooltip("Maximum allowed angle for walking on stairs.")]
+        [Range(0, 90)]
+        public float maxStairsAngle = 50f;
 
         [Header("Custom Variables")]
         public MovementVariables movementVariables;
         public GravityVariables gravityVariables;
-        public JumpVariables jumpVariables;
         public DashVariables dashVariables;
 
         [Header("Shooting Variables")]
-        public float fireRatePrimary = 0.2f;
-        public float fireRateSecondary = 2f;
-        public float fireRateTertiary = 5f;
-        public float shootForcePrimary = 8000f;
-        public float shootForceSecondary = 5000f;
-        public float shootForceTertiary = 100000f;
-        public GameObject bulletPrimary;
-        public GameObject bulletSecondary;
-        public GameObject bulletTertiary;
+        [Tooltip("Spawn position of each bullet.")]
         public Transform bulletOrigin;
+        [Tooltip("Seconds between each shot.")]
+        public float fireRatePrimary = 0.2f, fireRateSecondary = 2f, fireRateTertiary = 5f;
+        [Tooltip("Force of each shot.")]
+        public float shootForcePrimary = 8000f, shootForceSecondary = 5000f, shootForceTertiary = 100000f;
+        [Tooltip("Prefab of the respective weapon's bullet.")]
+        public GameObject bulletPrimary, bulletSecondary, bulletTertiary;
         #endregion
 
         #region PRIVATE/HIDDEN VARS

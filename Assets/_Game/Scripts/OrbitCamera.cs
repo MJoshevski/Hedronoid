@@ -13,7 +13,7 @@ namespace Hedronoid
 
     public class OrbitCamera : MonoSingleton<OrbitCamera>
     {
-        #region PUBLIC VARS
+        #region PUBLIC/VISIBLE VARS
         [Header("References")]
         public Transform focus;
         [HideInInspector]
@@ -99,7 +99,7 @@ namespace Hedronoid
         }
         #endregion
 
-        #region PRIVATE VARS
+        #region PRIVATE/HIDDEN VARS
         private Vector3 focusPoint, previousFocusPoint;
         private Vector2 orbitAngles = new Vector2(45f, 0f);
         private float lastManualRotationTime;
@@ -136,6 +136,15 @@ namespace Hedronoid
         #endregion
 
         #region UNITY LIFECYCLE
+
+        void OnValidate()
+        {
+            if (maxVerticalAngle < minVerticalAngle)
+            {
+                maxVerticalAngle = minVerticalAngle;
+            }
+        }
+
         public void Start()
         {
             focusPoint = focus.position;
@@ -195,6 +204,7 @@ namespace Hedronoid
         }
         #endregion
 
+        #region METHODS
         void UpdateGravityAlignment()
         {
             Vector3 fromUp = gravityAlignment * Vector3.up;
@@ -463,14 +473,6 @@ namespace Hedronoid
             return true;
         }
 
-        void OnValidate()
-        {
-            if (maxVerticalAngle < minVerticalAngle)
-            {
-                maxVerticalAngle = minVerticalAngle;
-            }
-        }
-
         void ConstrainAngles()
         {
             orbitAngles.x =
@@ -491,5 +493,6 @@ namespace Hedronoid
             float angle = Mathf.Acos(direction.y) * Mathf.Rad2Deg;
             return direction.x < 0f ? 360f - angle : angle;
         }
+        #endregion
     }
 }

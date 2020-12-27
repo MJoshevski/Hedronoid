@@ -67,6 +67,21 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   health: 0
+  maxAcceleration: 100
+  maxAirAcceleration: 100
+  maxVelocityMagnitudeInVacuum: 80
+  jumpHeight: 20
+  maxAirJumps: 2
+  probeMask:
+    serializedVersion: 2
+    m_Bits: 3091
+  stairsMask:
+    serializedVersion: 2
+    m_Bits: 0
+  maxSnapSpeed: 20
+  probeDistance: 0.1
+  maxGroundAngle: 40
+  maxStairsAngle: 50
   movementVariables:
     Horizontal: 0
     Vertical: 0
@@ -82,82 +97,30 @@ MonoBehaviour:
     GravitySwitchCooldown: 1.5
     ChangeOnKeyPress: 1
     floatToSleep: 0
-  jumpVariables:
-    JumpMade: 0
-    MaxJumps: 2
-    JumpsMade: 0
-    firstJumpForceSettings: {fileID: 11400000, guid: e8e492410aa8f4932ae51bb23ed1688d,
-      type: 2}
-    secondJumpForceSettings: {fileID: 11400000, guid: c90d4d68425094098b735fc5cd211627,
-      type: 2}
   dashVariables:
     DashMade: 0
     MaxDashes: 1
     DashesMade: 0
     ContinuousInput: 0
     PhysicalForce: {fileID: 11400000, guid: 002679e5d113047b09c1a29efbd4bbd2, type: 2}
+  bulletOrigin: {fileID: 7378592729354335572}
+  fireRatePrimary: 0.2
+  fireRateSecondary: 2
+  fireRateTertiary: 5
+  shootForcePrimary: 8000
+  shootForceSecondary: 5000
+  shootForceTertiary: 100000
+  bulletPrimary: {fileID: 7264386719725267083, guid: 88a47373d8433b2479582b7e1b482b52,
+    type: 3}
+  bulletSecondary: {fileID: 947796022108612175, guid: 447e7d1ecac153c49807bda70018f24c,
+    type: 3}
+  bulletTertiary: {fileID: 0}
   delta: 0
-  Transform: {fileID: 0}
   Rigidbody: {fileID: 0}
   connectedRb: {fileID: 0}
   prevConnectedRb: {fileID: 0}
-  Animator: {fileID: 0}
-  jumpPressed: 0
-  jumpReleased: 0
-  dashPressed: 0
-  dashReleased: 0
-  isDashing: 0
-  isGrounded: 1
-  timeSinceJump: 0
-  upAxis: {x: 0, y: 0, z: 0}
-  rightAxis: {x: 0, y: 0, z: 0}
-  forwardAxis: {x: 0, y: 0, z: 0}
-  velocity: {x: 0, y: 0, z: 0}
-  desiredVelocity: {x: 0, y: 0, z: 0}
-  connectionVelocity: {x: 0, y: 0, z: 0}
-  maxAcceleration: 100
-  maxAirAcceleration: 100
-  maxVelocityMagnitudeInVacuum: 80
-  groundContactCount: 0
-  steepContactCount: 0
-  contactNormal: {x: 0, y: 0, z: 0}
-  steepNormal: {x: 0, y: 0, z: 0}
-  jumpPhase: 0
-  maxAirJumps: 2
-  stepsSinceLastGrounded: 0
-  stepsSinceLastJump: 0
-  maxSnapSpeed: 20
-  probeDistance: 0.1
-  maxGroundAngle: 40
-  maxStairsAngle: 50
-  jumpHeight: 20
-  lastFired_Auto: 0
-  lastFired_Shotgun: 0
-  lastFired_Rail: 0
   desiredJump: 0
   desiredDash: 0
-  charRay: {x: 0, y: 0, z: 0}
-  fireRate_Auto: 0.2
-  fireRate_Shotgun: 2
-  fireRate_Rail: 5
-  shootForce_Auto: 8000
-  shootForce_Shotgun: 5000
-  shootForce_Rail: 100000
-  bullets_Auto: {fileID: 7264386719725267083, guid: 88a47373d8433b2479582b7e1b482b52,
-    type: 3}
-  bullets_Shotgun: {fileID: 947796022108612175, guid: 447e7d1ecac153c49807bda70018f24c,
-    type: 3}
-  bullets_Rail: {fileID: 0}
-  bulletOrigin: {fileID: 7378592729354335572}
-  rb_auto: {fileID: 0}
-  probeMask:
-    serializedVersion: 2
-    m_Bits: 3091
-  stairsMask:
-    serializedVersion: 2
-    m_Bits: 0
-  minGroundDotProduct: 0.76604444
-  minStairsDotProduct: 0.64278764
 --- !u!136 &174345460303343908
 CapsuleCollider:
   m_ObjectHideFlags: 0
