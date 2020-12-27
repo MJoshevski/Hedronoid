@@ -7,71 +7,18 @@ namespace Hedronoid
 {
     public class PlayerStateManager : MonoSingleton<PlayerStateManager>
     {
+        #region PUBLIC/VISIBLE VARS
+        [Header("Character Controller Settings")]
         public float health;
-
-        public MovementVariables movementVariables;
-        public GravityVariables gravityVariables;
-        public JumpVariables jumpVariables;
-        public DashVariables dashVariables;
-
-        [HideInInspector]
-        public float delta;
-        [HideInInspector]
-        public Transform Transform;
-        [HideInInspector]
-        public Rigidbody Rigidbody, connectedRb, prevConnectedRb;
-
-        [HideInInspector]
-        public Animator Animator;
-        public AnimatorHashes animHashes;
-        public AnimatorData animData;
-
-        [HideInInspector] public bool jumpPressed;
-        [HideInInspector] public bool jumpReleased;
-        [HideInInspector] public bool dashPressed;
-        [HideInInspector] public bool dashReleased;
-        public bool isDashing;
-
-        //[HideInInspector]
-        public bool isGrounded;
-        [HideInInspector]
-        public float timeSinceJump;
-
-        [HideInInspector]
-        public Ray LookRay;
-        [HideInInspector]
-        public RaycastHit RayHit;
-
-        public PlayerActionSet PlayerActions;
-        public float MouseHorizontalSensitivity { get; set; }
-        public float MouseVerticalSensitivity { get; set; }
-        public Camera orbitCamera;
-
-        [HideInInspector]
-        public IGravityService gravityService;
-
-        [HideInInspector]
-        public Vector3 upAxis, rightAxis, forwardAxis;
-        [HideInInspector]
-        public Vector3 velocity, desiredVelocity, connectionVelocity;
         [Range(0f, 100f)]
         public float maxAcceleration = 10f, maxAirAcceleration = 1f;
         [Range(0f, 200f)]
         public float maxVelocityMagnitudeInVacuum = 80f;
-        [HideInInspector]
-        public bool OnGround => groundContactCount > 0;
-        [HideInInspector]
-        public bool OnSteep => steepContactCount > 0;
-        [HideInInspector]
-        public int groundContactCount, steepContactCount;
-        [HideInInspector]
-        public Vector3 contactNormal, steepNormal;
-        [HideInInspector]
-        public int jumpPhase;
+        [Range(0f, 50f)]
+        public float jumpHeight = 2f;
         [Range(0, 5)]
         public int maxAirJumps = 0;
-        [HideInInspector]
-        public int stepsSinceLastGrounded, stepsSinceLastJump;
+        public LayerMask probeMask = -1, stairsMask = -1;
         [Range(0f, 100f)]
         public float maxSnapSpeed = 100f;
         [Min(0f)]
@@ -79,17 +26,78 @@ namespace Hedronoid
         [Range(0, 90)]
         public float maxGroundAngle = 25f, maxStairsAngle = 50f;
 
-        [Range(0f, 50f)]
-        public float jumpHeight = 2f;
+        [Header("Custom Variables")]
+        public MovementVariables movementVariables;
+        public GravityVariables gravityVariables;
+        public JumpVariables jumpVariables;
+        public DashVariables dashVariables;
+
+        [Header("Shooting Variables")]
+        public float fireRatePrimary = 0.2f;
+        public float fireRateSecondary = 2f;
+        public float fireRateTertiary = 5f;
+        public float shootForcePrimary = 8000f;
+        public float shootForceSecondary = 5000f;
+        public float shootForceTertiary = 100000f;
+        public GameObject bulletPrimary;
+        public GameObject bulletSecondary;
+        public GameObject bulletTertiary;
+        public Transform bulletOrigin;
+        #endregion
+
+        #region PRIVATE/HIDDEN VARS
+        // GENERAL REFS
+        [HideInInspector]
+        public float delta;
+        [HideInInspector]
+        public Rigidbody Rigidbody, connectedRb, prevConnectedRb;
+        private IGravityService gravityService;
+        private Camera orbitCamera;
+        private Animator Animator;
+        private AnimatorHashes animHashes;
+        private AnimatorData animData;
+
+        // ACTION FLAGS
+        private bool isDashing, isGrounded, hasLanded;
+        private float timeSinceJump;
 
         // SHOOTING
+        private float lastFired_Auto = 0f;
+        private float lastFired_Shotgun = 0f;
+        private float lastFired_Rail = 0f;
         [HideInInspector]
-        public float lastFired_Auto = 0f;
+        public Ray LookRay;
         [HideInInspector]
-        public float lastFired_Shotgun = 0f;
-        [HideInInspector]
-        public float lastFired_Rail = 0f;
+        public RaycastHit RayHit;
+        private Rigidbody rb_auto;
+        private System.Action onDespawnAction;
 
+        // CONTROLS/BINDINGS
+        private PlayerActionSet PlayerActions;
+        private float MouseHorizontalSensitivity { get; set; }
+        private float MouseVerticalSensitivity { get; set; }
+
+        // PHYSICS VARS
+        private Vector3 upAxis, rightAxis, forwardAxis;
+        private Vector3 velocity, desiredVelocity, connectionVelocity;
+        private bool OnGround => groundContactCount > 0;
+        private bool OnSteep => steepContactCount > 0;
+        private int groundContactCount, steepContactCount;
+        private Vector3 contactNormal, steepNormal;
+        private int jumpPhase;
+        private int stepsSinceLastGrounded, stepsSinceLastJump;
+        private Vector3 connectionWorldPosition, connectionLocalPosition;
+        private Coroutine _forceApplyCoroutine = null;
+        private float minGroundDotProduct, minStairsDotProduct;
+        #endregion
+
+        #region CONSTANTS
+        const string KEY_BINDINGS = "Bindings";
+        const string KEY_MOUSE_HORIZONTAL_SENSITIVITY = "MouseHorizontalSensitivity";
+        const string KEY_MOUSE_VERTICAL_SENSITIVITY = "MouseVerticalSensitivity";
+        #endregion
+
+        #region UNITY LIFECYCLE
         void OnValidate()
         {
             minGroundDotProduct = Mathf.Cos(maxGroundAngle * Mathf.Deg2Rad);
@@ -98,7 +106,6 @@ namespace Hedronoid
 
         private void Start()
         {
-            Transform = this.transform;
             orbitCamera = OrbitCamera.Instance.GetComponent<Camera>();
             Rigidbody = GetComponent<Rigidbody>();
             Animator = GetComponentInChildren<Animator>();
@@ -178,7 +185,6 @@ namespace Hedronoid
 
         }
 
-        public Vector3 charRay;
         private void FixedUpdate()
         {
             delta = Time.fixedDeltaTime;
@@ -204,7 +210,7 @@ namespace Hedronoid
                 animHashes.Vertical,
                 movementVariables.MoveAmount,
                 0.2f,
-                Time.deltaTime);
+                delta);
             //
 
             Vector3 gravity = GravityService.GetGravity(Rigidbody.position, out upAxis);
@@ -248,11 +254,11 @@ namespace Hedronoid
                 Quaternion.LookRotation(targetDirection, upAxis);
 
             Quaternion targetRotation = Quaternion.Slerp(
-                Transform.rotation,
+                transform.rotation,
                 tr,
                 delta * gravityVariables.GravityRotationMultiplier);
 
-            Transform.rotation = targetRotation;
+            transform.rotation = targetRotation;
             //
 
             ClearState();
@@ -263,11 +269,14 @@ namespace Hedronoid
                 movementVariables.Horizontal * orbitCamera.transform.right;
             moveDirection = Vector3.ProjectOnPlane(moveDirection, upAxis);
             moveDirection.Normalize();
-            Debug.DrawRay(Transform.position, moveDirection, Color.yellow);
+            Debug.DrawRay(transform.position, moveDirection, Color.yellow);
             movementVariables.MoveDirection = moveDirection;
             //
         }
 
+        #endregion
+
+        #region METHODS
         void AdjustVelocity()
         {
             Vector3 relativeVelocity = velocity - connectionVelocity;
@@ -294,10 +303,7 @@ namespace Hedronoid
             contactNormal = steepNormal = connectionVelocity = Vector3.zero;
             prevConnectedRb = connectedRb;
             connectedRb = null;
-        }
-
-        private bool hasLanded;
-        private Vector3 connectionWorldPosition, connectionLocalPosition;
+        }      
 
         void UpdateState()
         {
@@ -423,7 +429,6 @@ namespace Hedronoid
             velocity += jumpDirection * jumpSpeed;
         }
 
-        Coroutine _forceApplyCoroutine = null;
         public void Dash()
         {
             Vector3 moveDirection = movementVariables.MoveDirection;
@@ -431,9 +436,9 @@ namespace Hedronoid
             GravityService.Instance.CurrentGravity = Vector3.zero;
 
             if (moveDirection.sqrMagnitude < .25f)
-                moveDirection = Transform.forward;
+                moveDirection = transform.forward;
 
-            Vector3 forceDirection = Transform.forward;
+            Vector3 forceDirection = transform.forward;
 
             forceDirection.Normalize();
 
@@ -482,48 +487,31 @@ namespace Hedronoid
             _forceApplyCoroutine = null;
         }
 
-        public float fireRate_Auto = 0.2f;
-        public float fireRate_Shotgun = 2f;
-        public float fireRate_Rail = 5f;
-        public float shootForce_Auto = 8000f;
-        public float shootForce_Shotgun = 5000f;
-        public float shootForce_Rail = 100000f;
-
-        public GameObject bullets_Auto;
-        public GameObject bullets_Shotgun;
-        public GameObject bullets_Rail;
-
-        public Transform bulletOrigin;
-        [HideInInspector]
-        public Rigidbody rb_auto;
-
-        private System.Action onDespawnAction;
-
         public void Shoot()
         {
             Gizmos.Line(bulletOrigin.position, RayHit.point, Color.yellow);
             Vector3 shootDirection = RayHit.point - bulletOrigin.position;
 
             if (Input.GetButton("Fire1") &&
-                Time.realtimeSinceStartup - lastFired_Auto > fireRate_Auto)
+                Time.realtimeSinceStartup - lastFired_Auto > fireRatePrimary)
             {
                 GameObject auto = TrashMan.spawn(
-                    bullets_Auto, bulletOrigin.position, Quaternion.identity);
+                    bulletPrimary, bulletOrigin.position, Quaternion.identity);
                 TrashMan.despawnAfterDelay(auto, 5f, () => onDespawnReset(auto));
 
                 rb_auto = auto.GetComponent<Rigidbody>();
-                rb_auto.AddForce(shootDirection.normalized * shootForce_Auto);
+                rb_auto.AddForce(shootDirection.normalized * shootForcePrimary);
                 lastFired_Auto = Time.realtimeSinceStartup;
             }
             else if (Input.GetButtonDown("Fire2") &&
-                Time.realtimeSinceStartup - lastFired_Shotgun > fireRate_Shotgun)
+                Time.realtimeSinceStartup - lastFired_Shotgun > fireRateSecondary)
             {
                 GameObject shot = TrashMan.spawn(
-                    bullets_Shotgun, bulletOrigin.position, Quaternion.identity);
+                    bulletSecondary, bulletOrigin.position, Quaternion.identity);
                 TrashMan.despawnAfterDelay(shot, 5f, () => onDespawnReset(shot));
 
                 Rigidbody rb_shot = shot.GetComponent<Rigidbody>();
-                rb_shot.AddForce(shootDirection.normalized * shootForce_Shotgun);
+                rb_shot.AddForce(shootDirection.normalized * shootForceSecondary);
                 lastFired_Shotgun = Time.realtimeSinceStartup;
             }
         }
@@ -632,7 +620,6 @@ namespace Hedronoid
             MouseVerticalSensitivity = PlayerPrefs.GetFloat(KEY_MOUSE_VERTICAL_SENSITIVITY, 50f);
         }
 
-        //Matej: Switch this to SP parameter (figure a way around coroutines)
         public IEnumerator WaitForSeconds(float duration)
         {
             yield return new WaitForSeconds(duration);
@@ -672,17 +659,12 @@ namespace Hedronoid
             }
         }
 
-        public LayerMask probeMask = -1, stairsMask = -1;
-        [HideInInspector]
-        public float minGroundDotProduct, minStairsDotProduct;
         public float GetMinDot(int layer)
         {
             return (stairsMask & (1 << layer)) == 0 ?
                 minGroundDotProduct : minStairsDotProduct;
         }
-
-        const string KEY_BINDINGS = "Bindings";
-        const string KEY_MOUSE_HORIZONTAL_SENSITIVITY = "MouseHorizontalSensitivity";
-        const string KEY_MOUSE_VERTICAL_SENSITIVITY = "MouseVerticalSensitivity";
+        #endregion
     }
 }
+
