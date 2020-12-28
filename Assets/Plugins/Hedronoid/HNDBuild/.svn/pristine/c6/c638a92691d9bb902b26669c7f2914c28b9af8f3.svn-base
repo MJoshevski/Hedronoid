@@ -1,0 +1,33 @@
+﻿using System.Collections;
+using System.Collections.Generic;
+using UnityEditor;
+using UnityEngine;
+
+namespace NapNok.NapBuild
+{
+    [CustomEditor(typeof(NapBuildStep), true)]
+    public class NapBuildStepEditor : Editor
+    {
+        NapBuildStep thisTarget;
+
+        void OnEnable()
+        {
+            thisTarget = (NapBuildStep)target;
+        }
+
+        public override void OnInspectorGUI()
+        {
+            DrawDefaultInspector();
+
+            List<string> reqValues = thisTarget.GetRequiredEnvValues();
+
+            if (reqValues == null || reqValues.Count == 0) return;
+
+            EditorGUILayout.Space();
+            EditorGUILayout.Space();
+            EditorGUILayout.Separator();
+            EditorGUILayout.LabelField("Used environment variables:");
+            EditorGUILayout.TextArea(string.Join("\n", reqValues.ToArray()));
+        }
+    }
+}

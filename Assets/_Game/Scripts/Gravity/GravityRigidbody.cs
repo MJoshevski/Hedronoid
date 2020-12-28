@@ -5,14 +5,14 @@ using UnityEngine;
 namespace Hedronoid
 {
     [RequireComponent(typeof(Rigidbody))]
-    public class GravityRigidbody : MonoBehaviour
+    public class GravityRigidbody : HNDMonoBehaviour
     {
         Rigidbody body;
         float floatDelay;
         [SerializeField]
         bool floatToSleep = false;
 
-        void Awake()
+        protected override void Awake()
         {
             body = GetComponent<Rigidbody>();
             body.useGravity = false;

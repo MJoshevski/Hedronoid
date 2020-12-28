@@ -1,0 +1,30 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 58f0503d67a1b124bb4bbc00c7f6ed53, type: 3}
+  m_Name: HNDAudioPreferences
+  m_EditorClassIdentifier: 
+  AudioManagerDataPath: Assets/Global/Audio/AudioManagerData.prefab
+  AudioEnumPath: Assets/Global/Audio/Scripts/AudioList.cs
+  MissingSoundTriggerId: GEN_Missing_Sound
+  PlayMissingSound: 0
+  Default3DSettings:
+    dopplerLevel: 1
+    minDistance: 100
+    maxDistance: 20000
+    panStereo: 1
+    rolloffMode: 0
+    spread: 0
+    spatialBlend: 1
+    spatialize: 1
+    spatializePostEffects: 1
+  ProjectVOCategoryName: VO
+  LAMSVOCategoryName: VO

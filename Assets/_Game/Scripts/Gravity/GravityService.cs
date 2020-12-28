@@ -9,7 +9,7 @@ namespace Hedronoid
         Vector3 CurrentGravity { get; set; }
     }
 
-    public class GravityService : MonoSingleton<IGravityService>, IGravityService
+    public class GravityService : HNDMonoSingleton<IGravityService>, IGravityService
     {
         public Transform playerInputSpace;
         public Vector3 CurrentGravity { get; set; }

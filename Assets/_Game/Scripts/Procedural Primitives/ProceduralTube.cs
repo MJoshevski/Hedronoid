@@ -2,8 +2,9 @@
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.ProBuilder;
+using Hedronoid;
 
-public class ProceduralTube : MonoBehaviour
+public class ProceduralTube : HNDMonoBehaviour
 {
     [SerializeField]
     float height = 1f;
@@ -21,7 +22,7 @@ public class ProceduralTube : MonoBehaviour
     float topRadius2 = .15f;
 
     // Start is called before the first frame update
-    void Start()
+    protected override void Start()
     {
         Mesh mesh = gameObject.GetComponent<MeshCollider>().sharedMesh;
         mesh.Clear();

@@ -14,7 +14,7 @@ namespace Hedronoid
         void ResetBindings();
     }
 
-    public class InputManager : MonoSingleton<IInputManager>, IInputManager
+    public class InputManager : HNDMonoSingleton<IInputManager>, IInputManager
     {
         public PlayerActionSet PlayerActions { get; private set; }
         public float MouseHorizontalSensitivity { get; set; }

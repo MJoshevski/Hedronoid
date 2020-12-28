@@ -11,7 +11,7 @@ namespace Hedronoid
         ManualShoulderSwitch = 1
     }
 
-    public class OrbitCamera : MonoSingleton<OrbitCamera>
+    public class OrbitCamera : HNDMonoSingleton<OrbitCamera>
     {
         #region PUBLIC/VISIBLE VARS
         [Header("References")]
@@ -145,7 +145,7 @@ namespace Hedronoid
             }
         }
 
-        public void Start()
+        protected override void Start()
         {
             focusPoint = focus.position;
             distanceThreshold = manualPositionOffset.x * 2f;

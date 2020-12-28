@@ -27,7 +27,7 @@ namespace Hedronoid
 
         float innerFalloffFactor, outerFalloffFactor;
 
-        void Awake()
+        protected override void Awake()
         {
             OnValidate();
         }

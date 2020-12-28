@@ -1,9 +1,10 @@
 ﻿using UnityEngine;
 using UnityEngine.UI;
+using Hedronoid;
 
 namespace Hedronoid
 {
-    public class DebugMenu : MonoBehaviour
+    public class DebugMenu : HNDMonoBehaviour
     {
         [Header("Refs")]
         public GameObject Panel;
@@ -23,7 +24,7 @@ namespace Hedronoid
         [Header("Prefabs")]
         public GameObject BindingView;
 
-        void Start()
+        protected override void Start()
         {
             Panel.SetActive(false);
 

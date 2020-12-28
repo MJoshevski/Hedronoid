@@ -1,0 +1,29 @@
+﻿using System;
+using System.Collections;
+using System.Collections.Generic;
+using UnityEngine;
+
+namespace NapNok.Particle
+{
+    [Serializable]
+    public class NapParticleSystemData
+    {
+        public string Name;
+        public int GUID;
+        public NapParticleSystem ParticleSystemPrefab;
+    }
+
+    public class ParticleManagerData : ScriptableObject
+    {
+        [SerializeField]
+        private List<NapParticleSystemData> m_ParticleSystems = new List<NapParticleSystemData>();
+
+        public List<NapParticleSystemData> ParticleSystems
+        {
+            get
+            {
+                return m_ParticleSystems;
+            }
+        }
+    }
+}

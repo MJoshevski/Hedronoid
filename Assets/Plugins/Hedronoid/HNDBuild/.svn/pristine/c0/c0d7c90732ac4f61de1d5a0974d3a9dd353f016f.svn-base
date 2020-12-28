@@ -1,0 +1,32 @@
+﻿using System.Collections;
+using System.Collections.Generic;
+using UnityEditor;
+using UnityEngine;
+
+namespace NapNok.NapBuild
+{
+    [CustomEditor(typeof(NapBuildPipeline), true)]
+    public class NapBuildPipelineEditor : Editor
+    {
+        NapBuildPipeline thisTarget;
+
+        void OnEnable()
+        {
+            thisTarget = (NapBuildPipeline)target;
+        }
+
+        public override void OnInspectorGUI()
+        {
+            DrawDefaultInspector();
+
+            EditorGUILayout.Space();
+            EditorGUILayout.Space();
+            EditorGUILayout.Separator();
+
+            if (GUILayout.Button("Build!"))
+            {
+                thisTarget.Build();
+            }
+        }
+    }
+}

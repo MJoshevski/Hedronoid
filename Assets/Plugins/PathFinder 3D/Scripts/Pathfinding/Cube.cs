@@ -31,6 +31,7 @@ namespace PathFinder3D
 
         public override bool Equals(object otherAbstr)
         {
+            base.Equals(otherAbstr);
             Cube other = (Cube)otherAbstr;
             return index.Equals(other.index);
         }

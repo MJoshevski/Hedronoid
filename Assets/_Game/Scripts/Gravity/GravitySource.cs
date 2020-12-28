@@ -3,7 +3,7 @@ using System.Collections.Generic;
 
 namespace Hedronoid
 {
-    public class GravitySource : MonoBehaviour
+    public class GravitySource : HNDMonoBehaviour
     {
         [Header("Collision Layer/Tag")]
         public LayerMask triggerLayers;
@@ -21,12 +21,12 @@ namespace Hedronoid
         public List<GravitySource> enableOnExit = new List<GravitySource>();
         public List<GravitySource> disableOnExit = new List<GravitySource>();
 
-        void OnEnable()
+        protected override void OnEnable()
         {
             GravityService.Register(this);
         }
 
-        void OnDisable()
+        protected override void OnDisable()
         {
             GravityService.Unregister(this);
         }

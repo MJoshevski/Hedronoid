@@ -1,8 +1,9 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using Hedronoid;
 
-public class Portal : MonoBehaviour {
+public class Portal : HNDMonoBehaviour {
     [Header ("Main Settings")]
     public Portal linkedPortal;
     public MeshRenderer screen;
@@ -20,7 +21,8 @@ public class Portal : MonoBehaviour {
     List<PortalTraveller> trackedTravellers;
     MeshFilter screenMeshFilter;
 
-    void Awake () {
+    protected override void Awake ()
+    {
         playerCam = Camera.main;
         portalCam = GetComponentInChildren<Camera> ();
         portalCam.enabled = false;

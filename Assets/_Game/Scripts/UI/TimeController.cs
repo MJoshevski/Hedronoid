@@ -2,8 +2,9 @@
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
+using Hedronoid;
 
-public class TimeController : MonoBehaviour
+public class TimeController : HNDMonoBehaviour
 {
     public Button PlayButton;
 
@@ -14,7 +15,7 @@ public class TimeController : MonoBehaviour
     [SerializeField]
     int escKeyPresses = 0;
 
-    void Start()
+    protected override void Start()
     {
         PlayButton.onClick.AddListener(() =>
         {

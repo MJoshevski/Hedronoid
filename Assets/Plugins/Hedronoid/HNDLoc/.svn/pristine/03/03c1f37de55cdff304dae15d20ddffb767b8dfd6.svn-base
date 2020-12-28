@@ -1,0 +1,22 @@
+﻿using System.Collections;
+using System.Collections.Generic;
+using NapNok.NapLoc;
+using UnityEngine;
+
+public static class NapLocStringExtensions
+{
+    public static string NapLocalized(this string source)
+    {
+        return NapLoc.Instance.GetLocalizedString(source);
+    }
+
+    public static string NapLocalized(this string source, params object[] list)
+    {
+        return NapLoc.Instance.GetLocalizedStringFormat(source, list);
+    }
+
+    public static string NapLocalizedUpper(this string source)
+    {
+        return NapLoc.Instance.GetLocalizedUpperString(source);
+    }   
+}

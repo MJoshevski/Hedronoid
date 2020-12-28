@@ -1,0 +1,19 @@
+﻿using System.Collections;
+using System.Collections.Generic;
+using UnityEngine;
+
+namespace NapNok 
+{
+    public class NNEnumBitMaskAttribute : PropertyAttribute
+    {
+        public System.Type propType;
+
+        public NNEnumBitMaskAttribute() { }
+
+        public NNEnumBitMaskAttribute(System.Type aType)
+        {
+            propType = aType;
+        }
+
+    }
+}

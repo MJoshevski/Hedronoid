@@ -5,7 +5,7 @@ using Gizmos = Popcron.Gizmos;
 
 namespace Hedronoid
 {
-    public class PlayerStateManager : MonoSingleton<PlayerStateManager>
+    public class PlayerStateManager : HNDMonoSingleton<PlayerStateManager>
     {
         #region PUBLIC/VISIBLE VARS
         [Header("Character Controller Settings")]
@@ -117,7 +117,7 @@ namespace Hedronoid
             minStairsDotProduct = Mathf.Cos(maxStairsAngle * Mathf.Deg2Rad);
         }
 
-        private void Start()
+        protected override void Start()
         {
             orbitCamera = OrbitCamera.Instance.GetComponent<Camera>();
             Rigidbody = GetComponent<Rigidbody>();

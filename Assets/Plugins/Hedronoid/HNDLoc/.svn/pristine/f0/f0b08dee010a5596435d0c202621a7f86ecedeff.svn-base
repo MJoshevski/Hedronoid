@@ -1,0 +1,59 @@
+﻿using System.Collections;
+using System.Collections.Generic;
+using NapNok.Events;
+using UnityEngine;
+using UnityEngine.UI;
+
+namespace NapNok.NapLoc
+{
+    [RequireComponent(typeof(Image))]
+    public class NapLocImageLocalizer : NNGameObject
+    {
+
+        Image m_Image;
+
+        Sprite m_DefaultSprite;
+
+        [SerializeField]
+        string m_ImageNameInBundle;
+
+        protected override void Awake()
+        {
+            base.Awake();
+
+            m_Image = GetComponent<Image>();
+            m_DefaultSprite = m_Image.sprite;
+
+            if (string.IsNullOrEmpty(m_ImageNameInBundle) && m_DefaultSprite != null)
+            {
+                m_ImageNameInBundle = m_DefaultSprite.name;
+            }
+
+            UpdateImage();
+
+            if (NapLoc.Instance.CanChangeLanguageRuntime)
+            {
+                NNEvents.Instance.AddListener<LanguageChangedEvent>(OnLanguageChanged);
+            }
+        }
+
+        private void OnLanguageChanged(LanguageChangedEvent e)
+        {
+            UpdateImage();
+        }
+
+        private void UpdateImage()
+        {
+            if (string.IsNullOrEmpty(m_ImageNameInBundle)) return;
+
+            Sprite s = NapLoc.Instance.GetLocalizedSprite(m_ImageNameInBundle);
+            if (s == null)
+            {
+                D.LocWarningFormat("Can't find localized image named '{0}'", m_ImageNameInBundle);
+                return;
+            }
+
+            m_Image.sprite = s;
+        }
+    }
+}
