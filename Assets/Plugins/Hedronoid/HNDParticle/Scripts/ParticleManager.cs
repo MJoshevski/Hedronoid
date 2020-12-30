@@ -8,20 +8,20 @@ using Hedronoid.ObjectPool;
 
 namespace Hedronoid.Particle
 {
-    public class PlayParticleSystem : NNBaseEvent
+    public class PlayParticleSystem : HNDBaseEvent
     {
         public ParticleManager.PlayConfig Config;
         public NapParticleSystem ParticleSystemInstance;
     }
 
-    public class StopParticleSystem : NNBaseEvent
+    public class StopParticleSystem : HNDBaseEvent
     {
         public NapParticleSystem ParticleSystemInstance;
         public bool InstantKill = true;
         public float Delay = -1f;
     }
 
-    public class StopAllParticleSystems : NNBaseEvent
+    public class StopAllParticleSystems : HNDBaseEvent
     { }
 
     [Serializable]
@@ -48,9 +48,9 @@ namespace Hedronoid.Particle
         {
             base.Awake();
 
-            NNEvents.Instance.AddListener<PlayParticleSystem>(OnPlayParticleSystem);
-            NNEvents.Instance.AddListener<StopParticleSystem>(OnStopParticleSystem);
-            NNEvents.Instance.AddListener<StopAllParticleSystems>(OnStopAllParticleSystems);
+            HNDEvents.Instance.AddListener<PlayParticleSystem>(OnPlayParticleSystem);
+            HNDEvents.Instance.AddListener<StopParticleSystem>(OnStopParticleSystem);
+            HNDEvents.Instance.AddListener<StopAllParticleSystems>(OnStopAllParticleSystems);
 
             D.CoreLog("Particle manager start time: " + Time.realtimeSinceStartup);
             for (int i = 0; i < m_ParticleManagerData.ParticleSystems.Count; i++)

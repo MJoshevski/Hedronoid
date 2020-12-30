@@ -17,22 +17,22 @@ namespace Hedronoid.Audio
     /// <summary>
     /// When audio begins playing (nice for subtitles)
     /// </summary>
-    public class OnAudioBeganPlaying : NNBaseEvent { public string ClipName; }
+    public class OnAudioBeganPlaying : HNDBaseEvent { public string ClipName; }
 
     /// <summary>
     /// When audio stops playing (nice for subtitles)
     /// </summary>
-    public class OnAudioStoppedPlaying : NNBaseEvent { public string ClipName; }
+    public class OnAudioStoppedPlaying : HNDBaseEvent { public string ClipName; }
 
     /// <summary>
     /// When audio manager finished preloading some prefix
     /// </summary>
-    public class OnPreloadedAudio : NNBaseEvent { public string Prefix; public bool Async = true; }
+    public class OnPreloadedAudio : HNDBaseEvent { public string Prefix; public bool Async = true; }
 
     /// <summary>
     /// When audio manager finished unloading some prefix
     /// </summary>
-    public class OnUnloadedAudio : NNBaseEvent { public string Prefix; }
+    public class OnUnloadedAudio : HNDBaseEvent { public string Prefix; }
 
     #endregion
 
@@ -274,7 +274,7 @@ namespace Hedronoid.Audio
             }
 
             D.AudioLog("Preloaded audio with prefix " + prefix);
-            NNEvents.Instance.Raise(new OnPreloadedAudio { Prefix = prefix, Async = true });
+            HNDEvents.Instance.Raise(new OnPreloadedAudio { Prefix = prefix, Async = true });
         }
 
         public void PreloadAudioSync(string prefix)
@@ -295,7 +295,7 @@ namespace Hedronoid.Audio
             }
 
             D.AudioLog("Preloaded audio with prefix " + prefix);
-            NNEvents.Instance.Raise(new OnPreloadedAudio { Prefix = prefix, Async = false });
+            HNDEvents.Instance.Raise(new OnPreloadedAudio { Prefix = prefix, Async = false });
         }
 
         public void UnloadAudio(string prefix)
@@ -312,7 +312,7 @@ namespace Hedronoid.Audio
                     m_Cache.ReleaseClipNow(clipPath);
                 }
             }
-            NNEvents.Instance.Raise(new OnUnloadedAudio { Prefix = prefix });
+            HNDEvents.Instance.Raise(new OnUnloadedAudio { Prefix = prefix });
         }
 
         public static AudioSource Add3DData(AudioSource sound, AudioSource3DData data)

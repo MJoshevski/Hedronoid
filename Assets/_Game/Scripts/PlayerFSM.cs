@@ -2,12 +2,16 @@
 using System.Collections.Generic;
 using UnityEngine;
 using Gizmos = Popcron.Gizmos;
+using Hedronoid.HNDFSM;
+using Hedronoid.Core;
 
-namespace Hedronoid
+namespace Hedronoid.Player
 {
-    public class PlayerStateManager : HNDMonoSingleton<PlayerStateManager>
+    public class PlayerFSM : HNDFiniteStateMachine, IGameplaySceneContextInjector
     {
         #region PUBLIC/VISIBLE VARS
+        public GameplaySceneContext GameplaySceneContext { get; set; }
+
         [Header("Character Controller Settings")]
         public float health;
         [Tooltip("Maximum allowed acceleration/movement while on ground.")]
@@ -117,9 +121,12 @@ namespace Hedronoid
             minStairsDotProduct = Mathf.Cos(maxStairsAngle * Mathf.Deg2Rad);
         }
 
-        protected override void Start()
+        protected override void Awake()
         {
-            orbitCamera = OrbitCamera.Instance.GetComponent<Camera>();
+            base.Awake();
+            this.Inject(gameObject);
+
+            orbitCamera = GameplaySceneContext.OrbitCamera.GetComponent<Camera>();
             Rigidbody = GetComponent<Rigidbody>();
             Animator = GetComponentInChildren<Animator>();
             animHashes = new AnimatorHashes();
@@ -139,8 +146,10 @@ namespace Hedronoid
         public bool desiredJump, desiredDash;
         private bool inVacuum;
 
-        private void Update()
+        protected override void Update()
         {
+            base.Update();
+
             delta = Time.deltaTime;
 
             Vector2 playerInput = new Vector2(movementVariables.Horizontal, movementVariables.Vertical);
@@ -198,8 +207,10 @@ namespace Hedronoid
 
         }
 
-        private void FixedUpdate()
+        protected override void FixedUpdate()
         {
+            base.FixedUpdate();
+
             delta = Time.fixedDeltaTime;
 
             LookRay =

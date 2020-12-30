@@ -1,10 +1,13 @@
 ﻿using Hedronoid;
+using Hedronoid.Core;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class PlayerPortalTraveler : PortalTraveller
+public class PlayerPortalTraveler : PortalTraveller, IGameplaySceneContextInjector
 {
+    public GameplaySceneContext GameplaySceneContext { get; set; }
+
     Camera cam;
     void Start()
     {
@@ -14,7 +17,7 @@ public class PlayerPortalTraveler : PortalTraveller
     public override void Teleport(Transform fromPortal, Transform toPortal, Vector3 pos, Quaternion rot)
     {
         cam.enabled = false;
-        PlayerStateManager.Instance.transform.position = pos;
+        GameplaySceneContext.Player.transform.position = pos;
         Physics.SyncTransforms();
         cam.enabled = true;
     }

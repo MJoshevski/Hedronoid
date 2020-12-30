@@ -89,7 +89,7 @@ namespace Hedronoid
             {
                 foreach (Delegate del in cachedEventListeners[t])
                 {
-                    NNEvents.Instance.RemoveListener(t, del);
+                    HNDEvents.Instance.RemoveListener(t, del);
                 }
                 cachedEventListeners[t].Clear();
             }

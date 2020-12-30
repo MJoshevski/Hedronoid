@@ -30,7 +30,7 @@ namespace Hedronoid.HNDLoc
 
             if (HNDLoc.Instance.CanChangeLanguageRuntime)
             {
-                NNEvents.Instance.AddListener<LanguageChangedEvent>(OnLanguageChanged);
+                HNDEvents.Instance.AddListener<LanguageChangedEvent>(OnLanguageChanged);
             }
         }
 

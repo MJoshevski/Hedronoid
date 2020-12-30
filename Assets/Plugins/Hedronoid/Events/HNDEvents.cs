@@ -8,26 +8,26 @@ namespace Hedronoid.Events
     /// Event system.
     /// Subscribe to events, raise events...
     /// </summary>
-    public class NNEvents
+    public class HNDEvents
     {
-        static NNEvents instance = null;
-        public static NNEvents Instance
+        static HNDEvents instance = null;
+        public static HNDEvents Instance
         {
             get
             {
                 if (instance == null)
                 {
-                    instance = new NNEvents();
+                    instance = new HNDEvents();
                 }
                 return instance;
             }
         }
 
-        public delegate void NNEventDelegate<T>(T e) where T : NNBaseEvent;
-        private delegate void NNEventDelegate(NNBaseEvent e);
+        public delegate void HNDEventDelegate<T>(T e) where T : HNDBaseEvent;
+        private delegate void HNDEventDelegate(HNDBaseEvent e);
 
-        private Dictionary<System.Type, NNEventDelegate> delegates = new Dictionary<System.Type, NNEventDelegate>();
-        private Dictionary<System.Delegate, NNEventDelegate> delegateLookup = new Dictionary<System.Delegate, NNEventDelegate>();
+        private Dictionary<System.Type, HNDEventDelegate> delegates = new Dictionary<System.Type, HNDEventDelegate>();
+        private Dictionary<System.Delegate, HNDEventDelegate> delegateLookup = new Dictionary<System.Delegate, HNDEventDelegate>();
 
         /// <summary>
         /// Adds listener for a specific event.
@@ -36,7 +36,7 @@ namespace Hedronoid.Events
         /// </summary>
         /// <typeparam name="T">Event type</typeparam>
         /// <param name="del">Delegate method</param>
-        public void AddListener<T>(NNEventDelegate<T> del) where T : NNBaseEvent
+        public void AddListener<T>(HNDEventDelegate<T> del) where T : HNDBaseEvent
         {
             // Early-out if we've already registered this delegate
             if (delegateLookup.ContainsKey(del))
@@ -48,10 +48,10 @@ namespace Hedronoid.Events
 
             // Create a new non-generic delegate which calls our generic one.
             // This is the delegate we actually invoke.
-            NNEventDelegate internalDelegate = (e) => del((T)e);
+            HNDEventDelegate internalDelegate = (e) => del((T)e);
             delegateLookup[del] = internalDelegate;
 
-            NNEventDelegate tempDel;
+            HNDEventDelegate tempDel;
             if (delegates.TryGetValue(typeof(T), out tempDel))
             {
                 delegates[typeof(T)] = tempDel += internalDelegate;
@@ -67,7 +67,7 @@ namespace Hedronoid.Events
         /// </summary>
         /// <typeparam name="T">Event type</typeparam>
         /// <param name="del">Delegate method</param>
-        public void RemoveListener<T>(NNEventDelegate<T> del) where T : NNBaseEvent
+        public void RemoveListener<T>(HNDEventDelegate<T> del) where T : HNDBaseEvent
         {
             RemoveListener(typeof(T), del);
         }
@@ -79,10 +79,10 @@ namespace Hedronoid.Events
         /// <param name="del">Delegate method</param>
         public void RemoveListener(System.Type t, System.Delegate del)
         {
-            NNEventDelegate internalDelegate;
+            HNDEventDelegate internalDelegate;
             if (delegateLookup.TryGetValue(del, out internalDelegate))
             {
-                NNEventDelegate tempDel;
+                HNDEventDelegate tempDel;
                 if (delegates.TryGetValue(t, out tempDel))
                 {
                     tempDel -= internalDelegate;
@@ -103,9 +103,9 @@ namespace Hedronoid.Events
         /// Raises the event and notifies the delegates
         /// </summary>
         /// <param name="e">Event</param>
-        public void Raise(NNBaseEvent e)
+        public void Raise(HNDBaseEvent e)
         {
-            NNEventDelegate del;
+            HNDEventDelegate del;
             if (delegates.TryGetValue(e.GetType(), out del))
             {
                 del.Invoke(e);

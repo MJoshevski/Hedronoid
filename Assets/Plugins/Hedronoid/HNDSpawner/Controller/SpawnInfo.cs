@@ -118,7 +118,7 @@ namespace Hedronoid.Spawners {
 
             for (int i = 0; i < m_ActiveObjects.Count; i++) {
                 if (m_ActiveObjects[i] != null) {
-                    NNEvents.Instance.Raise (new ObjectSpawnerController.ObjectRemovedEvent () { GameObject = m_ActiveObjects[i] });
+                    HNDEvents.Instance.Raise (new ObjectSpawnerController.ObjectRemovedEvent () { GameObject = m_ActiveObjects[i] });
 
                     if (m_PoolManager) {
                         m_PoolManager.ReturnObject (m_ActiveObjects[i]);
@@ -205,7 +205,7 @@ namespace Hedronoid.Spawners {
                     m_TotalObjectsSpawned++;
                     spawned++;
 
-                    NNEvents.Instance.Raise (new ObjectSpawnerController.ObjectSpawnedEvent () { sender = (spawnManager ? spawnManager.gameObject : null), GameObject = go });
+                    HNDEvents.Instance.Raise (new ObjectSpawnerController.ObjectSpawnedEvent () { sender = (spawnManager ? spawnManager.gameObject : null), GameObject = go });
                 }
             }
             if (spawned == 0)

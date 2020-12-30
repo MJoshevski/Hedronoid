@@ -12,7 +12,7 @@ using UnityEngine;
 namespace Hedronoid.HNDLoc
 {
 
-    public class LanguageChangedEvent : NNBaseEvent
+    public class LanguageChangedEvent : HNDBaseEvent
     {
         public string To;
         public string From;
@@ -315,7 +315,7 @@ namespace Hedronoid.HNDLoc
                 m_CurrentLanguageConfig = m_HNDLocSettings.GetConfigForLanguage(value);
                 UpdateCulture(m_CurrentLanguageConfig);
                 D.LocLog("Language changed to " + value);
-                NNEvents.Instance.Raise(lc);
+                HNDEvents.Instance.Raise(lc);
             }
         }
 

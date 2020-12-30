@@ -10,7 +10,7 @@ namespace Hedronoid.Events
     /// sender doesn't need to be set, but it's a good practice
     /// </summary>
     [Serializable]
-    public class NNBaseEvent
+    public class HNDBaseEvent
     {
         public GameObject sender;
     }

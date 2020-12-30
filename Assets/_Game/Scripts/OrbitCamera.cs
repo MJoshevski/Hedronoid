@@ -2,6 +2,8 @@
 using System.Collections.Generic;
 using UnityEngine;
 using Gizmos = Popcron.Gizmos;
+using Hedronoid.Core;
+using Hedronoid.Player;
 
 namespace Hedronoid
 {
@@ -11,9 +13,11 @@ namespace Hedronoid
         ManualShoulderSwitch = 1
     }
 
-    public class OrbitCamera : HNDMonoSingleton<OrbitCamera>
+    public class OrbitCamera : HNDGameObject, IGameplaySceneContextInjector
     {
         #region PUBLIC/VISIBLE VARS
+        public GameplaySceneContext GameplaySceneContext { get; set; }
+
         [Header("References")]
         public Transform focus;
         [HideInInspector]
@@ -100,6 +104,7 @@ namespace Hedronoid
         #endregion
 
         #region PRIVATE/HIDDEN VARS
+        private PlayerFSM Player;
         private Vector3 focusPoint, previousFocusPoint;
         private Vector2 orbitAngles = new Vector2(45f, 0f);
         private float lastManualRotationTime;
@@ -145,8 +150,12 @@ namespace Hedronoid
             }
         }
 
-        protected override void Start()
+        protected override void Awake()
         {
+            base.Awake();
+            this.Inject(gameObject);
+
+            Player = GameplaySceneContext.Player;
             focusPoint = focus.position;
             distanceThreshold = manualPositionOffset.x * 2f;
             gravityService = GravityService.Instance;
@@ -157,10 +166,6 @@ namespace Hedronoid
             maxVerticalAnglePrev = maxVerticalAngle;
 
             Cursor.lockState = LockCursor ? CursorLockMode.Locked : CursorLockMode.None;
-        }
-
-        public void Update()
-        {            
         }
 
         public void LateUpdate()
@@ -257,7 +262,7 @@ namespace Hedronoid
                     if (Input.GetButtonDown("Fire3"))
                     {
                         distanceThreshold = 0.01f;
-                        prevHitPoint = PlayerStateManager.Instance.RayHit;
+                        prevHitPoint = Player.RayHit;
                         shoulderFocused = false;
                         manualPositionOffset.x *= -1;
                     }
@@ -284,7 +289,7 @@ namespace Hedronoid
             if (distanceOffset > Mathf.Abs(distanceThreshold) && 
                 shoulderCentering > 0f)
             {
-                float movMag = PlayerStateManager.Instance.Rigidbody.velocity.sqrMagnitude;
+                float movMag = Player.Rigidbody.velocity.sqrMagnitude;
 
                 float factor = 1;
                 if (movMag > catchupVeloThreshold)
@@ -383,7 +388,7 @@ namespace Hedronoid
         void AutomaticCentering ()
         {
             // Change last hit ray magnitude to be identical to the previous hit ray
-            Ray hitRay = PlayerStateManager.Instance.LookRay;
+            Ray hitRay = Player.LookRay;
             Vector3 hitPoint = hitRay.GetPoint(prevHitPoint.distance);
 
             // Aligned delta/direction between the two hit points

@@ -189,7 +189,7 @@ namespace Hedronoid.Audio
             AudioSource.Play();
 
             m_CachedBeganPlayingEvent.ClipName = ClipID;
-            NNEvents.Instance.Raise(m_CachedBeganPlayingEvent);
+            HNDEvents.Instance.Raise(m_CachedBeganPlayingEvent);
 
             for (int i = 0; i < m_WaitUntilStartedInstructions.Count; i++)
             {
@@ -333,7 +333,7 @@ namespace Hedronoid.Audio
                 m_WaitUntilStartedInstructions.Clear();
 
                 m_CachedStopppedPlayingEvent.ClipName = AudioSource.clip.name;
-                NNEvents.Instance.Raise(m_CachedStopppedPlayingEvent);
+                HNDEvents.Instance.Raise(m_CachedStopppedPlayingEvent);
 
                 m_Cache.ReleaseClipNow(ClipID);
                 m_AudioManager.ClipPlayerFinishedPlaying(this);

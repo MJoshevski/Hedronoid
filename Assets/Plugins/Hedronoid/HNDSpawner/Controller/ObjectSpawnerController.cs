@@ -13,9 +13,9 @@ namespace Hedronoid.Spawners
     /// </summary>
     public class ObjectSpawnerController : HNDMonoBehaviour
     {
-        public class ObjectSpawnedEvent : NNBaseEvent { public GameObject GameObject; }
-        public class ObjectRemovedEvent : NNBaseEvent { public GameObject GameObject; }
-        public class SpawnObjectEvent : NNBaseEvent { public string SpawnInfoName; public SpawnPrefabConfig PrefabConfig; internal int Amount; }
+        public class ObjectSpawnedEvent : HNDBaseEvent { public GameObject GameObject; }
+        public class ObjectRemovedEvent : HNDBaseEvent { public GameObject GameObject; }
+        public class SpawnObjectEvent : HNDBaseEvent { public string SpawnInfoName; public SpawnPrefabConfig PrefabConfig; internal int Amount; }
 
         [Tooltip("Should this object spawner use a pool?")]
         [SerializeField]
@@ -47,7 +47,7 @@ namespace Hedronoid.Spawners
         protected override void Start()
         {
             m_SpawnInfo.Init(transform, m_UsePool ? m_PoolManager : null);
-            NNEvents.Instance.AddListener<SpawnObjectEvent>(OnSpawnObjectEvent);
+            HNDEvents.Instance.AddListener<SpawnObjectEvent>(OnSpawnObjectEvent);
         }
 
         /// <summary>
