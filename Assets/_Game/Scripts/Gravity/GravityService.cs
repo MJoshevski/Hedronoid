@@ -4,15 +4,9 @@ using UnityEngine;
 
 namespace Hedronoid
 {
-    public interface IGravityService
+    public static class GravityService
     {
-        Vector3 CurrentGravity { get; set; }
-    }
-
-    public class GravityService : HNDMonoSingleton<IGravityService>, IGravityService
-    {
-        public Transform playerInputSpace;
-        public Vector3 CurrentGravity { get; set; }
+        public static Vector3 CurrentGravity { get; set; }
         static List<GravitySource> sources = new List<GravitySource>();
 
         public static Vector3 GetGravity(Vector3 position)

@@ -19,10 +19,6 @@ namespace Hedronoid
     {
         public static Transform relativeTransform(this Transform transform)
         {
-            IGravityService service = GravityService.Instance;
-            if (service == null)
-                Debug.LogError("No gravity service initialized.");
-
             Matrix4x4 matrix = transform.localToWorldMatrix;
             Quaternion rotation = MatrixExtensions.ExtractRotation(ref matrix);
             //Debug.LogError("MATRIX: " + matrix.ToString());

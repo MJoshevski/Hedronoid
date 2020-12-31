@@ -68,7 +68,6 @@ namespace Hedronoid.Player
         public float delta;
         [HideInInspector]
         public Rigidbody Rigidbody, connectedRb, prevConnectedRb;
-        private IGravityService gravityService;
         private Camera orbitCamera;
         private Animator Animator;
         private AnimatorHashes animHashes;
@@ -136,8 +135,6 @@ namespace Hedronoid.Player
             LoadBindings();
             LoadSensitivities();
 
-            gravityService = GravityService.Instance;
-
             lastFired_Auto = lastFired_Rail = lastFired_Shotgun = 0;
 
         }
@@ -184,7 +181,7 @@ namespace Hedronoid.Player
             desiredDash |= Input.GetButtonDown("Dash");
             desiredJump |= Input.GetButtonDown("Jump");
 
-            if (gravityService.CurrentGravity == Vector3.zero)
+            if (GravityService.CurrentGravity == Vector3.zero)
             {
                 Rigidbody.velocity =
                     Vector3.ClampMagnitude(
@@ -253,7 +250,7 @@ namespace Hedronoid.Player
 
             if (isDashing) gravity = Vector3.zero;
 
-            GravityService.Instance.CurrentGravity = gravity;
+            GravityService.CurrentGravity = gravity;
 
             UpdateState();
             AdjustVelocity();
@@ -457,7 +454,7 @@ namespace Hedronoid.Player
         {
             Vector3 moveDirection = movementVariables.MoveDirection;
 
-            GravityService.Instance.CurrentGravity = Vector3.zero;
+            GravityService.CurrentGravity = Vector3.zero;
 
             if (moveDirection.sqrMagnitude < .25f)
                 moveDirection = transform.forward;

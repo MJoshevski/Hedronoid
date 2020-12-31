@@ -119,8 +119,6 @@ namespace Hedronoid
         private float minVerticalAnglePrev;
         private float maxVerticalAnglePrev;
 
-        private IGravityService gravityService;
-
         // RAYCASTING
         private RaycastHit prevHitPoint;
 
@@ -158,7 +156,6 @@ namespace Hedronoid
             Player = GameplaySceneContext.Player;
             focusPoint = focus.position;
             distanceThreshold = manualPositionOffset.x * 2f;
-            gravityService = GravityService.Instance;
             gravityAlignment = Quaternion.identity;
             orbitCamera = GetComponent<Camera>();
             orbitCamera.transform.localRotation = orbitRotation = Quaternion.Euler(orbitAngles);
