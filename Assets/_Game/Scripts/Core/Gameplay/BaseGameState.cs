@@ -4,6 +4,7 @@ using UnityEngine;
 using Hedronoid;
 using Hedronoid.HNDFSM;
 using Hedronoid.Events;
+
 namespace Hedronoid.Core
 {
     public class BaseGameState : HNDFiniteStateMachine, IGameplaySceneContextInjector

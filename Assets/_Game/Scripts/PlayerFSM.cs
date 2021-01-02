@@ -4,9 +4,36 @@ using UnityEngine;
 using Gizmos = Popcron.Gizmos;
 using Hedronoid.HNDFSM;
 using Hedronoid.Core;
+using Hedronoid.Events;
 
 namespace Hedronoid.Player
 {
+    public class PlayerCreated : HNDBaseEvent
+    {
+        public PlayerFSM Player;
+    }
+
+    public class PlayerDestroyed : HNDBaseEvent
+    {
+        public PlayerFSM Player;
+    }
+
+    /// <summary>
+    /// All possible player states.
+    /// </summary>
+    public enum EPlayerStates
+    {
+        GROUND_MOVEMENT,
+        JUMPING,
+        AIR_JUMPING,
+        FALLING,
+        LANDING,
+        DASHING,
+        FLYING,
+
+        HIGHEST
+    }
+
     public class PlayerFSM : HNDFiniteStateMachine, IGameplaySceneContextInjector
     {
         #region PUBLIC/VISIBLE VARS
@@ -60,12 +87,13 @@ namespace Hedronoid.Player
         public float shootForcePrimary = 8000f, shootForceSecondary = 5000f, shootForceTertiary = 100000f;
         [Tooltip("Prefab of the respective weapon's bullet.")]
         public GameObject bulletPrimary, bulletSecondary, bulletTertiary;
+
+        //[HideInInspector]
+        public bool desiredJump, desiredDash;
         #endregion
 
         #region PRIVATE/HIDDEN VARS
         // GENERAL REFS
-        [HideInInspector]
-        public float delta;
         [HideInInspector]
         public Rigidbody Rigidbody, connectedRb, prevConnectedRb;
         private Camera orbitCamera;
@@ -105,6 +133,19 @@ namespace Hedronoid.Player
         private Vector3 connectionWorldPosition, connectionLocalPosition;
         private Coroutine _forceApplyCoroutine = null;
         private float minGroundDotProduct, minStairsDotProduct;
+        private bool inVacuum;
+
+        // INPUT
+        private Vector2 playerInput;
+
+        // STATES
+        private FSMState m_GroundMovementState;
+        private FSMState m_JumpingState;
+        private FSMState m_AirJumpingState;
+        private FSMState m_FallingState;
+        private FSMState m_LandingState;
+        private FSMState m_DashingState;
+        private FSMState m_FlyingState;
         #endregion
 
         #region CONSTANTS
@@ -137,131 +178,79 @@ namespace Hedronoid.Player
 
             lastFired_Auto = lastFired_Rail = lastFired_Shotgun = 0;
 
+            AddHNDEventListeners();
+            CreateFSMStates();
         }
 
-        [HideInInspector]
-        public bool desiredJump, desiredDash;
-        private bool inVacuum;
+        protected override void Start()
+        {
+            base.Start();
+            ChangeState(EPlayerStates.GROUND_MOVEMENT);
+        }
 
         protected override void Update()
         {
             base.Update();
 
-            delta = Time.deltaTime;
-
-            Vector2 playerInput = new Vector2(movementVariables.Horizontal, movementVariables.Vertical);
-            playerInput = Vector2.ClampMagnitude(playerInput, 1f);
-
-            // MOVEMENT
-            movementVariables.Horizontal = PlayerActions.Move.X;
-            movementVariables.Vertical = PlayerActions.Move.Y;
-
-            movementVariables.desiredVelocity =
-               new Vector3(movementVariables.Horizontal, 0f, movementVariables.Vertical) *
-                movementVariables.MovementSpeed;
-            //
-
-            if (orbitCamera.transform)
-            {
-                rightAxis = VectorExtensions.ProjectDirectionOnPlane(orbitCamera.transform.right, upAxis);
-                forwardAxis =
-                    VectorExtensions.ProjectDirectionOnPlane(orbitCamera.transform.forward, upAxis);
-            }
-            else
-            {
-                rightAxis = VectorExtensions.ProjectDirectionOnPlane(Vector3.right, upAxis);
-                forwardAxis = VectorExtensions.ProjectDirectionOnPlane(Vector3.forward, upAxis);
-            }
-
-            desiredVelocity =
-                new Vector3(playerInput.x, 0f, playerInput.y) *
-                movementVariables.MaxAcceleration;
-
             Shoot();
             desiredDash |= Input.GetButtonDown("Dash");
             desiredJump |= Input.GetButtonDown("Jump");
 
-            if (GravityService.CurrentGravity == Vector3.zero)
-            {
-                Rigidbody.velocity =
-                    Vector3.ClampMagnitude(
-                        Rigidbody.velocity, maxVelocityMagnitudeInVacuum);
-
-                if (!inVacuum)
-                {
-                    inVacuum = true;
-                    Animator.CrossFade(animHashes.Flying, 0.2f);
-                }
-            }
-            else if (inVacuum)
-            {
-                inVacuum = false;
-                Animator.CrossFade(animHashes.Falling, 0.2f);
-            }
-
-
+            playerInput = new Vector2(movementVariables.Horizontal, movementVariables.Vertical);
+            playerInput = Vector2.ClampMagnitude(playerInput, 1f);
             //Debug.LogError("VELO MAG: " + Rigidbody.velocity.magnitude);
-
         }
 
         protected override void FixedUpdate()
         {
             base.FixedUpdate();
 
-            delta = Time.fixedDeltaTime;
+            PlayerFSM player = GameplaySceneContext.Player;
 
             LookRay =
                 orbitCamera.ScreenPointToRay(
                 new Vector3(Screen.width / 2, Screen.height / 2, 0));
-
             Physics.Raycast(LookRay, out RayHit, 10000f);
 
-            //DEBUG
-            if (Input.GetKeyDown(KeyCode.F3))
-                Gizmos.Enabled = !Gizmos.Enabled;
-            //
-
-            //ANIMATION PURPOSE 
-            float moveAmount =
-                Mathf.Clamp01(Mathf.Abs(movementVariables.Horizontal) + Mathf.Abs(movementVariables.Vertical));
-            movementVariables.MoveAmount = moveAmount;
-
-            //RUNNING ANIM
-            Animator.SetFloat(
-                animHashes.Vertical,
-                movementVariables.MoveAmount,
-                0.2f,
-                delta);
-            //
-
-            Vector3 gravity = GravityService.GetGravity(Rigidbody.position, out upAxis);
-
-            // In Vacuum Behaviour (get up-axis from camera instead of gravity)
-            if (gravity == Vector3.zero)
+            if (orbitCamera.transform)
             {
-                upAxis = orbitCamera.transform.up;
+                rightAxis =
+                    VectorExtensions.ProjectDirectionOnPlane(orbitCamera.transform.right, upAxis);
+                forwardAxis =
+                    VectorExtensions.ProjectDirectionOnPlane(orbitCamera.transform.forward, upAxis);
             }
-
-            if (desiredDash)
+            else
             {
-                desiredDash = false;
-                Dash();
+                rightAxis =
+                    VectorExtensions.ProjectDirectionOnPlane(Vector3.right, upAxis);
+                forwardAxis =
+                    VectorExtensions.ProjectDirectionOnPlane(Vector3.forward, upAxis);
             }
-
-            if (isDashing) gravity = Vector3.zero;
-
-            GravityService.CurrentGravity = gravity;
 
             UpdateState();
             AdjustVelocity();
 
+            GravityService.CurrentGravity = 
+                GravityService.GetGravity(Rigidbody.position, out upAxis);
+
+            if (GravityService.CurrentGravity == Vector3.zero)
+                ChangeState(EPlayerStates.FLYING);
+
+            if (desiredDash)
+                ChangeState(EPlayerStates.DASHING);
+
             if (desiredJump)
             {
-                desiredJump = false;
-                Jump(gravity);
+                if (CurrentState != EPlayerStates.JUMPING)
+                    ChangeState(EPlayerStates.JUMPING);
+                else if (maxAirJumps > 0 && jumpPhase <= maxAirJumps)
+                    ChangeState(EPlayerStates.AIR_JUMPING);
             }
 
-            velocity += gravity * delta * gravityVariables.GravityForceMultiplier;
+            velocity += 
+                GravityService.CurrentGravity * 
+                Time.fixedDeltaTime * 
+                gravityVariables.GravityForceMultiplier;
 
             Rigidbody.velocity = velocity;
 
@@ -271,18 +260,270 @@ namespace Hedronoid.Player
             if (targetDirection == Vector3.zero)
                 targetDirection = forwardAxis;
 
-            Quaternion tr =
-                Quaternion.LookRotation(targetDirection, upAxis);
-
             Quaternion targetRotation = Quaternion.Slerp(
                 transform.rotation,
-                tr,
-                delta * gravityVariables.GravityRotationMultiplier);
+                Quaternion.LookRotation(targetDirection, upAxis),
+                Time.fixedDeltaTime * gravityVariables.GravityRotationMultiplier);
 
             transform.rotation = targetRotation;
-            //
 
-            ClearState();
+            ClearState();          
+        }
+
+        #endregion
+
+        #region STATE: GROUND_MOVEMENT
+        private void OnEnterGroundMovement(FSMState fromState)
+        {
+        }
+
+        private void OnUpdateGroundMovement()
+        {
+        }
+
+        private void OnFixedUpdateGroundMovement()
+        {
+            Move();
+
+            // RUNNING ANIM
+            Animator.SetFloat(
+                animHashes.Vertical,
+                movementVariables.MoveAmount,
+                0.2f,
+                Time.fixedDeltaTime);
+        }
+
+        private void OnExitGroundMovement(FSMState toState)
+        {
+        }
+        #endregion
+
+        #region STATE: JUMPING
+        private void OnEnterJumping(FSMState fromState)
+        {
+            Move();
+            Jump(GravityService.CurrentGravity);
+            desiredJump = false;
+
+            contactNormal = upAxis;
+            isGrounded = false;
+            hasLanded = false;
+
+            // JUMPS ANIMATION
+            if (movementVariables.MoveAmount > 0.1f)
+            {
+                Animator.CrossFade(animHashes.JumpForward, 0.2f);
+            }
+            else
+            {
+                Animator.CrossFade(animHashes.JumpIdle, 0.2f);
+            }               
+        }
+
+        private void OnUpdateJumping()
+        {
+        }
+
+        private void OnFixedUpdateJumping()
+        {
+            Move();
+
+            if (velocity.y < -0.001)
+                ChangeState(EPlayerStates.FALLING);
+        }
+
+        private void OnExitJumping(FSMState fromState)
+        {
+        }
+        #endregion
+
+        #region STATE: AIR_JUMPING
+        private void OnEnterAirJumping(FSMState fromState)
+        {
+            Jump(GravityService.CurrentGravity);
+            desiredJump = false;
+
+            contactNormal = upAxis;
+            isGrounded = false;
+            hasLanded = false;
+
+            Animator.CrossFade(animHashes.DoubleJump, 0.2f);
+        }
+
+        private void OnUpdateAirJumping()
+        {
+        }
+
+        private void OnFixedUpdateAirJumping()
+        {
+            Move();
+
+            if (velocity.y < -0.01)
+                ChangeState(EPlayerStates.FALLING);
+        }
+
+        private void OnExitAirJumping(FSMState fromState)
+        {
+        }
+        #endregion
+
+        #region STATE: FALLING
+        private void OnEnterFalling(FSMState fromState)
+        {
+            Animator.CrossFade(animHashes.Falling, 0.2f);
+        }
+
+        private void OnUpdateFalling()
+        {
+        }
+
+        private void OnFixedUpdateFalling()
+        {
+            Move(); 
+
+            if (OnGround)
+            {
+                ChangeState(EPlayerStates.LANDING);
+            }
+        }
+
+        private void OnExitFalling(FSMState fromState)
+        {
+        }
+        #endregion
+
+        #region STATE: LANDING
+        private void OnEnterLanding(FSMState fromState)
+        {
+            if (movementVariables.MoveAmount > 0.3f)
+            {
+                Animator.CrossFade(animHashes.LandRun, 0.2f);
+            }
+            else
+            {
+                Animator.CrossFade(animHashes.LandFast, 0.2f);
+            }
+            hasLanded = true;
+            isGrounded = true;
+            Animator.SetBool(animHashes.IsGrounded, isGrounded);
+            ChangeState(EPlayerStates.GROUND_MOVEMENT);
+        }
+
+        private void OnUpdateLanding()
+        {
+        }
+
+        private void OnFixedUpdateLanding()
+        {          
+        }
+
+        private void OnExitLanding(FSMState fromState)
+        {
+        }
+        #endregion
+
+        #region STATE: DASHING
+        private void OnEnterDashing(FSMState fromState)
+        {
+            Dash();
+            desiredDash = false;
+            Animator.CrossFade(animHashes.Dash, 0.2f);
+        }
+
+        private void OnUpdateDashing()
+        {
+        }
+
+        private void OnFixedUpdateDashing()
+        {
+            GravityService.CurrentGravity = Vector3.zero;
+            velocity.y = 0;
+
+            if (GravityService.CurrentGravity == Vector3.zero)
+                ChangeState(EPlayerStates.FLYING);
+            else if (OnGround) ChangeState(EPlayerStates.GROUND_MOVEMENT);
+            else ChangeState(EPlayerStates.FALLING);
+        }
+
+        private void OnExitDashing(FSMState fromState)
+        {
+        }        
+        #endregion
+
+        #region STATE: FLYING
+        private void OnEnterFlying(FSMState fromState)
+        {
+            upAxis = orbitCamera.transform.up;
+            // FLYING ANIM
+            Animator.CrossFade(animHashes.Flying, 0.2f);
+        }
+
+        private void OnUpdateFlying()
+        {
+
+        }
+
+        private void OnFixedUpdateFlying()
+        {            
+            Move();      
+
+            Rigidbody.velocity =
+                    Vector3.ClampMagnitude(
+                        Rigidbody.velocity, maxVelocityMagnitudeInVacuum);
+
+            if (OnGround)
+                ChangeState(EPlayerStates.LANDING);
+            else if (GravityService.CurrentGravity != Vector3.zero)
+                ChangeState(EPlayerStates.FALLING);
+        }       
+
+        private void OnExitFlying(FSMState fromState)
+        {
+        }
+
+        #endregion
+
+        #region METHODS
+        private void AddHNDEventListeners()
+        {
+        }
+
+        private void CreateFSMStates()
+        {
+            m_GroundMovementState = CreateState(EPlayerStates.GROUND_MOVEMENT, OnUpdateGroundMovement, OnEnterGroundMovement, OnExitGroundMovement);
+            m_GroundMovementState.onFixedUpdateState = OnFixedUpdateGroundMovement;
+            m_JumpingState = CreateState(EPlayerStates.JUMPING, OnUpdateJumping, OnEnterJumping, OnExitJumping);
+            m_JumpingState.onFixedUpdateState = OnFixedUpdateJumping;
+            m_AirJumpingState = CreateState(EPlayerStates.AIR_JUMPING, OnUpdateAirJumping, OnEnterAirJumping, OnExitAirJumping);
+            m_AirJumpingState.onFixedUpdateState = OnFixedUpdateAirJumping;
+            m_FallingState = CreateState(EPlayerStates.FALLING, OnUpdateFalling, OnEnterFalling, OnExitFalling);
+            m_FallingState.onFixedUpdateState = OnFixedUpdateFalling;
+            m_LandingState = CreateState(EPlayerStates.LANDING, OnUpdateLanding, OnEnterLanding, OnExitLanding);
+            m_LandingState.onFixedUpdateState = OnFixedUpdateLanding;
+            m_FlyingState = CreateState(EPlayerStates.FLYING, OnUpdateFlying, OnEnterFlying, OnExitFlying);
+            m_FlyingState.onFixedUpdateState = OnFixedUpdateFlying;
+            m_DashingState = CreateState(EPlayerStates.DASHING, OnUpdateDashing, OnEnterDashing, OnExitDashing);
+            m_DashingState.onFixedUpdateState = OnFixedUpdateDashing;
+        }
+
+        private void Move()
+        {
+            // MOVEMENT
+            movementVariables.Horizontal = PlayerActions.Move.X;
+            movementVariables.Vertical = PlayerActions.Move.Y;
+
+            movementVariables.desiredVelocity =
+               new Vector3(movementVariables.Horizontal, 0f, movementVariables.Vertical) *
+                movementVariables.MovementSpeed;
+
+            desiredVelocity =
+               new Vector3(playerInput.x, 0f, playerInput.y) *
+               movementVariables.MaxAcceleration;
+
+            //ANIMATION PURPOSE 
+            float moveAmount =
+                Mathf.Clamp01(Mathf.Abs(movementVariables.Horizontal) + Mathf.Abs(movementVariables.Vertical));
+            movementVariables.MoveAmount = moveAmount;
 
             //DIRECTION GIZMO
             Vector3 moveDirection =
@@ -292,12 +533,8 @@ namespace Hedronoid.Player
             moveDirection.Normalize();
             Debug.DrawRay(transform.position, moveDirection, Color.yellow);
             movementVariables.MoveDirection = moveDirection;
-            //
         }
 
-        #endregion
-
-        #region METHODS
         void AdjustVelocity()
         {
             Vector3 relativeVelocity = velocity - connectionVelocity;
@@ -308,7 +545,7 @@ namespace Hedronoid.Player
             float currentZ = Vector3.Dot(relativeVelocity, zAxis);
 
             float acceleration = OnGround ? maxAcceleration : maxAirAcceleration;
-            float maxSpeedChange = acceleration * Time.deltaTime;
+            float maxSpeedChange = acceleration * Time.fixedDeltaTime;
 
             float newX =
                 Mathf.MoveTowards(currentX, desiredVelocity.x, maxSpeedChange);
@@ -335,22 +572,6 @@ namespace Hedronoid.Player
             if (OnGround || SnapToGround() || CheckSteepContacts())
             {
                 stepsSinceLastGrounded = 0;
-
-                if (!hasLanded && !isGrounded)
-                {
-                    if (movementVariables.MoveAmount > 0.3f)
-                    {
-                        Animator.CrossFade(animHashes.LandRun, 0.2f);
-                    }
-                    else
-                    {
-                        Animator.CrossFade(animHashes.LandFast, 0.2f);
-                    }
-                    hasLanded = true;
-                }
-
-                isGrounded = true;
-                Animator.SetBool(animHashes.IsGrounded, isGrounded);
 
                 if (stepsSinceLastJump > 1)
                 {
@@ -430,22 +651,7 @@ namespace Hedronoid.Player
             if (alignedSpeed > 0f)
             {
                 jumpSpeed = Mathf.Max(jumpSpeed - alignedSpeed, 0f);
-            }
-
-            // JUMPS ANIMATION
-            if (jumpPhase == 1)
-            {
-                if (movementVariables.MoveAmount > 0.1f)
-                {
-                    Animator.CrossFade(animHashes.JumpForward, 0.2f);
-                }
-                else
-                {
-                    Animator.CrossFade(animHashes.JumpIdle, 0.2f);
-                }
-            }
-            else if (jumpPhase > 1)
-                Animator.CrossFade(animHashes.DoubleJump, 0.2f);
+            }          
 
             velocity += jumpDirection * jumpSpeed;
         }
@@ -453,8 +659,6 @@ namespace Hedronoid.Player
         public void Dash()
         {
             Vector3 moveDirection = movementVariables.MoveDirection;
-
-            GravityService.CurrentGravity = Vector3.zero;
 
             if (moveDirection.sqrMagnitude < .25f)
                 moveDirection = transform.forward;
@@ -474,8 +678,6 @@ namespace Hedronoid.Player
             if (dashVariables.DashesMade >= dashVariables.MaxDashes)
                 return;
 
-            dashVariables.DashMade = true;
-
             StartCoroutine(
                 DoApplyForceOverTime(forceDirection, dashVariables.PhysicalForce));
 
@@ -485,9 +687,7 @@ namespace Hedronoid.Player
         {
             dashVariables.DashesMade++;
 
-            Animator.CrossFade(animHashes.Dash, 0.2f);
-
-            //Zero out vertical velocity on dash
+            // Zero out vertical velocity on dash
             isDashing = true;
             velocity.y = 0;
 
@@ -495,7 +695,7 @@ namespace Hedronoid.Player
                 Rigidbody.ApplyForceContinuously(forceDirection, forceSettings));
             yield return _forceApplyCoroutine;
 
-            //Dead stop on dash-end
+            // Dead stop on dash-end
             isDashing = false;
             velocity = Vector3.zero;
 

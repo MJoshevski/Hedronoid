@@ -9,6 +9,11 @@ public class PlayerPortalTraveler : PortalTraveller, IGameplaySceneContextInject
     public GameplaySceneContext GameplaySceneContext { get; set; }
 
     Camera cam;
+    void Awake()
+    {
+        this.Inject(gameObject);
+    }
+
     void Start()
     {
         cam = Camera.main;

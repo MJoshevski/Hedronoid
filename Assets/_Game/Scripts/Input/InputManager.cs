@@ -16,6 +16,8 @@ namespace Hedronoid
 
     public class InputManager : HNDMonoSingleton<IInputManager>, IInputManager
     {
+        protected InputManager() { } // guarantee this will be always a singleton only - can't use the constructor!
+
         public PlayerActionSet PlayerActions { get; private set; }
         public float MouseHorizontalSensitivity { get; set; }
         public float MouseVerticalSensitivity { get; set; }
