@@ -128,6 +128,7 @@ namespace Hedronoid.Player
         private bool OnSteep => steepContactCount > 0;
         private int groundContactCount, steepContactCount;
         private Vector3 contactNormal, steepNormal;
+        [SerializeField]
         private int jumpPhase;
         private int stepsSinceLastGrounded, stepsSinceLastJump;
         private Vector3 connectionWorldPosition, connectionLocalPosition;
@@ -241,7 +242,7 @@ namespace Hedronoid.Player
 
             if (desiredJump)
             {
-                if (CurrentState != EPlayerStates.JUMPING)
+                if (jumpPhase == 0)
                     ChangeState(EPlayerStates.JUMPING);
                 else if (maxAirJumps > 0 && jumpPhase <= maxAirJumps)
                     ChangeState(EPlayerStates.AIR_JUMPING);
@@ -285,12 +286,17 @@ namespace Hedronoid.Player
         {
             Move();
 
+            if (!OnGround && !OnSteep)
+            {
+                ChangeState(EPlayerStates.FALLING);
+            }
+
             // RUNNING ANIM
             Animator.SetFloat(
-                animHashes.Vertical,
-                movementVariables.MoveAmount,
-                0.2f,
-                Time.fixedDeltaTime);
+            animHashes.Vertical,
+            movementVariables.MoveAmount,
+            0.2f,
+            Time.fixedDeltaTime);
         }
 
         private void OnExitGroundMovement(FSMState toState)

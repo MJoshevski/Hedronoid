@@ -1,0 +1,24 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 5a437a0b9ffa349f1b692cec673d677e, type: 3}
+  m_Name: FlockingBehaviorBlockTest0
+  m_EditorClassIdentifier: 
+  steering: {x: 0, y: 0, z: 0}
+  displacement: {x: 0, y: 0, z: 0}
+  flockingBehaviorInstances:
+  - m_behavior: {fileID: 11400000, guid: 43452bf123132493eadb282629b5a9ef, type: 2}
+    m_weight: 1
+  - m_behavior: {fileID: 11400000, guid: 24537900755e448ae8d23c26135776c8, type: 2}
+    m_weight: 1
+  - m_behavior: {fileID: 11400000, guid: f0d4c4bb5f9704c15a9dcbf105943558, type: 2}
+    m_weight: 2
+  - m_behavior: {fileID: 11400000, guid: 551dab6a4d8b24707bdece67aa06ea8c, type: 2}
+    m_weight: 1
