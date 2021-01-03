@@ -53,7 +53,7 @@ namespace Hedronoid.Audio
         [MenuItem("Hedronoid/Audio Manager/Print unused files")]
         public static void PrintUnusedFiles()
         {
-            NapAudioPreferences prefs = NapAudioPreferences.Instance;
+            HNDAudioPreferences prefs = HNDAudioPreferences.Instance;
             var data = AssetDatabase.LoadAssetAtPath<AudioManagerData>(prefs.AudioManagerDataPath);
             if (data == null)
             {
@@ -113,7 +113,7 @@ namespace Hedronoid.Audio
         void SaveLeafsToEnum(AudioManagerCategory root)
         {
             List<AudioManagerCategory> cats = root.GetLeafDictionary().Values.OrderBy(c => c.ID).ToList();
-            NapAudioPreferences p = NapAudioPreferences.Instance;
+            HNDAudioPreferences p = HNDAudioPreferences.Instance;
 
             string guid = AssetDatabase.FindAssets("AudioList").FirstOrDefault();
             string filePath = p.AudioEnumPath;
@@ -888,7 +888,7 @@ namespace Hedronoid.Audio
 
         private AudioManagerData LoadOrCreateAudioData()
         {
-            NapAudioPreferences p = NapAudioPreferences.Instance;
+            HNDAudioPreferences p = HNDAudioPreferences.Instance;
             AudioManagerData data = AssetDatabase.LoadAssetAtPath<AudioManagerData>(p.AudioManagerDataPath);
             if (data == null)
             {

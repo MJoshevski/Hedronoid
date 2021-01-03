@@ -102,7 +102,7 @@ namespace Hedronoid.Player
         private AnimatorData animData;
 
         // ACTION FLAGS
-        private bool isDashing, isGrounded, hasLanded;
+        private bool isGrounded, hasLanded;
         private float timeSinceJump;
 
         // SHOOTING
@@ -307,7 +307,6 @@ namespace Hedronoid.Player
 
             contactNormal = upAxis;
             isGrounded = false;
-            hasLanded = false;
 
             // JUMPS ANIMATION
             if (movementVariables.MoveAmount > 0.1f)
@@ -345,7 +344,6 @@ namespace Hedronoid.Player
 
             contactNormal = upAxis;
             isGrounded = false;
-            hasLanded = false;
 
             Animator.CrossFade(animHashes.DoubleJump, 0.2f);
         }
@@ -403,7 +401,6 @@ namespace Hedronoid.Player
             {
                 Animator.CrossFade(animHashes.LandFast, 0.2f);
             }
-            hasLanded = true;
             isGrounded = true;
             Animator.SetBool(animHashes.IsGrounded, isGrounded);
             ChangeState(EPlayerStates.GROUND_MOVEMENT);
@@ -586,7 +583,6 @@ namespace Hedronoid.Player
             {
                 contactNormal = upAxis;
                 isGrounded = false;
-                hasLanded = false;
             }
 
             if (connectedRb)
@@ -688,7 +684,6 @@ namespace Hedronoid.Player
             dashVariables.DashesMade++;
 
             // Zero out vertical velocity on dash
-            isDashing = true;
             velocity.y = 0;
 
             _forceApplyCoroutine = StartCoroutine(
@@ -696,7 +691,6 @@ namespace Hedronoid.Player
             yield return _forceApplyCoroutine;
 
             // Dead stop on dash-end
-            isDashing = false;
             velocity = Vector3.zero;
 
             AfterApplyForce();

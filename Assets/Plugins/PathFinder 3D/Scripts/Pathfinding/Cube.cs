@@ -35,5 +35,10 @@ namespace PathFinder3D
             Cube other = (Cube)otherAbstr;
             return index.Equals(other.index);
         }
+
+        public override int GetHashCode()
+        {
+            return base.GetHashCode();
+        }
     }
 }

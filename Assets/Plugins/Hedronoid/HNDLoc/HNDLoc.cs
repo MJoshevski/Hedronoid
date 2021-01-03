@@ -80,7 +80,7 @@ namespace Hedronoid.HNDLoc
 
         public static HNDLocSettings GetOrCreateSettings()
         {
-            HNDLocSettings s = NNScriptableObjectExtensions.LoadOrCreateScriptableObjectInResources<HNDLocSettings>("HNDLocSettings");
+            HNDLocSettings s = HNDScriptableObjectExtensions.LoadOrCreateScriptableObjectInResources<HNDLocSettings>("HNDLocSettings");
             return s;
         }
 

@@ -88,7 +88,7 @@ namespace Hedronoid.Audio
 
         private void Import()
         {
-            NapAudioPreferences preferences = NapAudioPreferences.Instance;
+            HNDAudioPreferences preferences = HNDAudioPreferences.Instance;
 
             var xmlDocument = new XmlDocument();
             xmlDocument.Load(m_XmlPath);

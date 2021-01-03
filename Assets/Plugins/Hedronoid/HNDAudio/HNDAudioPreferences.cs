@@ -5,17 +5,17 @@ using UnityEngine.Audio;
 
 namespace Hedronoid.Audio
 {
-    public class NapAudioPreferences : ScriptableObject
+    public class HNDAudioPreferences : ScriptableObject
     {
-        private static NapAudioPreferences m_LoadedInstance;
+        private static HNDAudioPreferences m_LoadedInstance;
 
-        public static NapAudioPreferences Instance
+        public static HNDAudioPreferences Instance
         {
             get
             {
                 if (m_LoadedInstance == null)
                 {
-                    m_LoadedInstance = NNScriptableObjectExtensions.LoadOrCreateScriptableObjectInResources<NapAudioPreferences>("NapAudioPreferences");
+                    m_LoadedInstance = HNDScriptableObjectExtensions.LoadOrCreateScriptableObjectInResources<HNDAudioPreferences>("HNDAudioPreferences");
                 }
                 return m_LoadedInstance;
             }

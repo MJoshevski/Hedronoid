@@ -5,7 +5,7 @@ using UnityEngine;
 
 namespace Hedronoid
 {
-    public static class NNScriptableObjectExtensions
+    public static class HNDScriptableObjectExtensions
     {
         private const string RESOURCES = "Resources";
 

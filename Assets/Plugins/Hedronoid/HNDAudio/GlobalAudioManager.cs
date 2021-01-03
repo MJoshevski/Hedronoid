@@ -134,7 +134,7 @@ namespace Hedronoid.Audio
             }
         }
 
-        NapAudioPreferences m_Preferences;
+        HNDAudioPreferences m_Preferences;
 
         public void LoadAudioBundle(string path)
         {
@@ -168,7 +168,7 @@ namespace Hedronoid.Audio
         {
             base.Awake();
 
-            m_Preferences = NapAudioPreferences.Instance;
+            m_Preferences = HNDAudioPreferences.Instance;
 
             // So audio time starts from zero
             m_CustomTimePausedDuration = DateTime.Now.Ticks;

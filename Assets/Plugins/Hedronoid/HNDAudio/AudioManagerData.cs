@@ -40,7 +40,7 @@ namespace Hedronoid.Audio
 #if UNITY_EDITOR
         public static AudioManagerData LoadInstanceData()
         {
-            NapAudioPreferences p = NapAudioPreferences.Instance;
+            HNDAudioPreferences p = HNDAudioPreferences.Instance;
 
 #if UNITY_2018_3_OR_NEWER
             var go = PrefabUtility.LoadPrefabContents(p.AudioManagerDataPath);
@@ -136,14 +136,14 @@ namespace Hedronoid.Audio
             if (m_TreeData == null) InitTree();
 
 #if UNITY_2018_3_OR_NEWER
-            var go = PrefabUtility.LoadPrefabContents(NapAudioPreferences.Instance.AudioManagerDataPath);
+            var go = PrefabUtility.LoadPrefabContents(HNDAudioPreferences.Instance.AudioManagerDataPath);
             AudioManagerData data = go.GetComponent<AudioManagerData>();
 
             data.TreeData = m_TreeData;
             data.SavedTree = new List<AudioManagerCategory>();
             data.SaveTree(m_TreeData);
 
-            PrefabUtility.SaveAsPrefabAsset(go, NapAudioPreferences.Instance.AudioManagerDataPath);
+            PrefabUtility.SaveAsPrefabAsset(go, HNDAudioPreferences.Instance.AudioManagerDataPath);
 #else
             m_SavedTree = new List<AudioManagerCategory>();
             SaveTree(m_TreeData);
