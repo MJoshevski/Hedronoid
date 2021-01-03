@@ -7,7 +7,7 @@ using Hedronoid.Events;
 
 namespace Hedronoid.Core
 {
-    public class BaseGameState : HNDFiniteStateMachine, IGameplaySceneContextInjector
+    public class HNDGameState : HNDFiniteStateMachine, IGameplaySceneContextInjector
     {
         public GameplaySceneContext GameplaySceneContext { get; set; }
 

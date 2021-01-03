@@ -64,14 +64,14 @@ namespace Hedronoid.Core
             }
         }
 
-        private BaseGameState m_GameState;
-        public BaseGameState GameState
+        private HNDGameState m_GameState;
+        public HNDGameState GameState
         {
             get
             {
                 if (m_GameState == null)
                 {
-                    m_GameState = cachedGameObject.GetComponentInChildren<BaseGameState>(true);
+                    m_GameState = cachedGameObject.GetComponentInChildren<HNDGameState>(true);
                 }
 
                 return m_GameState;
