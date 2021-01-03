@@ -115,7 +115,7 @@ public class FlockingManager : MonoBehaviour
         CapsuleCollider capsule = popperHack.AddComponent<CapsuleCollider>();
         capsule.height = 2.0f;
         capsule.radius = 1.0f;
-        popperHack.layer = LayerMask.NameToLayer("ClientCollisionHack");
+        //popperHack.layer = LayerMask.NameToLayer("ClientCollisionHack");
         clientJellyPopper = popperHack.transform;
 
 
@@ -126,7 +126,7 @@ public class FlockingManager : MonoBehaviour
     {
         playerAttractionMultiplier = 1.0f;
 
-        localPlayerTransform = Camera.main.transform; //hacky hack hack
+        //localPlayerTransform = Camera.main.transform; //hacky hack hack
 
         Shader.SetGlobalFloat("_jellyDimmer", 1.0f);
 
@@ -285,7 +285,7 @@ public class FlockingManager : MonoBehaviour
         CheckSwapNeighborhoodIndexBuffers();
 
 
-        clientJellyPopper.position = Camera.main.transform.position;
+        //clientJellyPopper.position = Camera.main.transform.position;
 
         numAttractors = 2;
         flockAttractors[0] = new FlockAttractor()
@@ -300,7 +300,7 @@ public class FlockingManager : MonoBehaviour
        
         flockAttractors[1] = new FlockAttractor()
         {
-            position = Camera.main.transform.position,
+            //position = Camera.main.transform.position,
             radius = 15.0f,
             intensityMax = 3.0f * playerAttractionMultiplier,
             intensityMin = 3.0f * playerAttractionMultiplier
