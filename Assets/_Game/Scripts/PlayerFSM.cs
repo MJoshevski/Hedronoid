@@ -102,7 +102,6 @@ namespace Hedronoid.Player
         private AnimatorData animData;
 
         // ACTION FLAGS
-        private bool isGrounded, hasLanded;
         private float timeSinceJump;
 
         // SHOOTING
@@ -124,6 +123,7 @@ namespace Hedronoid.Player
         // PHYSICS VARS
         private Vector3 upAxis, rightAxis, forwardAxis;
         private Vector3 velocity, desiredVelocity, connectionVelocity;
+        [SerializeField]
         private bool OnGround => groundContactCount > 0;
         private bool OnSteep => steepContactCount > 0;
         private int groundContactCount, steepContactCount;
@@ -306,7 +306,6 @@ namespace Hedronoid.Player
             desiredJump = false;
 
             contactNormal = upAxis;
-            isGrounded = false;
 
             // JUMPS ANIMATION
             if (movementVariables.MoveAmount > 0.1f)
@@ -343,7 +342,6 @@ namespace Hedronoid.Player
             desiredJump = false;
 
             contactNormal = upAxis;
-            isGrounded = false;
 
             Animator.CrossFade(animHashes.DoubleJump, 0.2f);
         }
@@ -377,9 +375,9 @@ namespace Hedronoid.Player
 
         private void OnFixedUpdateFalling()
         {
-            Move(); 
+            Move();
 
-            if (OnGround)
+            if (OnGround || OnSteep)
             {
                 ChangeState(EPlayerStates.LANDING);
             }
@@ -401,8 +399,8 @@ namespace Hedronoid.Player
             {
                 Animator.CrossFade(animHashes.LandFast, 0.2f);
             }
-            isGrounded = true;
-            Animator.SetBool(animHashes.IsGrounded, isGrounded);
+
+            Animator.SetBool(animHashes.IsGrounded, OnGround);
             ChangeState(EPlayerStates.GROUND_MOVEMENT);
         }
 
@@ -438,7 +436,8 @@ namespace Hedronoid.Player
 
             if (GravityService.CurrentGravity == Vector3.zero)
                 ChangeState(EPlayerStates.FLYING);
-            else if (OnGround) ChangeState(EPlayerStates.GROUND_MOVEMENT);
+            else if (OnGround || OnSteep)
+                ChangeState(EPlayerStates.GROUND_MOVEMENT);
             else ChangeState(EPlayerStates.FALLING);
         }
 
@@ -468,7 +467,7 @@ namespace Hedronoid.Player
                     Vector3.ClampMagnitude(
                         Rigidbody.velocity, maxVelocityMagnitudeInVacuum);
 
-            if (OnGround)
+            if (OnGround || OnSteep)
                 ChangeState(EPlayerStates.LANDING);
             else if (GravityService.CurrentGravity != Vector3.zero)
                 ChangeState(EPlayerStates.FALLING);
@@ -582,7 +581,6 @@ namespace Hedronoid.Player
             else
             {
                 contactNormal = upAxis;
-                isGrounded = false;
             }
 
             if (connectedRb)
