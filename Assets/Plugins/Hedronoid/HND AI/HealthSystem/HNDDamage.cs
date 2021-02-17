@@ -6,7 +6,7 @@ using UnityEngine;
 namespace Hedronoid
 {
     [System.Serializable]
-    public class NNDamage
+    public class HNDDamage
     {
         [Tooltip("Apply damage to the Character Health")]
         public int damageValue = 15;
@@ -30,12 +30,12 @@ namespace Hedronoid
         public int reaction_id = 0;
         public string attackName;
 
-        public NNDamage(int value)
+        public HNDDamage(int value)
         {
             this.damageValue = value;
         }
 
-        public NNDamage(NNDamage damage)
+        public HNDDamage(HNDDamage damage)
         {
             this.damageValue = damage.damageValue;
             this.staminaBlockCost = damage.staminaBlockCost;

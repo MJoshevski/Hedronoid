@@ -126,7 +126,7 @@ namespace Hedronoid.Health
             m_Health.AddRootSource(src);
         }
 
-        public void DoDamage(NNDamage damage)
+        public void DoDamage(HNDDamage damage)
         {
             DamageInfo di = new DamageInfo();
             di.Damage = damage.damageValue;
@@ -476,14 +476,14 @@ namespace Hedronoid.Health
         bool Expired();
     }
 
-    public static class NNDamageHelper
+    public static class HNDDamageHelper
     {
         /// <summary>
         /// Apply damage to gameObject if <see cref="CanReceiveDamage(GameObject)"/>
         /// </summary>
         /// <param name="receiver"></param>
         /// <param name="damage"></param>
-        public static void ApplyDamage(this GameObject receiver, Hedronoid.NNDamage damage)
+        public static void ApplyDamage(this GameObject receiver, Hedronoid.HNDDamage damage)
         {
             var receivers = receiver.GetComponents<DamageHandler>();
             if (receivers != null)

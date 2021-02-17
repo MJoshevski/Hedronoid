@@ -49,13 +49,8 @@ namespace Hedronoid.AI
         [SerializeField]
         private Animator animator;
 
+        [SerializeField]
         private bool dashInProgress = false;
-        private bool isPointingSpear = false;
-
-        public bool IsPointingSpear
-        {
-            get { return isPointingSpear; }
-        }
 
         public bool DashInProgress
         {
@@ -103,17 +98,18 @@ namespace Hedronoid.AI
 
         public void PointSpear(Transform target)
         {
-            if (!dashInProgress && !isPointingSpear)
+            if (!dashInProgress)
                 StartCoroutine(AntiAir(target));
         }
 
         public void DoDash(Transform target)
         {
-            // if (m_DamageHandler.IsPancake || !gameObject.activeInHierarchy) return;
-            // if (!dashInProgress)
-            // {
-            //     StartCoroutine(Dash(target));
-            // }
+            if (!gameObject.activeInHierarchy) return;
+
+            if (!dashInProgress)
+            {
+                StartCoroutine(Dash(target));
+            }
         }
 
         private void ReturnToIdle()
@@ -167,16 +163,16 @@ namespace Hedronoid.AI
 
         private IEnumerator AntiAir(Transform target)
         {
-            if (dashInProgress || isPointingSpear)
+            if (dashInProgress)
                 yield break;
-            isPointingSpear = true;
+          
             SetAnimatorTrigger("DashAttackWarning");
 
             yield return new WaitForSeconds(3f);
 
             SetAnimatorTrigger("ForceIdle");
 
-            isPointingSpear = false;
+            
             if (m_Navigation is GruntNavigation)
             {
                 (m_Navigation as GruntNavigation).PointUpDone();
@@ -200,10 +196,17 @@ namespace Hedronoid.AI
             // Turn towards the target direction while winding up, and then go, remove y so we don't look up or down.
             var remainingTime = m_windupTime;
             var distanceToTarget = 0f;
+            float t = 0f;
+
             while ((remainingTime -= Time.deltaTime) > 0)
             {
-                TurnTowardsTarget(target);
-                               
+                if (t <= 1)
+                { 
+                    // if end color not reached yet...
+                    t += Time.deltaTime / m_windupTime; // advance timer at the right speed
+                    m_GruntNavigation.skinMaterial.color = Color.Lerp(Color.white, Color.red, t);
+                }
+                    TurnTowardsTarget(target);
                 distanceToTarget = Vector3.Distance(transform.position, target.position);
                 yield return null;
             }
@@ -256,7 +259,9 @@ namespace Hedronoid.AI
                     cachedRigidbody.angularVelocity = Vector3.zero;
                     dashDamage = true;
                     if (dashInProgress)
+                    {
                         cachedRigidbody.AddForce(targetDir * Time.fixedDeltaTime * m_dashSpeed, ForceMode.VelocityChange);
+                    }
                     yield return new WaitForFixedUpdate();
                 }
             }
@@ -289,7 +294,9 @@ namespace Hedronoid.AI
                     yield return new WaitForFixedUpdate();
                 }
             }
-            
+
+            m_GruntNavigation.skinMaterial.color = Color.white;
+
             SetAnimatorTrigger("TurnInvulnerable");
             yield return new WaitForSeconds(1f); // giving animation one second to stand up without turning when no cooldown is used... or whatever.
 

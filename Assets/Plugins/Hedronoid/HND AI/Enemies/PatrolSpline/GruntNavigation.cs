@@ -11,12 +11,15 @@ using Hedronoid.Events;
 namespace Hedronoid.AI
 {
     // Grunts move 
+    [RequireComponent(typeof(GruntDash))]
+    [RequireComponent(typeof(GruntSensor))]
+    [RequireComponent(typeof(NavMeshAgent))]
+
     public class GruntNavigation : AIBaseNavigation
     {
         public enum EGruntStates
         {
             DashToTarget = EStates.Highest + 1,
-            PointSpearUp
         }
 
         [Header("Patrol Settings")]
@@ -28,6 +31,8 @@ namespace Hedronoid.AI
         private float m_sensorCutoffRange = 20f;
         [SerializeField]
         private float m_dashDistance = 8f;
+
+        public Material skinMaterial;
 
         public float DashDistance
         {
@@ -65,7 +70,6 @@ namespace Hedronoid.AI
             base.Awake();
             m_GruntDash = GetComponent<GruntDash>();
             CreateState(EGruntStates.DashToTarget, OnDashUpdate, null, null);
-            CreateState(EGruntStates.PointSpearUp, OnSpearUpdate, null, null);
 
             enemyEmojis = GetComponent<EnemyEmojis>();
             HNDEvents.Instance.AddListener<KillEvent>(OnKilled);
@@ -111,13 +115,6 @@ namespace Hedronoid.AI
                     (m_Motor as GruntDash).DoDash(m_Target);
                 }
             }
-            else if (IsInState(EGruntStates.PointSpearUp))
-            {
-                if (m_Motor is GruntDash)
-                {
-                    (m_Motor as GruntDash).PointSpear(m_Target);
-                }
-            }
         }
 
         public override void ChangeTarget()
@@ -153,7 +150,6 @@ namespace Hedronoid.AI
                 m_DefaultTarget = newTarget;
                 m_Target = newTarget;
                 lastEvaluationPosition = m_Target.position;
-                YelledAt = true;
                 ChangeState(EStates.GoToTarget);
                 return;
             }
@@ -250,34 +246,21 @@ namespace Hedronoid.AI
                 var distanceToTaget = Vector3.Distance(transform.position, m_Target.position);
 
                 // If we are within dash distance, change to the dash state
-                if (YelledAt)
+                if (distanceToTaget <= m_dashDistance)
                 {
-                    SetAgentDestination(m_Target.position);
-                }
-                else
-                {
-                    if (distanceToTaget <= m_dashDistance)
+                    if (!dashed)
                     {
-                        if (!dashed)
-                        {
-                            ChangeState(EGruntStates.DashToTarget);
-                            dashed = true;
-                            return;
-                        }
-                        else
-                        {
-                            ChangeState(EGruntStates.PointSpearUp);
-                            dashed = false;
-                            return;
-                        }
-                    }
-
-                    if (distanceToTaget > m_sensorRange)
-                    {
-                        // We can no longer see the target. Pick a waypoint
-                        ChangeState(EStates.DefaultMovement);
+                        ChangeState(EGruntStates.DashToTarget);
+                        dashed = true;
                         return;
                     }
+                }
+
+                if (distanceToTaget > m_sensorRange)
+                {
+                    // We can no longer see the target. Pick a waypoint
+                    ChangeState(EStates.DefaultMovement);
+                    return;
                 }
 
                 bool setAgentDestination = false;
@@ -299,7 +282,6 @@ namespace Hedronoid.AI
             else
             {
                 ChangeState(EStates.DefaultMovement);
-                YelledAt = false;
             }
         }
 
@@ -352,6 +334,7 @@ namespace Hedronoid.AI
 
         public void DashDone()
         {
+            dashed = false;
             StartCoroutine(WaitImpactDashDone());
         }
 

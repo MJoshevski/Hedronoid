@@ -11,8 +11,9 @@ using Unity.Burst;
 
 using System;
 using Unity.Mathematics;
+using Hedronoid;
 
-public class FlockingManager : MonoBehaviour
+public class FlockingManager : HNDMonoBehaviour
 {
 
     static private FlockingManager _instance;
@@ -92,7 +93,7 @@ public class FlockingManager : MonoBehaviour
 
     Transform localPlayerTransform;
 
-    void Awake()
+    protected override void Awake()
     {
         _instance = this;
 
@@ -122,7 +123,7 @@ public class FlockingManager : MonoBehaviour
     }
 
     // Use this for initialization
-    void Start()
+    protected override void Start()
     {
         playerAttractionMultiplier = 1.0f;
 
@@ -202,7 +203,7 @@ public class FlockingManager : MonoBehaviour
 
     }
 
-    private void OnDestroy()
+    protected override void OnDestroy()
     {
         flockAttractors.Dispose();
 
@@ -408,12 +409,6 @@ public class FlockingManager : MonoBehaviour
         UpdateAgentTransformsJobHandle = updateAgentTransformsJob.Schedule(m_AgentTransformsAccessArray, updateAgentsJobHandle);
 
 
-
-
-
-        
-
-
         //extractNeighborPositionsJobHandle.Complete();
         //updateAgentsJobHandle.Complete();
 
@@ -431,8 +426,6 @@ public class FlockingManager : MonoBehaviour
         //{
         //    agent.StartComputation();
         //}
-
-
     }
 
 

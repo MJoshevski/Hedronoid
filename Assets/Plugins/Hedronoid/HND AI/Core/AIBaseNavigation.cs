@@ -57,14 +57,6 @@ namespace Hedronoid.AI
             get { return m_isFrozen; }
         }
 
-        private bool m_YelledAt = false;
-
-        public bool YelledAt
-        {
-            get { return m_YelledAt; }
-            set { m_YelledAt = value; }
-        }
-
         public Transform Target 
         {
             get { return m_Target; }
