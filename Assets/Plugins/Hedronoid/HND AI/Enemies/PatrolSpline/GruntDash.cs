@@ -43,7 +43,7 @@ namespace Hedronoid.AI
         private float m_VulnerableTimeAfterDash = 4f;
 
         private GruntNavigation m_GruntNavigation;
-
+        private Material m_sharedMaterial;
         private DamageHandler m_DamageHandler;
 
         [SerializeField]
@@ -70,9 +70,11 @@ namespace Hedronoid.AI
         {
             base.Awake();
             //animator = GetComponentInChildren<Animator>();
+
             m_tempStorageRate = m_turnRate;
             m_DamageHandler = GetComponent<DamageHandler>();
-            m_GruntNavigation = GetComponent<GruntNavigation>(); 
+            m_GruntNavigation = GetComponent<GruntNavigation>();
+            m_sharedMaterial = m_GruntNavigation.GetComponentInChildren<MeshRenderer>().sharedMaterial;
             if (m_DamageHandler)
                 m_DamageHandler.IsInvulnerable = false;
             HNDEvents.Instance.AddListener<KillEvent>(KillEvent);
@@ -204,9 +206,10 @@ namespace Hedronoid.AI
                 { 
                     // if end color not reached yet...
                     t += Time.deltaTime / m_windupTime; // advance timer at the right speed
-                    m_GruntNavigation.skinMaterial.color = Color.Lerp(Color.white, Color.red, t);
+                    m_sharedMaterial.color = Color.Lerp(Color.white, Color.red, t);
                 }
-                    TurnTowardsTarget(target);
+
+                TurnTowardsTarget(target);
                 distanceToTarget = Vector3.Distance(transform.position, target.position);
                 yield return null;
             }
@@ -295,7 +298,7 @@ namespace Hedronoid.AI
                 }
             }
 
-            m_GruntNavigation.skinMaterial.color = Color.white;
+            m_sharedMaterial.color = Color.white;
 
             SetAnimatorTrigger("TurnInvulnerable");
             yield return new WaitForSeconds(1f); // giving animation one second to stand up without turning when no cooldown is used... or whatever.

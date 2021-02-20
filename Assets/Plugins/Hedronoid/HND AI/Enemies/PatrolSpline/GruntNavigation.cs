@@ -32,8 +32,6 @@ namespace Hedronoid.AI
         [SerializeField]
         private float m_dashDistance = 8f;
 
-        public Material skinMaterial;
-
         public float DashDistance
         {
             get { return m_dashDistance; }
