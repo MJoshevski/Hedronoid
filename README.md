@@ -1,2 +1,2 @@
-# MDKShooter
+# Hedronoid
 Gravity shooter prototype.
