@@ -50377,6 +50377,12 @@ PrefabInstance:
       propertyPath: playerAttractionMultiplier
       value: 1
       objectReference: {fileID: 0}
+    - target: {fileID: 2512188636589364986, guid: e711f13de9ac67d44a6a2e52084c9df6,
+        type: 3}
+      propertyPath: agentPrefab
+      value: 
+      objectReference: {fileID: 8651953927585237200, guid: 405ac0583a9056344b408395689367a4,
+        type: 3}
     - target: {fileID: 2512188636589364987, guid: e711f13de9ac67d44a6a2e52084c9df6,
         type: 3}
       propertyPath: m_Name
@@ -50385,7 +50391,7 @@ PrefabInstance:
     - target: {fileID: 2512188636589364987, guid: e711f13de9ac67d44a6a2e52084c9df6,
         type: 3}
       propertyPath: m_IsActive
-      value: 0
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 2512188636654497816, guid: e711f13de9ac67d44a6a2e52084c9df6,
         type: 3}
@@ -94000,7 +94006,7 @@ PrefabInstance:
     - target: {fileID: 3474869452392144071, guid: 3b5f4e3ee4872481494f0c270e532a54,
         type: 3}
       propertyPath: m_RootOrder
-      value: 7
+      value: 10
       objectReference: {fileID: 0}
     - target: {fileID: 3474869452392144071, guid: 3b5f4e3ee4872481494f0c270e532a54,
         type: 3}

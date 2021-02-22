@@ -109,13 +109,19 @@ public class FlockingAgent : MonoBehaviour
 
     public void OnCollisionEnter(Collision collision)
     {
-        
+
         //ParticleHelper.PlayParticleSystem(m_PopVFX, m_transform.position - m_transform.forward * 1.0f, m_transform.forward, 1.0f, false);
         //AudioHelper.PlayAudioOnPosition(m_PopSFX, m_transform.position);
 
-        fm.ReducePlayerAttraction(collision.gameObject);
-        fm.Respawn(agentIdx);
-
+        if (collision.gameObject.layer == LayerMask.NameToLayer("PlayerBullet"))
+        {
+            GetComponentInChildren<SkinnedMeshRenderer>().enabled = false;
+        }
+        else
+        {
+            fm.ReducePlayerAttraction(collision.gameObject);
+            fm.Respawn(agentIdx);
+        }
     }
 
 

@@ -139,7 +139,7 @@ public class FlockingManager : HNDMonoBehaviour
 
         MaterialPropertyBlock props = new MaterialPropertyBlock();
         MeshRenderer renderer;
-
+        SkinnedMeshRenderer skinnedRenderer;
        
         //agents = FindObjectsOfType<FlockingAgent>();
         Transform[] agentTransforms = new Transform[agents.Length];
@@ -163,7 +163,13 @@ public class FlockingManager : HNDMonoBehaviour
                 props.SetColor("_Color", new Color(r, g, b));
 
                 renderer = agent.GetComponent<MeshRenderer>();
-                renderer.SetPropertyBlock(props);
+
+                if (!renderer)
+                {
+                    skinnedRenderer = agent.GetComponentInChildren<SkinnedMeshRenderer>();
+                    skinnedRenderer.SetPropertyBlock(props);
+                }
+                else renderer.SetPropertyBlock(props);
             }
         }
 
