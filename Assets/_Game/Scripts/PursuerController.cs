@@ -24,15 +24,17 @@ public class PursuerController : MonoBehaviour
     public ParticleSystem deathPfx;
     public GameObject blastFX;
 
-    [SerializeField]
     private Rigidbody mineRb;
+    private MeshRenderer mineMeshRenderer;
     private bool detonationStarted = false;
 
     private void Start()
     {
         thisPursuerInstance = gameObject.GetComponent<Pursuer>();
         mineRb = GetComponent<Rigidbody>();
+        mineMeshRenderer = GetComponent<MeshRenderer>();
         graphIsReady = false;
+        deathPfx.Stop();
     }
 
     public void TheGraphIsReady()
@@ -105,7 +107,18 @@ public class PursuerController : MonoBehaviour
         }
 
         if (deathPfx) deathPfx.Play();
+        mineMeshRenderer.enabled = false;
+        blastFX.gameObject.SetActive(false);
+        mineRb.isKinematic = true;
+
+        yield return new WaitForSeconds(2f);
+
         TrashMan.despawnAfterDelay(gameObject, 0.0f);
+        blastFX.gameObject.SetActive(true);
+        blastFX.transform.localScale = Vector3.one * 0.01f;
+        mineRb.isKinematic = false;
+        mineMeshRenderer.enabled = true;
+
     }
 
     public void EventTargetReached()
