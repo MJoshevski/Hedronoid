@@ -157,10 +157,10 @@ public class FlockingManager : HNDMonoBehaviour
                 agent.agentIdx = k;
                 collidersToAgents.Add(agent.GetComponent<Collider>(), agent);
 
-                float r = UnityEngine.Random.Range(0.0f, 1.0f);
-                float g = UnityEngine.Random.Range(0.9f, 1.0f);
-                float b = UnityEngine.Random.Range(0.9f, 1.0f);
-                props.SetColor("_Color", new Color(r, g, b));
+                //float r = UnityEngine.Random.Range(0.0f, 1.0f);
+                //float g = UnityEngine.Random.Range(0.9f, 1.0f);
+                //float b = UnityEngine.Random.Range(0.9f, 1.0f);
+                //props.SetColor("_Color", new Color(r, g, b));
 
                 renderer = agent.GetComponent<MeshRenderer>();
 
