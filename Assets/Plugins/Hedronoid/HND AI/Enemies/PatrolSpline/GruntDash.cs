@@ -74,7 +74,7 @@ namespace Hedronoid.AI
             m_tempStorageRate = m_turnRate;
             m_DamageHandler = GetComponent<DamageHandler>();
             m_GruntNavigation = GetComponent<GruntNavigation>();
-            m_sharedMaterial = m_GruntNavigation.GetComponentInChildren<MeshRenderer>().sharedMaterial;
+            m_sharedMaterial = m_GruntNavigation.GetComponentInChildren<SkinnedMeshRenderer>().materials[1];
             if (m_DamageHandler)
                 m_DamageHandler.IsInvulnerable = false;
             HNDEvents.Instance.AddListener<KillEvent>(KillEvent);
