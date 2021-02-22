@@ -1,7 +1,8 @@
 ﻿using Hedronoid;
+using System.Collections;
 using UnityEngine;
 using UnityEngine.UI;
-
+using Gizmos = Popcron.Gizmos;
 [RequireComponent(typeof(Pursuer))]
 
 
@@ -16,11 +17,21 @@ public class PursuerController : MonoBehaviour
     public float targetLesionAreaRadius;
     public float targetPathUpdateOffset;
     public float circleRadius = 30;
+    public float detonationRadius = 15f;
+    public float detonationCountdown = 2f;
+    public float detonationForce = 150f;
+    public ForceMode detonationForceMode = ForceMode.Impulse;
     public ParticleSystem deathPfx;
+    public GameObject blastFX;
+
+    [SerializeField]
+    private Rigidbody mineRb;
+    private bool detonationStarted = false;
 
     private void Start()
     {
         thisPursuerInstance = gameObject.GetComponent<Pursuer>();
+        mineRb = GetComponent<Rigidbody>();
         graphIsReady = false;
     }
 
@@ -29,19 +40,24 @@ public class PursuerController : MonoBehaviour
         graphIsReady = true;
         targetOldPos = target.transform.position;
         targetPathUpdateOffset = 8;
-        thisPursuerInstance.MoveTo(target.transform);
+        if (!detonationStarted) thisPursuerInstance.MoveTo(target.transform);
     }
 
     public void Update()
     {
         if (!graphIsReady) return;
 
+        var targetDistance = Vector3.Distance(transform.position, target.position);
+
+        if (targetDistance <= detonationRadius && !detonationStarted)
+            StartDetonationSequence();
+
         if (Vector3.Distance(targetOldPos, target.position) > targetPathUpdateOffset)
         {
             targetOldPos = target.position;
             if (thisPursuerInstance.GetCurCondition() == "Movement")
                 thisPursuerInstance.RefinePath(target);
-            else
+            else if (!detonationStarted)
                 thisPursuerInstance.MoveTo(target, true);
         }
     }
@@ -56,12 +72,48 @@ public class PursuerController : MonoBehaviour
         }
     }
 
+    public void StartDetonationSequence()
+    {
+        detonationStarted = true;
+
+        StartCoroutine(Detonate());
+    }
+
+    private IEnumerator Detonate()
+    {
+        float elapsedTime = 0f;
+        thisPursuerInstance.ResetCondition();
+
+        while (elapsedTime < detonationCountdown)
+        {
+            blastFX.transform.localScale =
+                Vector3.Lerp(blastFX.transform.localScale, Vector3.one * detonationRadius * 2f, elapsedTime / detonationCountdown);
+            elapsedTime += Time.deltaTime;
+
+            // Yield here
+            yield return null;
+        }
+
+        Collider[] colliders = Physics.OverlapSphere(transform.position, detonationRadius);
+
+        foreach (Collider hit in colliders)
+        {
+            Rigidbody rb = hit.GetComponent<Rigidbody>();
+
+            if (rb != null)
+                rb.AddExplosionForce(detonationForce, transform.position, detonationRadius, 3.0f, detonationForceMode);
+        }
+
+        if (deathPfx) deathPfx.Play();
+        TrashMan.despawnAfterDelay(gameObject, 0.0f);
+    }
 
     public void EventTargetReached()
     {
         transform.position = RandomCirclePos();
-        thisPursuerInstance.MoveTo(target);
+        if (!detonationStarted) thisPursuerInstance.MoveTo(target);
     }
+
     Vector3 RandomCirclePos()
     {
         float alpha = Random.Range(0f, 360f);

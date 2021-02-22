@@ -37,6 +37,7 @@ public class FlockingAgent : MonoBehaviour
 
     public FlockingBehaviorBlock m_behaviorBlock;
 
+    private Rigidbody m_neighborhoodRb;
     private SphereCollider m_neighborhoodCollider;
     LayerMask swarmOnly;
 
@@ -69,6 +70,10 @@ public class FlockingAgent : MonoBehaviour
     {
         m_transform = this.transform;
         m_neighborhoodCollider = gameObject.AddComponent<SphereCollider>();
+        m_neighborhoodRb = gameObject.AddComponent<Rigidbody>();
+        m_neighborhoodRb.useGravity = false;
+        m_neighborhoodRb.constraints = RigidbodyConstraints.FreezeRotation;
+
         m_neighborhoodCollider.radius = 0.5f;
         this.gameObject.layer = LayerMask.NameToLayer("Flockers");
         swarmOnly = LayerMask.GetMask("Flockers");
