@@ -71,6 +71,9 @@ namespace Hedronoid.AI
 
             enemyEmojis = GetComponent<EnemyEmojis>();
             HNDEvents.Instance.AddListener<KillEvent>(OnKilled);
+
+            agent.updateRotation = true;
+            agent.updateUpAxis = true;
         }
 
         private void OnKilled(KillEvent e)
