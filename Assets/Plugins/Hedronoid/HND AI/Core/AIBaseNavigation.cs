@@ -78,7 +78,7 @@ namespace Hedronoid.AI
         // Waypoints
         protected Transform[] waypoints;
 
-        private const float GroundDetectDistance = 1000f;
+        protected const float GroundDetectDistance = 1000f;
 
         // Components
         protected Animator [] m_Animators;
@@ -301,7 +301,11 @@ namespace Hedronoid.AI
             }
 
             else if (m_Rb) m_Rb.constraints = RigidbodyConstraints.FreezeAll;
-            if (agent) agent.enabled = false;
+            if (agent)
+            {
+                agent.isStopped = true;
+                agent.enabled = false;
+            }
             if (m_HealthBase) m_HealthBase.CanBeOneShotted = true;
         }
 
@@ -322,7 +326,13 @@ namespace Hedronoid.AI
             }               
 
             else if (m_Rb) m_Rb.constraints = RigidbodyConstraints.None;
-            if (agent) agent.enabled = true;
+
+            if (agent)
+            {
+                agent.isStopped = false;
+                agent.updateRotation = true;
+            }
+
             ChangeState(EStates.DefaultMovement);
             if (m_HealthBase) m_HealthBase.CanBeOneShotted = false;
         }
@@ -360,7 +370,7 @@ namespace Hedronoid.AI
             return newWayPoint;
         }
 
-        public bool SetAgentDestination(Vector3 destination)
+        public virtual bool SetAgentDestination(Vector3 destination)
         {
             if (!agent.isOnNavMesh)
             {

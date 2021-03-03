@@ -20,7 +20,7 @@ namespace Hedronoid.AI
         [Header("Dash controls")]
         [SerializeField]
         [Tooltip("The blockhead will turn towards you before dashing. This is how far it turns.")]
-        private float m_turnRate;
+        protected float m_turnRate;
 
         public float TurnRate
         {
@@ -29,40 +29,40 @@ namespace Hedronoid.AI
 
         [SerializeField]
         [Tooltip("After turning, The blockhead will wait a bit before dashing.")]
-        private float m_windupTime = 1;
+        protected float m_windupTime = 1;
         [SerializeField]
-        private float m_dashSpeed = 15;
+        protected float m_dashSpeed = 15;
         [SerializeField]
         [Tooltip("Dash for this long")]
-        private float m_dashTime = 1;
+        protected float m_dashTime = 1;
         [SerializeField]
         [Tooltip("After dashing, The blockhead will wait a bit before resuming navigation.")]
-        private float m_cooldownTime = 5;
+        protected float m_cooldownTime = 5;
         [SerializeField]
         [Tooltip("After dashing, The blockhead will be vulnerable for a while.")]
-        private float m_VulnerableTimeAfterDash = 4f;
+        protected float m_VulnerableTimeAfterDash = 4f;
 
-        private GruntNavigation m_GruntNavigation;
-        private Material m_sharedMaterial;
-        private DamageHandler m_DamageHandler;
-
-        [SerializeField]
-        private Animator animator;
+        protected GruntNavigation m_GruntNavigation;
+        protected Material m_sharedMaterial;
+        protected DamageHandler m_DamageHandler;
 
         [SerializeField]
-        private bool dashInProgress = false;
+        protected Animator animator;
+
+        [SerializeField]
+        protected bool dashInProgress = false;
 
         public bool DashInProgress
         {
             get { return dashInProgress; }
         }
 
-        private bool dashDamage = false;
+        protected bool dashDamage = false;
         [SerializeField]
-        private float m_Damage = 1f;
+        protected float m_Damage = 1f;
         [SerializeField]
-        private GameObject m_DashStartParticle;
-        private GameObject m_InstantiatedDashStartParticle;
+        protected GameObject m_DashStartParticle;
+        protected GameObject m_InstantiatedDashStartParticle;
 
         private float m_tempStorageRate;
 
@@ -90,7 +90,7 @@ namespace Hedronoid.AI
         {
         }
 
-        private void Update()
+        protected virtual void Update()
         {
             if (m_GruntNavigation.m_GruntFreeze)
                 m_turnRate = 0;
@@ -114,7 +114,7 @@ namespace Hedronoid.AI
             }
         }
 
-        private void ReturnToIdle()
+        protected void ReturnToIdle()
         {
             StopCoroutine("Dash");
 
@@ -131,7 +131,7 @@ namespace Hedronoid.AI
             }
         }
 
-        IEnumerator DashParticle()
+        protected IEnumerator DashParticle()
         {
             m_InstantiatedDashStartParticle = Instantiate(m_DashStartParticle, transform.position + transform.forward * 0.5f, Quaternion.identity);
             m_InstantiatedDashStartParticle.transform.parent = transform;
@@ -182,7 +182,7 @@ namespace Hedronoid.AI
         }
 
 
-        private IEnumerator Dash(Transform target)
+        protected virtual IEnumerator Dash(Transform target)
         {
             //Turn invulnerable at dash start
             if(dashInProgress)
@@ -310,7 +310,7 @@ namespace Hedronoid.AI
             }
         }
 
-        private Vector3 TurnTowardsTarget(Transform target)
+        protected virtual Vector3 TurnTowardsTarget(Transform target)
         {
             var targetPos = target.position;
             targetPos.y = transform.position.y;
@@ -344,7 +344,7 @@ namespace Hedronoid.AI
             });
         }
 
-        private void SetAnimatorTrigger(string name)
+        protected void SetAnimatorTrigger(string name)
         {
             if (animator != null)
             {

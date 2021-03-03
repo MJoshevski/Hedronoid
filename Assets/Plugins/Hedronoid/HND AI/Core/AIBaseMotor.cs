@@ -24,6 +24,14 @@ namespace Hedronoid.AI {
             base.Start();
         }
 
+        protected virtual void Update()
+        {
+        }
+
+        protected virtual void FixedUpdate()
+        {
+        }
+
         public virtual void Attack(Transform target)
         {
             throw new NotImplementedException();

@@ -25,12 +25,12 @@ namespace Hedronoid.AI
         [Header("Patrol Settings")]
         [SerializeField]
         [Tooltip("This is how far away we will detect the player or NPCs")]
-        private float m_sensorRange = 3f;
+        protected float m_sensorRange = 3f;
         [SerializeField]
         [Tooltip("This is how far the cutoff will be once the player has already entered the sensor range")]
-        private float m_sensorCutoffRange = 20f;
+        protected float m_sensorCutoffRange = 20f;
         [SerializeField]
-        private float m_dashDistance = 8f;
+        protected float m_dashDistance = 8f;
 
         public float DashDistance
         {
@@ -44,29 +44,31 @@ namespace Hedronoid.AI
 
         [SerializeField]
         [Tooltip("This is how often we will check for new targets around us if we are patrolling.")]
-        private float m_sensorTimestep = 0.25f;
+        protected float m_sensorTimestep = 0.25f;
 
-        private float m_targetEvaluationDistance = 3f;
+        protected float m_targetEvaluationDistance = 3f;
 
-        private int nextWaypoint;
-        private float remainingSensorTime;
-        private EnemyEmojis enemyEmojis;
+        protected int nextWaypoint;
+        protected float remainingSensorTime;
+        protected EnemyEmojis enemyEmojis;
 
-        private Vector3 lastEvaluationPosition;
+        protected Vector3 lastEvaluationPosition;
 
-        private bool dashed = false;
+        protected bool dashed = false;
 
         [SerializeField]
         public float m_physicsCullRange = 30.0f;
-        private Camera[] m_playerCameras = new Camera[2] { null, null };
-        private Transform[] m_playerTx = new Transform[2] { null, null };
-        private GruntDash m_GruntDash;
+        protected Camera[] m_playerCameras = new Camera[2] { null, null };
+        protected Transform[] m_playerTx = new Transform[2] { null, null };
+        protected GruntDash m_GruntDash;
+        protected Rigidbody m_GruntRb;
         public bool m_GruntFreeze;
 
         protected override void Awake()
         {
             base.Awake();
             m_GruntDash = GetComponent<GruntDash>();
+            m_GruntRb = GetComponent<Rigidbody>();
             CreateState(EGruntStates.DashToTarget, OnDashUpdate, null, null);
 
             enemyEmojis = GetComponent<EnemyEmojis>();
@@ -110,7 +112,13 @@ namespace Hedronoid.AI
             }
             if (IsInState(EGruntStates.DashToTarget))
             {
-                agent.enabled = false;
+                if (agent)
+                {
+                    agent.isStopped = true;
+                    agent.updateRotation = false;
+                    //agent.enabled = false;
+                }
+
                 if (m_Motor is GruntDash)
                 {
                     (m_Motor as GruntDash).DoDash(m_Target);
@@ -306,7 +314,13 @@ namespace Hedronoid.AI
                             m_Target = null;
                     }
 
-                    agent.enabled = true;
+                    if (agent)
+                    {
+                        agent.isStopped = false;
+                        //agent.enabled = true;
+                        agent.updateRotation = true;
+                    }
+
                     if (m_Target)
                     {
                         // After the dash we will check if the player is still within range.
