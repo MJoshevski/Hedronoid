@@ -66,6 +66,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: b3e08173336c77d4bbf8356471f54b2a, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  _currentState: 
   health: 0
   maxAcceleration: 100
   maxAirAcceleration: 100
@@ -98,7 +99,6 @@ MonoBehaviour:
     ChangeOnKeyPress: 1
     floatToSleep: 0
   dashVariables:
-    DashMade: 0
     MaxDashes: 1
     DashesMade: 0
     ContinuousInput: 0
@@ -115,12 +115,12 @@ MonoBehaviour:
   bulletSecondary: {fileID: 947796022108612175, guid: 447e7d1ecac153c49807bda70018f24c,
     type: 3}
   bulletTertiary: {fileID: 0}
-  delta: 0
+  desiredJump: 0
+  desiredDash: 0
   Rigidbody: {fileID: 0}
   connectedRb: {fileID: 0}
   prevConnectedRb: {fileID: 0}
-  desiredJump: 0
-  desiredDash: 0
+  jumpPhase: 0
 --- !u!136 &174345460303343908
 CapsuleCollider:
   m_ObjectHideFlags: 0

@@ -17,8 +17,7 @@ namespace Hedronoid.AI
 
             //targetDirection = (m_Target.position - transform.position).normalized;
 
-            GravityService.CurrentGravity =
-                GravityService.GetGravity(m_GruntRb.position, out upAxis);
+            upAxis = GravityService.GetUpAxis(m_Rb.transform.position);
 
             //Quaternion targetRotation = Quaternion.Slerp(
             //    transform.rotation,

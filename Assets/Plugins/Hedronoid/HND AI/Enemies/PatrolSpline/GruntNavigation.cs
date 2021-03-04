@@ -4,6 +4,7 @@ using UnityEngine.AI;
 using System.Collections;
 using Hedronoid.Health;
 using Hedronoid.Events;
+using static Hedronoid.Health.HealthBase;
 
 /// <summary>
 /// 
@@ -61,14 +62,12 @@ namespace Hedronoid.AI
         protected Camera[] m_playerCameras = new Camera[2] { null, null };
         protected Transform[] m_playerTx = new Transform[2] { null, null };
         protected GruntDash m_GruntDash;
-        protected Rigidbody m_GruntRb;
         public bool m_GruntFreeze;
 
         protected override void Awake()
         {
             base.Awake();
             m_GruntDash = GetComponent<GruntDash>();
-            m_GruntRb = GetComponent<Rigidbody>();
             CreateState(EGruntStates.DashToTarget, OnDashUpdate, null, null);
 
             enemyEmojis = GetComponent<EnemyEmojis>();
@@ -76,6 +75,14 @@ namespace Hedronoid.AI
 
             agent.updateRotation = true;
             agent.updateUpAxis = true;
+        }
+
+        private void OnCollisionEnter(Collision collision)
+        {
+            if (collision.gameObject.layer == LayerMask.NameToLayer("PlayerBullet"))
+            {
+                HNDEvents.Instance.Raise(new RecieveHealthEvent { amount = -1f, canGoAboveMax = false, GOID = gameObject.GetInstanceID()});
+            }
         }
 
         private void OnKilled(KillEvent e)

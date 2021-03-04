@@ -50,6 +50,16 @@ namespace Hedronoid
             return new Vector3(0, 0, g.normalized.z);
         }
 
+        public static Vector3 GetRightAxis(Vector3 position)
+        {
+            Vector3 g = Vector3.zero;
+            for (int i = 0; i < sources.Count; i++)
+            {
+                g += sources[i].GetGravity(position);
+            }
+            return new Vector3(g.normalized.x, 0, 0);
+        }
+
         public static void Register(GravitySource source)
         {
             Debug.Assert(

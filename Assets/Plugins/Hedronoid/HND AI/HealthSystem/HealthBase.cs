@@ -18,13 +18,13 @@ namespace Hedronoid.Health
         public float MaxHealth { get { return m_MaxHealth; } }
         [SerializeField]
         protected float m_CurrentHealth = 10f;
-        private float m_LastDamageTimestamp = 0f;
+        protected float m_LastDamageTimestamp = 0f;
         public Action stunStarted;
         public Action stunEnded;
-        private List<IStunSource> m_stunSources;
+        protected List<IStunSource> m_stunSources;
         public Action rootStarted;
         public Action rootEnded;
-        private List<IRootSource> m_rootSources;
+        protected List<IRootSource> m_rootSources;
         public List<IRootSource> RootSources
         {
             get 
@@ -44,19 +44,19 @@ namespace Hedronoid.Health
             set { m_CanBeOneShotted = value; }
         }
         [SerializeField]
-        private bool m_shouldRagdollOnDeath;
-        
-        private DamageHandler[] m_damageHandlers;
+        protected bool m_shouldRagdollOnDeath;
+
+        protected DamageHandler[] m_damageHandlers;
 
         [Header("Debug")]
         [SerializeField]
-        private GameObject HealthBarPrefab;
+        protected GameObject HealthBarPrefab;
         [SerializeField]
-        private Transform m_rootTransform;
+        protected Transform m_rootTransform;
         [SerializeField]
-        private Vector3 textOffset = Vector3.zero;
-        private Slider m_healthBarSlider;
-        private RectTransform m_healthBar;
+        protected Vector3 textOffset = Vector3.zero;
+        protected Slider m_healthBarSlider;
+        protected RectTransform m_healthBar;
 
         protected override void Awake()
         {
@@ -239,6 +239,7 @@ namespace Hedronoid.Health
         {
             if(!HealthBarPrefab) return;
             m_healthBar = Instantiate(HealthBarPrefab).GetComponent<RectTransform>();
+            m_healthBar.transform.parent = this.transform;
             if(!m_rootTransform) m_rootTransform = transform;
             m_healthBarSlider = m_healthBar.GetComponentInChildren<Slider>();
             m_healthBarSlider.minValue = 0f;
@@ -246,7 +247,7 @@ namespace Hedronoid.Health
             UpdateHealthBar();
         }
 
-        private void UpdateHealthBarOrientation()
+        protected virtual void UpdateHealthBarOrientation()
         {
             if(!m_healthBar) return;
             m_healthBar.position = m_rootTransform.position + (Vector3.up * textOffset.y) + (Vector3.right * textOffset.x);

@@ -84,7 +84,7 @@ namespace Hedronoid.AI
         protected Animator [] m_Animators;
         protected AIBaseSensor m_Sensor;
         protected AIBaseMotor m_Motor;
-        protected Rigidbody m_Rb;
+        public Rigidbody m_Rb;
         protected HealthBase m_HealthBase;
 
         protected override void Awake()
