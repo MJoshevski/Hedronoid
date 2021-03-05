@@ -280,8 +280,8 @@ namespace Hedronoid
             float distanceOffset =
                 Vector3.Distance(targetPointOffset, focusPoint);
 
-            Gizmos.Cube(targetPointOffset, Quaternion.identity, Vector3.one / 2f, Color.blue);
-            Gizmos.Cube(prevHitPoint.point, Quaternion.identity, Vector3.one * 4f, Color.black);
+            //Gizmos.Cube(targetPointOffset, Quaternion.identity, Vector3.one / 2f, Color.blue);
+            //Gizmos.Cube(prevHitPoint.point, Quaternion.identity, Vector3.one * 4f, Color.black);
 
             if (distanceOffset > Mathf.Abs(distanceThreshold) && 
                 shoulderCentering > 0f)

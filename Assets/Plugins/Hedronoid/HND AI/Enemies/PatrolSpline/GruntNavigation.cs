@@ -5,6 +5,7 @@ using System.Collections;
 using Hedronoid.Health;
 using Hedronoid.Events;
 using static Hedronoid.Health.HealthBase;
+using Hedronoid.Weapons;
 
 /// <summary>
 /// 
@@ -62,12 +63,16 @@ namespace Hedronoid.AI
         protected Camera[] m_playerCameras = new Camera[2] { null, null };
         protected Transform[] m_playerTx = new Transform[2] { null, null };
         protected GruntDash m_GruntDash;
+        protected DamageHandler m_damageHandler;
         public bool m_GruntFreeze;
+
+        protected DamageInfo damage;
 
         protected override void Awake()
         {
             base.Awake();
             m_GruntDash = GetComponent<GruntDash>();
+            m_damageHandler = GetComponent<DamageHandler>();
             CreateState(EGruntStates.DashToTarget, OnDashUpdate, null, null);
 
             enemyEmojis = GetComponent<EnemyEmojis>();
@@ -81,7 +86,11 @@ namespace Hedronoid.AI
         {
             if (collision.gameObject.layer == LayerMask.NameToLayer("PlayerBullet"))
             {
-                HNDEvents.Instance.Raise(new RecieveHealthEvent { amount = -1f, canGoAboveMax = false, GOID = gameObject.GetInstanceID()});
+                damage = new DamageInfo();
+                damage.sender = Target.gameObject;
+                damage.Damage = 1;
+
+                m_damageHandler.DoDamage(damage);
             }
         }
 

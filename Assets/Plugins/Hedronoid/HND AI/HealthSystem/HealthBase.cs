@@ -61,7 +61,11 @@ namespace Hedronoid.Health
         protected override void Awake()
         {
             base.Awake();
-            m_damageHandlers = GetComponentsInChildren<DamageHandler>();
+
+            m_damageHandlers = GetComponents<DamageHandler>();
+            if(m_damageHandlers != null || m_damageHandlers.Length == 0)
+                m_damageHandlers = GetComponentsInChildren<DamageHandler>();
+
             m_stunSources = new List<IStunSource>();
             m_rootSources = new List<IRootSource>();
             InitHealthBar();
@@ -239,7 +243,7 @@ namespace Hedronoid.Health
         {
             if(!HealthBarPrefab) return;
             m_healthBar = Instantiate(HealthBarPrefab).GetComponent<RectTransform>();
-            m_healthBar.transform.parent = this.transform;
+            m_healthBar.transform.SetParent(transform);
             if(!m_rootTransform) m_rootTransform = transform;
             m_healthBarSlider = m_healthBar.GetComponentInChildren<Slider>();
             m_healthBarSlider.minValue = 0f;

@@ -96,8 +96,7 @@ namespace Hedronoid.AI
                 StartCoroutine(DashParticle());
             }
             remainingTime = m_dashTime;
-            /*var*/ targetDir = TurnTowardsTarget(target);
-            //targetDir.y = 0f;
+            var targetDir = TurnTowardsTarget(target);
 
             var lookRot = Quaternion.LookRotation(targetDir, upAxis);
             while ((remainingTime -= Time.fixedDeltaTime) > 0 && dashInProgress)
@@ -157,32 +156,10 @@ namespace Hedronoid.AI
             }
         }
 
-        private Vector3 targetDir, lookDir;
-
-        private void OnDrawGizmos()
-        {
-            Gizmos.color = Color.cyan;
-            for(int i=0; i <= 5; i++)
-            {
-                var pos = transform.position;
-                pos = new Vector3(transform.position.x + i, transform.position.y, transform.position.z);
-                Gizmos.DrawRay(pos, targetDir * 10000000000f);
-            }
-
-            Gizmos.color = Color.magenta;
-            for (int i = 0; i <= 5; i++)
-            {
-                var pos = transform.position;
-                pos = new Vector3(transform.position.x + i, transform.position.y, transform.position.z);
-                Gizmos.DrawRay(pos, lookDir * 100000000000f);
-            }
-        }
-
         protected override Vector3 TurnTowardsTarget(Transform target)
         {
             var targetPos = target.position;
-            //targetPos.y = transform.localPosition.y;
-            /*var*/ lookDir = (targetPos - transform.position).normalized;
+            var lookDir = (targetPos - transform.position).normalized;
             var lookRot = Quaternion.LookRotation(lookDir, upAxis);
             cachedRigidbody.rotation = Quaternion.RotateTowards(transform.rotation, lookRot, m_turnRate * Time.deltaTime);
             return lookDir;

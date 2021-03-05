@@ -708,7 +708,7 @@ namespace Hedronoid.Player
 
         public void Shoot()
         {
-            Gizmos.Line(bulletOrigin.position, RayHit.point, Color.yellow);
+            //Gizmos.Line(bulletOrigin.position, RayHit.point, Color.yellow);
 
             Vector3 shootDirection;
 

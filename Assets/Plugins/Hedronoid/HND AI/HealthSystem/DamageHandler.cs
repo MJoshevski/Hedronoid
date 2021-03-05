@@ -93,6 +93,7 @@ namespace Hedronoid.Health
             m_damageReactionController = GetComponent<DamageReactionController>();
             m_Collider = GetComponent<Collider>();
             m_agent = GetComponent<NavMeshAgent>();
+
             //if(!hitReaction) hitReaction = GetComponent<HitReaction>();
             //if(!hitReaction) hitReaction = GetComponentInParent<HitReaction>();
         }
@@ -168,11 +169,13 @@ namespace Hedronoid.Health
             var healthInfo = new HealthInfo { amount = -DamageAfterResistance(e) };
             
             m_Health.HealthInfoReciever(healthInfo);
+
             if (damagedEvent != null)
                 damagedEvent(this, e, m_Health, healthInfo);
 
             if (m_damageReactionController)
                 m_damageReactionController.React(e.Type);
+
             if (!m_IsBlinking && e.Damage != 0 && (m_BlinkRenderer || m_LODGroup) && m_DamageBlinkTexture)
             {
                 StartCoroutine(Blink());
@@ -430,6 +433,7 @@ namespace Hedronoid.Health
             if (gameObject.activeInHierarchy)
             {
                 StopAllCoroutines();
+                gameObject.SetActive(false);
             }
             else
             {
