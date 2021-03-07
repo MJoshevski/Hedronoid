@@ -88,6 +88,9 @@ namespace Hedronoid.Player
         [Tooltip("Prefab of the respective weapon's bullet.")]
         public GameObject bulletPrimary, bulletSecondary, bulletTertiary;
 
+        [Header("FMOD Audio Data")]
+        public PlayerAudioData m_playerAudioData;
+
         //[HideInInspector]
         public bool desiredJump, desiredDash;
         #endregion
@@ -181,6 +184,7 @@ namespace Hedronoid.Player
 
             AddHNDEventListeners();
             CreateFSMStates();
+            CreateFMODEvents();
         }
 
         protected override void Start()
@@ -490,6 +494,16 @@ namespace Hedronoid.Player
         {
         }
 
+        FMOD.Studio.EventInstance Run;
+        FMOD.Studio.EventInstance BulletPrimary;
+        private void CreateFMODEvents()
+        {
+            Run = FMODUnity.RuntimeManager.CreateInstance(m_playerAudioData.footsteps);
+            FMODUnity.RuntimeManager.AttachInstanceToGameObject(Run, transform, GetComponent<Rigidbody>());
+
+            BulletPrimary = FMODUnity.RuntimeManager.CreateInstance(m_playerAudioData.bulletPrimary[0]);
+        }
+
         private void CreateFSMStates()
         {
             m_GroundMovementState = CreateState(EPlayerStates.GROUND_MOVEMENT, OnUpdateGroundMovement, OnEnterGroundMovement, OnExitGroundMovement);
@@ -508,6 +522,10 @@ namespace Hedronoid.Player
             m_DashingState.onFixedUpdateState = OnFixedUpdateDashing;
         }
 
+        [SerializeField]
+        float timeBetweenFtstp = 0.3f;
+        float timeFromLastFtstp;
+
         private void Move()
         {
             // MOVEMENT
@@ -522,6 +540,20 @@ namespace Hedronoid.Player
                new Vector3(playerInput.x, 0f, playerInput.y) *
                movementVariables.MaxAcceleration;
 
+            if (desiredVelocity.magnitude > 0.1f)
+            {              
+                if (timeFromLastFtstp > timeBetweenFtstp)
+                {
+                    FMODUnity.RuntimeManager.PlayOneShot(m_playerAudioData.footsteps, transform.position);
+                    timeFromLastFtstp = 0f;
+                }
+                timeFromLastFtstp += Time.deltaTime;
+            }
+            else
+            {
+                timeFromLastFtstp = 0f;
+            }
+           
             //ANIMATION PURPOSE 
             float moveAmount =
                 Mathf.Clamp01(Mathf.Abs(movementVariables.Horizontal) + Mathf.Abs(movementVariables.Vertical));
@@ -706,6 +738,7 @@ namespace Hedronoid.Player
             _forceApplyCoroutine = null;
         }
 
+        FMOD.ATTRIBUTES_3D aTTRIBUTES_3D;
         public void Shoot()
         {
             //Gizmos.Line(bulletOrigin.position, RayHit.point, Color.yellow);
@@ -726,6 +759,8 @@ namespace Hedronoid.Player
                 rb_auto = auto.GetComponent<Rigidbody>();
                 rb_auto.AddForce(shootDirection.normalized * shootForcePrimary);
                 lastFired_Auto = Time.realtimeSinceStartup;
+
+                FMODUnity.RuntimeManager.PlayOneShot(m_playerAudioData.bulletPrimary[0], transform.position);
             }
             else if (Input.GetButtonDown("Fire2") &&
                 Time.realtimeSinceStartup - lastFired_Shotgun > fireRateSecondary)
@@ -737,6 +772,8 @@ namespace Hedronoid.Player
                 Rigidbody rb_shot = shot.GetComponent<Rigidbody>();
                 rb_shot.AddForce(shootDirection.normalized * shootForceSecondary);
                 lastFired_Shotgun = Time.realtimeSinceStartup;
+
+                FMODUnity.RuntimeManager.PlayOneShot(m_playerAudioData.bulletSecondary, transform.position);
             }
         }
 
