@@ -5,7 +5,7 @@
 			<value>Shoot_Primery</value>
 		</property>
 		<property name="outputFormat">
-			<value>2</value>
+			<value>0</value>
 		</property>
 		<relationship name="folder">
 			<destination>{0f4da442-5ec7-4461-821f-0780aed7cb4e}</destination>
@@ -92,15 +92,14 @@
 		<property name="length">
 			<value>0.88401360544217689</value>
 		</property>
-		<relationship name="modulators">
-			<destination>{ea81c4fc-1270-42f1-9208-e299136d7f29}</destination>
-			<destination>{be76404a-f9db-46cf-9400-ef363ab9c702}</destination>
-		</relationship>
 		<relationship name="audioFile">
 			<destination>{5100f544-fe34-4022-8fcf-8063d2d4a328}</destination>
 		</relationship>
 	</object>
 	<object class="EventMixerGroup" id="{7db4b1db-db2e-44eb-abfa-a2387d00e1d3}">
+		<property name="volume">
+			<value>-5</value>
+		</property>
 		<property name="name">
 			<value>Audio 1</value>
 		</property>
@@ -117,27 +116,10 @@
 	<object class="MixerBusEffectChain" id="{89b799dc-32ec-48c8-8e66-62b2a49a5218}">
 		<relationship name="effects">
 			<destination>{91b9089a-9108-429c-b882-1c3dd900c909}</destination>
-			<destination>{9e479543-0602-4de8-b6a8-49b180704cd2}</destination>
 		</relationship>
 	</object>
 	<object class="MixerBusPanner" id="{8d9a7c0e-623d-4a68-b606-081254a50fb5}" />
 	<object class="MixerBusFader" id="{f49a8ace-c2c1-4a94-9484-a9eccbb6a6f2}" />
-	<object class="RandomizerModulator" id="{ea81c4fc-1270-42f1-9208-e299136d7f29}">
-		<property name="nameOfPropertyBeingModulated">
-			<value>pitch</value>
-		</property>
-		<property name="amount">
-			<value>6.25</value>
-		</property>
-	</object>
-	<object class="RandomizerModulator" id="{be76404a-f9db-46cf-9400-ef363ab9c702}">
-		<property name="nameOfPropertyBeingModulated">
-			<value>volume</value>
-		</property>
-		<property name="amount">
-			<value>3</value>
-		</property>
-	</object>
 	<object class="MixerBusEffectChain" id="{1b47453b-0500-4de0-976d-9109be73eeb8}">
 		<relationship name="effects">
 			<destination>{3e84188a-0292-431f-91fd-0546308060f2}</destination>
@@ -145,6 +127,5 @@
 	</object>
 	<object class="MixerBusPanner" id="{591cfe4d-2ebf-4290-a2cd-44448aafd858}" />
 	<object class="MixerBusFader" id="{91b9089a-9108-429c-b882-1c3dd900c909}" />
-	<object class="SpatialiserEffect" id="{9e479543-0602-4de8-b6a8-49b180704cd2}" />
 	<object class="MixerBusFader" id="{3e84188a-0292-431f-91fd-0546308060f2}" />
 </objects>
