@@ -12,10 +12,11 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 825b9c973bc3b8148937086cc001c911, type: 3}
   m_Name: PlayerEventSheet
   m_EditorClassIdentifier: 
-  footsteps: 
+  footsteps: event:/SFX/Footsteps/Player_Footsteps
   jump: 
   doubleJump: 
   dash: 
   land: 
-  bulletPrimary: []
-  bulletSecondary: 
+  bulletPrimary:
+  - event:/SFX/Weapon/Shoot_Primery
+  bulletSecondary: event:/SFX/Weapon/Shoot_Secondary
