@@ -115,12 +115,14 @@ MonoBehaviour:
   bulletSecondary: {fileID: 947796022108612175, guid: 447e7d1ecac153c49807bda70018f24c,
     type: 3}
   bulletTertiary: {fileID: 0}
+  m_playerAudioData: {fileID: 11400000, guid: 91b92ad256509054ba889529496acad0, type: 2}
   desiredJump: 0
   desiredDash: 0
   Rigidbody: {fileID: 0}
   connectedRb: {fileID: 0}
   prevConnectedRb: {fileID: 0}
   jumpPhase: 0
+  timeBetweenFtstp: 0.275
 --- !u!136 &174345460303343908
 CapsuleCollider:
   m_ObjectHideFlags: 0
