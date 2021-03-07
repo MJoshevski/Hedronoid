@@ -540,7 +540,7 @@ namespace Hedronoid.Player
                new Vector3(playerInput.x, 0f, playerInput.y) *
                movementVariables.MaxAcceleration;
 
-            if (desiredVelocity.magnitude > 0.1f)
+            if (desiredVelocity.magnitude > 0.1f && OnGround)
             {              
                 if (timeFromLastFtstp > timeBetweenFtstp)
                 {
