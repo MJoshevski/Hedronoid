@@ -13,7 +13,7 @@ namespace Hedronoid
             rigidbody.AddForce(force, mode);
         }
 
-        public static IEnumerator ApplyForceContinuously(this Rigidbody rigidbody, Vector3 force, PhysicalForceSettings forceSettings)
+        public static IEnumerator ApplyForceContinuouslyCR(this Rigidbody rigidbody, Vector3 force, PhysicalForceSettings forceSettings)
         {
             float time = 0f;
             AnimationCurve powerOverTime = forceSettings.PowerOverTime;

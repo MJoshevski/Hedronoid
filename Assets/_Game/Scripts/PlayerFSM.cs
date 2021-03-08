@@ -139,6 +139,10 @@ namespace Hedronoid.Player
         private float minGroundDotProduct, minStairsDotProduct;
         private bool inVacuum;
 
+        //DASH PRIVATE VARS
+        private Vector3 posBeforeDash;
+        private float timeOnDashEnter;
+
         // INPUT
         private Vector2 playerInput;
 
@@ -256,6 +260,9 @@ namespace Hedronoid.Player
                 GravityService.CurrentGravity * 
                 Time.fixedDeltaTime * 
                 gravityVariables.GravityForceMultiplier;
+
+            if (blockGravityDown)
+                velocity.y = 0;
 
             Rigidbody.velocity = velocity;
 
@@ -428,32 +435,63 @@ namespace Hedronoid.Player
         #endregion
 
         #region STATE: DASHING
+        Vector3 forceDirection;
         private void OnEnterDashing(FSMState fromState)
         {
-            Dash();
+            if (dashVariables.DashesMade >= dashVariables.MaxDashes)
+                return;
+
+            Vector3 moveDirection = movementVariables.MoveDirection;
+
+            if (moveDirection.sqrMagnitude < .25f)
+                moveDirection = transform.forward;
+
+            forceDirection = moveDirection;
+
+            forceDirection.Normalize();
+
+            // Zero out vertical velocity on dash
+            Rigidbody.velocity = Vector3.zero;
+
+            dashVariables.DashesMade++;
+            timeOnDashEnter = Time.realtimeSinceStartup;
+            blockGravityDown = true;
+            posBeforeDash = transform.position;
             desiredDash = false;
             Animator.CrossFade(animHashes.Dash, 0.2f);
+
+            Rigidbody.ApplyForce(forceDirection * dashVariables.PhysicalForce.Multiplier, dashVariables.PhysicalForce.ForceMode);
         }
 
         private void OnUpdateDashing()
         {
+         
         }
 
+        public float distanceBeforeAndAfterDash;
         private void OnFixedUpdateDashing()
         {
-            GravityService.CurrentGravity = Vector3.zero;
             velocity.y = 0;
+            distanceBeforeAndAfterDash = Vector3.Distance(posBeforeDash, transform.position);
 
-            if (GravityService.CurrentGravity == Vector3.zero)
-                ChangeState(EPlayerStates.FLYING);
-            else if (OnGround || OnSteep)
-                ChangeState(EPlayerStates.GROUND_MOVEMENT);
-            else ChangeState(EPlayerStates.FALLING);
+            if (distanceBeforeAndAfterDash > dashVariables.MaxDistance || 
+                Time.realtimeSinceStartup - timeOnDashEnter > dashVariables.MaxTime)
+            {
+                Rigidbody.velocity = Vector3.zero;
+
+                if (GravityService.CurrentGravity == Vector3.zero)
+                    ChangeState(EPlayerStates.FLYING);
+                else if (OnGround || OnSteep)
+                    ChangeState(EPlayerStates.GROUND_MOVEMENT);
+                else ChangeState(EPlayerStates.FALLING);
+            }
         }
 
-        private void OnExitDashing(FSMState fromState)
+        private void OnExitDashing(FSMState fromstate)
         {
-        }        
+            AfterApplyForce();
+        }
+
         #endregion
 
         #region STATE: FLYING
@@ -688,54 +726,19 @@ namespace Hedronoid.Player
             velocity += jumpDirection * jumpSpeed;
         }
 
-        public void Dash()
-        {
-            Vector3 moveDirection = movementVariables.MoveDirection;
-
-            if (moveDirection.sqrMagnitude < .25f)
-                moveDirection = transform.forward;
-
-            Vector3 forceDirection = transform.forward;
-
-            forceDirection.Normalize();
-
-            if (dashVariables.ContinuousInput
-            && _forceApplyCoroutine != null)
-            {
-                StopCoroutine(_forceApplyCoroutine);
-                _forceApplyCoroutine = null;
-                AfterApplyForce();
-            }
-
-            if (dashVariables.DashesMade >= dashVariables.MaxDashes)
-                return;
-
-            StartCoroutine(
-                DoApplyForceOverTime(forceDirection, dashVariables.PhysicalForce));
-
-        }
-
-        IEnumerator DoApplyForceOverTime(Vector3 forceDirection, PhysicalForceSettings forceSettings)
-        {
-            dashVariables.DashesMade++;
-
-            // Zero out vertical velocity on dash
-            velocity.y = 0;
-
-            _forceApplyCoroutine = StartCoroutine(
-                Rigidbody.ApplyForceContinuously(forceDirection, forceSettings));
-            yield return _forceApplyCoroutine;
-
-            // Dead stop on dash-end
-            velocity = Vector3.zero;
-
-            AfterApplyForce();
-        }
+       
+        private bool blockGravityDown = false;
 
         void AfterApplyForce()
-        {
+        { 
             dashVariables.DashesMade--;
             _forceApplyCoroutine = null;
+
+            // Return gravity pull when dashing
+            blockGravityDown = false;
+
+            // Dead stop on dash-end
+            Rigidbody.velocity = Vector3.zero;
         }
 
         FMOD.ATTRIBUTES_3D aTTRIBUTES_3D;

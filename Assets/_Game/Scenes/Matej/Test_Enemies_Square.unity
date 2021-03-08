@@ -27760,6 +27760,22 @@ PrefabInstance:
       propertyPath: timeBetweenFtstp
       value: 0.275
       objectReference: {fileID: 0}
+    - target: {fileID: 7861412649541033217, guid: c53fde5f71a1861438ac53a6526a1b08,
+        type: 3}
+      propertyPath: dashVariables.MaxDistance
+      value: 30
+      objectReference: {fileID: 0}
+    - target: {fileID: 7861412649541033217, guid: c53fde5f71a1861438ac53a6526a1b08,
+        type: 3}
+      propertyPath: dashVariables.PhysicalForce
+      value: 
+      objectReference: {fileID: 11400000, guid: c55d33c596c554fa3926ae3d481dfef0,
+        type: 2}
+    - target: {fileID: 7861412649541033217, guid: c53fde5f71a1861438ac53a6526a1b08,
+        type: 3}
+      propertyPath: dashVariables.MaxTime
+      value: 0.15
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: c53fde5f71a1861438ac53a6526a1b08, type: 3}
 --- !u!1 &869499472
