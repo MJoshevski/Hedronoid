@@ -1,7 +1,7 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
-using Gizmos = Popcron.Gizmos;
+//using Gizmos = Popcron.Gizmos;
 using Hedronoid.HNDFSM;
 using Hedronoid.Core;
 using Hedronoid.Events;
@@ -267,9 +267,6 @@ namespace Hedronoid.Player
                 Time.fixedDeltaTime * 
                 gravityVariables.GravityForceMultiplier;
 
-            if (blockGravityDown)
-                velocity.y = 0;
-
             Rigidbody.velocity = velocity;
 
             // ROTATE TO GRAVITY
@@ -406,6 +403,11 @@ namespace Hedronoid.Player
             {
                 ChangeState(EPlayerStates.LANDING);
             }
+            else if (GravityService.CurrentGravity == Vector3.zero)
+            {
+                ChangeState(EPlayerStates.FLYING);
+            }
+
         }
 
         private void OnExitFalling(FSMState fromState)
@@ -463,7 +465,6 @@ namespace Hedronoid.Player
 
             dashVariables.DashesMade++;
             timeOnDashEnter = Time.realtimeSinceStartup;
-            blockGravityDown = true;
             posBeforeDash = transform.position;
             desiredDash = false;
             Animator.CrossFade(animHashes.Dash, 0.2f);
@@ -482,6 +483,13 @@ namespace Hedronoid.Player
             Rigidbody.ApplyForce(forceDirection * dashVariables.PhysicalForce.Multiplier, dashVariables.PhysicalForce.ForceMode);
         }
 
+        protected override void OnDrawGizmos()
+        {
+            base.OnDrawGizmos();
+            Ray r = new Ray(transform.position, forceDirection);
+            Gizmos.DrawRay(r);
+        }
+
         private void OnUpdateDashing()
         {
          
@@ -498,9 +506,7 @@ namespace Hedronoid.Player
             {
                 Rigidbody.velocity = Vector3.zero;
 
-                if (GravityService.CurrentGravity == Vector3.zero)
-                    ChangeState(EPlayerStates.FLYING);
-                else if (OnGround || OnSteep)
+                if (OnGround || OnSteep)
                     ChangeState(EPlayerStates.GROUND_MOVEMENT);
                 else ChangeState(EPlayerStates.FALLING);
             }
@@ -761,16 +767,10 @@ namespace Hedronoid.Player
             velocity += jumpDirection * jumpSpeed;
         }
 
-       
-        private bool blockGravityDown = false;
-
         void AfterApplyForce()
         { 
             dashVariables.DashesMade--;
             _forceApplyCoroutine = null;
-
-            // Return gravity pull when dashing
-            blockGravityDown = false;
 
             // Dead stop on dash-end
             Rigidbody.velocity = Vector3.zero;
