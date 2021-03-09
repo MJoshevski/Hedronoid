@@ -139,9 +139,12 @@ namespace Hedronoid.Player
         private float minGroundDotProduct, minStairsDotProduct;
         private bool inVacuum;
 
-        //DASH PRIVATE VARS
+        //DASH VARS
+        [SerializeField]
+        private ParticleSystem dashStartPFX, dashingPFX;
         private Vector3 posBeforeDash;
         private float timeOnDashEnter;
+
 
         // INPUT
         private Vector2 playerInput;
@@ -189,6 +192,9 @@ namespace Hedronoid.Player
             AddHNDEventListeners();
             CreateFSMStates();
             CreateFMODEvents();
+
+            dashStartPFX.Stop();
+            dashingPFX.Stop();
         }
 
         protected override void Start()
@@ -321,6 +327,8 @@ namespace Hedronoid.Player
             Move();
             Jump(GravityService.CurrentGravity);
             desiredJump = false;
+
+            FMODUnity.RuntimeManager.PlayOneShot(m_playerAudioData.jump, transform.position);
 
             contactNormal = upAxis;
 
@@ -460,6 +468,17 @@ namespace Hedronoid.Player
             desiredDash = false;
             Animator.CrossFade(animHashes.Dash, 0.2f);
 
+            StopAllCoroutines();
+            StartCoroutine(LerpCameraFov(100, 120));
+
+            FMODUnity.RuntimeManager.PlayOneShot(m_playerAudioData.dash, transform.position);
+
+            dashStartPFX.Stop();
+            dashStartPFX.Play();
+
+            dashingPFX.Stop();
+            dashingPFX.Play();
+
             Rigidbody.ApplyForce(forceDirection * dashVariables.PhysicalForce.Multiplier, dashVariables.PhysicalForce.ForceMode);
         }
 
@@ -490,6 +509,22 @@ namespace Hedronoid.Player
         private void OnExitDashing(FSMState fromstate)
         {
             AfterApplyForce();
+        }
+
+        IEnumerator LerpCameraFov(float from, float to)
+        {
+            float t = 0;
+
+            while (from != to)
+            {
+                GameplaySceneContext.OrbitCamera.orbitCamera.fieldOfView =
+                    Mathf.Lerp(from, to, t);
+
+                t += Time.deltaTime * 4f;
+                yield return null;
+            }          
+
+            yield return null;
         }
 
         #endregion
@@ -739,6 +774,10 @@ namespace Hedronoid.Player
 
             // Dead stop on dash-end
             Rigidbody.velocity = Vector3.zero;
+            dashingPFX.Stop();
+
+            StopAllCoroutines();
+            StartCoroutine(LerpCameraFov(120, 100));
         }
 
         FMOD.ATTRIBUTES_3D aTTRIBUTES_3D;
