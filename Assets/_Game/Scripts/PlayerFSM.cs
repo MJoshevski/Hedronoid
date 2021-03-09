@@ -471,7 +471,7 @@ namespace Hedronoid.Player
             StopAllCoroutines();
             StartCoroutine(LerpCameraFov(100, 120));
 
-            FMODUnity.RuntimeManager.PlayOneShot(m_playerAudioData.dash, transform.position);
+            FMODUnity.RuntimeManager.PlayOneShotAttached(m_playerAudioData.dash, gameObject);
 
             dashStartPFX.Stop();
             dashStartPFX.Play();
