@@ -185,7 +185,6 @@ namespace Hedronoid.Player
             LoadSensitivities();
 
             lastFired_Auto = lastFired_Rail = lastFired_Shotgun = 0;
-            dashPfx.Stop();
 
             AddHNDEventListeners();
             CreateFSMStates();
@@ -437,7 +436,6 @@ namespace Hedronoid.Player
 
         #region STATE: DASHING
         Vector3 forceDirection;
-        public ParticleSystem dashPfx;
         private void OnEnterDashing(FSMState fromState)
         {
             if (dashVariables.DashesMade >= dashVariables.MaxDashes)
@@ -456,19 +454,13 @@ namespace Hedronoid.Player
             Rigidbody.velocity = Vector3.zero;
 
             dashVariables.DashesMade++;
-
+            timeOnDashEnter = Time.realtimeSinceStartup;
             blockGravityDown = true;
             posBeforeDash = transform.position;
             desiredDash = false;
-            Animator.CrossFade(animHashes.Dash, 0.2f);           
+            Animator.CrossFade(animHashes.Dash, 0.2f);
 
-            dashPosition = transform.position + (forceDirection * dashVariables.DashDistance);
-
-            StopAllCoroutines();
-            StartCoroutine(LerpCameraFov(100, 120));
-
-            dashPfx.Play();
-            //Rigidbody.ApplyForce(forceDirection * dashVariables.PhysicalForce.Multiplier, dashVariables.PhysicalForce.ForceMode);
+            Rigidbody.ApplyForce(forceDirection * dashVariables.PhysicalForce.Multiplier, dashVariables.PhysicalForce.ForceMode);
         }
 
         private void OnUpdateDashing()
@@ -476,16 +468,14 @@ namespace Hedronoid.Player
          
         }
 
-        public float distanceToDashPos;
-        public Vector3 dashPosition;
-        public float timeDashing = 0f;
-
+        public float distanceBeforeAndAfterDash;
         private void OnFixedUpdateDashing()
         {
             velocity.y = 0;
-            distanceToDashPos = Vector3.Distance(transform.position, dashPosition);
+            distanceBeforeAndAfterDash = Vector3.Distance(posBeforeDash, transform.position);
 
-            if (distanceToDashPos <= 0.2f)
+            if (distanceBeforeAndAfterDash > dashVariables.MaxDistance || 
+                Time.realtimeSinceStartup - timeOnDashEnter > dashVariables.MaxTime)
             {
                 Rigidbody.velocity = Vector3.zero;
 
@@ -495,50 +485,14 @@ namespace Hedronoid.Player
                     ChangeState(EPlayerStates.GROUND_MOVEMENT);
                 else ChangeState(EPlayerStates.FALLING);
             }
-            else
-            {
-                //if (timeDashing < dashVariables.DashDuration /*&&*/
-                //    /*distanceBeforeAndAfterDash < dashVariables.DashDistance*/)
-                //{
-                //float t = (timeDashing * distanceToDashPos) / dashVariables.DashDuration;
-                float t = timeDashing;
-                //t = t * t * (3f - 2f * t);
-                //t *= distanceToDashPos;
-                float powerOverTime = dashVariables.PhysicalForce.PowerOverTime.Evaluate(t);
-
-                transform.position = Vector3.Lerp(transform.position, dashPosition, powerOverTime);
-                timeDashing += Time.deltaTime / dashVariables.DashDuration;
-
-                //}
-            }
         }
 
         private void OnExitDashing(FSMState fromstate)
         {
-            StopAllCoroutines();
-            StartCoroutine(LerpCameraFov(120, 100));
-
-            dashPfx.Stop();
             AfterApplyForce();
         }
+
         #endregion
-
-        IEnumerator LerpCameraFov(float from, float to)
-        {
-            float t = 0f;
-
-            while (from != to)
-            {
-                GameplaySceneContext.OrbitCamera.orbitCamera.fieldOfView =
-                    Mathf.Lerp(from, to, t);
-
-                t += Time.deltaTime * 4f;
-
-                yield return null;
-            }
-
-            yield return null;
-        }
 
         #region STATE: FLYING
         private void OnEnterFlying(FSMState fromState)
@@ -785,8 +739,6 @@ namespace Hedronoid.Player
 
             // Dead stop on dash-end
             Rigidbody.velocity = Vector3.zero;
-
-            timeDashing = 0f;
         }
 
         FMOD.ATTRIBUTES_3D aTTRIBUTES_3D;
