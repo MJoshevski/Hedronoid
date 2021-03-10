@@ -61,7 +61,7 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 5654940747461758271}
   m_LocalRotation: {x: 0.35355338, y: -0.1464466, z: 0.35355338, w: 0.8535535}
-  m_LocalPosition: {x: 213.73761, y: 5.252411, z: -266.29752}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children: []
   m_Father: {fileID: 1529084921077620322}
@@ -4161,6 +4161,16 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 280accdea1833e54696eb8086f863a68, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  triggerLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  triggerTag: 
+  enableOnEnter: []
+  disableOnEnter: []
+  enableOnStay: []
+  disableOnStay: []
+  enableOnExit: []
+  disableOnExit: []
   gravity: 9.81
   boundaryHeight: 32.2
   boundaryRadius: 6.69
@@ -4197,7 +4207,7 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 5654940749253789788}
   m_LocalRotation: {x: 0.35355338, y: -0.1464466, z: 0.35355338, w: 0.8535535}
-  m_LocalPosition: {x: 213.35129, y: 4.8806496, z: -266.95212}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children: []
   m_Father: {fileID: 1529084921077620322}
@@ -10071,6 +10081,16 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 280accdea1833e54696eb8086f863a68, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  triggerLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  triggerTag: 
+  enableOnEnter: []
+  disableOnEnter: []
+  enableOnStay: []
+  disableOnStay: []
+  enableOnExit: []
+  disableOnExit: []
   gravity: -9.81
   boundaryHeight: 38.4
   boundaryRadius: 17.6

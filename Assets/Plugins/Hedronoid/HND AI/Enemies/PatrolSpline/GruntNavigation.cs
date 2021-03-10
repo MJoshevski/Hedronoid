@@ -97,6 +97,7 @@ namespace Hedronoid.AI
         private void OnKilled(KillEvent e)
         {
             if (e.GOID != gameObject.GetInstanceID()) return;
+            StopAllCoroutines();
             this.enabled = false;
         }
 

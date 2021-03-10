@@ -144,7 +144,7 @@ namespace Hedronoid.Player
         private ParticleSystem dashStartPFX, dashingPFX;
         private Vector3 posBeforeDash;
         private float timeOnDashEnter;
-
+        private float gravMultiplierWhenDashing;
 
         // INPUT
         private Vector2 playerInput;
@@ -248,8 +248,8 @@ namespace Hedronoid.Player
             GravityService.CurrentGravity = 
                 GravityService.GetGravity(Rigidbody.position, out upAxis);
 
-            if (GravityService.CurrentGravity == Vector3.zero)
-                ChangeState(EPlayerStates.FLYING);
+            //if (GravityService.CurrentGravity == Vector3.zero)
+            //    ChangeState(EPlayerStates.FLYING);
 
             if (desiredDash)
                 ChangeState(EPlayerStates.DASHING);
@@ -321,7 +321,6 @@ namespace Hedronoid.Player
         #region STATE: JUMPING
         private void OnEnterJumping(FSMState fromState)
         {
-            Move();
             Jump(GravityService.CurrentGravity);
             desiredJump = false;
 
@@ -362,7 +361,7 @@ namespace Hedronoid.Player
         {
             Jump(GravityService.CurrentGravity);
             desiredJump = false;
-
+            FMODUnity.RuntimeManager.PlayOneShot(m_playerAudioData.jump, transform.position);
             contactNormal = upAxis;
 
             Animator.CrossFade(animHashes.DoubleJump, 0.2f);
@@ -480,28 +479,28 @@ namespace Hedronoid.Player
             dashingPFX.Stop();
             dashingPFX.Play();
 
+            gravMultiplierWhenDashing = gravityVariables.GravityForceMultiplier;
             Rigidbody.ApplyForce(forceDirection * dashVariables.PhysicalForce.Multiplier, dashVariables.PhysicalForce.ForceMode);
         }
 
-        protected override void OnDrawGizmos()
-        {
-            base.OnDrawGizmos();
-            Ray r = new Ray(transform.position, forceDirection);
-            Gizmos.DrawRay(r);
-        }
-
         private void OnUpdateDashing()
-        {
-         
+        {         
         }
 
-        public float distanceBeforeAndAfterDash;
         private void OnFixedUpdateDashing()
         {
-            velocity.y = 0;
-            distanceBeforeAndAfterDash = Vector3.Distance(posBeforeDash, transform.position);
+            if (OnGround || OnSteep)
+            {
+                gravityVariables.GravityForceMultiplier = 
+                    gravMultiplierWhenDashing * gravityVariables.GravityForceMultiplierWhenDashing;
+            }
+            else
+            {
+                velocity.y = 0f;
+                gravityVariables.GravityForceMultiplier = gravMultiplierWhenDashing;
+            }
 
-            if (distanceBeforeAndAfterDash > dashVariables.MaxDistance || 
+            if (Vector3.Distance(posBeforeDash, transform.position) > dashVariables.MaxDistance || 
                 Time.realtimeSinceStartup - timeOnDashEnter > dashVariables.MaxTime)
             {
                 Rigidbody.velocity = Vector3.zero;
@@ -514,7 +513,19 @@ namespace Hedronoid.Player
 
         private void OnExitDashing(FSMState fromstate)
         {
-            AfterApplyForce();
+            dashVariables.DashesMade--;
+            _forceApplyCoroutine = null;
+
+            gravityVariables.GravityForceMultiplier = gravMultiplierWhenDashing;
+
+            // Dead stop on dash-end
+            Rigidbody.velocity = Vector3.zero;
+            dashingPFX.Stop();
+
+            StopAllCoroutines();
+            StartCoroutine(LerpCameraFov(120, 100));
+
+            Animator.CrossFade(animHashes.LandRun, 0.2f);
         }
 
         IEnumerator LerpCameraFov(float from, float to)
@@ -532,7 +543,6 @@ namespace Hedronoid.Player
 
             yield return null;
         }
-
         #endregion
 
         #region STATE: FLYING
@@ -767,20 +777,6 @@ namespace Hedronoid.Player
             velocity += jumpDirection * jumpSpeed;
         }
 
-        void AfterApplyForce()
-        { 
-            dashVariables.DashesMade--;
-            _forceApplyCoroutine = null;
-
-            // Dead stop on dash-end
-            Rigidbody.velocity = Vector3.zero;
-            dashingPFX.Stop();
-
-            StopAllCoroutines();
-            StartCoroutine(LerpCameraFov(120, 100));
-        }
-
-        FMOD.ATTRIBUTES_3D aTTRIBUTES_3D;
         public void Shoot()
         {
             //Gizmos.Line(bulletOrigin.position, RayHit.point, Color.yellow);

@@ -8,7 +8,8 @@ namespace Hedronoid
 	{
 		[Header("Gravity Behavior")]
         public float GravityForceMultiplier = 1f;
-		public float GravityRotationMultiplier = 5f;
+        public float GravityForceMultiplierWhenDashing = 100f;
+        public float GravityRotationMultiplier = 5f;
 
         [Header("Gravity Switch")]
         [Tooltip("How much time (seconds) should we wait before we can switch again?")]
