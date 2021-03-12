@@ -57,9 +57,11 @@ namespace Hedronoid.Player
         [Range(0, 5)]
         public int maxAirJumps = 0;
         [Tooltip("How much faster do we want to fall?")]
-        public float fallMultiplier = 100f;
+        [Range(1, 100)]
+        public float fallMultiplier = 25f;
         [Tooltip("How much gravity do we apply on low jumps?")]
-        public float lowJumpMultiplier = 100f;
+        [Range(1, 100)]
+        public float lowJumpMultiplier = 10f;
         [Tooltip("Layer mask for ground contact probing and stairs.")]
         public LayerMask probeMask = -1;
         [Tooltip("Layer mask for detecting stairs.")]
