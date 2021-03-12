@@ -56,6 +56,8 @@ namespace Hedronoid.Player
         [Tooltip("Number of jumps possible in air.")]
         [Range(0, 5)]
         public int maxAirJumps = 0;
+        [Tooltip("How much faster do we want to fall?")]
+        public float fallMultiplier = 100f;
         [Tooltip("Layer mask for ground contact probing and stairs.")]
         public LayerMask probeMask = -1;
         [Tooltip("Layer mask for detecting stairs.")]
@@ -207,8 +209,14 @@ namespace Hedronoid.Player
         {
             base.Update();
 
-            Shoot();
+            if (Input.GetButton("Fire1"))
+                Shoot(true);
+
+            if (Input.GetButton("Fire2"))
+                Shoot(false);
+
             desiredDash |= Input.GetButtonDown("Dash");
+
             desiredJump |= Input.GetButtonDown("Jump");
 
             playerInput = new Vector2(movementVariables.Horizontal, movementVariables.Vertical);
@@ -248,19 +256,20 @@ namespace Hedronoid.Player
             GravityService.CurrentGravity = 
                 GravityService.GetGravity(Rigidbody.position, out upAxis);
 
-            //if (GravityService.CurrentGravity == Vector3.zero)
-            //    ChangeState(EPlayerStates.FLYING);
+            if (GravityService.CurrentGravity == Vector3.zero)
+                ChangeState(EPlayerStates.FLYING);
 
             if (desiredDash)
                 ChangeState(EPlayerStates.DASHING);
 
-            if (desiredJump)
+            if (desiredJump && jumpPhase <= maxAirJumps)
             {
                 if (jumpPhase == 0)
                     ChangeState(EPlayerStates.JUMPING);
-                else if (maxAirJumps > 0 && jumpPhase <= maxAirJumps)
+                else if (maxAirJumps > 0)
                     ChangeState(EPlayerStates.AIR_JUMPING);
             }
+            else desiredJump = false;
 
             velocity += 
                 GravityService.CurrentGravity * 
@@ -388,6 +397,7 @@ namespace Hedronoid.Player
         private void OnEnterFalling(FSMState fromState)
         {
             Animator.CrossFade(animHashes.Falling, 0.2f);
+            gravMultiplierWhenDashing = gravityVariables.GravityForceMultiplier;
         }
 
         private void OnUpdateFalling()
@@ -397,6 +407,9 @@ namespace Hedronoid.Player
         private void OnFixedUpdateFalling()
         {
             Move();
+
+            gravityVariables.GravityForceMultiplier =
+                gravMultiplierWhenDashing + (fallMultiplier - 1f) * Time.fixedDeltaTime;
 
             if (OnGround || OnSteep)
             {
@@ -411,6 +424,8 @@ namespace Hedronoid.Player
 
         private void OnExitFalling(FSMState fromState)
         {
+            gravityVariables.GravityForceMultiplier =
+                gravMultiplierWhenDashing;
         }
         #endregion
 
@@ -696,7 +711,7 @@ namespace Hedronoid.Player
             {
                 stepsSinceLastGrounded = 0;
 
-                if (stepsSinceLastJump > 1)
+                if (stepsSinceLastJump > 2)
                 {
                     jumpPhase = 0;
                 }
@@ -742,11 +757,11 @@ namespace Hedronoid.Player
             {
                 jumpDirection = contactNormal;
             }
-            else if (OnSteep)
-            {
-                jumpDirection = steepNormal;
-                jumpPhase = 0;
-            }
+            //else if (OnSteep)
+            //{
+            //    jumpDirection = steepNormal;
+            //    jumpPhase = 0;
+            //}
             else if (maxAirJumps > 0 && jumpPhase <= maxAirJumps)
             {
                 if (jumpPhase == 0)
@@ -777,7 +792,7 @@ namespace Hedronoid.Player
             velocity += jumpDirection * jumpSpeed;
         }
 
-        public void Shoot()
+        public void Shoot(bool primaryFire)
         {
             //Gizmos.Line(bulletOrigin.position, RayHit.point, Color.yellow);
 
@@ -787,8 +802,7 @@ namespace Hedronoid.Player
                 shootDirection = RayHit.point - bulletOrigin.position;
             else shootDirection = LookRay.direction;
 
-            if (Input.GetButton("Fire1") &&
-                Time.realtimeSinceStartup - lastFired_Auto > fireRatePrimary)
+            if (primaryFire && Time.realtimeSinceStartup - lastFired_Auto > fireRatePrimary)
             {
                 GameObject auto = TrashMan.spawn(
                     bulletPrimary, bulletOrigin.position, Quaternion.identity);
@@ -800,8 +814,7 @@ namespace Hedronoid.Player
 
                 FMODUnity.RuntimeManager.PlayOneShot(m_playerAudioData.bulletPrimary[0], transform.position);
             }
-            else if (Input.GetButtonDown("Fire2") &&
-                Time.realtimeSinceStartup - lastFired_Shotgun > fireRateSecondary)
+            else if (!primaryFire && Time.realtimeSinceStartup - lastFired_Shotgun > fireRateSecondary)
             {
                 GameObject shot = TrashMan.spawn(
                     bulletSecondary, bulletOrigin.position, Quaternion.identity);
