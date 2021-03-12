@@ -73,8 +73,9 @@ MonoBehaviour:
   maxAcceleration: 100
   maxAirAcceleration: 100
   maxVelocityMagnitudeInVacuum: 80
-  jumpHeight: 20
-  maxAirJumps: 2
+  jumpHeight: 50
+  maxAirJumps: 1
+  fallMultiplier: 200
   probeMask:
     serializedVersion: 2
     m_Bits: 3091
@@ -96,6 +97,7 @@ MonoBehaviour:
     MoveDirection: {x: 0, y: 0, z: 0}
   gravityVariables:
     GravityForceMultiplier: 5
+    GravityForceMultiplierWhenDashing: 100
     GravityRotationMultiplier: 5
     GravitySwitchCooldown: 1.5
     ChangeOnKeyPress: 1
@@ -128,7 +130,6 @@ MonoBehaviour:
   jumpPhase: 0
   dashStartPFX: {fileID: 2612123158487192303}
   dashingPFX: {fileID: 8585434972651343292}
-  distanceBeforeAndAfterDash: 0
   timeBetweenFtstp: 0.275
 --- !u!136 &174345460303343908
 CapsuleCollider:
