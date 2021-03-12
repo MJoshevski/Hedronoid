@@ -58,6 +58,8 @@ namespace Hedronoid.Player
         public int maxAirJumps = 0;
         [Tooltip("How much faster do we want to fall?")]
         public float fallMultiplier = 100f;
+        [Tooltip("How much gravity do we apply on low jumps?")]
+        public float lowJumpMultiplier = 100f;
         [Tooltip("Layer mask for ground contact probing and stairs.")]
         public LayerMask probeMask = -1;
         [Tooltip("Layer mask for detecting stairs.")]
@@ -127,7 +129,7 @@ namespace Hedronoid.Player
 
         // PHYSICS VARS
         private Vector3 upAxis, rightAxis, forwardAxis;
-        private Vector3 velocity, desiredVelocity, connectionVelocity;
+        private Vector3 velocity, gravityAlignedVelocity, desiredVelocity, connectionVelocity;
         [SerializeField]
         private bool OnGround => groundContactCount > 0;
         private bool OnSteep => steepContactCount > 0;
@@ -140,13 +142,14 @@ namespace Hedronoid.Player
         private Coroutine _forceApplyCoroutine = null;
         private float minGroundDotProduct, minStairsDotProduct;
         private bool inVacuum;
+        [SerializeField]
+        private float secondaryGravityMultiplier = 1f;
 
         //DASH VARS
         [SerializeField]
         private ParticleSystem dashStartPFX, dashingPFX;
         private Vector3 posBeforeDash;
         private float timeOnDashEnter;
-        private float gravMultiplierWhenDashing;
 
         // INPUT
         private Vector2 playerInput;
@@ -184,6 +187,7 @@ namespace Hedronoid.Player
             Animator = GetComponentInChildren<Animator>();
             animHashes = new AnimatorHashes();
             animData = new AnimatorData(Animator);
+            secondaryGravityMultiplier = 1f;
 
             PlayerActions = PlayerActionSet.CreateWithDefaultBindings();
             LoadBindings();
@@ -274,9 +278,12 @@ namespace Hedronoid.Player
             velocity += 
                 GravityService.CurrentGravity * 
                 Time.fixedDeltaTime * 
-                gravityVariables.GravityForceMultiplier;
+                gravityVariables.GravityForceMultiplier *
+                secondaryGravityMultiplier;
 
             Rigidbody.velocity = velocity;
+
+            gravityAlignedVelocity = transform.InverseTransformDirection(velocity);
 
             // ROTATE TO GRAVITY
             Vector3 targetDirection = movementVariables.MoveDirection;
@@ -332,9 +339,8 @@ namespace Hedronoid.Player
         {
             Jump(GravityService.CurrentGravity);
             desiredJump = false;
-
             FMODUnity.RuntimeManager.PlayOneShot(m_playerAudioData.jump, transform.position);
-
+            secondaryGravityMultiplier = 1f;
             contactNormal = upAxis;
 
             // JUMPS ANIMATION
@@ -356,12 +362,17 @@ namespace Hedronoid.Player
         {
             Move();
 
-            if (velocity.y < -0.001)
+            if (gravityAlignedVelocity.y < -0.001)
                 ChangeState(EPlayerStates.FALLING);
+            else if (gravityAlignedVelocity.y > 0 && !Input.GetButton("Jump"))
+            {
+                secondaryGravityMultiplier += (lowJumpMultiplier - 1f) * Time.fixedDeltaTime;
+            }
         }
 
         private void OnExitJumping(FSMState fromState)
         {
+            secondaryGravityMultiplier = 1f;
         }
         #endregion
 
@@ -370,6 +381,8 @@ namespace Hedronoid.Player
         {
             Jump(GravityService.CurrentGravity);
             desiredJump = false;
+            secondaryGravityMultiplier = 1f;
+
             FMODUnity.RuntimeManager.PlayOneShot(m_playerAudioData.jump, transform.position);
             contactNormal = upAxis;
 
@@ -384,12 +397,17 @@ namespace Hedronoid.Player
         {
             Move();
 
-            if (velocity.y < -0.01)
+            if (gravityAlignedVelocity.y < -0.001)
                 ChangeState(EPlayerStates.FALLING);
+            else if (gravityAlignedVelocity.y > 0 && !Input.GetButton("Jump"))
+            {
+                secondaryGravityMultiplier += (lowJumpMultiplier - 1f) * Time.fixedDeltaTime;
+            }
         }
 
         private void OnExitAirJumping(FSMState fromState)
         {
+            secondaryGravityMultiplier = 1f;
         }
         #endregion
 
@@ -397,7 +415,7 @@ namespace Hedronoid.Player
         private void OnEnterFalling(FSMState fromState)
         {
             Animator.CrossFade(animHashes.Falling, 0.2f);
-            gravMultiplierWhenDashing = gravityVariables.GravityForceMultiplier;
+            secondaryGravityMultiplier = 1f;
         }
 
         private void OnUpdateFalling()
@@ -408,8 +426,7 @@ namespace Hedronoid.Player
         {
             Move();
 
-            gravityVariables.GravityForceMultiplier =
-                gravMultiplierWhenDashing + (fallMultiplier - 1f) * Time.fixedDeltaTime;
+            secondaryGravityMultiplier += (fallMultiplier - 1f) * Time.fixedDeltaTime;
 
             if (OnGround || OnSteep)
             {
@@ -424,8 +441,7 @@ namespace Hedronoid.Player
 
         private void OnExitFalling(FSMState fromState)
         {
-            gravityVariables.GravityForceMultiplier =
-                gravMultiplierWhenDashing;
+            secondaryGravityMultiplier = 1f;
         }
         #endregion
 
@@ -494,7 +510,7 @@ namespace Hedronoid.Player
             dashingPFX.Stop();
             dashingPFX.Play();
 
-            gravMultiplierWhenDashing = gravityVariables.GravityForceMultiplier;
+            secondaryGravityMultiplier = 1f; ;
             Rigidbody.ApplyForce(forceDirection * dashVariables.PhysicalForce.Multiplier, dashVariables.PhysicalForce.ForceMode);
         }
 
@@ -506,13 +522,12 @@ namespace Hedronoid.Player
         {
             if (OnGround || OnSteep)
             {
-                gravityVariables.GravityForceMultiplier = 
-                    gravMultiplierWhenDashing * gravityVariables.GravityForceMultiplierWhenDashing;
+                secondaryGravityMultiplier = gravityVariables.GravityForceMultiplierWhenDashing;
             }
             else
             {
-                velocity.y = 0f;
-                gravityVariables.GravityForceMultiplier = gravMultiplierWhenDashing;
+                gravityAlignedVelocity.y = 0f;
+                secondaryGravityMultiplier = 1f;
             }
 
             if (Vector3.Distance(posBeforeDash, transform.position) > dashVariables.MaxDistance || 
@@ -531,7 +546,7 @@ namespace Hedronoid.Player
             dashVariables.DashesMade--;
             _forceApplyCoroutine = null;
 
-            gravityVariables.GravityForceMultiplier = gravMultiplierWhenDashing;
+            secondaryGravityMultiplier = 1f;
 
             // Dead stop on dash-end
             Rigidbody.velocity = Vector3.zero;
@@ -757,11 +772,11 @@ namespace Hedronoid.Player
             {
                 jumpDirection = contactNormal;
             }
-            //else if (OnSteep)
-            //{
-            //    jumpDirection = steepNormal;
-            //    jumpPhase = 0;
-            //}
+            else if (OnSteep)
+            {
+                jumpDirection = steepNormal;
+                jumpPhase = 0;
+            }
             else if (maxAirJumps > 0 && jumpPhase <= maxAirJumps)
             {
                 if (jumpPhase == 0)
@@ -776,7 +791,8 @@ namespace Hedronoid.Player
             }
 
             // Zero out the previous up-velocity
-            velocity.y = 0;
+            gravityAlignedVelocity.y = 0;
+            velocity = transform.InverseTransformDirection(gravityAlignedVelocity);
 
             stepsSinceLastJump = 0;
             jumpPhase += 1;

@@ -73,9 +73,10 @@ MonoBehaviour:
   maxAcceleration: 100
   maxAirAcceleration: 100
   maxVelocityMagnitudeInVacuum: 80
-  jumpHeight: 35
-  maxAirJumps: 1
-  fallMultiplier: 200
+  jumpHeight: 50
+  maxAirJumps: 3
+  fallMultiplier: 25
+  lowJumpMultiplier: 10
   probeMask:
     serializedVersion: 2
     m_Bits: 3091
@@ -128,6 +129,7 @@ MonoBehaviour:
   connectedRb: {fileID: 0}
   prevConnectedRb: {fileID: 0}
   jumpPhase: 0
+  secondaryGravityMultiplier: 1
   dashStartPFX: {fileID: 2612123158487192303}
   dashingPFX: {fileID: 8585434972651343292}
   timeBetweenFtstp: 0.275
