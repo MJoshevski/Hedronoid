@@ -794,7 +794,7 @@ namespace Hedronoid.Player
 
             // Zero out the previous up-velocity
             gravityAlignedVelocity.y = 0;
-            velocity = transform.InverseTransformDirection(gravityAlignedVelocity);
+            Rigidbody.velocity = transform.InverseTransformDirection(gravityAlignedVelocity);
 
             stepsSinceLastJump = 0;
             jumpPhase += 1;
