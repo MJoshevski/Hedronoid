@@ -74,7 +74,7 @@ MonoBehaviour:
   maxAirAcceleration: 100
   maxVelocityMagnitudeInVacuum: 80
   jumpHeight: 35
-  maxAirJumps: 3
+  maxAirJumps: 1
   fallMultiplier: 12
   lowJumpMultiplier: 10
   probeMask:
@@ -107,6 +107,7 @@ MonoBehaviour:
     MaxDashes: 1
     MaxDistance: 30
     MaxTime: 0.15
+    DashCooldown: 0
     DashesMade: 0
     ContinuousInput: 0
     PhysicalForce: {fileID: 11400000, guid: c55d33c596c554fa3926ae3d481dfef0, type: 2}

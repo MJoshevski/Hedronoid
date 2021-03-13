@@ -265,7 +265,9 @@ namespace Hedronoid.Player
             if (GravityService.CurrentGravity == Vector3.zero)
                 ChangeState(EPlayerStates.FLYING);
 
-            if (desiredDash)
+            if (desiredDash && 
+                (Time.realtimeSinceStartup - timeEnteredDash) >= dashVariables.DashCooldown &&
+                 (dashVariables.DashesMade < dashVariables.MaxDashes))
                 ChangeState(EPlayerStates.DASHING);
 
             if (desiredJump && jumpPhase <= maxAirJumps)
@@ -477,18 +479,18 @@ namespace Hedronoid.Player
         #endregion
 
         #region STATE: DASHING
-        Vector3 forceDirection;
+        private float timeEnteredDash = 0f;
+
         private void OnEnterDashing(FSMState fromState)
         {
-            if (dashVariables.DashesMade >= dashVariables.MaxDashes)
-                return;
+            timeEnteredDash = Time.realtimeSinceStartup;
 
             Vector3 moveDirection = movementVariables.MoveDirection;
 
             if (moveDirection.sqrMagnitude < .25f)
                 moveDirection = transform.forward;
 
-            forceDirection = moveDirection;
+            Vector3 forceDirection = moveDirection;
 
             forceDirection.Normalize();
 
@@ -545,7 +547,6 @@ namespace Hedronoid.Player
 
         private void OnExitDashing(FSMState fromstate)
         {
-            dashVariables.DashesMade--;
             _forceApplyCoroutine = null;
 
             secondaryGravityMultiplier = 1f;
@@ -731,6 +732,9 @@ namespace Hedronoid.Player
                 if (stepsSinceLastJump > 2)
                 {
                     jumpPhase = 0;
+
+                    if(dashVariables.DashesMade != 0)
+                        dashVariables.DashesMade--;
                 }
                 if (groundContactCount > 1)
                 {
