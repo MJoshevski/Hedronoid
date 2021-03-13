@@ -14,9 +14,9 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   footsteps: event:/SFX/Footsteps/Player_Footsteps
   jump: event:/Player/Player_Movement/Jump
-  doubleJump: 
+  doubleJump: event:/Player/Player_Movement/DJump
   dash: event:/Player/Player_Movement/Dash
-  land: 
+  land: event:/SFX/Footsteps/Player_Land
   bulletPrimary:
   - event:/SFX/Weapon/Shoot_Primery
   bulletSecondary: event:/SFX/Weapon/Shoot_Secondary
