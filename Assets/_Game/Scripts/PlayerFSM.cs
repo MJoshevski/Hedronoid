@@ -265,10 +265,13 @@ namespace Hedronoid.Player
             if (GravityService.CurrentGravity == Vector3.zero)
                 ChangeState(EPlayerStates.FLYING);
 
-            if (desiredDash && 
+            if (desiredDash &&
                 (Time.realtimeSinceStartup - timeEnteredDash) >= dashVariables.DashCooldown &&
                  (dashVariables.DashesMade < dashVariables.MaxDashes))
+            {
                 ChangeState(EPlayerStates.DASHING);
+            }
+            else desiredDash = false;
 
             if (desiredJump && jumpPhase <= maxAirJumps)
             {
@@ -526,12 +529,11 @@ namespace Hedronoid.Player
         {
             if (OnGround || OnSteep)
             {
-                secondaryGravityMultiplier = gravityVariables.GravityForceMultiplierWhenDashing;
+
             }
             else
             {
                 gravityAlignedVelocity.y = 0f;
-                secondaryGravityMultiplier = 1f;
             }
 
             if (Vector3.Distance(posBeforeDash, transform.position) > dashVariables.MaxDistance || 
