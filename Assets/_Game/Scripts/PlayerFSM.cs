@@ -796,9 +796,8 @@ namespace Hedronoid.Player
                 return;
             }
 
-            // Zero out the previous up-velocity
+            // Zero out the previous up-velocity 
             gravityAlignedVelocity.y = 0;
-            Rigidbody.velocity = transform.InverseTransformDirection(gravityAlignedVelocity);
 
             stepsSinceLastJump = 0;
             jumpPhase += 1;
@@ -811,6 +810,10 @@ namespace Hedronoid.Player
                 jumpSpeed = Mathf.Max(jumpSpeed - alignedSpeed, 0f);
             }          
 
+            // Transform the aligned velocity to world space
+            velocity = transform.InverseTransformDirection(gravityAlignedVelocity);
+
+            // Apply jump force after zeroing out local y-velocity
             velocity += jumpDirection * jumpSpeed;
         }
 
