@@ -390,7 +390,7 @@ namespace Hedronoid.Player
             desiredJump = false;
             secondaryGravityMultiplier = 1f;
 
-            FMODUnity.RuntimeManager.PlayOneShot(m_playerAudioData.jump, transform.position);
+            FMODUnity.RuntimeManager.PlayOneShot(m_playerAudioData.doubleJump, transform.position);
             contactNormal = upAxis;
 
             Animator.CrossFade(animHashes.DoubleJump, 0.2f);
@@ -463,6 +463,8 @@ namespace Hedronoid.Player
             {
                 Animator.CrossFade(animHashes.LandFast, 0.2f);
             }
+
+            FMODUnity.RuntimeManager.PlayOneShot(m_playerAudioData.land, transform.position);
 
             Animator.SetBool(animHashes.IsGrounded, OnGround);
             ChangeState(EPlayerStates.GROUND_MOVEMENT);
