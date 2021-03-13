@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<objects serializationModel="Studio.02.01.00">
+	<object class="EffectPreset" id="{8b0796f7-b612-496e-a554-e4b2f856e0fb}">
+		<property name="name">
+			<value>Spatializer</value>
+		</property>
+		<relationship name="folder">
+			<destination>{d05afddf-a8fa-48d5-97d1-e474393938ac}</destination>
+		</relationship>
+		<relationship name="effect">
+			<destination>{f9ac1bd6-e273-412d-b041-cde14459bd9a}</destination>
+		</relationship>
+	</object>
+	<object class="SpatialiserEffect" id="{f9ac1bd6-e273-412d-b041-cde14459bd9a}">
+		<property name="minimumDistance">
+			<value>5</value>
+		</property>
+		<property name="userPanExtent">
+			<value>180</value>
+		</property>
+	</object>
+</objects>

@@ -5,7 +5,7 @@
 			<value>Dash</value>
 		</property>
 		<property name="outputFormat">
-			<value>0</value>
+			<value>2</value>
 		</property>
 		<relationship name="folder">
 			<destination>{a405729c-a5c5-4c70-90df-c8bba736ddb1}</destination>
@@ -102,6 +102,9 @@
 		</relationship>
 	</object>
 	<object class="EventMixerGroup" id="{0c9e8105-c91d-48e0-898d-9ea21e4e4a3e}">
+		<property name="volume">
+			<value>-2</value>
+		</property>
 		<property name="name">
 			<value>Audio 1</value>
 		</property>
@@ -118,6 +121,7 @@
 	<object class="MixerBusEffectChain" id="{0f35d96d-842a-4186-9905-6fcdfbad6497}">
 		<relationship name="effects">
 			<destination>{246a66f2-3c2e-4f00-8a21-b7f10603e113}</destination>
+			<destination>{8916032d-1ebf-4e3c-bcc7-901ff1597c5d}</destination>
 		</relationship>
 	</object>
 	<object class="MixerBusPanner" id="{2a49ce8d-ebdb-44d0-92aa-dcb9c2b709ea}" />
@@ -152,5 +156,13 @@
 	</object>
 	<object class="MixerBusPanner" id="{e9c1f9f7-295c-4d3c-b4db-9d549999a4d1}" />
 	<object class="MixerBusFader" id="{246a66f2-3c2e-4f00-8a21-b7f10603e113}" />
+	<object class="ProxyEffect" id="{8916032d-1ebf-4e3c-bcc7-901ff1597c5d}">
+		<property name="inputFormat">
+			<value>0</value>
+		</property>
+		<relationship name="preset">
+			<destination>{8b0796f7-b612-496e-a554-e4b2f856e0fb}</destination>
+		</relationship>
+	</object>
 	<object class="MixerBusFader" id="{933b0fbf-e6b6-436f-9cc0-73003f5016b0}" />
 </objects>
