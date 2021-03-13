@@ -265,7 +265,9 @@ namespace Hedronoid.Player
             if (GravityService.CurrentGravity == Vector3.zero)
                 ChangeState(EPlayerStates.FLYING);
 
-            if (desiredDash)
+            if (desiredDash && 
+                (Time.realtimeSinceStartup - timeEnteredDash) >= dashVariables.DashCooldown &&
+                 (dashVariables.DashesMade < dashVariables.MaxDashes))
                 ChangeState(EPlayerStates.DASHING);
 
             if (desiredJump && jumpPhase <= maxAirJumps)
@@ -477,18 +479,18 @@ namespace Hedronoid.Player
         #endregion
 
         #region STATE: DASHING
-        Vector3 forceDirection;
+        private float timeEnteredDash = 0f;
+
         private void OnEnterDashing(FSMState fromState)
         {
-            if (dashVariables.DashesMade >= dashVariables.MaxDashes)
-                return;
+            timeEnteredDash = Time.realtimeSinceStartup;
 
             Vector3 moveDirection = movementVariables.MoveDirection;
 
             if (moveDirection.sqrMagnitude < .25f)
                 moveDirection = transform.forward;
 
-            forceDirection = moveDirection;
+            Vector3 forceDirection = moveDirection;
 
             forceDirection.Normalize();
 
@@ -545,7 +547,6 @@ namespace Hedronoid.Player
 
         private void OnExitDashing(FSMState fromstate)
         {
-            dashVariables.DashesMade--;
             _forceApplyCoroutine = null;
 
             secondaryGravityMultiplier = 1f;
@@ -731,6 +732,9 @@ namespace Hedronoid.Player
                 if (stepsSinceLastJump > 2)
                 {
                     jumpPhase = 0;
+
+                    if(dashVariables.DashesMade != 0)
+                        dashVariables.DashesMade--;
                 }
                 if (groundContactCount > 1)
                 {
@@ -792,9 +796,8 @@ namespace Hedronoid.Player
                 return;
             }
 
-            // Zero out the previous up-velocity
+            // Zero out the previous up-velocity 
             gravityAlignedVelocity.y = 0;
-            Rigidbody.velocity = transform.InverseTransformDirection(gravityAlignedVelocity);
 
             stepsSinceLastJump = 0;
             jumpPhase += 1;
@@ -807,6 +810,10 @@ namespace Hedronoid.Player
                 jumpSpeed = Mathf.Max(jumpSpeed - alignedSpeed, 0f);
             }          
 
+            // Transform the aligned velocity to world space
+            velocity = transform.InverseTransformDirection(gravityAlignedVelocity);
+
+            // Apply jump force after zeroing out local y-velocity
             velocity += jumpDirection * jumpSpeed;
         }
 

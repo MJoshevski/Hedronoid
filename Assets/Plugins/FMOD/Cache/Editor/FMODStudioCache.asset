@@ -17,11 +17,11 @@ MonoBehaviour:
   Banks:
   - {fileID: 1853122365376065793}
   IsStream: 0
-  Is3D: 1
+  Is3D: 0
   IsOneShot: 1
   Parameters: []
-  MinDistance: 1
-  MaxDistance: 20
+  MinDistance: 0
+  MaxDistance: 0
   Length: 863
 --- !u!114 &-7493752862495257904
 MonoBehaviour:
@@ -84,11 +84,11 @@ MonoBehaviour:
   Path: FMOD/Build/Desktop/Master.strings.bank
   Name: Master.strings
   StudioPath: bank:/Master.strings
-  lastModified: 637509158479729397
+  lastModified: 637512529596724196
   LoadResult: 0
   FileSizes:
   - Name: Desktop
-    Value: 1088
+    Value: 1136
   Exists: 1
 --- !u!114 &11400000
 MonoBehaviour:
@@ -113,12 +113,13 @@ MonoBehaviour:
   - {fileID: 323417763405778331}
   - {fileID: 1171206041571934396}
   - {fileID: -8400136905350644667}
+  - {fileID: 2308596742653851385}
   EditorParameters: []
   MasterBanks:
   - {fileID: 1853122365376065793}
   StringsBanks:
   - {fileID: -4829641087670619796}
-  stringsBankWriteTime: 637509158479729397
+  stringsBankWriteTime: 637512529596724196
   cacheVersion: 6
 --- !u!114 &261874365611567720
 MonoBehaviour:
@@ -160,11 +161,11 @@ MonoBehaviour:
   Banks:
   - {fileID: 1853122365376065793}
   IsStream: 0
-  Is3D: 1
+  Is3D: 0
   IsOneShot: 1
   Parameters: []
-  MinDistance: 1
-  MaxDistance: 20
+  MinDistance: 0
+  MaxDistance: 0
   Length: 1033
 --- !u!114 &1171206041571934396
 MonoBehaviour:
@@ -188,7 +189,7 @@ MonoBehaviour:
   Parameters: []
   MinDistance: 1
   MaxDistance: 20
-  Length: 0
+  Length: 398
 --- !u!114 &1777409834707339535
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -223,7 +224,7 @@ MonoBehaviour:
   Path: FMOD/Build/Desktop/Master.bank
   Name: Master
   StudioPath: bank:/Master
-  lastModified: 637509158479649625
+  lastModified: 637512529596664354
   LoadResult: 0
   FileSizes: []
   Exists: 1
@@ -250,6 +251,29 @@ MonoBehaviour:
   MinDistance: 0
   MaxDistance: 0
   Length: 0
+--- !u!114 &2308596742653851385
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: ceb653cd98e289a4e8697a1af55201f2, type: 3}
+  m_Name: event:/Player/Player_Movement/DJump
+  m_EditorClassIdentifier: 
+  Path: event:/Player/Player_Movement/DJump
+  guid: f15e9af4cf3fd949a14ec557680dd39d
+  Banks:
+  - {fileID: 1853122365376065793}
+  IsStream: 0
+  Is3D: 1
+  IsOneShot: 1
+  Parameters: []
+  MinDistance: 1
+  MaxDistance: 20
+  Length: 652
 --- !u!114 &6447661801968252080
 MonoBehaviour:
   m_ObjectHideFlags: 0
