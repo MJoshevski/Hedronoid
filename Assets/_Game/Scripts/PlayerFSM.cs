@@ -59,6 +59,9 @@ namespace Hedronoid.Player
         [Tooltip("How much faster do we want to fall?")]
         [Range(1, 100)]
         public float fallMultiplier = 25f;
+        [Tooltip("What is the limit of how high the fall multiplier goes?")]
+        [Range(1, 100)]
+        public float fallMultiplierThreshold = 5f;
         [Tooltip("How much gravity do we apply on low jumps?")]
         [Range(1, 100)]
         public float lowJumpMultiplier = 10f;
@@ -72,6 +75,9 @@ namespace Hedronoid.Player
         [Tooltip("Distance of the ground contact probe.")]
         [Min(0f)]
         public float probeDistance = 1f;
+        [Tooltip("Distance of the ground contact probe.")]
+        [Min(0f)]
+        public float dashProbeDistance = 5f;
         [Tooltip("Maximum allowed angle for walking on ground.")]
         [Range(0, 90)]
         public float maxGroundAngle = 25f;
@@ -305,7 +311,7 @@ namespace Hedronoid.Player
 
             transform.rotation = targetRotation;
 
-            ClearState();          
+            ClearState();
         }
 
         #endregion
@@ -418,6 +424,105 @@ namespace Hedronoid.Player
         }
         #endregion
 
+        #region STATE: DASHING
+        private float timeEnteredDash = 0f;
+
+        private void OnEnterDashing(FSMState fromState)
+        {
+            timeEnteredDash = Time.realtimeSinceStartup;
+
+            Vector3 moveDirection = movementVariables.MoveDirection;
+
+            if (moveDirection.sqrMagnitude < .25f)
+                moveDirection = transform.forward;
+
+            Vector3 forceDirection = moveDirection;
+
+            forceDirection.Normalize();
+
+            // Zero out vertical velocity on dash
+            Rigidbody.velocity = Vector3.zero;
+
+            dashVariables.DashesMade++;
+            timeOnDashEnter = Time.realtimeSinceStartup;
+            posBeforeDash = transform.position;
+            desiredDash = false;
+            Animator.CrossFade(animHashes.Dash, 0.2f);
+
+            StopAllCoroutines();
+            StartCoroutine(LerpCameraFov(100, 120));
+
+            FMODUnity.RuntimeManager.PlayOneShotAttached(m_playerAudioData.dash, gameObject);
+
+            dashStartPFX.Stop();
+            dashStartPFX.Play();
+
+            dashingPFX.Stop();
+            dashingPFX.Play();
+
+            secondaryGravityMultiplier = 1f; ;
+            Rigidbody.ApplyForce(forceDirection * dashVariables.PhysicalForce.Multiplier, dashVariables.PhysicalForce.ForceMode);
+        }
+
+        private void OnUpdateDashing()
+        {
+        }
+
+        private void OnFixedUpdateDashing()
+        {
+            if (OnGround || OnSteep)
+            {
+                SnapPlayerToGround();
+            }
+            else
+            {
+                gravityAlignedVelocity.y = 0f;
+            }
+
+            if (Vector3.Distance(posBeforeDash, transform.position) > dashVariables.MaxDistance ||
+                Time.realtimeSinceStartup - timeOnDashEnter > dashVariables.MaxTime)
+            {
+                Rigidbody.velocity = Vector3.zero;
+
+                if (OnGround || OnSteep)
+                    ChangeState(EPlayerStates.GROUND_MOVEMENT);
+                else ChangeState(EPlayerStates.FALLING);
+            }
+        }
+
+        private void OnExitDashing(FSMState fromstate)
+        {
+            _forceApplyCoroutine = null;
+
+            secondaryGravityMultiplier = 1f;
+
+            // Dead stop on dash-end
+            Rigidbody.velocity = Vector3.zero;
+            dashingPFX.Stop();
+
+            StopAllCoroutines();
+            StartCoroutine(LerpCameraFov(120, 100));
+
+            Animator.CrossFade(animHashes.LandRun, 0.2f);
+        }
+
+        IEnumerator LerpCameraFov(float from, float to)
+        {
+            float t = 0;
+
+            while (from != to)
+            {
+                GameplaySceneContext.OrbitCamera.orbitCamera.fieldOfView =
+                    Mathf.Lerp(from, to, t);
+
+                t += Time.fixedDeltaTime * 4f;
+                yield return null;
+            }
+
+            yield return null;
+        }
+        #endregion
+
         #region STATE: FALLING
         private void OnEnterFalling(FSMState fromState)
         {
@@ -434,6 +539,8 @@ namespace Hedronoid.Player
             Move();
 
             secondaryGravityMultiplier += (fallMultiplier - 1f) * Time.fixedDeltaTime;
+            secondaryGravityMultiplier = 
+                Mathf.Clamp(secondaryGravityMultiplier, 1f, fallMultiplierThreshold);
 
             if (OnGround || OnSteep)
             {
@@ -480,105 +587,6 @@ namespace Hedronoid.Player
 
         private void OnExitLanding(FSMState fromState)
         {
-        }
-        #endregion
-
-        #region STATE: DASHING
-        private float timeEnteredDash = 0f;
-
-        private void OnEnterDashing(FSMState fromState)
-        {
-            timeEnteredDash = Time.realtimeSinceStartup;
-
-            Vector3 moveDirection = movementVariables.MoveDirection;
-
-            if (moveDirection.sqrMagnitude < .25f)
-                moveDirection = transform.forward;
-
-            Vector3 forceDirection = moveDirection;
-
-            forceDirection.Normalize();
-
-            // Zero out vertical velocity on dash
-            Rigidbody.velocity = Vector3.zero;
-
-            dashVariables.DashesMade++;
-            timeOnDashEnter = Time.realtimeSinceStartup;
-            posBeforeDash = transform.position;
-            desiredDash = false;
-            Animator.CrossFade(animHashes.Dash, 0.2f);
-
-            StopAllCoroutines();
-            StartCoroutine(LerpCameraFov(100, 120));
-
-            FMODUnity.RuntimeManager.PlayOneShotAttached(m_playerAudioData.dash, gameObject);
-
-            dashStartPFX.Stop();
-            dashStartPFX.Play();
-
-            dashingPFX.Stop();
-            dashingPFX.Play();
-
-            secondaryGravityMultiplier = 1f; ;
-            Rigidbody.ApplyForce(forceDirection * dashVariables.PhysicalForce.Multiplier, dashVariables.PhysicalForce.ForceMode);
-        }
-
-        private void OnUpdateDashing()
-        {         
-        }
-
-        private void OnFixedUpdateDashing()
-        {
-            if (OnGround || OnSteep)
-            {
-
-            }
-            else
-            {
-                gravityAlignedVelocity.y = 0f;
-            }
-
-            if (Vector3.Distance(posBeforeDash, transform.position) > dashVariables.MaxDistance || 
-                Time.realtimeSinceStartup - timeOnDashEnter > dashVariables.MaxTime)
-            {
-                Rigidbody.velocity = Vector3.zero;
-
-                if (OnGround || OnSteep)
-                    ChangeState(EPlayerStates.GROUND_MOVEMENT);
-                else ChangeState(EPlayerStates.FALLING);
-            }
-        }
-
-        private void OnExitDashing(FSMState fromstate)
-        {
-            _forceApplyCoroutine = null;
-
-            secondaryGravityMultiplier = 1f;
-
-            // Dead stop on dash-end
-            Rigidbody.velocity = Vector3.zero;
-            dashingPFX.Stop();
-
-            StopAllCoroutines();
-            StartCoroutine(LerpCameraFov(120, 100));
-
-            Animator.CrossFade(animHashes.LandRun, 0.2f);
-        }
-
-        IEnumerator LerpCameraFov(float from, float to)
-        {
-            float t = 0;
-
-            while (from != to)
-            {
-                GameplaySceneContext.OrbitCamera.orbitCamera.fieldOfView =
-                    Mathf.Lerp(from, to, t);
-
-                t += Time.deltaTime * 4f;
-                yield return null;
-            }          
-
-            yield return null;
         }
         #endregion
 
@@ -673,7 +681,7 @@ namespace Hedronoid.Player
                     FMODUnity.RuntimeManager.PlayOneShot(m_playerAudioData.footsteps, transform.position);
                     timeFromLastFtstp = 0f;
                 }
-                timeFromLastFtstp += Time.deltaTime;
+                timeFromLastFtstp += Time.fixedDeltaTime;
             }
             else
             {
@@ -909,6 +917,24 @@ namespace Hedronoid.Player
 
             connectedRb = hit.rigidbody;
             return true;
+        }
+
+        void SnapPlayerToGround()
+        {
+            if (!Physics.Raycast(
+                Rigidbody.position, -upAxis, out RaycastHit hit,
+                dashProbeDistance, probeMask
+            ))
+            {
+                return;
+            }
+
+            float upDot = Vector3.Dot(upAxis, hit.normal);
+            if (upDot < GetMinDot(hit.collider.gameObject.layer))
+            {
+                return;
+            }
+            Rigidbody.position = hit.point;
         }
 
         bool CheckSteepContacts()

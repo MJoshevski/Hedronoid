@@ -55,7 +55,7 @@ Rigidbody:
   m_IsKinematic: 0
   m_Interpolate: 1
   m_Constraints: 112
-  m_CollisionDetection: 3
+  m_CollisionDetection: 2
 --- !u!114 &7861412649541033217
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -85,6 +85,7 @@ MonoBehaviour:
     m_Bits: 0
   maxSnapSpeed: 20
   probeDistance: 0.1
+  dashProbeDistance: 5
   maxGroundAngle: 40
   maxStairsAngle: 50
   movementVariables:
