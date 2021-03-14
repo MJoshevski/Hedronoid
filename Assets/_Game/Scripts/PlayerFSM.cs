@@ -272,7 +272,7 @@ namespace Hedronoid.Player
                 ChangeState(EPlayerStates.FLYING);
 
             if (desiredDash &&
-                (Time.realtimeSinceStartup - timeEnteredDash) >= dashVariables.DashCooldown &&
+                (Time.realtimeSinceStartup - timeOnDashEnter) >= dashVariables.DashCooldown &&
                  (dashVariables.DashesMade < dashVariables.MaxDashes))
             {
                 ChangeState(EPlayerStates.DASHING);
@@ -425,11 +425,9 @@ namespace Hedronoid.Player
         #endregion
 
         #region STATE: DASHING
-        private float timeEnteredDash = 0f;
-
         private void OnEnterDashing(FSMState fromState)
         {
-            timeEnteredDash = Time.realtimeSinceStartup;
+            timeOnDashEnter = Time.realtimeSinceStartup;
 
             Vector3 moveDirection = movementVariables.MoveDirection;
 
@@ -444,7 +442,6 @@ namespace Hedronoid.Player
             Rigidbody.velocity = Vector3.zero;
 
             dashVariables.DashesMade++;
-            timeOnDashEnter = Time.realtimeSinceStartup;
             posBeforeDash = transform.position;
             desiredDash = false;
             Animator.CrossFade(animHashes.Dash, 0.2f);
@@ -480,7 +477,7 @@ namespace Hedronoid.Player
             }
 
             if (Vector3.Distance(posBeforeDash, transform.position) > dashVariables.MaxDistance ||
-                Time.realtimeSinceStartup - timeOnDashEnter > dashVariables.MaxTime)
+                Time.realtimeSinceStartup - timeOnDashEnter >= dashVariables.MaxTime)
             {
                 Rigidbody.velocity = Vector3.zero;
 
