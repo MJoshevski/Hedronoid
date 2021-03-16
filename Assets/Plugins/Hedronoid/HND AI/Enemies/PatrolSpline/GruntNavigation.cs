@@ -419,6 +419,12 @@ namespace Hedronoid.AI
                 }
                 Gizmos.DrawLine(DefaultTarget.GetChild(DefaultTarget.childCount - 1).position, DefaultTarget.GetChild(0).position);
             }
+
+            Gizmos.color = Color.magenta;
+            Gizmos.DrawWireSphere(transform.position, m_sensorRange);
+
+            Gizmos.color = Color.blue;
+            Gizmos.DrawWireSphere(transform.position, m_sensorCutoffRange);
         }
 #endif
     }

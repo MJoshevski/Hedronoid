@@ -72,7 +72,9 @@ namespace Hedronoid.AI
                     if (hit.distance < distance)
                     {
                         distance = hit.distance;
-                        frontObject = hit.transform.gameObject;
+
+                        if(gameObject.layer != hit.transform.gameObject.layer)
+                            frontObject = hit.transform.gameObject;
                     }
                 }
             }
@@ -84,7 +86,8 @@ namespace Hedronoid.AI
                     if (hit.distance < distance)
                     {
                         distance = hit.distance;
-                        frontObject = hit.transform.gameObject;
+                        if (gameObject.layer != hit.transform.gameObject.layer)
+                            frontObject = hit.transform.gameObject;
                     }
                 }
             }

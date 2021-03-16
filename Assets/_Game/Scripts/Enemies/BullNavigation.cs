@@ -55,10 +55,10 @@ namespace Hedronoid.AI
 
             if (m_Target)
             {
-                var distanceToTaget = Vector3.Distance(transform.position, m_Target.position);
+                var distanceToTarget = Vector3.Distance(transform.position, m_Target.position);
 
                 // If we are within dash distance, change to the dash state
-                if (distanceToTaget <= m_dashDistance)
+                if (distanceToTarget <= m_dashDistance)
                 {
                     if (!dashed)
                     {
@@ -68,7 +68,7 @@ namespace Hedronoid.AI
                     }
                 }
 
-                if (distanceToTaget > m_sensorRange)
+                if (distanceToTarget > m_sensorRange)
                 {
                     // We can no longer see the target. Pick a waypoint
                     ChangeState(EStates.DefaultMovement);
@@ -94,6 +94,49 @@ namespace Hedronoid.AI
             else
             {
                 ChangeState(EStates.DefaultMovement);
+            }
+        }
+
+        public GameObject objInFront;
+        public override void ChangeTarget()
+        {
+            /*GameObject*/ objInFront = (m_Sensor as GruntSensor).GetObjectInFront();
+            Transform newTarget;
+
+            if (objInFront)
+            {
+                if (objInFront.layer != LayerMask.NameToLayer("Player"))
+                {
+                    objInFront = null;
+                    newTarget = (m_Sensor as GruntSensor).GetTargetWithinReach(m_sensorRange);
+                }
+                else
+                {
+                    newTarget = objInFront.transform;
+                }
+            }
+            else
+            {
+                newTarget = (m_Sensor as GruntSensor).GetTargetWithinReach(m_sensorRange);
+            }
+
+            if (newTarget)
+            {
+                m_Target = newTarget.transform;
+                if (enemyEmojis)
+                {
+                    enemyEmojis.ChangeTarget(m_Target.gameObject);
+                }
+                lastEvaluationPosition = m_Target.position;
+                if (!m_GruntDash.DashInProgress)
+                {
+                    ChangeState(EStates.GoToTarget);
+                    return;
+                }
+            }
+            else
+            {
+                remainingSensorTime = m_sensorTimestep;
             }
         }
 
