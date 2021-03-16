@@ -96,5 +96,50 @@ namespace Hedronoid.AI
                 ChangeState(EStates.DefaultMovement);
             }
         }
+
+        public override Vector3 CreateRandomWaypoint(Vector3 lastPos, float minRange, float maxRange)
+        {
+            Vector3 upAxis = m_Rb.transform.up;
+            Vector3 forwardAxis = m_Rb.transform.forward;
+
+            Vector3 newWayPointDirection = forwardAxis * UnityEngine.Random.Range(minRange, maxRange);
+            Vector3 newWayPoint = lastPos + newWayPointDirection;
+
+            bool found = false;
+            int searchCount = 50;
+            while (!found)
+            {
+                newWayPointDirection =
+                    Quaternion.AngleAxis(UnityEngine.Random.Range(0f, 360f), upAxis) * newWayPointDirection;
+                newWayPoint = lastPos + newWayPointDirection;
+
+                Vector3 groundDetectStart = new Vector3(newWayPoint.x, newWayPoint.y + 0.2f, newWayPoint.z);
+
+                RaycastHit rh;
+
+                if (Physics.Raycast(
+                    groundDetectStart,
+                    -upAxis, 
+                    out rh, 
+                    GroundDetectDistance * 2, 
+                    HNDAI.Settings.GroundLayer))
+                {
+                    NavMeshHit nmh;
+                    NavMesh.SamplePosition(rh.point, out nmh, 1f, NavMesh.AllAreas);
+                    if (nmh.hit)
+                    {
+                        //agent.destination = nmh.position;
+                        newWayPoint = nmh.position + upAxis * 0.2f;
+                        found = true;
+                    }
+                }
+                if (searchCount <= 0)
+                {
+                    return lastPos;
+                }
+                searchCount--;
+            }
+            return newWayPoint;
+        }
     }
 }

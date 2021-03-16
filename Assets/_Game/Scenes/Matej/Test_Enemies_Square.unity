@@ -3826,7 +3826,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 0
+  m_IsActive: 1
 --- !u!4 &95116212
 Transform:
   m_ObjectHideFlags: 0
@@ -5215,14 +5215,15 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   _currentState: 
-  m_DefaultTarget: {fileID: 321601603}
+  m_DefaultTarget: {fileID: 0}
   m_Target: {fileID: 321601603}
   m_MinWaypoints: 3
   m_MaxWaypoints: 7
-  m_MinWayPointDistance: 2
-  m_MaxWayPointDistance: 4
+  m_MinWayPointDistance: 15
+  m_MaxWayPointDistance: 55
   m_RadiusForGroundDetection: 0.5
   m_GroundDetectionDistance: 0.55
+  waypoints: []
   m_Rb: {fileID: 0}
   m_sensorRange: 100
   m_sensorCutoffRange: 120
@@ -9448,14 +9449,15 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   _currentState: 
-  m_DefaultTarget: {fileID: 321601603}
+  m_DefaultTarget: {fileID: 0}
   m_Target: {fileID: 321601603}
   m_MinWaypoints: 3
   m_MaxWaypoints: 7
-  m_MinWayPointDistance: 2
-  m_MaxWayPointDistance: 4
+  m_MinWayPointDistance: 15
+  m_MaxWayPointDistance: 55
   m_RadiusForGroundDetection: 0.5
   m_GroundDetectionDistance: 0.55
+  waypoints: []
   m_Rb: {fileID: 0}
   m_sensorRange: 100
   m_sensorCutoffRange: 120
@@ -17026,14 +17028,15 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   _currentState: 
-  m_DefaultTarget: {fileID: 321601603}
+  m_DefaultTarget: {fileID: 0}
   m_Target: {fileID: 321601603}
   m_MinWaypoints: 3
   m_MaxWaypoints: 7
-  m_MinWayPointDistance: 2
-  m_MaxWayPointDistance: 4
+  m_MinWayPointDistance: 15
+  m_MaxWayPointDistance: 55
   m_RadiusForGroundDetection: 0.5
   m_GroundDetectionDistance: 0.55
+  waypoints: []
   m_Rb: {fileID: 0}
   m_sensorRange: 100
   m_sensorCutoffRange: 120
@@ -23388,14 +23391,15 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   _currentState: 
-  m_DefaultTarget: {fileID: 321601603}
+  m_DefaultTarget: {fileID: 0}
   m_Target: {fileID: 321601603}
   m_MinWaypoints: 3
   m_MaxWaypoints: 7
-  m_MinWayPointDistance: 2
-  m_MaxWayPointDistance: 4
+  m_MinWayPointDistance: 15
+  m_MaxWayPointDistance: 55
   m_RadiusForGroundDetection: 0.5
   m_GroundDetectionDistance: 0.55
+  waypoints: []
   m_Rb: {fileID: 0}
   m_sensorRange: 100
   m_sensorCutoffRange: 120
@@ -35135,14 +35139,15 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   _currentState: 
-  m_DefaultTarget: {fileID: 321601603}
+  m_DefaultTarget: {fileID: 0}
   m_Target: {fileID: 321601603}
   m_MinWaypoints: 3
   m_MaxWaypoints: 7
-  m_MinWayPointDistance: 2
-  m_MaxWayPointDistance: 4
+  m_MinWayPointDistance: 15
+  m_MaxWayPointDistance: 55
   m_RadiusForGroundDetection: 0.5
   m_GroundDetectionDistance: 0.55
+  waypoints: []
   m_Rb: {fileID: 0}
   m_sensorRange: 100
   m_sensorCutoffRange: 120
@@ -47575,14 +47580,15 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   _currentState: 
-  m_DefaultTarget: {fileID: 321601603}
+  m_DefaultTarget: {fileID: 0}
   m_Target: {fileID: 321601603}
   m_MinWaypoints: 3
   m_MaxWaypoints: 7
-  m_MinWayPointDistance: 2
-  m_MaxWayPointDistance: 4
+  m_MinWayPointDistance: 15
+  m_MaxWayPointDistance: 55
   m_RadiusForGroundDetection: 0.5
   m_GroundDetectionDistance: 0.55
+  waypoints: []
   m_Rb: {fileID: 0}
   m_sensorRange: 100
   m_sensorCutoffRange: 120
@@ -67277,6 +67283,7 @@ MonoBehaviour:
   m_MaxWayPointDistance: 4
   m_RadiusForGroundDetection: 0.5
   m_GroundDetectionDistance: 0.55
+  waypoints: []
   m_Rb: {fileID: 0}
   m_sensorRange: 100
   m_sensorCutoffRange: 120
@@ -68371,14 +68378,15 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   _currentState: 
-  m_DefaultTarget: {fileID: 321601603}
+  m_DefaultTarget: {fileID: 0}
   m_Target: {fileID: 321601603}
   m_MinWaypoints: 3
   m_MaxWaypoints: 7
-  m_MinWayPointDistance: 2
-  m_MaxWayPointDistance: 4
+  m_MinWayPointDistance: 15
+  m_MaxWayPointDistance: 55
   m_RadiusForGroundDetection: 0.5
   m_GroundDetectionDistance: 0.55
+  waypoints: []
   m_Rb: {fileID: 0}
   m_sensorRange: 100
   m_sensorCutoffRange: 120

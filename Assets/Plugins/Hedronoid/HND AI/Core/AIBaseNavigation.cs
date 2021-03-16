@@ -76,6 +76,7 @@ namespace Hedronoid.AI
         }
 
         // Waypoints
+        //[SerializeField]
         protected Transform[] waypoints;
 
         protected const float GroundDetectDistance = 1000f;
@@ -337,7 +338,7 @@ namespace Hedronoid.AI
             if (m_HealthBase) m_HealthBase.CanBeOneShotted = false;
         }
 
-        public Vector3 CreateRandomWaypoint(Vector3 lastPos, float minRange, float maxRange)
+        public virtual Vector3 CreateRandomWaypoint(Vector3 lastPos, float minRange, float maxRange)
         {
             Vector3 newWayPointDirection = Vector3.forward * UnityEngine.Random.Range(minRange, maxRange);
             Vector3 newWayPoint = lastPos + newWayPointDirection;
