@@ -358,13 +358,12 @@ GameObject:
   - component: {fileID: 11840339}
   - component: {fileID: 11840338}
   - component: {fileID: 11840337}
-  - component: {fileID: 11840342}
   m_Layer: 11
   m_Name: Stairs (10)
   m_TagString: Forbidden
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 3
-  m_StaticEditorFlags: 8
+  m_StaticEditorFlags: 0
   m_IsActive: 1
 --- !u!64 &11840337
 MeshCollider:
@@ -1529,22 +1528,6 @@ Transform:
   m_Father: {fileID: 825462364}
   m_RootOrder: 4
   m_LocalEulerAnglesHint: {x: 360, y: -180, z: 0}
---- !u!114 &11840342
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 11840336}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 35e95dc5ff2b64380880dd7ac5922847, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  m_Size: {x: 4, y: 3, z: 4}
-  m_Center: {x: 0, y: 1, z: 0}
-  m_Area: 3
-  m_AffectedAgents: ffffffff
 --- !u!1 &14326058
 GameObject:
   m_ObjectHideFlags: 0
@@ -1557,13 +1540,12 @@ GameObject:
   - component: {fileID: 14326061}
   - component: {fileID: 14326060}
   - component: {fileID: 14326059}
-  - component: {fileID: 14326063}
   m_Layer: 11
   m_Name: Pillar (4)
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 3
-  m_StaticEditorFlags: 8
+  m_StaticEditorFlags: 0
   m_IsActive: 1
 --- !u!65 &14326059
 BoxCollider:
@@ -1647,22 +1629,6 @@ Transform:
   m_Father: {fileID: 1103182547}
   m_RootOrder: 10
   m_LocalEulerAnglesHint: {x: 30, y: 90, z: 90}
---- !u!114 &14326063
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 14326058}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 35e95dc5ff2b64380880dd7ac5922847, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  m_Size: {x: 4, y: 3, z: 4}
-  m_Center: {x: 0, y: 1, z: 0}
-  m_Area: 3
-  m_AffectedAgents: ffffffff
 --- !u!1 &20104284
 GameObject:
   m_ObjectHideFlags: 0
@@ -1778,7 +1744,7 @@ GameObject:
   m_TagString: Forbidden
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 3
-  m_StaticEditorFlags: 8
+  m_StaticEditorFlags: 0
   m_IsActive: 1
 --- !u!4 &28914594
 Transform:
@@ -2104,7 +2070,7 @@ GameObject:
   m_TagString: Forbidden
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 3
-  m_StaticEditorFlags: 8
+  m_StaticEditorFlags: 0
   m_IsActive: 1
 --- !u!4 &29843877
 Transform:
@@ -3687,10 +3653,10 @@ MonoBehaviour:
   m_IgnoreNavMeshObstacle: 1
   m_OverrideTileSize: 0
   m_TileSize: 256
-  m_OverrideVoxelSize: 0
-  m_VoxelSize: 0.16666667
+  m_OverrideVoxelSize: 1
+  m_VoxelSize: 2
   m_BuildHeightMesh: 0
-  m_NavMeshData: {fileID: 23800000, guid: 13f0520151b707945aecdae34ba7d066, type: 2}
+  m_NavMeshData: {fileID: 23800000, guid: 50e31f2d1a51d9d4c83f63abbf55bbdb, type: 2}
 --- !u!1 &92351188
 GameObject:
   m_ObjectHideFlags: 0
@@ -3905,7 +3871,7 @@ GameObject:
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 3
-  m_StaticEditorFlags: 8
+  m_StaticEditorFlags: 0
   m_IsActive: 1
 --- !u!4 &95717117
 Transform:
@@ -4156,7 +4122,7 @@ GameObject:
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 3
-  m_StaticEditorFlags: 8
+  m_StaticEditorFlags: 0
   m_IsActive: 1
 --- !u!4 &110529191
 Transform:
@@ -4439,7 +4405,7 @@ GameObject:
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 3
-  m_StaticEditorFlags: 8
+  m_StaticEditorFlags: 0
   m_IsActive: 1
 --- !u!4 &132604914
 Transform:
@@ -4626,7 +4592,7 @@ GameObject:
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 3
-  m_StaticEditorFlags: 8
+  m_StaticEditorFlags: 0
   m_IsActive: 1
 --- !u!4 &148353643
 Transform:
@@ -4721,7 +4687,7 @@ GameObject:
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 3
-  m_StaticEditorFlags: 8
+  m_StaticEditorFlags: 0
   m_IsActive: 1
 --- !u!4 &150614319
 Transform:
@@ -5172,7 +5138,7 @@ NavMeshAgent:
   m_GameObject: {fileID: 169845887}
   m_Enabled: 1
   m_AgentTypeID: 0
-  m_Radius: 3
+  m_Radius: 2
   m_Speed: 10
   m_Acceleration: 10
   avoidancePriority: 50
@@ -5647,7 +5613,7 @@ GameObject:
   m_TagString: Forbidden
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 3
-  m_StaticEditorFlags: 8
+  m_StaticEditorFlags: 0
   m_IsActive: 1
 --- !u!4 &174661090
 Transform:
@@ -6189,7 +6155,7 @@ GameObject:
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 3
-  m_StaticEditorFlags: 8
+  m_StaticEditorFlags: 0
   m_IsActive: 1
 --- !u!4 &181587874
 Transform:
@@ -7439,7 +7405,7 @@ GameObject:
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 3
-  m_StaticEditorFlags: 8
+  m_StaticEditorFlags: 0
   m_IsActive: 1
 --- !u!4 &241748438
 Transform:
@@ -7939,7 +7905,7 @@ GameObject:
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 3
-  m_StaticEditorFlags: 8
+  m_StaticEditorFlags: 0
   m_IsActive: 1
 --- !u!4 &254974838
 Transform:
@@ -9013,10 +8979,10 @@ MonoBehaviour:
   m_IgnoreNavMeshObstacle: 1
   m_OverrideTileSize: 0
   m_TileSize: 256
-  m_OverrideVoxelSize: 0
-  m_VoxelSize: 0.16666667
+  m_OverrideVoxelSize: 1
+  m_VoxelSize: 2
   m_BuildHeightMesh: 0
-  m_NavMeshData: {fileID: 23800000, guid: f8941d9a987f3e4419f60d8235c629e8, type: 2}
+  m_NavMeshData: {fileID: 23800000, guid: 9c307ea6732d40d4d9708b6ed4326a76, type: 2}
 --- !u!1 &308406398
 GameObject:
   m_ObjectHideFlags: 0
@@ -9129,7 +9095,7 @@ GameObject:
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 3
-  m_StaticEditorFlags: 8
+  m_StaticEditorFlags: 0
   m_IsActive: 1
 --- !u!4 &312183909
 Transform:
@@ -9255,7 +9221,7 @@ GameObject:
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 3
-  m_StaticEditorFlags: 8
+  m_StaticEditorFlags: 0
   m_IsActive: 1
 --- !u!4 &314046762
 Transform:
@@ -9412,7 +9378,7 @@ NavMeshAgent:
   m_GameObject: {fileID: 315507802}
   m_Enabled: 1
   m_AgentTypeID: 0
-  m_Radius: 3
+  m_Radius: 2
   m_Speed: 10
   m_Acceleration: 10
   avoidancePriority: 50
@@ -9906,13 +9872,12 @@ GameObject:
   - component: {fileID: 333238535}
   - component: {fileID: 333238534}
   - component: {fileID: 333238533}
-  - component: {fileID: 333238538}
   m_Layer: 11
   m_Name: Stairs (14)
   m_TagString: Forbidden
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 3
-  m_StaticEditorFlags: 8
+  m_StaticEditorFlags: 0
   m_IsActive: 1
 --- !u!64 &333238533
 MeshCollider:
@@ -11077,22 +11042,6 @@ Transform:
   m_Father: {fileID: 825462364}
   m_RootOrder: 10
   m_LocalEulerAnglesHint: {x: -0.001, y: -180, z: -90}
---- !u!114 &333238538
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 333238532}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 35e95dc5ff2b64380880dd7ac5922847, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  m_Size: {x: 4, y: 3, z: 4}
-  m_Center: {x: 0, y: 1, z: 0}
-  m_Area: 3
-  m_AffectedAgents: ffffffff
 --- !u!1 &337968481
 GameObject:
   m_ObjectHideFlags: 0
@@ -11259,13 +11208,12 @@ GameObject:
   - component: {fileID: 348500207}
   - component: {fileID: 348500206}
   - component: {fileID: 348500205}
-  - component: {fileID: 348500210}
   m_Layer: 11
   m_Name: Stairs (6)
   m_TagString: Forbidden
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 3
-  m_StaticEditorFlags: 8
+  m_StaticEditorFlags: 0
   m_IsActive: 1
 --- !u!64 &348500205
 MeshCollider:
@@ -12430,22 +12378,6 @@ Transform:
   m_Father: {fileID: 825462364}
   m_RootOrder: 2
   m_LocalEulerAnglesHint: {x: 180, y: -359.999, z: 0}
---- !u!114 &348500210
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 348500204}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 35e95dc5ff2b64380880dd7ac5922847, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  m_Size: {x: 4, y: 3, z: 4}
-  m_Center: {x: 0, y: 1, z: 0}
-  m_Area: 3
-  m_AffectedAgents: ffffffff
 --- !u!1 &351769332
 GameObject:
   m_ObjectHideFlags: 0
@@ -12719,7 +12651,7 @@ GameObject:
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 3
-  m_StaticEditorFlags: 8
+  m_StaticEditorFlags: 0
   m_IsActive: 1
 --- !u!4 &361839540
 Transform:
@@ -13354,7 +13286,7 @@ GameObject:
   m_TagString: Forbidden
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 3
-  m_StaticEditorFlags: 8
+  m_StaticEditorFlags: 0
   m_IsActive: 1
 --- !u!4 &388414140
 Transform:
@@ -13844,8 +13776,8 @@ MonoBehaviour:
   m_IgnoreNavMeshObstacle: 1
   m_OverrideTileSize: 0
   m_TileSize: 256
-  m_OverrideVoxelSize: 0
-  m_VoxelSize: 0.16666667
+  m_OverrideVoxelSize: 1
+  m_VoxelSize: 2
   m_BuildHeightMesh: 0
   m_NavMeshData: {fileID: 23800000, guid: 665f068bae4b59f42af2e0b39e3bf525, type: 2}
 --- !u!1 &398063577
@@ -14029,7 +13961,7 @@ GameObject:
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 3
-  m_StaticEditorFlags: 8
+  m_StaticEditorFlags: 0
   m_IsActive: 1
 --- !u!4 &414195798
 Transform:
@@ -14730,7 +14662,7 @@ GameObject:
   m_TagString: Forbidden
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 3
-  m_StaticEditorFlags: 8
+  m_StaticEditorFlags: 0
   m_IsActive: 1
 --- !u!4 &471090148
 Transform:
@@ -15518,7 +15450,7 @@ GameObject:
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 3
-  m_StaticEditorFlags: 8
+  m_StaticEditorFlags: 0
   m_IsActive: 1
 --- !u!4 &511457356
 Transform:
@@ -15964,7 +15896,7 @@ GameObject:
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 3
-  m_StaticEditorFlags: 8
+  m_StaticEditorFlags: 0
   m_IsActive: 1
 --- !u!4 &546816339
 Transform:
@@ -17026,7 +16958,7 @@ NavMeshAgent:
   m_GameObject: {fileID: 593369575}
   m_Enabled: 1
   m_AgentTypeID: 0
-  m_Radius: 3
+  m_Radius: 2
   m_Speed: 10
   m_Acceleration: 10
   avoidancePriority: 50
@@ -17343,7 +17275,7 @@ GameObject:
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 3
-  m_StaticEditorFlags: 8
+  m_StaticEditorFlags: 0
   m_IsActive: 1
 --- !u!4 &607374000
 Transform:
@@ -17438,7 +17370,7 @@ GameObject:
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 3
-  m_StaticEditorFlags: 8
+  m_StaticEditorFlags: 0
   m_IsActive: 1
 --- !u!4 &608282882
 Transform:
@@ -17908,13 +17840,12 @@ GameObject:
   - component: {fileID: 626846538}
   - component: {fileID: 626846537}
   - component: {fileID: 626846536}
-  - component: {fileID: 626846540}
   m_Layer: 11
   m_Name: PIllar (2)
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 3
-  m_StaticEditorFlags: 8
+  m_StaticEditorFlags: 0
   m_IsActive: 1
 --- !u!65 &626846536
 BoxCollider:
@@ -17998,22 +17929,6 @@ Transform:
   m_Father: {fileID: 1103182547}
   m_RootOrder: 4
   m_LocalEulerAnglesHint: {x: -30, y: 90, z: -90}
---- !u!114 &626846540
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 626846535}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 35e95dc5ff2b64380880dd7ac5922847, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  m_Size: {x: 4, y: 3, z: 4}
-  m_Center: {x: 0, y: 1, z: 0}
-  m_Area: 3
-  m_AffectedAgents: ffffffff
 --- !u!1 &632380902
 GameObject:
   m_ObjectHideFlags: 0
@@ -18031,7 +17946,7 @@ GameObject:
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 3
-  m_StaticEditorFlags: 8
+  m_StaticEditorFlags: 0
   m_IsActive: 1
 --- !u!4 &632380903
 Transform:
@@ -18245,13 +18160,12 @@ GameObject:
   - component: {fileID: 638120967}
   - component: {fileID: 638120966}
   - component: {fileID: 638120965}
-  - component: {fileID: 638120969}
   m_Layer: 11
   m_Name: PIllar (3)
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 3
-  m_StaticEditorFlags: 8
+  m_StaticEditorFlags: 0
   m_IsActive: 1
 --- !u!65 &638120965
 BoxCollider:
@@ -18335,22 +18249,6 @@ Transform:
   m_Father: {fileID: 1103182547}
   m_RootOrder: 5
   m_LocalEulerAnglesHint: {x: -30, y: 90, z: -90}
---- !u!114 &638120969
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 638120964}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 35e95dc5ff2b64380880dd7ac5922847, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  m_Size: {x: 4, y: 3, z: 4}
-  m_Center: {x: 0, y: 1, z: 0}
-  m_Area: 3
-  m_AffectedAgents: ffffffff
 --- !u!1 &640401959
 GameObject:
   m_ObjectHideFlags: 0
@@ -18779,7 +18677,7 @@ GameObject:
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 3
-  m_StaticEditorFlags: 8
+  m_StaticEditorFlags: 0
   m_IsActive: 1
 --- !u!4 &663887992
 Transform:
@@ -18900,13 +18798,12 @@ GameObject:
   - component: {fileID: 666620342}
   - component: {fileID: 666620341}
   - component: {fileID: 666620340}
-  - component: {fileID: 666620345}
   m_Layer: 11
   m_Name: Stairs (15)
   m_TagString: Forbidden
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 3
-  m_StaticEditorFlags: 8
+  m_StaticEditorFlags: 0
   m_IsActive: 1
 --- !u!64 &666620340
 MeshCollider:
@@ -20071,22 +19968,6 @@ Transform:
   m_Father: {fileID: 825462364}
   m_RootOrder: 11
   m_LocalEulerAnglesHint: {x: -0.001, y: -60.001, z: -90}
---- !u!114 &666620345
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 666620339}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 35e95dc5ff2b64380880dd7ac5922847, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  m_Size: {x: 4, y: 3, z: 4}
-  m_Center: {x: 0, y: 1, z: 0}
-  m_Area: 3
-  m_AffectedAgents: ffffffff
 --- !u!1 &666835948
 GameObject:
   m_ObjectHideFlags: 0
@@ -20222,13 +20103,12 @@ GameObject:
   - component: {fileID: 668651758}
   - component: {fileID: 668651757}
   - component: {fileID: 668651756}
-  - component: {fileID: 668651761}
   m_Layer: 11
   m_Name: Stairs (12)
   m_TagString: Forbidden
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 3
-  m_StaticEditorFlags: 8
+  m_StaticEditorFlags: 0
   m_IsActive: 1
 --- !u!64 &668651756
 MeshCollider:
@@ -21393,22 +21273,6 @@ Transform:
   m_Father: {fileID: 825462364}
   m_RootOrder: 8
   m_LocalEulerAnglesHint: {x: -0.001, y: -360, z: -90}
---- !u!114 &668651761
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 668651755}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 35e95dc5ff2b64380880dd7ac5922847, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  m_Size: {x: 4, y: 3, z: 4}
-  m_Center: {x: 0, y: 1, z: 0}
-  m_Area: 3
-  m_AffectedAgents: ffffffff
 --- !u!1 &669157558
 GameObject:
   m_ObjectHideFlags: 0
@@ -21610,13 +21474,12 @@ GameObject:
   - component: {fileID: 679196509}
   - component: {fileID: 679196508}
   - component: {fileID: 679196507}
-  - component: {fileID: 679196511}
   m_Layer: 11
   m_Name: Pillar (3)
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 3
-  m_StaticEditorFlags: 8
+  m_StaticEditorFlags: 0
   m_IsActive: 1
 --- !u!65 &679196507
 BoxCollider:
@@ -21700,22 +21563,6 @@ Transform:
   m_Father: {fileID: 1103182547}
   m_RootOrder: 9
   m_LocalEulerAnglesHint: {x: 30, y: 90, z: 90}
---- !u!114 &679196511
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 679196506}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 35e95dc5ff2b64380880dd7ac5922847, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  m_Size: {x: 4, y: 3, z: 4}
-  m_Center: {x: 0, y: 1, z: 0}
-  m_Area: 3
-  m_AffectedAgents: ffffffff
 --- !u!1 &680439568
 GameObject:
   m_ObjectHideFlags: 0
@@ -22100,13 +21947,12 @@ GameObject:
   - component: {fileID: 692507205}
   - component: {fileID: 692507204}
   - component: {fileID: 692507203}
-  - component: {fileID: 692507208}
   m_Layer: 11
   m_Name: Stairs (5)
   m_TagString: Forbidden
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 3
-  m_StaticEditorFlags: 8
+  m_StaticEditorFlags: 0
   m_IsActive: 1
 --- !u!64 &692507203
 MeshCollider:
@@ -23271,22 +23117,6 @@ Transform:
   m_Father: {fileID: 825462364}
   m_RootOrder: 1
   m_LocalEulerAnglesHint: {x: 180, y: -270, z: 0}
---- !u!114 &692507208
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 692507202}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 35e95dc5ff2b64380880dd7ac5922847, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  m_Size: {x: 4, y: 3, z: 4}
-  m_Center: {x: 0, y: 1, z: 0}
-  m_Area: 3
-  m_AffectedAgents: ffffffff
 --- !u!1 &697099508
 GameObject:
   m_ObjectHideFlags: 0
@@ -23492,7 +23322,7 @@ NavMeshAgent:
   m_GameObject: {fileID: 702027915}
   m_Enabled: 1
   m_AgentTypeID: 0
-  m_Radius: 3
+  m_Radius: 2
   m_Speed: 10
   m_Acceleration: 10
   avoidancePriority: 50
@@ -23692,7 +23522,7 @@ GameObject:
   m_TagString: Forbidden
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 3
-  m_StaticEditorFlags: 8
+  m_StaticEditorFlags: 0
   m_IsActive: 1
 --- !u!4 &702270858
 Transform:
@@ -24100,7 +23930,7 @@ GameObject:
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 3
-  m_StaticEditorFlags: 8
+  m_StaticEditorFlags: 0
   m_IsActive: 1
 --- !u!4 &708801293
 Transform:
@@ -24413,7 +24243,7 @@ GameObject:
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 3
-  m_StaticEditorFlags: 8
+  m_StaticEditorFlags: 0
   m_IsActive: 1
 --- !u!4 &722995370
 Transform:
@@ -26235,7 +26065,7 @@ GameObject:
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 3
-  m_StaticEditorFlags: 8
+  m_StaticEditorFlags: 0
   m_IsActive: 1
 --- !u!4 &812031595
 Transform:
@@ -26577,13 +26407,12 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 825462364}
-  - component: {fileID: 825462365}
   m_Layer: 11
   m_Name: Stairs
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 3
-  m_StaticEditorFlags: 8
+  m_StaticEditorFlags: 0
   m_IsActive: 1
 --- !u!4 &825462364
 Transform:
@@ -26611,22 +26440,6 @@ Transform:
   m_Father: {fileID: 853635696}
   m_RootOrder: 6
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!114 &825462365
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 825462363}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 35e95dc5ff2b64380880dd7ac5922847, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  m_Size: {x: 4, y: 3, z: 4}
-  m_Center: {x: 0, y: 1, z: 0}
-  m_Area: 3
-  m_AffectedAgents: ffffffff
 --- !u!1 &826636330
 GameObject:
   m_ObjectHideFlags: 0
@@ -26706,7 +26519,7 @@ GameObject:
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 3
-  m_StaticEditorFlags: 8
+  m_StaticEditorFlags: 0
   m_IsActive: 1
 --- !u!4 &831754182
 Transform:
@@ -27432,7 +27245,7 @@ GameObject:
   m_TagString: Forbidden
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 3
-  m_StaticEditorFlags: 8
+  m_StaticEditorFlags: 0
   m_IsActive: 1
 --- !u!4 &857276176
 Transform:
@@ -27952,10 +27765,10 @@ MonoBehaviour:
   m_IgnoreNavMeshObstacle: 1
   m_OverrideTileSize: 0
   m_TileSize: 256
-  m_OverrideVoxelSize: 0
-  m_VoxelSize: 0.16666667
+  m_OverrideVoxelSize: 1
+  m_VoxelSize: 2
   m_BuildHeightMesh: 0
-  m_NavMeshData: {fileID: 23800000, guid: 9c307ea6732d40d4d9708b6ed4326a76, type: 2}
+  m_NavMeshData: {fileID: 23800000, guid: a826297b443a67146b7b5e43906f3e8d, type: 2}
 --- !u!1 &862301403
 GameObject:
   m_ObjectHideFlags: 0
@@ -28479,7 +28292,7 @@ GameObject:
   m_TagString: Forbidden
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 3
-  m_StaticEditorFlags: 8
+  m_StaticEditorFlags: 0
   m_IsActive: 1
 --- !u!4 &878824401
 Transform:
@@ -28894,13 +28707,12 @@ GameObject:
   - component: {fileID: 881117071}
   - component: {fileID: 881117070}
   - component: {fileID: 881117069}
-  - component: {fileID: 881117073}
   m_Layer: 11
   m_Name: Pillar
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 3
-  m_StaticEditorFlags: 8
+  m_StaticEditorFlags: 0
   m_IsActive: 1
 --- !u!65 &881117069
 BoxCollider:
@@ -28984,22 +28796,6 @@ Transform:
   m_Father: {fileID: 1103182547}
   m_RootOrder: 12
   m_LocalEulerAnglesHint: {x: 30, y: 90, z: 90}
---- !u!114 &881117073
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 881117068}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 35e95dc5ff2b64380880dd7ac5922847, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  m_Size: {x: 4, y: 3, z: 4}
-  m_Center: {x: 0, y: 1, z: 0}
-  m_Area: 3
-  m_AffectedAgents: ffffffff
 --- !u!1 &883229107
 GameObject:
   m_ObjectHideFlags: 0
@@ -29661,13 +29457,12 @@ GameObject:
   - component: {fileID: 926999420}
   - component: {fileID: 926999419}
   - component: {fileID: 926999418}
-  - component: {fileID: 926999422}
   m_Layer: 11
   m_Name: PIllar (4)
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 3
-  m_StaticEditorFlags: 8
+  m_StaticEditorFlags: 0
   m_IsActive: 1
 --- !u!65 &926999418
 BoxCollider:
@@ -29751,22 +29546,6 @@ Transform:
   m_Father: {fileID: 1103182547}
   m_RootOrder: 6
   m_LocalEulerAnglesHint: {x: -30, y: 90, z: -90}
---- !u!114 &926999422
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 926999417}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 35e95dc5ff2b64380880dd7ac5922847, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  m_Size: {x: 4, y: 3, z: 4}
-  m_Center: {x: 0, y: 1, z: 0}
-  m_Area: 3
-  m_AffectedAgents: ffffffff
 --- !u!1 &929436382
 GameObject:
   m_ObjectHideFlags: 0
@@ -31585,7 +31364,7 @@ GameObject:
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 3
-  m_StaticEditorFlags: 8
+  m_StaticEditorFlags: 0
   m_IsActive: 1
 --- !u!4 &1017156079
 Transform:
@@ -32486,7 +32265,7 @@ GameObject:
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 3
-  m_StaticEditorFlags: 8
+  m_StaticEditorFlags: 0
   m_IsActive: 1
 --- !u!4 &1072806590
 Transform:
@@ -32991,7 +32770,7 @@ GameObject:
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 3
-  m_StaticEditorFlags: 8
+  m_StaticEditorFlags: 0
   m_IsActive: 1
 --- !u!4 &1084833802
 Transform:
@@ -33179,7 +32958,7 @@ GameObject:
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 3
-  m_StaticEditorFlags: 8
+  m_StaticEditorFlags: 0
   m_IsActive: 1
 --- !u!4 &1093448029
 Transform:
@@ -33337,7 +33116,7 @@ GameObject:
   m_TagString: Forbidden
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 3
-  m_StaticEditorFlags: 8
+  m_StaticEditorFlags: 0
   m_IsActive: 1
 --- !u!4 &1096940951
 Transform:
@@ -33722,7 +33501,7 @@ GameObject:
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 3
-  m_StaticEditorFlags: 8
+  m_StaticEditorFlags: 0
   m_IsActive: 1
 --- !u!4 &1098767395
 Transform:
@@ -33851,7 +33630,7 @@ GameObject:
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 3
-  m_StaticEditorFlags: 8
+  m_StaticEditorFlags: 0
   m_IsActive: 1
 --- !u!4 &1102384479
 Transform:
@@ -34017,13 +33796,12 @@ GameObject:
   - component: {fileID: 1104758772}
   - component: {fileID: 1104758771}
   - component: {fileID: 1104758770}
-  - component: {fileID: 1104758775}
   m_Layer: 11
   m_Name: Stairs (8)
   m_TagString: Forbidden
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 3
-  m_StaticEditorFlags: 8
+  m_StaticEditorFlags: 0
   m_IsActive: 1
 --- !u!64 &1104758770
 MeshCollider:
@@ -35188,22 +34966,6 @@ Transform:
   m_Father: {fileID: 825462364}
   m_RootOrder: 5
   m_LocalEulerAnglesHint: {x: 180, y: -270.001, z: 180}
---- !u!114 &1104758775
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1104758769}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 35e95dc5ff2b64380880dd7ac5922847, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  m_Size: {x: 4, y: 3, z: 4}
-  m_Center: {x: 0, y: 1, z: 0}
-  m_Area: 3
-  m_AffectedAgents: ffffffff
 --- !u!1 &1105270314
 GameObject:
   m_ObjectHideFlags: 0
@@ -35314,7 +35076,7 @@ NavMeshAgent:
   m_GameObject: {fileID: 1106969690}
   m_Enabled: 1
   m_AgentTypeID: 0
-  m_Radius: 3
+  m_Radius: 2
   m_Speed: 10
   m_Acceleration: 10
   avoidancePriority: 50
@@ -35610,7 +35372,7 @@ GameObject:
   m_TagString: Forbidden
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 3
-  m_StaticEditorFlags: 8
+  m_StaticEditorFlags: 0
   m_IsActive: 1
 --- !u!4 &1113068215
 Transform:
@@ -36558,7 +36320,7 @@ GameObject:
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 3
-  m_StaticEditorFlags: 8
+  m_StaticEditorFlags: 0
   m_IsActive: 1
 --- !u!4 &1136528581
 Transform:
@@ -36929,13 +36691,12 @@ GameObject:
   - component: {fileID: 1164926551}
   - component: {fileID: 1164926550}
   - component: {fileID: 1164926549}
-  - component: {fileID: 1164926552}
   m_Layer: 11
   m_Name: PIllar
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 3
-  m_StaticEditorFlags: 8
+  m_StaticEditorFlags: 0
   m_IsActive: 1
 --- !u!4 &1164926548
 Transform:
@@ -37019,22 +36780,6 @@ MeshFilter:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1164926547}
   m_Mesh: {fileID: 10202, guid: 0000000000000000e000000000000000, type: 0}
---- !u!114 &1164926552
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1164926547}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 35e95dc5ff2b64380880dd7ac5922847, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  m_Size: {x: 4, y: 3, z: 4}
-  m_Center: {x: 0, y: 1, z: 0}
-  m_Area: 3
-  m_AffectedAgents: ffffffff
 --- !u!1 &1165092029
 GameObject:
   m_ObjectHideFlags: 0
@@ -37054,7 +36799,7 @@ GameObject:
   m_TagString: Forbidden
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 3
-  m_StaticEditorFlags: 8
+  m_StaticEditorFlags: 0
   m_IsActive: 1
 --- !u!4 &1165092030
 Transform:
@@ -39570,10 +39315,10 @@ MonoBehaviour:
   m_IgnoreNavMeshObstacle: 1
   m_OverrideTileSize: 0
   m_TileSize: 256
-  m_OverrideVoxelSize: 0
-  m_VoxelSize: 0.16666667
+  m_OverrideVoxelSize: 1
+  m_VoxelSize: 2
   m_BuildHeightMesh: 0
-  m_NavMeshData: {fileID: 23800000, guid: a826297b443a67146b7b5e43906f3e8d, type: 2}
+  m_NavMeshData: {fileID: 23800000, guid: 13f0520151b707945aecdae34ba7d066, type: 2}
 --- !u!1 &1272262257
 GameObject:
   m_ObjectHideFlags: 0
@@ -39622,7 +39367,7 @@ GameObject:
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 3
-  m_StaticEditorFlags: 8
+  m_StaticEditorFlags: 0
   m_IsActive: 1
 --- !u!4 &1274957756
 Transform:
@@ -39779,7 +39524,7 @@ GameObject:
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 3
-  m_StaticEditorFlags: 8
+  m_StaticEditorFlags: 0
   m_IsActive: 1
 --- !u!4 &1285507178
 Transform:
@@ -40028,7 +39773,7 @@ GameObject:
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 3
-  m_StaticEditorFlags: 8
+  m_StaticEditorFlags: 0
   m_IsActive: 1
 --- !u!4 &1294916396
 Transform:
@@ -40157,7 +39902,7 @@ GameObject:
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 3
-  m_StaticEditorFlags: 8
+  m_StaticEditorFlags: 0
   m_IsActive: 1
 --- !u!4 &1296026383
 Transform:
@@ -40451,10 +40196,10 @@ MonoBehaviour:
   m_IgnoreNavMeshObstacle: 1
   m_OverrideTileSize: 0
   m_TileSize: 256
-  m_OverrideVoxelSize: 0
-  m_VoxelSize: 0.16666667
+  m_OverrideVoxelSize: 1
+  m_VoxelSize: 2
   m_BuildHeightMesh: 0
-  m_NavMeshData: {fileID: 23800000, guid: 50e31f2d1a51d9d4c83f63abbf55bbdb, type: 2}
+  m_NavMeshData: {fileID: 23800000, guid: f8941d9a987f3e4419f60d8235c629e8, type: 2}
 --- !u!1 &1304234309
 GameObject:
   m_ObjectHideFlags: 0
@@ -40667,7 +40412,7 @@ GameObject:
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 3
-  m_StaticEditorFlags: 8
+  m_StaticEditorFlags: 0
   m_IsActive: 1
 --- !u!4 &1313286408
 Transform:
@@ -40762,7 +40507,7 @@ GameObject:
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 3
-  m_StaticEditorFlags: 8
+  m_StaticEditorFlags: 0
   m_IsActive: 1
 --- !u!4 &1320563879
 Transform:
@@ -41036,13 +40781,12 @@ GameObject:
   - component: {fileID: 1327611406}
   - component: {fileID: 1327611405}
   - component: {fileID: 1327611404}
-  - component: {fileID: 1327611409}
   m_Layer: 11
   m_Name: Stairs (7)
   m_TagString: Forbidden
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 3
-  m_StaticEditorFlags: 8
+  m_StaticEditorFlags: 0
   m_IsActive: 1
 --- !u!64 &1327611404
 MeshCollider:
@@ -42207,22 +41951,6 @@ Transform:
   m_Father: {fileID: 825462364}
   m_RootOrder: 3
   m_LocalEulerAnglesHint: {x: 180, y: -449.999, z: 0}
---- !u!114 &1327611409
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1327611403}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 35e95dc5ff2b64380880dd7ac5922847, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  m_Size: {x: 4, y: 3, z: 4}
-  m_Center: {x: 0, y: 1, z: 0}
-  m_Area: 3
-  m_AffectedAgents: ffffffff
 --- !u!1 &1328037270
 GameObject:
   m_ObjectHideFlags: 0
@@ -43280,13 +43008,12 @@ GameObject:
   - component: {fileID: 1362352584}
   - component: {fileID: 1362352583}
   - component: {fileID: 1362352582}
-  - component: {fileID: 1362352586}
   m_Layer: 11
   m_Name: Pillar (1)
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 3
-  m_StaticEditorFlags: 8
+  m_StaticEditorFlags: 0
   m_IsActive: 1
 --- !u!65 &1362352582
 BoxCollider:
@@ -43370,22 +43097,6 @@ Transform:
   m_Father: {fileID: 1103182547}
   m_RootOrder: 7
   m_LocalEulerAnglesHint: {x: 30, y: 90, z: 90}
---- !u!114 &1362352586
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1362352581}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 35e95dc5ff2b64380880dd7ac5922847, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  m_Size: {x: 4, y: 3, z: 4}
-  m_Center: {x: 0, y: 1, z: 0}
-  m_Area: 3
-  m_AffectedAgents: ffffffff
 --- !u!1 &1362783683
 GameObject:
   m_ObjectHideFlags: 0
@@ -43464,7 +43175,7 @@ GameObject:
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 3
-  m_StaticEditorFlags: 8
+  m_StaticEditorFlags: 0
   m_IsActive: 1
 --- !u!4 &1368739910
 Transform:
@@ -43742,7 +43453,7 @@ GameObject:
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 3
-  m_StaticEditorFlags: 8
+  m_StaticEditorFlags: 0
   m_IsActive: 1
 --- !u!4 &1376336326
 Transform:
@@ -43837,7 +43548,7 @@ GameObject:
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 3
-  m_StaticEditorFlags: 8
+  m_StaticEditorFlags: 0
   m_IsActive: 1
 --- !u!4 &1378500942
 Transform:
@@ -43965,7 +43676,7 @@ GameObject:
   m_TagString: Forbidden
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 3
-  m_StaticEditorFlags: 8
+  m_StaticEditorFlags: 0
   m_IsActive: 1
 --- !u!4 &1387512252
 Transform:
@@ -44743,7 +44454,7 @@ GameObject:
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 3
-  m_StaticEditorFlags: 8
+  m_StaticEditorFlags: 0
   m_IsActive: 1
 --- !u!4 &1416778257
 Transform:
@@ -44995,7 +44706,7 @@ GameObject:
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 3
-  m_StaticEditorFlags: 8
+  m_StaticEditorFlags: 0
   m_IsActive: 1
 --- !u!4 &1430490685
 Transform:
@@ -47428,7 +47139,7 @@ GameObject:
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 3
-  m_StaticEditorFlags: 8
+  m_StaticEditorFlags: 0
   m_IsActive: 1
 --- !u!4 &1563940492
 Transform:
@@ -47650,7 +47361,7 @@ GameObject:
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 3
-  m_StaticEditorFlags: 8
+  m_StaticEditorFlags: 0
   m_IsActive: 1
 --- !u!4 &1573799305
 Transform:
@@ -47807,7 +47518,7 @@ NavMeshAgent:
   m_GameObject: {fileID: 1579787299}
   m_Enabled: 1
   m_AgentTypeID: 0
-  m_Radius: 3
+  m_Radius: 2
   m_Speed: 10
   m_Acceleration: 10
   avoidancePriority: 50
@@ -48441,7 +48152,7 @@ GameObject:
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 3
-  m_StaticEditorFlags: 8
+  m_StaticEditorFlags: 0
   m_IsActive: 1
 --- !u!4 &1629253576
 Transform:
@@ -48598,7 +48309,7 @@ GameObject:
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 3
-  m_StaticEditorFlags: 8
+  m_StaticEditorFlags: 0
   m_IsActive: 1
 --- !u!4 &1635228218
 Transform:
@@ -48689,13 +48400,12 @@ GameObject:
   - component: {fileID: 1635236764}
   - component: {fileID: 1635236763}
   - component: {fileID: 1635236762}
-  - component: {fileID: 1635236766}
   m_Layer: 11
   m_Name: Stairs (4)
   m_TagString: Forbidden
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 3
-  m_StaticEditorFlags: 8
+  m_StaticEditorFlags: 0
   m_IsActive: 1
 --- !u!4 &1635236761
 Transform:
@@ -48705,7 +48415,7 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1635236760}
   m_LocalRotation: {x: 0.0000029504295, y: -0.0000014454083, z: 1, w: 0.0000014540705}
-  m_LocalPosition: {x: 40.668896, y: -6.072176, z: 129.09839}
+  m_LocalPosition: {x: 40.7, y: -10.7, z: 128.9}
   m_LocalScale: {x: 39.92548, y: 1, z: 1}
   m_Children:
   - {fileID: 878824401}
@@ -49860,22 +49570,6 @@ MeshFilter:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1635236760}
   m_Mesh: {fileID: 361335726}
---- !u!114 &1635236766
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1635236760}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 35e95dc5ff2b64380880dd7ac5922847, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  m_Size: {x: 4, y: 3, z: 4}
-  m_Center: {x: 0, y: 1, z: 0}
-  m_Area: 3
-  m_AffectedAgents: ffffffff
 --- !u!1 &1638457073
 GameObject:
   m_ObjectHideFlags: 0
@@ -50483,7 +50177,7 @@ GameObject:
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 3
-  m_StaticEditorFlags: 8
+  m_StaticEditorFlags: 0
   m_IsActive: 1
 --- !u!4 &1659642398
 Transform:
@@ -51632,7 +51326,7 @@ GameObject:
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 3
-  m_StaticEditorFlags: 8
+  m_StaticEditorFlags: 0
   m_IsActive: 1
 --- !u!4 &1705212180
 Transform:
@@ -51879,7 +51573,7 @@ GameObject:
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 3
-  m_StaticEditorFlags: 8
+  m_StaticEditorFlags: 0
   m_IsActive: 1
 --- !u!4 &1710631170
 Transform:
@@ -52352,7 +52046,7 @@ GameObject:
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 3
-  m_StaticEditorFlags: 8
+  m_StaticEditorFlags: 0
   m_IsActive: 1
 --- !u!4 &1747103105
 Transform:
@@ -52477,7 +52171,7 @@ GameObject:
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 3
-  m_StaticEditorFlags: 8
+  m_StaticEditorFlags: 0
   m_IsActive: 1
 --- !u!4 &1750550558
 Transform:
@@ -52916,13 +52610,12 @@ GameObject:
   - component: {fileID: 1751490161}
   - component: {fileID: 1751490160}
   - component: {fileID: 1751490159}
-  - component: {fileID: 1751490163}
   m_Layer: 11
   m_Name: PIllar (1)
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 3
-  m_StaticEditorFlags: 8
+  m_StaticEditorFlags: 0
   m_IsActive: 1
 --- !u!65 &1751490159
 BoxCollider:
@@ -53006,22 +52699,6 @@ Transform:
   m_Father: {fileID: 1103182547}
   m_RootOrder: 3
   m_LocalEulerAnglesHint: {x: -30, y: 90, z: -90}
---- !u!114 &1751490163
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1751490158}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 35e95dc5ff2b64380880dd7ac5922847, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  m_Size: {x: 4, y: 3, z: 4}
-  m_Center: {x: 0, y: 1, z: 0}
-  m_Area: 3
-  m_AffectedAgents: ffffffff
 --- !u!23 &1752819006 stripped
 MeshRenderer:
   m_CorrespondingSourceObject: {fileID: 998356590043849621, guid: f41802e248f2e42178e949a42908c5b4,
@@ -53233,7 +52910,7 @@ GameObject:
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 3
-  m_StaticEditorFlags: 8
+  m_StaticEditorFlags: 0
   m_IsActive: 1
 --- !u!4 &1769439977
 Transform:
@@ -53396,7 +53073,7 @@ GameObject:
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 3
-  m_StaticEditorFlags: 8
+  m_StaticEditorFlags: 0
   m_IsActive: 1
 --- !u!4 &1774911762
 Transform:
@@ -54313,7 +53990,7 @@ GameObject:
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 3
-  m_StaticEditorFlags: 8
+  m_StaticEditorFlags: 0
   m_IsActive: 1
 --- !u!4 &1804930790
 Transform:
@@ -54592,7 +54269,7 @@ GameObject:
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 3
-  m_StaticEditorFlags: 8
+  m_StaticEditorFlags: 0
   m_IsActive: 1
 --- !u!4 &1824747188
 Transform:
@@ -55225,7 +54902,7 @@ GameObject:
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 3
-  m_StaticEditorFlags: 8
+  m_StaticEditorFlags: 0
   m_IsActive: 1
 --- !u!4 &1855222316
 Transform:
@@ -55500,13 +55177,12 @@ GameObject:
   - component: {fileID: 1863798343}
   - component: {fileID: 1863798342}
   - component: {fileID: 1863798341}
-  - component: {fileID: 1863798345}
   m_Layer: 11
   m_Name: Pillar (2)
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 3
-  m_StaticEditorFlags: 8
+  m_StaticEditorFlags: 0
   m_IsActive: 1
 --- !u!65 &1863798341
 BoxCollider:
@@ -55590,22 +55266,6 @@ Transform:
   m_Father: {fileID: 1103182547}
   m_RootOrder: 8
   m_LocalEulerAnglesHint: {x: 30, y: 90, z: 90}
---- !u!114 &1863798345
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1863798340}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 35e95dc5ff2b64380880dd7ac5922847, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  m_Size: {x: 4, y: 3, z: 4}
-  m_Center: {x: 0, y: 1, z: 0}
-  m_Area: 3
-  m_AffectedAgents: ffffffff
 --- !u!1 &1864751386
 GameObject:
   m_ObjectHideFlags: 0
@@ -56568,7 +56228,7 @@ GameObject:
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 3
-  m_StaticEditorFlags: 8
+  m_StaticEditorFlags: 0
   m_IsActive: 1
 --- !u!4 &1926375990
 Transform:
@@ -57488,13 +57148,12 @@ GameObject:
   - component: {fileID: 1953950054}
   - component: {fileID: 1953950053}
   - component: {fileID: 1953950052}
-  - component: {fileID: 1953950057}
   m_Layer: 11
   m_Name: Stairs (9)
   m_TagString: Forbidden
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 3
-  m_StaticEditorFlags: 8
+  m_StaticEditorFlags: 0
   m_IsActive: 1
 --- !u!64 &1953950052
 MeshCollider:
@@ -58659,22 +58318,6 @@ Transform:
   m_Father: {fileID: 825462364}
   m_RootOrder: 7
   m_LocalEulerAnglesHint: {x: 180, y: -450.001, z: -180}
---- !u!114 &1953950057
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1953950051}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 35e95dc5ff2b64380880dd7ac5922847, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  m_Size: {x: 4, y: 3, z: 4}
-  m_Center: {x: 0, y: 1, z: 0}
-  m_Area: 3
-  m_AffectedAgents: ffffffff
 --- !u!1 &1955252758
 GameObject:
   m_ObjectHideFlags: 0
@@ -58903,13 +58546,12 @@ GameObject:
   - component: {fileID: 1969990031}
   - component: {fileID: 1969990030}
   - component: {fileID: 1969990029}
-  - component: {fileID: 1969990034}
   m_Layer: 11
   m_Name: Stairs (11)
   m_TagString: Forbidden
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 3
-  m_StaticEditorFlags: 8
+  m_StaticEditorFlags: 0
   m_IsActive: 1
 --- !u!64 &1969990029
 MeshCollider:
@@ -60074,22 +59716,6 @@ Transform:
   m_Father: {fileID: 825462364}
   m_RootOrder: 6
   m_LocalEulerAnglesHint: {x: 0, y: -360.001, z: 0}
---- !u!114 &1969990034
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1969990028}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 35e95dc5ff2b64380880dd7ac5922847, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  m_Size: {x: 4, y: 3, z: 4}
-  m_Center: {x: 0, y: 1, z: 0}
-  m_Area: 3
-  m_AffectedAgents: ffffffff
 --- !u!1 &1973365530
 GameObject:
   m_ObjectHideFlags: 0
@@ -60467,7 +60093,7 @@ GameObject:
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 3
-  m_StaticEditorFlags: 8
+  m_StaticEditorFlags: 0
   m_IsActive: 1
 --- !u!4 &1997842709
 Transform:
@@ -60624,7 +60250,7 @@ GameObject:
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 3
-  m_StaticEditorFlags: 8
+  m_StaticEditorFlags: 0
   m_IsActive: 1
 --- !u!4 &2001931561
 Transform:
@@ -60750,7 +60376,7 @@ GameObject:
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 3
-  m_StaticEditorFlags: 8
+  m_StaticEditorFlags: 0
   m_IsActive: 1
 --- !u!4 &2004038815
 Transform:
@@ -61860,7 +61486,7 @@ GameObject:
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 3
-  m_StaticEditorFlags: 8
+  m_StaticEditorFlags: 0
   m_IsActive: 1
 --- !u!4 &2042781828
 Transform:
@@ -62925,13 +62551,12 @@ GameObject:
   - component: {fileID: 2101323766}
   - component: {fileID: 2101323765}
   - component: {fileID: 2101323764}
-  - component: {fileID: 2101323769}
   m_Layer: 11
   m_Name: Stairs (13)
   m_TagString: Forbidden
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 3
-  m_StaticEditorFlags: 8
+  m_StaticEditorFlags: 0
   m_IsActive: 1
 --- !u!64 &2101323764
 MeshCollider:
@@ -64096,22 +63721,6 @@ Transform:
   m_Father: {fileID: 825462364}
   m_RootOrder: 9
   m_LocalEulerAnglesHint: {x: -0.001, y: -285, z: -90}
---- !u!114 &2101323769
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 2101323763}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 35e95dc5ff2b64380880dd7ac5922847, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  m_Size: {x: 4, y: 3, z: 4}
-  m_Center: {x: 0, y: 1, z: 0}
-  m_Area: 3
-  m_AffectedAgents: ffffffff
 --- !u!1 &2107621134
 GameObject:
   m_ObjectHideFlags: 0
@@ -65105,7 +64714,7 @@ GameObject:
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 3
-  m_StaticEditorFlags: 8
+  m_StaticEditorFlags: 0
   m_IsActive: 1
 --- !u!4 &2143161211
 Transform:
