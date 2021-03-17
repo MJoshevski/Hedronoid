@@ -20,8 +20,8 @@ namespace Hedronoid.AI
         // [SerializeField]
         // private NPC.NPCType m_NPCTypeToHunt;
 
-        private Collider[] m_colliderBuffer = new Collider[10];
-        private List<Transform> m_targetsInRange = new List<Transform>(10);
+        protected Collider[] m_colliderBuffer = new Collider[10];
+        protected List<Transform> m_targetsInRange = new List<Transform>(10);
 
         public override Transform GetTargetWithinReach(float distance)
         {

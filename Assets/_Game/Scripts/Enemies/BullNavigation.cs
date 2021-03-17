@@ -97,28 +97,14 @@ namespace Hedronoid.AI
             }
         }
 
-        public GameObject objInFront;
         public override void ChangeTarget()
         {
-            /*GameObject*/ objInFront = (m_Sensor as GruntSensor).GetObjectInFront();
             Transform newTarget;
 
-            if (objInFront)
-            {
-                if (objInFront.layer != LayerMask.NameToLayer("Player"))
-                {
-                    objInFront = null;
-                    newTarget = (m_Sensor as GruntSensor).GetTargetWithinReach(m_sensorRange);
-                }
-                else
-                {
-                    newTarget = objInFront.transform;
-                }
-            }
-            else
-            {
-                newTarget = (m_Sensor as GruntSensor).GetTargetWithinReach(m_sensorRange);
-            }
+            newTarget = (m_Sensor as BullSensor).GetTargetInsideCone(10f, m_Rb.transform.forward, 35f, 15f);
+
+            if (!newTarget)
+                newTarget = (m_Sensor as BullSensor).GetTargetWithinReach(m_sensorRange);
 
             if (newTarget)
             {
