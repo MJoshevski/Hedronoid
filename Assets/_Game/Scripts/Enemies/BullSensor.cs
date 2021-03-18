@@ -25,7 +25,7 @@ namespace Hedronoid.AI
             {
                 if (players.Length == 1)
                 {
-                    return players[0].collider.gameObject.transform;
+                    return players[0].collider.transform;
                 }
             }
             return null;
