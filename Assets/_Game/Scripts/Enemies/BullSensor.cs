@@ -6,17 +6,17 @@ namespace Hedronoid.AI
 {
     public class BullSensor : GruntSensor
     {
+        [SerializeField]
+        protected float maxRadius = 10f;
+        [SerializeField]
+        protected float maxDistance = 35f;
+        [SerializeField]
+        protected float coneAngle = 15f;
+
         private Physics physics;
-        private float m_maxRadius, m_maxDistance, m_coneAngle;
-        private Vector3 m_direction;
 
-        public Transform GetTargetInsideCone(float maxRadius, Vector3 direction, float maxDistance, float coneAngle)
+        public Transform GetTargetInsideCone(Vector3 direction)
         {
-            m_maxRadius = maxRadius;
-            m_maxDistance = maxDistance;
-            m_coneAngle = coneAngle;
-            m_direction = direction;
-
             // First check if we have any players in range
             RaycastHit[] players = physics.ConeCastNonAlloc(transform.position, maxRadius, direction, m_colliderBuffer.Length, maxDistance, coneAngle);
 
@@ -44,8 +44,8 @@ namespace Hedronoid.AI
             Popcron.Gizmos.Cone(
                 transform.position,
                 transform.rotation,
-                m_maxDistance,
-                m_coneAngle,
+                maxDistance,
+                coneAngle,
                 Color.yellow);
         }
     }

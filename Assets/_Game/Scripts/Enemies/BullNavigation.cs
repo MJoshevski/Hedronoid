@@ -101,7 +101,7 @@ namespace Hedronoid.AI
         {
             Transform newTarget;
 
-            newTarget = (m_Sensor as BullSensor).GetTargetInsideCone(10f, m_Rb.transform.forward, 35f, 15f);
+            newTarget = (m_Sensor as BullSensor).GetTargetInsideCone(m_Rb.transform.forward);
 
             if (!newTarget)
                 newTarget = (m_Sensor as BullSensor).GetTargetWithinReach(m_sensorRange);
