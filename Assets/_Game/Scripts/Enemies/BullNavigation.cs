@@ -9,23 +9,7 @@ namespace Hedronoid.AI
 {
     public class BullNavigation : GruntNavigation
     {
-        private Vector3 upAxis, targetDirection;
-
-        protected override void FixedUpdate()
-        {
-            base.FixedUpdate();
-
-            //targetDirection = (m_Target.position - transform.position).normalized;
-
-            upAxis = GravityService.GetUpAxis(m_Rb.transform.position);
-
-            //Quaternion targetRotation = Quaternion.Slerp(
-            //    transform.rotation,
-            //    Quaternion.LookRotation(targetDirection, upAxis),
-            //    Time.fixedDeltaTime);
-
-            //transform.rotation = targetRotation;
-        }
+        private Vector3 targetDirection;
 
         public override bool SetAgentDestination(Vector3 destination)
         {
@@ -33,10 +17,11 @@ namespace Hedronoid.AI
             {
                 return false;
             }
+
             // First make sure that the destination is grounded
             var groundDetectStart = new Vector3(destination.x, destination.y + 1f, destination.z);
             RaycastHit rh;
-            if (Physics.Raycast(groundDetectStart, -upAxis, out rh, GroundDetectDistance * 2, HNDAI.Settings.GroundLayer))
+            if (Physics.Raycast(groundDetectStart, -m_Rb.transform.up, out rh, GroundDetectDistance * 2, HNDAI.Settings.GroundLayer))
             {
                 NavMeshHit nmh;
                 NavMesh.SamplePosition(rh.point, out nmh, 3f, NavMesh.AllAreas);
