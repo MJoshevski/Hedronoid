@@ -53,7 +53,7 @@ namespace Hedronoid.AI
                     }
                 }
 
-                if (distanceToTarget > m_sensorRange)
+                if (distanceToTarget > m_sensorCutoffRange)
                 {
                     // We can no longer see the target. Pick a waypoint
                     ChangeState(EStates.DefaultMovement);

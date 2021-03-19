@@ -328,7 +328,7 @@ namespace Popcron
         public static void Cone(Vector3 position, Quaternion rotation, float length, float angle, Color? color = null, bool dashed = false, int pointsCount = 16)
         {
             //draw the end of the cone
-            float endAngle = Mathf.Tan(angle * 0.5f * Mathf.Deg2Rad) * length;
+            float endAngle = Mathf.Tan(angle / 2f * 0.5f * Mathf.Deg2Rad) * length;
             Vector3 forward = rotation * Vector3.forward;
             Vector3 endPosition = position + forward * length;
             float offset = 0f;
