@@ -990,6 +990,9 @@ namespace Hedronoid.Player
         }
         void OnCollisionEnter(Collision collision)
         {
+            if (collision.gameObject.layer == LayerMask.NameToLayer("Enemy"))
+                FMODUnity.RuntimeManager.PlayOneShot(m_playerAudioData.recieveHit, transform.position);
+
             EvaluateCollision(collision);
         }
 
