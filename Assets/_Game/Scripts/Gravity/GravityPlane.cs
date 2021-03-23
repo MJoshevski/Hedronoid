@@ -16,8 +16,20 @@ namespace Hedronoid
 
         float outerFalloffFactor;
 
+        // BOUNDS
+        [HideInInspector]
+        public BoxCollider boundsCollider;
+
         void OnValidate()
         {
+            if(!boundsCollider)
+                boundsCollider = GetComponent<BoxCollider>();
+
+            boundsCollider.isTrigger = true;
+            boundsCollider.size = 
+                2 * new Vector3(boundaryDistance.x, outerFalloffDistance / 2f, boundaryDistance.y);
+            boundsCollider.center = new Vector3(0, outerFalloffDistance / 2f, 0);
+
             boundaryDistance = Vector2.Max(boundaryDistance, Vector2.zero);
             outerFalloffDistance = Mathf.Max(outerFalloffDistance, outerDistance);
             outerFalloffFactor = 1f / (outerFalloffDistance - outerDistance);

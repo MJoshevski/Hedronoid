@@ -7,14 +7,23 @@ namespace Hedronoid
         [Header("Gravity Variables")]
         [SerializeField]
         float gravity = 9.81f;
+        public float Gravity { get { return gravity; } }
 
         [SerializeField, Min(0f)]
         float outerRadius = 10f, outerFalloffRadius = 15f;
+        public float OuterRadius { get { return outerRadius; } }
+        public float OuterFalloffRadius { get { return outerFalloffRadius; } }
 
         [SerializeField, Min(0f)]
         float innerFalloffRadius = 1f, innerRadius = 5f;
+        public float InnerFalloffRadius { get { return innerFalloffRadius; } }
+        public float InnerRadius { get { return innerRadius; } }
 
         float innerFalloffFactor, outerFalloffFactor;
+
+        // BOUNDS
+        [HideInInspector]
+        public SphereCollider boundsCollider;
 
         protected override void Awake()
         {
@@ -23,6 +32,13 @@ namespace Hedronoid
 
         void OnValidate()
         {
+            if (!boundsCollider)
+                boundsCollider = GetComponent<SphereCollider>();
+
+            boundsCollider.isTrigger = true;
+            boundsCollider.radius = outerFalloffRadius;
+            boundsCollider.center = Vector3.zero;
+
             innerFalloffRadius = Mathf.Max(innerFalloffRadius, 0f);
             innerRadius = Mathf.Max(innerRadius, innerFalloffRadius);
             outerRadius = Mathf.Max(outerRadius, innerRadius);

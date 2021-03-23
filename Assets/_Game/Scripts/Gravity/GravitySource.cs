@@ -1,33 +1,45 @@
 ﻿using UnityEngine;
 using System.Collections.Generic;
+using System;
 
 namespace Hedronoid
 {
+    [RequireComponent(typeof(BoxCollider))]
+    [RequireComponent(typeof(Rigidbody))]
     public class GravitySource : HNDMonoBehaviour
     {
-        [Header("Collision Layer/Tag")]
+        [Header("Collisions and overlaps")]
         public LayerMask triggerLayers;
-        public string triggerTag;
-
-        [Header("On Enter")]
-        public List<GravitySource> enableOnEnter = new List<GravitySource>();
-        public List<GravitySource> disableOnEnter = new List<GravitySource>();
-
-        [Header("On Stay")]
-        public List<GravitySource> enableOnStay = new List<GravitySource>();
-        public List<GravitySource> disableOnStay = new List<GravitySource>();
-
-        [Header("On Exit")]
-        public List<GravitySource> enableOnExit = new List<GravitySource>();
-        public List<GravitySource> disableOnExit = new List<GravitySource>();
+        public int priorityWeight = 0;
+        public List<GravitySource> OverlappingSources { get; private set; } = new List<GravitySource>();
 
         protected override void OnEnable()
         {
+            base.OnEnable();
+
+            OverlappingSources.Clear();
+            OverlappingSources = GetOverlaps();
             GravityService.Register(this);
+        }
+
+        protected virtual void Update()
+        {
+            if (transform.hasChanged)
+            {
+                OverlappingSources.Clear();
+                OverlappingSources = GetOverlaps();
+            }
         }
 
         protected override void OnDisable()
         {
+            base.OnDisable();
+            GravityService.Unregister(this);
+        }
+
+        protected override void OnDestroy()
+        {
+            base.OnDestroy();
             GravityService.Unregister(this);
         }
 
@@ -39,25 +51,21 @@ namespace Hedronoid
         public virtual void OnTriggerEnter(Collider other)
         {
             if (!IsInLayerMaskOrTag(other)) return;
-
-            EnableDisableSources(enableOnEnter, true);
-            EnableDisableSources(disableOnEnter, false);
         }
 
         public virtual void OnTriggerStay(Collider other)
         {
             if (!IsInLayerMaskOrTag(other)) return;
-
-            EnableDisableSources(enableOnStay, true);
-            EnableDisableSources(disableOnStay, false);
         }
 
         public virtual void OnTriggerExit(Collider other)
         {
             if (!IsInLayerMaskOrTag(other)) return;
+        }
 
-            EnableDisableSources(enableOnExit, true);
-            EnableDisableSources(disableOnExit, false);
+        protected virtual List<GravitySource> GetOverlaps()
+        {
+            throw new NotImplementedException();
         }
 
         private void EnableDisableSources(List<GravitySource> sources, bool enable)
@@ -70,8 +78,7 @@ namespace Hedronoid
 
         private bool IsInLayerMaskOrTag(Collider other)
         {
-            return (other.tag == triggerTag || 
-                (triggerLayers.value & (1 << other.gameObject.layer)) > 0);
+            return ((triggerLayers.value & (1 << other.gameObject.layer)) > 0);
         }
     }
 }
