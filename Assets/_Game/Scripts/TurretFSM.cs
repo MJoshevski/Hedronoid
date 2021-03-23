@@ -61,6 +61,9 @@ namespace Hedronoid
         public Transform partToRotate;
         public float turnSpeed = 10f;
 
+        [Header("FMOD Audio Data")]
+        public NPCAudioData m_enemyAudioData;
+
         // Use this for initialization
 
         protected override void Awake()
@@ -163,6 +166,8 @@ namespace Hedronoid
                 rb_auto = auto.GetComponent<Rigidbody>();
                 rb_auto.AddForce(shootDirection.normalized * shootForcePrimary);
                 lastFired_Auto = Time.realtimeSinceStartup;
+
+                FMODUnity.RuntimeManager.PlayOneShot(m_enemyAudioData.bulletPrimary[0], transform.position);
             }
             //else if (Input.GetButtonDown("Fire2") &&
             //    Time.realtimeSinceStartup - lastFired_Shotgun > fireRateSecondary)

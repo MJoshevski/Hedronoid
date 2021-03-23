@@ -2,8 +2,8 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-[CreateAssetMenu(menuName = "Hedronoid/Audio/NPC", fileName = "New NPC Sheet")]
-public class NPCAudioData : ScriptableObject
+[CreateAssetMenu(menuName = "Hedronoid/Audio/Player", fileName = "New Player Sheet")]
+public class PlayerAudioData : ScriptableObject
 {
     [Header("Movement")]
     [FMODUnity.EventRef]
