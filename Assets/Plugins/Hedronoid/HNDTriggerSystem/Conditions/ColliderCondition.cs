@@ -17,6 +17,7 @@ namespace Hedronoid.TriggerSystem
         public enum ConditionType
         {
             ENTER,
+            ENTER_TOGGLE,
             INSIDE,
             EXIT,
             OUTSIDE
@@ -171,6 +172,10 @@ namespace Hedronoid.TriggerSystem
             if (m_ConditionType == ConditionType.ENTER)
             {
                 SetConditionFulfilled(false, other);
+            }
+            else if (m_ConditionType == ConditionType.ENTER_TOGGLE)
+            {
+                SetConditionFulfilled(true, other);
             }
             else if (m_ConditionType == ConditionType.INSIDE)
             {
