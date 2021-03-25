@@ -19,6 +19,10 @@ namespace Hedronoid
 
         float innerFalloffFactor, outerFalloffFactor;
 
+        // BOUNDS
+        [HideInInspector]
+        public BoxCollider boundsCollider;
+
         protected override void Awake()
         {
             OnValidate();
@@ -26,6 +30,18 @@ namespace Hedronoid
 
         void OnValidate()
         {
+            if (!boundsCollider)
+                boundsCollider = GetComponent<BoxCollider>();
+
+            boundsCollider.isTrigger = true;
+            boundsCollider.size =
+                2 * new Vector3(
+                    boundaryDistance.x + outerFalloffDistance, 
+                    boundaryDistance.y + outerFalloffDistance, 
+                    boundaryDistance.z + outerFalloffDistance);
+
+            boundsCollider.center = Vector3.zero;
+
             boundaryDistance = Vector3.Max(boundaryDistance, Vector3.zero);
             float maxInner = Mathf.Min(
                 Mathf.Min(boundaryDistance.x, boundaryDistance.y), boundaryDistance.z

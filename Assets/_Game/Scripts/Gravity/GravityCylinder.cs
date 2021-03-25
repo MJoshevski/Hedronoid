@@ -27,13 +27,21 @@ namespace Hedronoid
 
         float innerFalloffFactor, outerFalloffFactor;
 
-        protected override void Awake()
-        {
-            OnValidate();
-        }
+        // BOUNDS
+        [HideInInspector]
+        public CapsuleCollider boundsCollider;
 
         void OnValidate()
         {
+            if (!boundsCollider)
+                boundsCollider = GetComponent<CapsuleCollider>();
+
+            boundsCollider.isTrigger = true;
+            boundsCollider.radius = outerFalloffRadius;
+            boundsCollider.height = boundaryHeight + (2f * outerFalloffRadius);
+            boundsCollider.center = Vector3.zero;
+
+
             boundaryHeight = Mathf.Max(boundaryHeight, 0f);
             boundaryRadius = Mathf.Max(boundaryRadius, 0f);
 
