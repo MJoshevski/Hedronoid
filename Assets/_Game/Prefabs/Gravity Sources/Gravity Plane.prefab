@@ -355,7 +355,7 @@ GameObject:
   - component: {fileID: 7597725145684824320}
   - component: {fileID: 7388752683576324234}
   - component: {fileID: 8109935520850872483}
-  m_Layer: 0
+  m_Layer: 16
   m_Name: Gravity
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -390,8 +390,8 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   triggerLayers:
     serializedVersion: 2
-    m_Bits: 0
-  priorityWeight: 0
+    m_Bits: 66048
+  priorityWeight: 1
   gravity: 9.81
   boundaryDistance: {x: 13.96, y: 11.9}
   outerDistance: 5

@@ -23,13 +23,10 @@ namespace Hedronoid
         [HideInInspector]
         public BoxCollider boundsCollider;
 
-        protected override void Awake()
+        protected override void OnValidate()
         {
-            OnValidate();
-        }
+            base.OnValidate();
 
-        void OnValidate()
-        {
             if (!boundsCollider)
                 boundsCollider = GetComponent<BoxCollider>();
 

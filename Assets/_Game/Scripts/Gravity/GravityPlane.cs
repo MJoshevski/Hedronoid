@@ -1,4 +1,5 @@
-﻿using UnityEngine;
+﻿using System.Collections.Generic;
+using UnityEngine;
 
 namespace Hedronoid
 {
@@ -20,9 +21,11 @@ namespace Hedronoid
         [HideInInspector]
         public BoxCollider boundsCollider;
 
-        void OnValidate()
+        protected override void OnValidate()
         {
-            if(!boundsCollider)
+            base.OnValidate();
+
+            if (!boundsCollider)
                 boundsCollider = GetComponent<BoxCollider>();
 
             boundsCollider.isTrigger = true;
@@ -37,6 +40,9 @@ namespace Hedronoid
 
         public override Vector3 GetGravity(Vector3 position)
         {
+            PrioritizeActiveOverlappedGravities(position);
+            if (CurrentPriorityWeight == 1) return Vector3.zero;
+
             position =
                transform.InverseTransformDirection(position - transform.position);
 
@@ -85,6 +91,7 @@ namespace Hedronoid
             {
                 g *= 1f - (distance - outerDistance) * outerFalloffFactor;
             }
+
             return transform.TransformDirection(g * vector);
         }
 

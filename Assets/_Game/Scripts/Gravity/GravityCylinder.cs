@@ -31,8 +31,10 @@ namespace Hedronoid
         [HideInInspector]
         public CapsuleCollider boundsCollider;
 
-        void OnValidate()
+        protected override void OnValidate()
         {
+            base.OnValidate(); 
+
             if (!boundsCollider)
                 boundsCollider = GetComponent<CapsuleCollider>();
 
@@ -40,7 +42,6 @@ namespace Hedronoid
             boundsCollider.radius = outerFalloffRadius;
             boundsCollider.height = boundaryHeight + (2f * outerFalloffRadius);
             boundsCollider.center = Vector3.zero;
-
 
             boundaryHeight = Mathf.Max(boundaryHeight, 0f);
             boundaryRadius = Mathf.Max(boundaryRadius, 0f);

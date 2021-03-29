@@ -1,45 +1,66 @@
 ﻿using UnityEngine;
 using System.Collections.Generic;
 using System;
+using Hedronoid.Core;
 
 namespace Hedronoid
 {
     [RequireComponent(typeof(BoxCollider))]
     [RequireComponent(typeof(Rigidbody))]
-    public class GravitySource : HNDMonoBehaviour
+    public class GravitySource : HNDMonoBehaviour, IGameplaySceneContextInjector
     {
+        public GameplaySceneContext GameplaySceneContext { get; set; }
+
         [Header("Collisions and overlaps")]
         public LayerMask triggerLayers;
-        public int priorityWeight = 0;
+
+        //[HideInInspector]
+        [Range(1,10)]
+        public int CurrentPriorityWeight = 1;
+        [HideInInspector]
+        public bool IsPlayerInGravity = false;
+
         public List<GravitySource> OverlappingSources { get; private set; } = new List<GravitySource>();
+
+        protected Rigidbody m_Rb;
+
+        protected override void Awake()
+        {
+            base.Awake();
+
+            this.Inject(gameObject);
+            OnValidate();
+        }
+
+        protected virtual void OnValidate()
+        {
+            if (!m_Rb)
+                m_Rb = GetComponent<Rigidbody>();
+
+            if (m_Rb && m_Rb.useGravity)
+                m_Rb.useGravity = false;
+        }
 
         protected override void OnEnable()
         {
             base.OnEnable();
 
-            OverlappingSources.Clear();
-            OverlappingSources = GetOverlaps();
             GravityService.Register(this);
         }
 
-        protected virtual void Update()
-        {
-            if (transform.hasChanged)
-            {
-                OverlappingSources.Clear();
-                OverlappingSources = GetOverlaps();
-            }
-        }
+        //protected override void OnDisable()
+        //{
+        //    base.OnDisable();
 
-        protected override void OnDisable()
-        {
-            base.OnDisable();
-            GravityService.Unregister(this);
-        }
+        //    OverlappingSources.Clear();
+        //    GravityService.Unregister(this);
+        //}
 
         protected override void OnDestroy()
         {
             base.OnDestroy();
+
+            OverlappingSources.Clear();
             GravityService.Unregister(this);
         }
 
@@ -50,22 +71,98 @@ namespace Hedronoid
 
         public virtual void OnTriggerEnter(Collider other)
         {
-            if (!IsInLayerMaskOrTag(other)) return;
+            if (!IsInLayerMask(other)) return;
+
+            GravitySource grSrc = other.gameObject.GetComponent<GravitySource>();
+            if (grSrc && !OverlappingSources.Contains(grSrc))
+                    OverlappingSources.Add(grSrc);
+
+            if (other.gameObject.layer == LayerMask.NameToLayer("Player"))
+            {
+                IsPlayerInGravity = true;
+                CurrentPriorityWeight = 2;
+
+                foreach (GravitySource gs in OverlappingSources)
+                {
+                    if (gs.IsPlayerInGravity)
+                        gs.CurrentPriorityWeight = 1;
+                }
+            }
         }
 
         public virtual void OnTriggerStay(Collider other)
         {
-            if (!IsInLayerMaskOrTag(other)) return;
+            if (!IsInLayerMask(other)) return;
         }
 
         public virtual void OnTriggerExit(Collider other)
         {
-            if (!IsInLayerMaskOrTag(other)) return;
+            if (!IsInLayerMask(other)) return;
+
+            GravitySource grSrc = other.gameObject.GetComponent<GravitySource>();
+            if (grSrc && OverlappingSources.Contains(grSrc))
+                OverlappingSources.Remove(grSrc);
+
+            if (other.gameObject.layer == LayerMask.NameToLayer("Player"))
+            {
+                IsPlayerInGravity = false;
+                CurrentPriorityWeight = 1;
+
+                foreach (GravitySource gs in OverlappingSources)
+                    if (gs.IsPlayerInGravity)
+                        gs.CurrentPriorityWeight = 2;
+
+            }
         }
 
-        protected virtual List<GravitySource> GetOverlaps()
+        protected void PrioritizeActiveOverlappedGravities(Vector3 position)
         {
-            throw new NotImplementedException();
+            List<GravitySource> activeGravities = GravityService.GetActiveGravitySources();
+            Dictionary<GravitySource, float> srcAngleDictionary = new Dictionary<GravitySource, float>();
+            Vector3 moveDir = Vector3.zero;
+            moveDir = GameplaySceneContext.Player.movementVariables.MoveDirection;
+
+            if (activeGravities.Count > 1 && moveDir != null && moveDir != Vector3.zero)
+            {
+                foreach (GravitySource gs in activeGravities)
+                {
+                    Vector3 playerToGravityDir = (gs.transform.position - position).normalized;
+                    float angle = Vector3.Angle(playerToGravityDir, moveDir);
+
+                    srcAngleDictionary.Add(gs, angle);
+
+                    //Debug.LogErrorFormat("SOURCE {0} has angle with player {1}.", gs.transform.parent.name, angle);
+
+                }
+
+                GravitySource[] srcs = new GravitySource[srcAngleDictionary.Count];
+                srcAngleDictionary.Keys.CopyTo(srcs, 0);
+
+                GravitySource l = srcs[0];
+
+                for (int i = 1; i < srcs.Length; ++i)
+                {
+                    GravitySource r = srcs[i];
+
+                    if (srcAngleDictionary[l] > srcAngleDictionary[r])
+                        l = r;
+                }
+
+                Debug.LogErrorFormat("MIN>>>>>SRC {0} has angle with player {1}. And this is src: {2}",
+                    l.transform.parent.name, srcAngleDictionary[l], this.transform.parent.name);
+
+                if (this != l)
+                {
+                    CurrentPriorityWeight = 1;
+                    Debug.LogError("ZERO");
+
+                }
+                else
+                {
+                    CurrentPriorityWeight = 2;
+                    Debug.LogError("NOT ZERO");
+                }
+            }
         }
 
         private void EnableDisableSources(List<GravitySource> sources, bool enable)
@@ -76,7 +173,7 @@ namespace Hedronoid
                         gs.enabled = enable;
         }
 
-        private bool IsInLayerMaskOrTag(Collider other)
+        private bool IsInLayerMask(Collider other)
         {
             return ((triggerLayers.value & (1 << other.gameObject.layer)) > 0);
         }
