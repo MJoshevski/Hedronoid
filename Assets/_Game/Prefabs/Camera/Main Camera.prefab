@@ -11,7 +11,6 @@ GameObject:
   - component: {fileID: 2808058908603988581}
   - component: {fileID: 2808058908603988590}
   - component: {fileID: 2808058908603988582}
-  - component: {fileID: 2808058908603988635}
   - component: {fileID: 2808058908603988585}
   - component: {fileID: 2808058908603988584}
   - component: {fileID: 2808058908603988587}
@@ -119,25 +118,6 @@ MonoBehaviour:
   LockCursor: 1
   manualPositionOffset: {x: 1.5, y: 2}
   manualRotationOffset: {x: 0, y: 0, z: 0}
---- !u!114 &2808058908603988635
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 2808058908603988580}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 2816949335604a941b77b6b9fbbaf36b, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  portals:
-  - {fileID: 0}
-  - {fileID: 0}
-  - {fileID: 0}
-  - {fileID: 0}
-  - {fileID: 0}
-  - {fileID: 0}
 --- !u!124 &2808058908603988585
 Behaviour:
   m_ObjectHideFlags: 0
@@ -197,6 +177,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 86c6556701af9e04380698b89f691b6e, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  attenuationObject: {fileID: 0}
   ListenerNumber: -1
 --- !u!114 &2808058908603988634
 MonoBehaviour:

@@ -27,8 +27,8 @@ namespace Hedronoid
         protected override void Awake()
         {
             base.Awake();
-
             this.Inject(gameObject);
+
             OnValidate();
         }
 
@@ -47,14 +47,6 @@ namespace Hedronoid
 
             GravityService.Register(this);
         }
-
-        //protected override void OnDisable()
-        //{
-        //    base.OnDisable();
-
-        //    OverlappingSources.Clear();
-        //    GravityService.Unregister(this);
-        //}
 
         protected override void OnDestroy()
         {
@@ -80,11 +72,12 @@ namespace Hedronoid
             if (other.gameObject.layer == LayerMask.NameToLayer("Player"))
             {
                 IsPlayerInGravity = true;
-                CurrentPriorityWeight = 2;
 
-                foreach (GravitySource gs in OverlappingSources)
+                List<GravitySource> activeGravities = GravityService.GetActiveGravitySources();
+                if (activeGravities.Count == 1)
                 {
-                    if (gs.IsPlayerInGravity)
+                    CurrentPriorityWeight = 2;
+                    foreach (GravitySource gs in OverlappingSources)
                         gs.CurrentPriorityWeight = 1;
                 }
             }
@@ -104,35 +97,24 @@ namespace Hedronoid
                 OverlappingSources.Remove(grSrc);
 
             if (other.gameObject.layer == LayerMask.NameToLayer("Player"))
-            {
                 IsPlayerInGravity = false;
-                CurrentPriorityWeight = 1;
-
-                foreach (GravitySource gs in OverlappingSources)
-                    if (gs.IsPlayerInGravity)
-                        gs.CurrentPriorityWeight = 2;
-
-            }
         }
 
         protected void PrioritizeActiveOverlappedGravities(Vector3 position)
         {
             List<GravitySource> activeGravities = GravityService.GetActiveGravitySources();
             Dictionary<GravitySource, float> srcAngleDictionary = new Dictionary<GravitySource, float>();
-            Vector3 moveDir = Vector3.zero;
-            moveDir = GameplaySceneContext.Player.movementVariables.MoveDirection;
+            Vector3 moveDir = GameplaySceneContext.Player.movementVariables.MoveDirection;
 
             if (activeGravities.Count > 1 && moveDir != null && moveDir != Vector3.zero)
             {
                 foreach (GravitySource gs in activeGravities)
                 {
                     Vector3 playerToGravityDir = (gs.transform.position - position).normalized;
-                    float angle = Vector3.Angle(playerToGravityDir, moveDir);
+                    float angle = Mathf.Abs(Vector3.Angle(playerToGravityDir, moveDir));
 
                     srcAngleDictionary.Add(gs, angle);
-
                     //Debug.LogErrorFormat("SOURCE {0} has angle with player {1}.", gs.transform.parent.name, angle);
-
                 }
 
                 GravitySource[] srcs = new GravitySource[srcAngleDictionary.Count];
@@ -148,19 +130,16 @@ namespace Hedronoid
                         l = r;
                 }
 
-                Debug.LogErrorFormat("MIN>>>>>SRC {0} has angle with player {1}. And this is src: {2}",
-                    l.transform.parent.name, srcAngleDictionary[l], this.transform.parent.name);
+                //Debug.LogErrorFormat("MIN>>>>>SRC {0} has angle with player {1}. And this is src: {2}",
+                //    l.transform.parent.name, srcAngleDictionary[l], this.transform.parent.name);
 
                 if (this != l)
                 {
                     CurrentPriorityWeight = 1;
-                    Debug.LogError("ZERO");
-
                 }
                 else
                 {
                     CurrentPriorityWeight = 2;
-                    Debug.LogError("NOT ZERO");
                 }
             }
         }
