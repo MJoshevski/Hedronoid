@@ -14,7 +14,7 @@ namespace Hedronoid
         [Header("Collisions and overlaps")]
         public LayerMask triggerLayers;
 
-        //[HideInInspector]
+        [HideInInspector]
         [Range(1,10)]
         public int CurrentPriorityWeight = 1;
         [HideInInspector]
@@ -100,8 +100,22 @@ namespace Hedronoid
                 IsPlayerInGravity = false;
         }
 
+        private float lastTimestampPrioritization = 0;
         protected void PrioritizeActiveOverlappedGravities(Vector3 position)
         {
+
+            // HACK (Maybe..): This prevents the update priority to execute on each frame. 
+            // WHY: Jittering between gravities bug. When we are between overlapping 
+            // gravities the movement direction rotates to accomodate for the new gravity. 
+            // By doing so it made a small angle and overrode the priority system by reverting 
+            // the gravity back to the previous one.
+            // By constraining the execution step, we avoid this issue (so far).
+
+            if (Time.realtimeSinceStartup - lastTimestampPrioritization <= 0.2f) return;
+            else lastTimestampPrioritization = Time.realtimeSinceStartup;
+
+            //
+
             List<GravitySource> activeGravities = GravityService.GetActiveGravitySources();
             Dictionary<GravitySource, float> srcAngleDictionary = new Dictionary<GravitySource, float>();
             Vector3 moveDir = GameplaySceneContext.Player.movementVariables.MoveDirection;
@@ -111,7 +125,7 @@ namespace Hedronoid
                 foreach (GravitySource gs in activeGravities)
                 {
                     Vector3 playerToGravityDir = (gs.transform.position - position).normalized;
-                    float angle = Mathf.Abs(Vector3.Angle(playerToGravityDir, moveDir));
+                    float angle = Vector3.Angle(playerToGravityDir, moveDir);
 
                     srcAngleDictionary.Add(gs, angle);
                     //Debug.LogErrorFormat("SOURCE {0} has angle with player {1}.", gs.transform.parent.name, angle);
@@ -141,6 +155,13 @@ namespace Hedronoid
                 {
                     CurrentPriorityWeight = 2;
                 }
+            }
+            else if (activeGravities.Count == 1 && activeGravities[0] == this)
+            {
+                CurrentPriorityWeight = 2;
+
+                foreach (GravitySource gs in OverlappingSources)
+                    gs.CurrentPriorityWeight = 1;
             }
         }
 
