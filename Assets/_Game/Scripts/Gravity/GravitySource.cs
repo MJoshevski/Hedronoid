@@ -12,7 +12,11 @@ namespace Hedronoid
         public GameplaySceneContext GameplaySceneContext { get; set; }
 
         [Header("Collisions and overlaps")]
+        [Tooltip("Which layers are allowed to collide with this gravity source?")]
         public LayerMask triggerLayers;
+        [Tooltip("Should the boundaries control the scale/position of the trigger collider?")]
+        [SerializeField]
+        protected bool AutomaticColliderSize = true;
 
         [HideInInspector]
         [Range(1,10)]
@@ -102,26 +106,24 @@ namespace Hedronoid
 
         private float lastTimestampPrioritization = 0;
         protected void PrioritizeActiveOverlappedGravities(Vector3 position)
-        {
-
-            // HACK (Maybe..): This prevents the update priority to execute on each frame. 
-            // WHY: Jittering between gravities bug. When we are between overlapping 
-            // gravities the movement direction rotates to accomodate for the new gravity. 
-            // By doing so it made a small angle and overrode the priority system by reverting 
-            // the gravity back to the previous one.
-            // By constraining the execution step, we avoid this issue (so far).
-
-            if (Time.realtimeSinceStartup - lastTimestampPrioritization <= 0.2f) return;
-            else lastTimestampPrioritization = Time.realtimeSinceStartup;
-
-            //
-
+        {           
             List<GravitySource> activeGravities = GravityService.GetActiveGravitySources();
             Dictionary<GravitySource, float> srcAngleDictionary = new Dictionary<GravitySource, float>();
             Vector3 moveDir = GameplaySceneContext.Player.movementVariables.MoveDirection;
 
             if (activeGravities.Count > 1 && moveDir != null && moveDir != Vector3.zero)
             {
+                // HACK (Maybe..): This prevents the update priority to execute on each frame. 
+                // WHY: Jittering between gravities bug. When we are between overlapping 
+                // gravities the movement direction rotates to accomodate for the new gravity. 
+                // By doing so it made a small angle and overrode the priority system by reverting 
+                // the gravity back to the previous one.
+                // By constraining the execution step, we avoid this issue (so far).
+
+                if (Time.realtimeSinceStartup - lastTimestampPrioritization <= 0.2f) return;
+                else lastTimestampPrioritization = Time.realtimeSinceStartup;
+                //
+
                 foreach (GravitySource gs in activeGravities)
                 {
                     Vector3 playerToGravityDir = (gs.transform.position - position).normalized;

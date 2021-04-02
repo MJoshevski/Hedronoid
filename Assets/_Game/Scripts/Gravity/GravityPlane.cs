@@ -29,9 +29,13 @@ namespace Hedronoid
                 boundsCollider = GetComponent<BoxCollider>();
 
             boundsCollider.isTrigger = true;
-            boundsCollider.size = 
-                2 * new Vector3(boundaryDistance.x, outerFalloffDistance / 2f, boundaryDistance.y);
-            boundsCollider.center = new Vector3(0, outerFalloffDistance / 2f, 0);
+
+            if (AutomaticColliderSize)
+            {
+                boundsCollider.size =
+                    2 * new Vector3(boundaryDistance.x, outerFalloffDistance / 2f, boundaryDistance.y);
+                boundsCollider.center = new Vector3(0, outerFalloffDistance / 2f, 0);
+            }
 
             boundaryDistance = Vector2.Max(boundaryDistance, Vector2.zero);
             outerFalloffDistance = Mathf.Max(outerFalloffDistance, outerDistance);
