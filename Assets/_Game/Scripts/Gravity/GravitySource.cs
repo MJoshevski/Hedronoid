@@ -19,10 +19,10 @@ namespace Hedronoid
         protected bool AutomaticColliderSize = true;
         public bool ParentToEmbededSource = false;
 
-        //[HideInInspector]
+        [HideInInspector]
         [Range(1,10)]
         public int CurrentPriorityWeight = 1;
-        //[HideInInspector]
+        [HideInInspector]
         public bool IsPlayerInGravity = false;
 
         public List<GravitySource> OverlappingSources { get; private set; } = new List<GravitySource>();
