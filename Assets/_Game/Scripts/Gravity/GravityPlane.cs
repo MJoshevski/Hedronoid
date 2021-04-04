@@ -24,6 +24,10 @@ namespace Hedronoid
         protected override void OnValidate()
         {
             base.OnValidate();
+        
+            boundaryDistance = Vector2.Max(boundaryDistance, Vector2.zero);
+            outerFalloffDistance = Mathf.Max(outerFalloffDistance, outerDistance);
+            outerFalloffFactor = 1f / (outerFalloffDistance - outerDistance);
 
             if (!boundsCollider)
                 boundsCollider = GetComponent<BoxCollider>();
@@ -37,15 +41,14 @@ namespace Hedronoid
                 boundsCollider.center = new Vector3(0, outerFalloffDistance / 2f, 0);
             }
 
-            boundaryDistance = Vector2.Max(boundaryDistance, Vector2.zero);
-            outerFalloffDistance = Mathf.Max(outerFalloffDistance, outerDistance);
-            outerFalloffFactor = 1f / (outerFalloffDistance - outerDistance);
         }
 
         public override Vector3 GetGravity(Vector3 position)
         {
             PrioritizeActiveOverlappedGravities(position);
-            if (CurrentPriorityWeight == 1) return Vector3.zero;
+
+            if (CurrentPriorityWeight < GravityService.GetMaxPriorityWeight())
+                return Vector3.zero;
 
             position =
                transform.InverseTransformDirection(position - transform.position);

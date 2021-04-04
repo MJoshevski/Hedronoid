@@ -167,7 +167,7 @@ namespace Hedronoid
             }
         }
 
-        private void EnableDisableSources(List<GravitySource> sources, bool enable)
+        protected void EnableDisableSources(List<GravitySource> sources, bool enable)
         {
             if (sources.Count > 0)
                 foreach (GravitySource gs in sources)
@@ -175,7 +175,7 @@ namespace Hedronoid
                         gs.enabled = enable;
         }
 
-        private bool IsInLayerMask(Collider other)
+        protected bool IsInLayerMask(Collider other)
         {
             return ((triggerLayers.value & (1 << other.gameObject.layer)) > 0);
         }

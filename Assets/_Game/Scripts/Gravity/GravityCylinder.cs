@@ -35,14 +35,6 @@ namespace Hedronoid
         {
             base.OnValidate(); 
 
-            if (!boundsCollider)
-                boundsCollider = GetComponent<CapsuleCollider>();
-
-            boundsCollider.isTrigger = true;
-            boundsCollider.radius = outerFalloffRadius;
-            boundsCollider.height = boundaryHeight + (2f * outerFalloffRadius);
-            boundsCollider.center = Vector3.zero;
-
             boundaryHeight = Mathf.Max(boundaryHeight, 0f);
             boundaryRadius = Mathf.Max(boundaryRadius, 0f);
 
@@ -54,10 +46,39 @@ namespace Hedronoid
 
             innerFalloffFactor = 1f / (innerRadius - innerFalloffRadius);
             outerFalloffFactor = 1f / (outerFalloffRadius - outerRadius);
+
+            if (!boundsCollider)
+                boundsCollider = GetComponent<CapsuleCollider>();
+
+            boundsCollider.isTrigger = true;
+
+            if (AutomaticColliderSize)
+            {
+                boundsCollider.radius = outerFalloffRadius;
+                boundsCollider.height = boundaryHeight + (2f * outerFalloffRadius);
+                boundsCollider.center = Vector3.zero;
+            }
+        }
+
+        public override void OnTriggerEnter(Collider other)
+        {
+            base.OnTriggerEnter(other);
+
+            if (other.gameObject.layer == LayerMask.NameToLayer("Player"))
+            {
+                IsPlayerInGravity = true;
+
+                CurrentPriorityWeight = 2;
+                foreach (GravitySource gs in OverlappingSources)
+                    gs.CurrentPriorityWeight = 1;
+            }
         }
 
         public override Vector3 GetGravity(Vector3 position)
         {
+            if (CurrentPriorityWeight < GravityService.GetMaxPriorityWeight())
+                return Vector3.zero;
+
             Vector3 vector = transform.position - position;
             position =
                transform.InverseTransformDirection(position - transform.position);

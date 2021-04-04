@@ -29,13 +29,6 @@ namespace Hedronoid
         {
             base.OnValidate();
 
-            if (!boundsCollider)
-                boundsCollider = GetComponent<SphereCollider>();
-
-            boundsCollider.isTrigger = true;
-            boundsCollider.radius = outerFalloffRadius;
-            boundsCollider.center = Vector3.zero;
-
             innerFalloffRadius = Mathf.Max(innerFalloffRadius, 0f);
             innerRadius = Mathf.Max(innerRadius, innerFalloffRadius);
             outerRadius = Mathf.Max(outerRadius, innerRadius);
@@ -43,10 +36,38 @@ namespace Hedronoid
 
             innerFalloffFactor = 1f / (innerRadius - innerFalloffRadius);
             outerFalloffFactor = 1f / (outerFalloffRadius - outerRadius);
+
+            if (!boundsCollider)
+                boundsCollider = GetComponent<SphereCollider>();
+
+            boundsCollider.isTrigger = true;
+
+            if (AutomaticColliderSize)
+            {
+                boundsCollider.radius = outerFalloffRadius;
+                boundsCollider.center = Vector3.zero;
+            }
+        }
+
+        public override void OnTriggerEnter(Collider other)
+        {
+            base.OnTriggerEnter(other);
+
+            if (other.gameObject.layer == LayerMask.NameToLayer("Player"))
+            {
+                IsPlayerInGravity = true;
+
+                CurrentPriorityWeight = 2;
+                foreach (GravitySource gs in OverlappingSources)
+                    gs.CurrentPriorityWeight = 1;
+            }
         }
 
         public override Vector3 GetGravity(Vector3 position)
         {
+            if (CurrentPriorityWeight < GravityService.GetMaxPriorityWeight())
+                return Vector3.zero;
+
             Vector3 vector = transform.position - position;
             float distance = vector.magnitude;
             if (distance > outerFalloffRadius || distance < innerFalloffRadius)

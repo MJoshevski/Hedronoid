@@ -425,7 +425,9 @@ MonoBehaviour:
   triggerLayers:
     serializedVersion: 2
     m_Bits: 512
-  priorityWeight: 0
+  AutomaticColliderSize: 1
+  CurrentPriorityWeight: 1
+  IsPlayerInGravity: 0
   gravity: 9.81
   boundaryDistance: {x: 5.5, y: 1, z: 3}
   innerDistance: 0

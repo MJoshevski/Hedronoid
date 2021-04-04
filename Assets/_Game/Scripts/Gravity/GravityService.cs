@@ -20,6 +20,18 @@ namespace Hedronoid
             return activeGravities;
         }
 
+        public static int GetMaxPriorityWeight()
+        {
+            List<GravitySource> activeGravities = GetActiveGravitySources();
+
+            int maxWeight = 0;
+            foreach (GravitySource gs in activeGravities)
+                if (gs.CurrentPriorityWeight > maxWeight)
+                    maxWeight = gs.CurrentPriorityWeight;
+
+            return maxWeight;
+        }
+
         public static Vector3 GetGravity(Vector3 position)
         {
             Vector3 g = Vector3.zero;

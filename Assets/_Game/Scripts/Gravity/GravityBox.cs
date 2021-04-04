@@ -1,4 +1,5 @@
-﻿using UnityEngine;
+﻿using System.Collections.Generic;
+using UnityEngine;
 
 namespace Hedronoid
 {
@@ -33,8 +34,8 @@ namespace Hedronoid
             boundsCollider.isTrigger = true;
             boundsCollider.size =
                 2 * new Vector3(
-                    boundaryDistance.x + outerFalloffDistance, 
-                    boundaryDistance.y + outerFalloffDistance, 
+                    boundaryDistance.x + outerFalloffDistance,
+                    boundaryDistance.y + outerFalloffDistance,
                     boundaryDistance.z + outerFalloffDistance);
 
             boundsCollider.center = Vector3.zero;
@@ -53,8 +54,25 @@ namespace Hedronoid
             outerFalloffFactor = 1f / (outerFalloffDistance - outerDistance);
         }
 
+        public override void OnTriggerEnter(Collider other)
+        {
+            base.OnTriggerEnter(other);
+
+            if (other.gameObject.layer == LayerMask.NameToLayer("Player"))
+            {
+                IsPlayerInGravity = true;
+
+                CurrentPriorityWeight = 2;
+                foreach (GravitySource gs in OverlappingSources)
+                    gs.CurrentPriorityWeight = 1;
+            }
+        }
+
         public override Vector3 GetGravity(Vector3 position)
         {
+            if (CurrentPriorityWeight < GravityService.GetMaxPriorityWeight())
+                return Vector3.zero;
+
             position =
                 transform.InverseTransformDirection(position - transform.position);
 

@@ -1573,7 +1573,7 @@ MeshRenderer:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 874427018579043822}
-  m_Enabled: 1
+  m_Enabled: 0
   m_CastShadows: 1
   m_ReceiveShadows: 1
   m_DynamicOccludee: 1
@@ -2725,7 +2725,7 @@ GameObject:
   - component: {fileID: 874427018996454397}
   - component: {fileID: 874427018996454398}
   - component: {fileID: 874427018996454399}
-  m_Layer: 9
+  m_Layer: 10
   m_Name: Stairs
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -3879,12 +3879,8 @@ MonoBehaviour:
   assetGuid: 
   m_IsSelectable: 1
   m_SelectedFaces: 
-  m_SelectedEdges:
-  - a: 0
-    b: 1
-  - a: 126
-    b: 127
-  m_SelectedVertices: 00000000010000007e0000007f000000
+  m_SelectedEdges: []
+  m_SelectedVertices: 
 --- !u!64 &874427018996454399
 MeshCollider:
   m_ObjectHideFlags: 0
@@ -3987,6 +3983,7 @@ MonoBehaviour:
   triggerLayers:
     serializedVersion: 2
     m_Bits: 66048
+  AutomaticColliderSize: 1
   CurrentPriorityWeight: 1
   IsPlayerInGravity: 0
   gravity: -9.81
@@ -7821,7 +7818,7 @@ MeshRenderer:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 5028051448486510878}
-  m_Enabled: 1
+  m_Enabled: 0
   m_CastShadows: 1
   m_ReceiveShadows: 1
   m_DynamicOccludee: 1
@@ -9629,7 +9626,7 @@ MeshRenderer:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 5028051448763624964}
-  m_Enabled: 1
+  m_Enabled: 0
   m_CastShadows: 1
   m_ReceiveShadows: 1
   m_DynamicOccludee: 1
@@ -10819,7 +10816,7 @@ MeshRenderer:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 5028051449273970456}
-  m_Enabled: 1
+  m_Enabled: 0
   m_CastShadows: 1
   m_ReceiveShadows: 1
   m_DynamicOccludee: 1
@@ -11420,7 +11417,7 @@ GameObject:
   - component: {fileID: 5028051449349385789}
   - component: {fileID: 5028051449349385790}
   - component: {fileID: 5028051449349385791}
-  m_Layer: 9
+  m_Layer: 10
   m_Name: Stairs
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -12574,12 +12571,8 @@ MonoBehaviour:
   assetGuid: 
   m_IsSelectable: 1
   m_SelectedFaces: 
-  m_SelectedEdges:
-  - a: 0
-    b: 1
-  - a: 126
-    b: 127
-  m_SelectedVertices: 00000000010000007e0000007f000000
+  m_SelectedEdges: []
+  m_SelectedVertices: 
 --- !u!64 &5028051449349385791
 MeshCollider:
   m_ObjectHideFlags: 0
@@ -12607,7 +12600,7 @@ GameObject:
   - component: {fileID: 5028051449371314433}
   - component: {fileID: 5028051449371314434}
   - component: {fileID: 5028051449371314435}
-  m_Layer: 9
+  m_Layer: 10
   m_Name: Stairs
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -13761,12 +13754,8 @@ MonoBehaviour:
   assetGuid: 
   m_IsSelectable: 1
   m_SelectedFaces: 
-  m_SelectedEdges:
-  - a: 0
-    b: 1
-  - a: 126
-    b: 127
-  m_SelectedVertices: 00000000010000007e0000007f000000
+  m_SelectedEdges: []
+  m_SelectedVertices: 
 --- !u!64 &5028051449371314435
 MeshCollider:
   m_ObjectHideFlags: 0
@@ -14069,7 +14058,7 @@ GameObject:
   - component: {fileID: 5028051449400288875}
   - component: {fileID: 5028051449400288868}
   - component: {fileID: 5028051449400288869}
-  m_Layer: 9
+  m_Layer: 10
   m_Name: Stairs
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -15223,12 +15212,8 @@ MonoBehaviour:
   assetGuid: 
   m_IsSelectable: 1
   m_SelectedFaces: 
-  m_SelectedEdges:
-  - a: 0
-    b: 1
-  - a: 126
-    b: 127
-  m_SelectedVertices: 00000000010000007e0000007f000000
+  m_SelectedEdges: []
+  m_SelectedVertices: 
 --- !u!64 &5028051449400288869
 MeshCollider:
   m_ObjectHideFlags: 0
@@ -17910,7 +17895,7 @@ GameObject:
   - component: {fileID: 5028051449814704503}
   - component: {fileID: 5028051449814704496}
   - component: {fileID: 5028051449814704497}
-  m_Layer: 9
+  m_Layer: 10
   m_Name: Stairs
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -19064,12 +19049,8 @@ MonoBehaviour:
   assetGuid: 
   m_IsSelectable: 1
   m_SelectedFaces: 
-  m_SelectedEdges:
-  - a: 0
-    b: 1
-  - a: 126
-    b: 127
-  m_SelectedVertices: 00000000010000007e0000007f000000
+  m_SelectedEdges: []
+  m_SelectedVertices: 
 --- !u!64 &5028051449814704497
 MeshCollider:
   m_ObjectHideFlags: 0
@@ -21792,7 +21773,7 @@ MeshRenderer:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 5028051450188272419}
-  m_Enabled: 1
+  m_Enabled: 0
   m_CastShadows: 1
   m_ReceiveShadows: 1
   m_DynamicOccludee: 1
