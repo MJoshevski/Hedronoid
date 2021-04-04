@@ -9,6 +9,29 @@ namespace Hedronoid
         public static Vector3 CurrentGravity { get; set; }
         static List<GravitySource> sources = new List<GravitySource>();
 
+        public static List<GravitySource> GetActiveGravitySources()
+        {
+            List<GravitySource> activeGravities = new List<GravitySource>();
+
+            foreach (GravitySource gs in sources)
+                if (gs.IsPlayerInGravity)
+                    activeGravities.Add(gs);
+
+            return activeGravities;
+        }
+
+        public static int GetMaxPriorityWeight()
+        {
+            List<GravitySource> activeGravities = GetActiveGravitySources();
+
+            int maxWeight = 0;
+            foreach (GravitySource gs in activeGravities)
+                if (gs.CurrentPriorityWeight > maxWeight)
+                    maxWeight = gs.CurrentPriorityWeight;
+
+            return maxWeight;
+        }
+
         public static Vector3 GetGravity(Vector3 position)
         {
             Vector3 g = Vector3.zero;

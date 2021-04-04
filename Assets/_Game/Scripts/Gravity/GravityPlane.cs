@@ -1,4 +1,5 @@
-﻿using UnityEngine;
+﻿using System.Collections.Generic;
+using UnityEngine;
 
 namespace Hedronoid
 {
@@ -16,15 +17,50 @@ namespace Hedronoid
 
         float outerFalloffFactor;
 
-        void OnValidate()
+        // BOUNDS
+        [HideInInspector]
+        public BoxCollider boundsCollider;
+
+        protected override void OnValidate()
         {
+            base.OnValidate();
+        
             boundaryDistance = Vector2.Max(boundaryDistance, Vector2.zero);
             outerFalloffDistance = Mathf.Max(outerFalloffDistance, outerDistance);
             outerFalloffFactor = 1f / (outerFalloffDistance - outerDistance);
+
+            if (!boundsCollider)
+                boundsCollider = GetComponent<BoxCollider>();
+
+            boundsCollider.isTrigger = true;
+
+            if (AutomaticColliderSize)
+            {
+                boundsCollider.size =
+                    2 * new Vector3(boundaryDistance.x, outerFalloffDistance / 2f, boundaryDistance.y);
+                boundsCollider.center = new Vector3(0, outerFalloffDistance / 2f, 0);
+            }
+
+        }
+
+        public override void OnTriggerExit(Collider other)
+        {
+            base.OnTriggerExit(other);
+
+
+            if (other.gameObject.layer == LayerMask.NameToLayer("Player"))
+            {
+                CurrentPriorityWeight = 2;
+            }
         }
 
         public override Vector3 GetGravity(Vector3 position)
         {
+            PrioritizeActiveOverlappedGravities(position);
+
+            if (CurrentPriorityWeight < GravityService.GetMaxPriorityWeight())
+                return Vector3.zero;
+
             position =
                transform.InverseTransformDirection(position - transform.position);
 
@@ -73,6 +109,7 @@ namespace Hedronoid
             {
                 g *= 1f - (distance - outerDistance) * outerFalloffFactor;
             }
+
             return transform.TransformDirection(g * vector);
         }
 

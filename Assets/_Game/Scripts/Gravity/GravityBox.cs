@@ -1,4 +1,5 @@
-﻿using UnityEngine;
+﻿using System.Collections.Generic;
+using UnityEngine;
 
 namespace Hedronoid
 {
@@ -19,13 +20,26 @@ namespace Hedronoid
 
         float innerFalloffFactor, outerFalloffFactor;
 
-        protected override void Awake()
-        {
-            OnValidate();
-        }
+        // BOUNDS
+        [HideInInspector]
+        public BoxCollider boundsCollider;
 
-        void OnValidate()
+        protected override void OnValidate()
         {
+            base.OnValidate();
+
+            if (!boundsCollider)
+                boundsCollider = GetComponent<BoxCollider>();
+
+            boundsCollider.isTrigger = true;
+            boundsCollider.size =
+                2 * new Vector3(
+                    boundaryDistance.x + outerFalloffDistance,
+                    boundaryDistance.y + outerFalloffDistance,
+                    boundaryDistance.z + outerFalloffDistance);
+
+            boundsCollider.center = Vector3.zero;
+
             boundaryDistance = Vector3.Max(boundaryDistance, Vector3.zero);
             float maxInner = Mathf.Min(
                 Mathf.Min(boundaryDistance.x, boundaryDistance.y), boundaryDistance.z
@@ -40,8 +54,38 @@ namespace Hedronoid
             outerFalloffFactor = 1f / (outerFalloffDistance - outerDistance);
         }
 
+        public override void OnTriggerEnter(Collider other)
+        {
+            if (other.gameObject.layer == LayerMask.NameToLayer("Player"))
+            {
+                IsPlayerInGravity = true;
+
+                CurrentPriorityWeight = 2;
+                foreach (GravitySource gs in GravityService.GetActiveGravitySources())
+                    if (gs is GravityPlane)
+                    {
+                    }
+                    else if (gs != this)
+                        gs.CurrentPriorityWeight = 1;
+            }
+        }
+
+        public override void OnTriggerExit(Collider other)
+        {
+            base.OnTriggerExit(other);
+
+
+            if (other.gameObject.layer == LayerMask.NameToLayer("Player"))
+            {
+                CurrentPriorityWeight = 1;
+            }
+        }
+
         public override Vector3 GetGravity(Vector3 position)
         {
+            if (CurrentPriorityWeight < GravityService.GetMaxPriorityWeight())
+                return Vector3.zero;
+
             position =
                 transform.InverseTransformDirection(position - transform.position);
 

@@ -278,6 +278,9 @@ namespace Hedronoid.HNDFSM
             Handles.BeginGUI();
 
             var view = UnityEditor.SceneView.currentDrawingSceneView;
+
+            if (!view) return;
+
             Vector3 screenPos = view.camera.WorldToScreenPoint(worldPos);
             if ((screenPos.y < 0) || (screenPos.y > Screen.height) || (screenPos.x < 0) || (screenPos.x > Screen.width))
             {

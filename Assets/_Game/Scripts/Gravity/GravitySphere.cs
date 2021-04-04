@@ -7,22 +7,28 @@ namespace Hedronoid
         [Header("Gravity Variables")]
         [SerializeField]
         float gravity = 9.81f;
+        public float Gravity { get { return gravity; } }
 
         [SerializeField, Min(0f)]
         float outerRadius = 10f, outerFalloffRadius = 15f;
+        public float OuterRadius { get { return outerRadius; } }
+        public float OuterFalloffRadius { get { return outerFalloffRadius; } }
 
         [SerializeField, Min(0f)]
         float innerFalloffRadius = 1f, innerRadius = 5f;
+        public float InnerFalloffRadius { get { return innerFalloffRadius; } }
+        public float InnerRadius { get { return innerRadius; } }
 
         float innerFalloffFactor, outerFalloffFactor;
 
-        protected override void Awake()
-        {
-            OnValidate();
-        }
+        // BOUNDS
+        [HideInInspector]
+        public SphereCollider boundsCollider;
 
-        void OnValidate()
+        protected override void OnValidate()
         {
+            base.OnValidate();
+
             innerFalloffRadius = Mathf.Max(innerFalloffRadius, 0f);
             innerRadius = Mathf.Max(innerRadius, innerFalloffRadius);
             outerRadius = Mathf.Max(outerRadius, innerRadius);
@@ -30,10 +36,51 @@ namespace Hedronoid
 
             innerFalloffFactor = 1f / (innerRadius - innerFalloffRadius);
             outerFalloffFactor = 1f / (outerFalloffRadius - outerRadius);
+
+            if (!boundsCollider)
+                boundsCollider = GetComponent<SphereCollider>();
+
+            boundsCollider.isTrigger = true;
+
+            if (AutomaticColliderSize)
+            {
+                boundsCollider.radius = outerFalloffRadius;
+                boundsCollider.center = Vector3.zero;
+            }
+        }
+
+        public override void OnTriggerEnter(Collider other)
+        {
+            if (other.gameObject.layer == LayerMask.NameToLayer("Player"))
+            {
+                IsPlayerInGravity = true;
+
+                CurrentPriorityWeight = 2;
+                foreach (GravitySource gs in GravityService.GetActiveGravitySources())
+                    if (gs is GravityPlane)
+                    {
+                    }
+                    else if (gs != this)
+                        gs.CurrentPriorityWeight = 1;
+            }
+        }
+
+        public override void OnTriggerExit(Collider other)
+        {
+            base.OnTriggerExit(other);
+
+
+            if (other.gameObject.layer == LayerMask.NameToLayer("Player"))
+            {
+                CurrentPriorityWeight = 1;
+            }
         }
 
         public override Vector3 GetGravity(Vector3 position)
         {
+            if (CurrentPriorityWeight < GravityService.GetMaxPriorityWeight())
+                return Vector3.zero;
+
             Vector3 vector = transform.position - position;
             float distance = vector.magnitude;
             if (distance > outerFalloffRadius || distance < innerFalloffRadius)
