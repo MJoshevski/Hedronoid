@@ -43,6 +43,17 @@ namespace Hedronoid
 
         }
 
+        public override void OnTriggerExit(Collider other)
+        {
+            base.OnTriggerExit(other);
+
+
+            if (other.gameObject.layer == LayerMask.NameToLayer("Player"))
+            {
+                CurrentPriorityWeight = 2;
+            }
+        }
+
         public override Vector3 GetGravity(Vector3 position)
         {
             PrioritizeActiveOverlappedGravities(position);

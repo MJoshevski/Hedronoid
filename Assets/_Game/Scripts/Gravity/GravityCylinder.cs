@@ -59,18 +59,30 @@ namespace Hedronoid
                 boundsCollider.center = Vector3.zero;
             }
         }
-
         public override void OnTriggerEnter(Collider other)
         {
-            base.OnTriggerEnter(other);
-
             if (other.gameObject.layer == LayerMask.NameToLayer("Player"))
             {
                 IsPlayerInGravity = true;
 
                 CurrentPriorityWeight = 2;
-                foreach (GravitySource gs in OverlappingSources)
-                    gs.CurrentPriorityWeight = 1;
+                foreach (GravitySource gs in GravityService.GetActiveGravitySources())
+                    if (gs is GravityPlane)
+                    {
+                    }
+                    else if (gs != this && !gs.ParentToEmbededSource)
+                        gs.CurrentPriorityWeight = 1;
+            }
+        }
+
+        public override void OnTriggerExit(Collider other)
+        {
+            base.OnTriggerExit(other);
+
+
+            if (other.gameObject.layer == LayerMask.NameToLayer("Player"))
+            {
+                CurrentPriorityWeight = 1;
             }
         }
 

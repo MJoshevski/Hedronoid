@@ -17,11 +17,12 @@ namespace Hedronoid
         [Tooltip("Should the boundaries control the scale/position of the trigger collider?")]
         [SerializeField]
         protected bool AutomaticColliderSize = true;
+        public bool ParentToEmbededSource = false;
 
-        [HideInInspector]
+        //[HideInInspector]
         [Range(1,10)]
         public int CurrentPriorityWeight = 1;
-        [HideInInspector]
+        //[HideInInspector]
         public bool IsPlayerInGravity = false;
 
         public List<GravitySource> OverlappingSources { get; private set; } = new List<GravitySource>();
@@ -90,6 +91,10 @@ namespace Hedronoid
         public virtual void OnTriggerStay(Collider other)
         {
             if (!IsInLayerMask(other)) return;
+
+            if (other.gameObject.layer == LayerMask.NameToLayer("Player"))
+            {
+            }
         }
 
         public virtual void OnTriggerExit(Collider other)
@@ -149,13 +154,16 @@ namespace Hedronoid
                 //Debug.LogErrorFormat("MIN>>>>>SRC {0} has angle with player {1}. And this is src: {2}",
                 //    l.transform.parent.name, srcAngleDictionary[l], this.transform.parent.name);
 
-                if (this != l)
+                if (l is GravityPlane)
                 {
-                    CurrentPriorityWeight = 1;
-                }
-                else
-                {
-                    CurrentPriorityWeight = 2;
+                    if (this != l)
+                    {
+                        CurrentPriorityWeight = 2;
+                    }
+                    else
+                    {
+                        CurrentPriorityWeight = 3;
+                    }
                 }
             }
             else if (activeGravities.Count == 1 && activeGravities[0] == this)
