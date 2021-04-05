@@ -28,18 +28,6 @@ namespace Hedronoid
         {
             base.OnValidate();
 
-            if (!boundsCollider)
-                boundsCollider = GetComponent<BoxCollider>();
-
-            boundsCollider.isTrigger = true;
-            boundsCollider.size =
-                2 * new Vector3(
-                    boundaryDistance.x + outerFalloffDistance,
-                    boundaryDistance.y + outerFalloffDistance,
-                    boundaryDistance.z + outerFalloffDistance);
-
-            boundsCollider.center = Vector3.zero;
-
             boundaryDistance = Vector3.Max(boundaryDistance, Vector3.zero);
             float maxInner = Mathf.Min(
                 Mathf.Min(boundaryDistance.x, boundaryDistance.y), boundaryDistance.z
@@ -52,6 +40,22 @@ namespace Hedronoid
 
             innerFalloffFactor = 1f / (innerFalloffDistance - innerDistance);
             outerFalloffFactor = 1f / (outerFalloffDistance - outerDistance);
+
+            if (!boundsCollider)
+                boundsCollider = GetComponent<BoxCollider>();
+
+            boundsCollider.isTrigger = true;
+
+            if (AutomaticColliderSize)
+            {
+                boundsCollider.size =
+                    2 * new Vector3(
+                        boundaryDistance.x + outerFalloffDistance,
+                        boundaryDistance.y + outerFalloffDistance,
+                        boundaryDistance.z + outerFalloffDistance);
+
+                boundsCollider.center = Vector3.zero;
+            }
         }
 
         public override void OnTriggerEnter(Collider other)
@@ -67,6 +71,24 @@ namespace Hedronoid
                     }
                     else if (gs != this)
                         gs.CurrentPriorityWeight = 1;
+            }
+        }
+
+        public override void OnTriggerStay(Collider other)
+        {
+            base.OnTriggerStay(other);
+
+            if (other.gameObject.layer == LayerMask.NameToLayer("Player"))
+            {
+                List<GravitySource> activeGravities = GravityService.GetActiveGravitySources();
+
+                if(activeGravities.Count == 1 && 
+                    activeGravities[0] == this && 
+                    CurrentPriorityWeight == 1 && 
+                    activeGravities[0] is GravityBox)
+                {
+                    CurrentPriorityWeight = 2;
+                }
             }
         }
 
