@@ -1,4 +1,5 @@
-﻿using UnityEngine;
+﻿using System.Collections.Generic;
+using UnityEngine;
 
 namespace Hedronoid
 {
@@ -62,6 +63,24 @@ namespace Hedronoid
                     }
                     else if (gs != this)
                         gs.CurrentPriorityWeight = 1;
+            }
+        }
+
+        public override void OnTriggerStay(Collider other)
+        {
+            base.OnTriggerStay(other);
+
+            if (other.gameObject.layer == LayerMask.NameToLayer("Player"))
+            {
+                List<GravitySource> activeGravities = GravityService.GetActiveGravitySources();
+
+                if (activeGravities.Count == 1 &&
+                    activeGravities[0] == this &&
+                    CurrentPriorityWeight == 1 &&
+                    activeGravities[0] is GravitySphere)
+                {
+                    CurrentPriorityWeight = 2;
+                }
             }
         }
 

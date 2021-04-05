@@ -75,6 +75,24 @@ namespace Hedronoid
             }
         }
 
+        public override void OnTriggerStay(Collider other)
+        {
+            base.OnTriggerStay(other);
+
+            if (other.gameObject.layer == LayerMask.NameToLayer("Player"))
+            {
+                List<GravitySource> activeGravities = GravityService.GetActiveGravitySources();
+
+                if (activeGravities.Count == 1 &&
+                    activeGravities[0] == this &&
+                    CurrentPriorityWeight == 1 &&
+                    activeGravities[0] is GravityCylinder)
+                {
+                    CurrentPriorityWeight = 2;
+                }
+            }
+        }
+
         public override void OnTriggerExit(Collider other)
         {
             base.OnTriggerExit(other);
