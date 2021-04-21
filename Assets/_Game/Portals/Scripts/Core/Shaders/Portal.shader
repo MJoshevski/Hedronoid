@@ -12,7 +12,7 @@
 		{ 
 			"RenderType" = "Opaque"
 			"Queue" = "Geometry"
-			"RenderPipeline"="UniversalRenderPipeline"
+			"RenderPipeline"="UniversalPipeline"
 		}
 		LOD 100
 		Cull Off
@@ -22,7 +22,7 @@
 		ENDHLSL
 
 		Pass
-		{
+		{			
 			HLSLPROGRAM
 			#pragma vertex vert
 			#pragma fragment frag
@@ -38,9 +38,9 @@
 				float4 screenPos : TEXCOORD0;
 			};
 
-			//TEXTURE2D(_BaseMap);
-			//SAMPLER(sampler_BaseMap);
-			uniform sampler2D _MainTex;
+			TEXTURE2D(_MainTex);
+			SAMPLER(sampler_MainTex);
+			//uniform sampler2D _MainTex;
 
 			int displayMask; // set to 1 to display texture, otherwise will draw test colour
 
@@ -60,10 +60,10 @@
 			{
 				float2 uv = i.screenPos.xy / i.screenPos.w;
 
-				float4 portalCol = tex2D(_MainTex, uv);
-				//float4 portalCol = SAMPLE_TEXTURE2D(_BaseMap, sampler_BaseMap, uv);
+				//float4 portalCol = tex2D(_MainTex, uv);
+				float4 portalCol = SAMPLE_TEXTURE2D(_MainTex, sampler_MainTex, uv);
 
-				return portalCol/* * displayMask + _InactiveColour * (1 - displayMask)*/;	
+				return portalCol * displayMask + _InactiveColour * (1 - displayMask);	
 			}
 			ENDHLSL
 		}
@@ -120,5 +120,5 @@
             ENDCG
         }
     }
-    //Fallback "Standard" // for shadows
+    Fallback "Standard" // for shadows
 }
