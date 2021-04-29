@@ -13,6 +13,7 @@ namespace Hedronoid.Particle
         public NapParticleSystem ParticleSystemPrefab;
     }
 
+    [CreateAssetMenu(fileName = "ParticleManagerData", menuName = "Hedronoid/ScriptableObjects/ParticleManagerData", order = 1)]
     public class ParticleManagerData : ScriptableObject
     {
         [SerializeField]
