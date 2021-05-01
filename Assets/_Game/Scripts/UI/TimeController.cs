@@ -23,6 +23,8 @@ public class TimeController : HNDMonoBehaviour
         });
     }
 
+    bool gamePaused = false;
+
     void Update()
     {
         TimeScaleText.text = Time.timeScale.ToString();
@@ -36,18 +38,46 @@ public class TimeController : HNDMonoBehaviour
                 _timeScaleBeforePause = Time.timeScale;
 
                 Time.timeScale = 0;
-            }         
+                DebugPanel.SetActive(true);
+            }
             else
             {
                 if (escKeyPresses == 2)
-                    DebugPanel.SetActive(true);
-
-                if (escKeyPresses == 3)
                 {
                     DebugPanel.SetActive(false);
                     Time.timeScale = _timeScaleBeforePause;
                     escKeyPresses = 0;
                 }                    
+            }
+        }
+
+
+        if (!Input.GetKeyDown(KeyCode.P) && gamePaused)
+        {
+            if (!zeroTimescale)
+                Time.timeScale = 0.0000001f;
+
+            if (Input.GetKey(KeyCode.RightBracket))
+            {
+                Time.timeScale = 1;
+            }
+        }
+        else if (Input.GetKeyDown(KeyCode.P))
+        {
+            if (!gamePaused)
+            {
+                D.GameError("Paused");
+                Debug.LogError("Paused2");
+                _timeScaleBeforePause = Time.timeScale;
+
+                Time.timeScale = 0.0000001f;
+                gamePaused = true;
+            }
+            else
+            {
+                Time.timeScale = _timeScaleBeforePause;
+                gamePaused = false;
+
             }
         }
 

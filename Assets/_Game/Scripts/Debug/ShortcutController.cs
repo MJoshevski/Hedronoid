@@ -9,6 +9,7 @@ namespace Hedronoid
     public class ShortcutController : HNDMonoSingleton<ShortcutController>
     {
         protected ShortcutController() { } // guarantee this will be always a singleton only - can't use the constructor!
+        public KeyCode m_restartLevelKey = KeyCode.R;     // Restarts current level
 
         public enum EShortcuts
         {
@@ -55,7 +56,7 @@ namespace Hedronoid
         {
             // Enums used as keys in dict generate garbage!
             // R1 + X / RB + A
-            m_ShortcutPressedDict[(int)EShortcuts.RESET_SCENE] = Input.GetKeyDown(KeyCode.R);
+            m_ShortcutPressedDict[(int)EShortcuts.RESET_SCENE] = Input.GetKeyDown(m_restartLevelKey);
             /*|| (m_ControllerType == 1 && !Input.GetKey(ControllerMap.XB_BUTTON_LB) && Input.GetKey(ControllerMap.XB_BUTTON_RB) && Input.GetKeyDown(ControllerMap.XB_BUTTON_A))
             || (m_ControllerType == 2 && !Input.GetKey(ControllerMap.PS_BUTTON_L1) && Input.GetKey(ControllerMap.PS_BUTTON_R1) && Input.GetKeyDown(ControllerMap.PS_BUTTON_X));*/
 
