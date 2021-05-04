@@ -2,7 +2,7 @@
 using System.Linq;
 using System.Collections.Generic;
 
-public static class NNTransformExtensions
+public static class HNDTransformExtensions
 {
     /// <summary>
     /// Recursively finds first child with given name. Search could be very expensive, so avoid calling it each frame.
@@ -57,32 +57,32 @@ public static class NNTransformExtensions
         dst.localScale = src.localScale;
     }
 
-    public static NNTransformValues GetLocalTransformValues(this Transform src)
+    public static HNDTransformValues GetLocalTransformValues(this Transform src)
     {
-        NNTransformValues values = new NNTransformValues();
+        HNDTransformValues values = new HNDTransformValues();
         values.Position = src.localPosition;
         values.Rotation = src.localRotation;
         values.LocalScale = src.localScale;
         return values;
     }
 
-    public static NNTransformValues GetWorldTransformValues(this Transform src)
+    public static HNDTransformValues GetWorldTransformValues(this Transform src)
     {
-        NNTransformValues values = new NNTransformValues();
+        HNDTransformValues values = new HNDTransformValues();
         values.Position = src.position;
         values.Rotation = src.rotation;
         values.LocalScale = src.localScale;
         return values;
     }
 
-    public static void SetFromLocalTransformValues(this Transform dst, NNTransformValues values)
+    public static void SetFromLocalTransformValues(this Transform dst, HNDTransformValues values)
     {
         dst.localPosition = values.Position;
         dst.localRotation = values.Rotation;
         dst.localScale = values.LocalScale;
     }
 
-    public static void SetFromWorldTransformValuesExceptScale(this Transform dst, NNTransformValues values)
+    public static void SetFromWorldTransformValuesExceptScale(this Transform dst, HNDTransformValues values)
     {
         dst.position = values.Position;
         dst.rotation = values.Rotation;

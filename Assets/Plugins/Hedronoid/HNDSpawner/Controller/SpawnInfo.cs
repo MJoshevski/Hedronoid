@@ -175,7 +175,7 @@ namespace Hedronoid.Spawners {
                     }
 
                     // Get next spawn point from current spawn manager
-                    NNTransformValues spawnPoint = spawnManager.GetValidSpawnPoint ();
+                    HNDTransformValues spawnPoint = spawnManager.GetValidSpawnPoint ();
 
                     // Instantiate object
                     GameObject go = null;

@@ -22,33 +22,33 @@ namespace Hedronoid.Core
             }
         }
 
-        //private ScenePlayerManager m_ScenePlayerManager;
-        //public ScenePlayerManager ScenePlayerManager
-        //{
-        //    get
-        //    {
-        //        if (m_ScenePlayerManager == null)
-        //        {
-        //            m_ScenePlayerManager = cachedGameObject.GetComponentInChildren<ScenePlayerManager>(true);
-        //        }
+        private ScenePlayerManager m_ScenePlayerManager;
+        public ScenePlayerManager ScenePlayerManager
+        {
+            get
+            {
+                if (m_ScenePlayerManager == null)
+                {
+                    m_ScenePlayerManager = cachedGameObject.GetComponentInChildren<ScenePlayerManager>(true);
+                }
 
-        //        return m_ScenePlayerManager;
-        //    }
-        //}
+                return m_ScenePlayerManager;
+            }
+        }
 
-        //private PlayerSpawner m_PlayerSpawner;
-        //public PlayerSpawner PlayerSpawner
-        //{
-        //    get
-        //    {
-        //        if (m_PlayerSpawner == null)
-        //        {
-        //            m_PlayerSpawner = cachedGameObject.GetComponentInChildren<PlayerSpawner>(true);
-        //        }
+        private PlayerSpawner m_PlayerSpawner;
+        public PlayerSpawner PlayerSpawner
+        {
+            get
+            {
+                if (m_PlayerSpawner == null)
+                {
+                    m_PlayerSpawner = cachedGameObject.GetComponentInChildren<PlayerSpawner>(true);
+                }
 
-        //        return m_PlayerSpawner;
-        //    }
-        //}
+                return m_PlayerSpawner;
+            }
+        }
 
         private HNDPoolManager m_PoolManager;
         public HNDPoolManager PoolManager

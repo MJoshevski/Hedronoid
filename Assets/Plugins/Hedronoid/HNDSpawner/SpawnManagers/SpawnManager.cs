@@ -109,7 +109,7 @@ namespace Hedronoid.Spawners
         /// Depending on configurations this position can be checked with raycasts and tags
         /// </summary>
         /// <returns></returns>
-        public NNTransformValues GetValidSpawnPoint()
+        public HNDTransformValues GetValidSpawnPoint()
         {
             Vector3 spawnPosition = GetUnvalidatedSpawnPoint();
             int m_nonOccupiedAttemptsLeft = m_nonOccupiedAttempts;
@@ -123,7 +123,7 @@ namespace Hedronoid.Spawners
                 D.CoreWarning("Spawner " + GetType().Name + " on gameObject " + gameObject.name + " could not find enough non occupied spots, and were forced to spawn on top of other gmjs.");
             }
 
-            return new NNTransformValues() { Position = spawnPosition, Rotation = GetRotation(spawnPosition) };
+            return new HNDTransformValues() { Position = spawnPosition, Rotation = GetRotation(spawnPosition) };
         }
 
         /// <summary>

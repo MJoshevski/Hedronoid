@@ -3803,8 +3803,8 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 0}
   m_AnchorMax: {x: 0.5, y: 1}
-  m_AnchoredPosition: {x: 0, y: 0}
-  m_SizeDelta: {x: 0, y: 0}
+  m_AnchoredPosition: {x: 9.75, y: 0}
+  m_SizeDelta: {x: 9.754581, y: 0}
   m_Pivot: {x: 1, y: 0.5}
 --- !u!222 &490376516053685015
 CanvasRenderer:
@@ -3847,7 +3847,7 @@ MonoBehaviour:
     m_HorizontalOverflow: 0
     m_VerticalOverflow: 0
     m_LineSpacing: 1
-  m_Text: 'scale:'
+  m_Text: 'Timescale:'
 --- !u!1 &8757141184185003794
 GameObject:
   m_ObjectHideFlags: 0
@@ -4349,6 +4349,16 @@ PrefabInstance:
         type: 3}
       propertyPath: orthographic size
       value: 2.5
+      objectReference: {fileID: 0}
+    - target: {fileID: 114177534530588206, guid: 5eb9033fe9ff16d4f91b9d5c40a98cca,
+        type: 3}
+      propertyPath: m_keyReset
+      value: 302
+      objectReference: {fileID: 0}
+    - target: {fileID: 114177534530588206, guid: 5eb9033fe9ff16d4f91b9d5c40a98cca,
+        type: 3}
+      propertyPath: m_keyPause
+      value: 19
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 5eb9033fe9ff16d4f91b9d5c40a98cca, type: 3}
