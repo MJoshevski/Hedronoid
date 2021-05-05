@@ -958,13 +958,13 @@ namespace Hedronoid.Player
             PlayerPrefs.SetFloat(KEY_MOUSE_HORIZONTAL_SENSITIVITY, MouseHorizontalSensitivity);
             PlayerPrefs.SetFloat(KEY_MOUSE_VERTICAL_SENSITIVITY, MouseVerticalSensitivity);
             PlayerPrefs.Save();
-            Debug.Log("Bindings saved...");
+            D.CoreLog("Bindings saved...");
         }
 
         public void ResetBindings()
         {
             PlayerActions = PlayerActionSet.CreateWithDefaultBindings();
-            Debug.Log("Bindings reset...");
+            D.CoreLog("Bindings reset...");
 
         }
 
@@ -974,7 +974,7 @@ namespace Hedronoid.Player
             {
                 var saveData = PlayerPrefs.GetString(KEY_BINDINGS);
                 PlayerActions.Load(saveData);
-                Debug.Log("Bindings loaded...");
+                D.CoreLog("Bindings loaded...");
             }
         }
 

@@ -47,7 +47,7 @@ public class TelegraphPosition : HNDGameObject
         }
         else
         {
-            Debug.Log("RayCast Failed for: " + PosID);
+            D.AILog("RayCast Failed for: " + PosID);
             indicator.transform.position = transform.position;
         }
         yield return new WaitForSeconds(delay);

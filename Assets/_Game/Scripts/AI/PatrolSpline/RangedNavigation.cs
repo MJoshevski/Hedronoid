@@ -103,7 +103,7 @@ namespace Hedronoid.AI
 
         public void ShotDone()
         {
-            Debug.Log("RangedNavigation ShotDone()");
+            D.AILog("RangedNavigation ShotDone()");
             agent.enabled = true;
 
             // After the shooting we will check if the player is still within range.

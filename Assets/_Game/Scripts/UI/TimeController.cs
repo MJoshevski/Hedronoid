@@ -66,8 +66,8 @@ public class TimeController : HNDMonoBehaviour
         {
             if (!gamePaused)
             {
-                D.GameError("Paused");
-                Debug.LogError("Paused2");
+                D.GameLog("Game Paused");
+
                 _timeScaleBeforePause = Time.timeScale;
 
                 Time.timeScale = 0.0000001f;

@@ -91,12 +91,12 @@ namespace Hedronoid
 
             playerActions.ListenOptions.OnBindingAdded += (action, binding) =>
             {
-                UnityEngine.Debug.Log("Binding added... " + binding.DeviceName + ": " + binding.Name);
+                D.CoreLog("Binding added... " + binding.DeviceName + ": " + binding.Name);
             };
 
             playerActions.ListenOptions.OnBindingRejected += (action, binding, reason) =>
             {
-                UnityEngine.Debug.Log("Binding rejected... " + reason);
+                D.CoreLog("Binding rejected... " + reason);
             };
 
             return playerActions;

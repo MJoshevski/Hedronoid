@@ -53,17 +53,17 @@ public class FPSCounter : MonoBehaviour {
         if (m_fpsLine == null)
         {
             t_missingReference = true;
-            Debug.LogError("Missing LineRenderer component reference! Disabling script!");
+            D.UIError("Missing LineRenderer component reference! Disabling script!");
         }
         if(m_fpsLowHigh == null)
         {
             t_missingReference = true;
-            Debug.LogError("Missing TextMesh component reference! Disabling script!");
+            D.UIError("Missing TextMesh component reference! Disabling script!");
         }
         if (m_frameBufferDisplay == null)
         {
             t_missingReference = true;
-            Debug.LogError("Missing TextMesh component reference! Disabling script!");
+            D.UIError("Missing TextMesh component reference! Disabling script!");
         }
 
         // Better disable script if there's any missing reference

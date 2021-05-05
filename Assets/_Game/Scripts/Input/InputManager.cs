@@ -38,14 +38,14 @@ namespace Hedronoid
             PlayerPrefs.SetFloat(KEY_MOUSE_HORIZONTAL_SENSITIVITY, MouseHorizontalSensitivity);
             PlayerPrefs.SetFloat(KEY_MOUSE_VERTICAL_SENSITIVITY, MouseVerticalSensitivity);
             PlayerPrefs.Save();
-            Debug.Log("Bindings saved...");
+            D.CoreLog("Bindings saved...");
 
         }
 
         public void ResetBindings()
         {
             PlayerActions = PlayerActionSet.CreateWithDefaultBindings();
-            Debug.Log("Bindings reset...");
+            D.CoreLog("Bindings reset...");
 
         }
 
