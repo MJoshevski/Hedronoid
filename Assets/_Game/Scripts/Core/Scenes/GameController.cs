@@ -56,14 +56,6 @@ namespace Hedronoid.Core
             SceneManager.sceneLoaded += OnSceneLoaded;
         }
 
-        private void Update()
-        {
-            if (ShortcutController.Instance.IsShortcutPressed(ShortcutController.EShortcuts.RESET_SCENE))
-            {
-                LoadScene(SceneManager.GetActiveScene().buildIndex);
-            }
-        }
-
         private IEnumerator DelayedStart()
         {
             yield return new WaitForSeconds(0.1f);
