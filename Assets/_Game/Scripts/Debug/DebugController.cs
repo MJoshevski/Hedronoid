@@ -15,8 +15,6 @@ namespace Hedronoid
     {
         protected DebugController() { } // guarantee this will be always a singleton only - can't use the constructor!
 
-        [Tooltip("Toggles the visible Debug HUD On or Off.")]
-        public KeyCode m_toggleHUDKey = KeyCode.RightBracket;
         [Tooltip("Restarts current level.")]
         public KeyCode m_restartLevelKey = KeyCode.R;
         [Tooltip("Pauses current game.")]
@@ -31,6 +29,10 @@ namespace Hedronoid
         public KeyCode m_decreaseTimeScaleKey = KeyCode.Minus;
         [Tooltip("When paused, moves the game by one frame forward.")]
         public KeyCode m_nextFrameKey = KeyCode.N;
+        [Tooltip("Toggles the visible Debug HUD On or Off.")]
+        public KeyCode m_toggleHUDKey = KeyCode.RightBracket;
+        [Tooltip("Toggles the audio On or Off.")]
+        public KeyCode m_toggleAudioKey = KeyCode.M;
 
         public enum EShortcuts
         {
@@ -41,7 +43,8 @@ namespace Hedronoid
             TIMESCALE_INCREASE,
             TIMESCALE_DECREASE,
             RESET_SCENE,
-            TOGGLE_DEBUG_HUD
+            TOGGLE_DEBUG_HUD,
+            TOGGLE_AUDIO
         }
 
         public struct EShortcutsComparer : IEqualityComparer<EShortcuts>
@@ -116,6 +119,7 @@ namespace Hedronoid
             m_ShortcutPressedDict[EShortcuts.NEXT_FRAME] = Input.GetKeyDown(m_nextFrameKey);
             m_ShortcutPressedDict[EShortcuts.DEBUG_MENU] = Input.GetKeyDown(m_debugMenuKey);
             m_ShortcutPressedDict[EShortcuts.TOGGLE_DEBUG_HUD] = Input.GetKeyDown(m_toggleHUDKey);
+            m_ShortcutPressedDict[EShortcuts.TOGGLE_DEBUG_HUD] = Input.GetKeyDown(m_toggleAudioKey);
 
             if (!m_EnabledHUD)
             {
@@ -202,6 +206,12 @@ namespace Hedronoid
             if (IsShortcutPressed(EShortcuts.RESET_SCENE))
             {
                 GameController.Instance.LoadScene(SceneManager.GetActiveScene().buildIndex);
+            }
+
+            // Mute/unmute sounds
+            if (IsShortcutPressed(EShortcuts.TOGGLE_AUDIO))
+            {
+                AudioListener.volume = AudioListener.volume > 0.5f ? 0 : 1;
             }
         }
 
