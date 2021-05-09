@@ -67,7 +67,7 @@ namespace Hedronoid.Particle
             NapParticleSystem prefab = GetParticleSystemPrefabFromName(e.Config.Name);
             if (prefab == null)
             {
-                Debug.LogError("Did not find particle system with name '" + e.Config.Name + "'!");
+                D.CoreError("Did not find particle system with name '" + e.Config.Name + "'!");
                 return;
             }
 
@@ -98,7 +98,7 @@ namespace Hedronoid.Particle
             }
             else
             {
-                Debug.LogError("Failed to start particle system! Unable to rent '" + (parGO != null ? parGO.name : "NULL") + " from particle system pool.", cachedGameObject);
+                D.CoreError("Failed to start particle system! Unable to rent '" + (parGO != null ? parGO.name : "NULL") + " from particle system pool.", cachedGameObject);
             }
         }
 
@@ -106,7 +106,7 @@ namespace Hedronoid.Particle
         {
             if (e.ParticleSystemInstance == null)
             {
-                Debug.LogError("Trying to stop non-existing particle system.");
+                D.CoreError("Trying to stop non-existing particle system.");
                 return;
             }
             if (e.InstantKill)

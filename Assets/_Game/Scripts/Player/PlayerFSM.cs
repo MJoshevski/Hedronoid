@@ -5,6 +5,7 @@ using UnityEngine;
 using Hedronoid.HNDFSM;
 using Hedronoid.Core;
 using Hedronoid.Events;
+using Hedronoid.Weapons;
 
 namespace Hedronoid.Player
 {
@@ -838,6 +839,15 @@ namespace Hedronoid.Player
 
             if (primaryFire && Time.realtimeSinceStartup - lastFired_Auto > fireRatePrimary)
             {
+                BulletPoolManager.BulletConfig bulletConf = new BulletPoolManager.BulletConfig();
+                bulletConf.Prefab = bulletPrimary;
+                bulletConf.Position = bulletOrigin.position;
+                bulletConf.Rotation = Quaternion.identity;
+                bulletConf.Parent = null;
+                bulletConf.Duration = 5f;
+
+                HNDEvents.Instance.Raise(new GetBulletToFire { Config = bulletConf });
+
                 //GameObject auto = TrashMan.spawn(
                 //    bulletPrimary, bulletOrigin.position, Quaternion.identity);
                 //TrashMan.despawnAfterDelay(auto, 5f, () => onDespawnReset(auto));
