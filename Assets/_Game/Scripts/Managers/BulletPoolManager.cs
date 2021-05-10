@@ -59,6 +59,24 @@ namespace Hedronoid.Weapons
             D.CoreLog("Bullet pool manager end time: " + Time.realtimeSinceStartup);
         }
 
+        public GameObject GetBulletToFire(BulletPoolManager.BulletConfig Config)
+        {
+            if (Config.Prefab == null)
+            {
+                D.CoreError("Did not find bullet with name '" + Config.Prefab.name + "'!");
+                return null;
+            }
+            GameObject bulletGO =
+                RentObject(Config.Prefab, Config.Position, Config.Rotation, Config.Parent, Config.Duration);
+
+            if (bulletGO != null)
+                return bulletGO;
+            else
+                D.CoreError("Failed to start bullet system! Unable to rent '" + (bulletGO != null ? bulletGO.name : "NULL") + " from bullet pool.", cachedGameObject);
+
+            return null;
+        }
+
         private void OnGetBulletToFire(GetBulletToFire e)
         {
             if (e.Config.Prefab == null)

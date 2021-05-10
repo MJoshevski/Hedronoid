@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using Hedronoid.Player;
 using Hedronoid.ObjectPool;
+using Hedronoid.Weapons;
 
 namespace Hedronoid.Core
 {
@@ -50,17 +51,17 @@ namespace Hedronoid.Core
             }
         }
 
-        private HNDPoolManager m_PoolManager;
-        public HNDPoolManager PoolManager
+        private BulletPoolManager m_BulletPoolManager;
+        public BulletPoolManager BulletPoolManager
         {
             get
             {
-                if (m_PoolManager == null)
+                if (m_BulletPoolManager == null)
                 {
-                    m_PoolManager = cachedGameObject.GetComponentInChildren<HNDPoolManager>(true);
+                    m_BulletPoolManager = cachedGameObject.GetComponentInChildren<BulletPoolManager>(true);
                 }
 
-                return m_PoolManager;
+                return m_BulletPoolManager;
             }
         }
 

@@ -7,6 +7,7 @@ using Hedronoid.Health;
 using Hedronoid.HNDFSM;
 using Hedronoid.Core;
 using Hedronoid.AI;
+using Hedronoid.Weapons;
 
 /// <summary>
 /// 
@@ -159,27 +160,21 @@ namespace Hedronoid
 
             if (Time.realtimeSinceStartup - lastFired_Auto > fireRatePrimary)
             {
-                //GameObject auto = TrashMan.spawn(
-                //    bulletPrimary, bulletOrigin.position, Quaternion.identity);
-                //TrashMan.despawnAfterDelay(auto, 5f, () => onDespawnReset(auto));
+                BulletPoolManager.BulletConfig bulletConf = new BulletPoolManager.BulletConfig();
+                bulletConf.Prefab = bulletPrimary;
+                bulletConf.Position = bulletOrigin.position;
+                bulletConf.Rotation = Quaternion.identity;
+                bulletConf.Parent = null;
+                bulletConf.Duration = 5f;
 
-                //rb_auto = auto.GetComponent<Rigidbody>();
-                //rb_auto.AddForce(shootDirection.normalized * shootForcePrimary);
-                //lastFired_Auto = Time.realtimeSinceStartup;
+                GameObject auto = GameplaySceneContext.BulletPoolManager.GetBulletToFire(bulletConf);
+
+                rb_auto = auto.GetComponent<Rigidbody>();
+                rb_auto.AddForce(shootDirection.normalized * shootForcePrimary);
+                lastFired_Auto = Time.realtimeSinceStartup;
 
                 FMODUnity.RuntimeManager.PlayOneShot(m_enemyAudioData.bulletPrimary[0], transform.position);
             }
-            //else if (Input.GetButtonDown("Fire2") &&
-            //    Time.realtimeSinceStartup - lastFired_Shotgun > fireRateSecondary)
-            //{
-            //    GameObject shot = TrashMan.spawn(
-            //        bulletSecondary, bulletOrigin.position, Quaternion.identity);
-            //    TrashMan.despawnAfterDelay(shot, 5f, () => onDespawnReset(shot));
-
-            //    Rigidbody rb_shot = shot.GetComponent<Rigidbody>();
-            //    rb_shot.AddForce(shootDirection.normalized * shootForceSecondary);
-            //    lastFired_Shotgun = Time.realtimeSinceStartup;
-            //}
         }
 
         private System.Action onDespawnReset(GameObject bullet)

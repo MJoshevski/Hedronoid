@@ -128,7 +128,6 @@ namespace Hedronoid.Player
         public Ray LookRay;
         [HideInInspector]
         public RaycastHit RayHit;
-        private Rigidbody rb_auto;
         private System.Action onDespawnAction;
 
         // CONTROLS/BINDINGS
@@ -846,27 +845,28 @@ namespace Hedronoid.Player
                 bulletConf.Parent = null;
                 bulletConf.Duration = 5f;
 
-                HNDEvents.Instance.Raise(new GetBulletToFire { Config = bulletConf });
+                GameObject auto = GameplaySceneContext.BulletPoolManager.GetBulletToFire(bulletConf);
 
-                //GameObject auto = TrashMan.spawn(
-                //    bulletPrimary, bulletOrigin.position, Quaternion.identity);
-                //TrashMan.despawnAfterDelay(auto, 5f, () => onDespawnReset(auto));
-
-                //rb_auto = auto.GetComponent<Rigidbody>();
-                //rb_auto.AddForce(shootDirection.normalized * shootForcePrimary);
-                //lastFired_Auto = Time.realtimeSinceStartup;
+                Rigidbody rb_auto = auto.GetComponent<Rigidbody>();
+                rb_auto.AddForce(shootDirection.normalized * shootForcePrimary);
+                lastFired_Auto = Time.realtimeSinceStartup;
 
                 FMODUnity.RuntimeManager.PlayOneShot(m_playerAudioData.bulletPrimary[0], transform.position);
             }
             else if (!primaryFire && Time.realtimeSinceStartup - lastFired_Shotgun > fireRateSecondary)
             {
-                //GameObject shot = TrashMan.spawn(
-                //    bulletSecondary, bulletOrigin.position, Quaternion.identity);
-                //TrashMan.despawnAfterDelay(shot, 5f, () => onDespawnReset(shot));
+                BulletPoolManager.BulletConfig bulletConf = new BulletPoolManager.BulletConfig();
+                bulletConf.Prefab = bulletSecondary;
+                bulletConf.Position = bulletOrigin.position;
+                bulletConf.Rotation = Quaternion.identity;
+                bulletConf.Parent = null;
+                bulletConf.Duration = 5f;
 
-                //Rigidbody rb_shot = shot.GetComponent<Rigidbody>();
-                //rb_shot.AddForce(shootDirection.normalized * shootForceSecondary);
-                //lastFired_Shotgun = Time.realtimeSinceStartup;
+                GameObject shot = GameplaySceneContext.BulletPoolManager.GetBulletToFire(bulletConf);
+
+                Rigidbody rb_shot = shot.GetComponent<Rigidbody>();
+                rb_shot.AddForce(shootDirection.normalized * shootForceSecondary);
+                lastFired_Shotgun = Time.realtimeSinceStartup;
 
                 FMODUnity.RuntimeManager.PlayOneShot(m_playerAudioData.bulletSecondary, transform.position);
             }

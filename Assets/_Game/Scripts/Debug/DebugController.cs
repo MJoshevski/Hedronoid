@@ -119,7 +119,7 @@ namespace Hedronoid
             m_ShortcutPressedDict[EShortcuts.NEXT_FRAME] = Input.GetKeyDown(m_nextFrameKey);
             m_ShortcutPressedDict[EShortcuts.DEBUG_MENU] = Input.GetKeyDown(m_debugMenuKey);
             m_ShortcutPressedDict[EShortcuts.TOGGLE_DEBUG_HUD] = Input.GetKeyDown(m_toggleHUDKey);
-            m_ShortcutPressedDict[EShortcuts.TOGGLE_DEBUG_HUD] = Input.GetKeyDown(m_toggleAudioKey);
+            m_ShortcutPressedDict[EShortcuts.TOGGLE_AUDIO] = Input.GetKeyDown(m_toggleAudioKey);
 
             if (!m_EnabledHUD)
             {
@@ -211,7 +211,16 @@ namespace Hedronoid
             // Mute/unmute sounds
             if (IsShortcutPressed(EShortcuts.TOGGLE_AUDIO))
             {
-                AudioListener.volume = AudioListener.volume > 0.5f ? 0 : 1;
+                string masterBusString = "Bus:/";
+                FMOD.Studio.Bus masterBus;
+
+                masterBus = FMODUnity.RuntimeManager.GetBus(masterBusString);
+                float volume;
+                masterBus.getVolume(out volume);
+
+                if (volume > 0.5f)
+                    masterBus.setVolume(0);
+                else masterBus.setVolume(1);
             }
         }
 
