@@ -172,12 +172,6 @@ namespace Hedronoid.Player
         private FSMState m_FlyingState;
         #endregion
 
-        #region CONSTANTS
-        const string KEY_BINDINGS = "Bindings";
-        const string KEY_MOUSE_HORIZONTAL_SENSITIVITY = "MouseHorizontalSensitivity";
-        const string KEY_MOUSE_VERTICAL_SENSITIVITY = "MouseVerticalSensitivity";
-        #endregion
-
         #region UNITY LIFECYCLE
         void OnValidate()
         {
@@ -197,9 +191,7 @@ namespace Hedronoid.Player
             animData = new AnimatorData(Animator);
             secondaryGravityMultiplier = 1f;
 
-            PlayerActions = PlayerActionSet.CreateWithDefaultBindings();
-            LoadBindings();
-            LoadSensitivities();
+            PlayerActions = InputManager.Instance.PlayerActions;
 
             lastFired_Auto = lastFired_Rail = lastFired_Shotgun = 0;
 
@@ -959,39 +951,6 @@ namespace Hedronoid.Player
                 }
             }
             return false;
-        }
-
-        public void SaveBindings()
-        {
-            var saveData = PlayerActions.Save();
-            PlayerPrefs.SetString(KEY_BINDINGS, saveData);
-            PlayerPrefs.SetFloat(KEY_MOUSE_HORIZONTAL_SENSITIVITY, MouseHorizontalSensitivity);
-            PlayerPrefs.SetFloat(KEY_MOUSE_VERTICAL_SENSITIVITY, MouseVerticalSensitivity);
-            PlayerPrefs.Save();
-            D.CoreLog("Bindings saved...");
-        }
-
-        public void ResetBindings()
-        {
-            PlayerActions = PlayerActionSet.CreateWithDefaultBindings();
-            D.CoreLog("Bindings reset...");
-
-        }
-
-        void LoadBindings()
-        {
-            if (PlayerPrefs.HasKey(KEY_BINDINGS))
-            {
-                var saveData = PlayerPrefs.GetString(KEY_BINDINGS);
-                PlayerActions.Load(saveData);
-                D.CoreLog("Bindings loaded...");
-            }
-        }
-
-        void LoadSensitivities()
-        {
-            MouseHorizontalSensitivity = PlayerPrefs.GetFloat(KEY_MOUSE_HORIZONTAL_SENSITIVITY, 50f);
-            MouseVerticalSensitivity = PlayerPrefs.GetFloat(KEY_MOUSE_VERTICAL_SENSITIVITY, 50f);
         }
 
         public IEnumerator WaitForSeconds(float duration)

@@ -20,6 +20,7 @@ public class Music_Player : MonoBehaviour
     {
 
     }
+
     void OnDestroy()
     {
         MusicInst.stop(FMOD.Studio.STOP_MODE.ALLOWFADEOUT);
