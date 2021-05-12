@@ -94,13 +94,6 @@ namespace Hedronoid
             get { return manualPositionOffset; }
             private set { manualPositionOffset = value; }
         }
-        [SerializeField]
-        private Vector3 manualRotationOffset = Vector3.zero;
-        public Vector3 ManualRotationOffset
-        {
-            get { return manualPositionOffset; }
-            private set { manualPositionOffset = value; }
-        }
         #endregion
 
         #region PRIVATE/HIDDEN VARS
@@ -198,9 +191,6 @@ namespace Hedronoid
                 lookPosition = rectPosition - rectOffset;
             }
             //
-       
-            Quaternion manualRotation = Quaternion.Euler(manualRotationOffset);
-            lookRotation *= manualRotation;
 
             orbitCamera.transform.SetPositionAndRotation(lookPosition, lookRotation);
         }
@@ -360,26 +350,21 @@ namespace Hedronoid
             float x = playerAction.Look.X;
             float y = playerAction.Look.Y;
 
-            float horizontalAngle = x * Time.deltaTime * InputManager.Instance.MouseHorizontalSensitivity;
-            float verticalAngle = -y * Time.deltaTime * InputManager.Instance.MouseVerticalSensitivity;
+            float horizontalAngle = x * InputManager.Instance.MouseHorizontalSensitivity;
+            float verticalAngle = -y * InputManager.Instance.MouseVerticalSensitivity;
 
             float e = lookReleaseThreshold;
 
-            if (!shoulderFocused && (horizontalAngle < -e || horizontalAngle > e || verticalAngle < -e || verticalAngle > e))
+            if (!shoulderFocused && 
+                (horizontalAngle < -e || horizontalAngle > e || verticalAngle < -e || verticalAngle > e))
                 shoulderFocused = true;
 
             if (!shoulderFocused) return false;
 
-            e = 0.001f;
-            if (horizontalAngle < -e || horizontalAngle > e || verticalAngle < -e || verticalAngle > e)
-            {
-                orbitAngles += rotationSpeed * Time.unscaledDeltaTime * new Vector2(verticalAngle, horizontalAngle);
-                lastManualRotationTime = Time.unscaledTime;
-                prevHitPoint.point = Vector3.zero;
-                return true;
-            }
-
-            return false;
+            orbitAngles += Time.fixedUnscaledDeltaTime * new Vector2(verticalAngle, horizontalAngle);
+            lastManualRotationTime = Time.unscaledTime;
+            prevHitPoint.point = Vector3.zero;
+            return true;
         }
 
         void AutomaticCentering ()

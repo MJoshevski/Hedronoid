@@ -18,7 +18,7 @@ GameObject:
   - component: {fileID: 2808058908603988634}
   - component: {fileID: 2808058908603988633}
   m_Layer: 8
-  m_Name: Main Camera
+  m_Name: Orbit Camera
   m_TagString: MainCamera
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -106,18 +106,17 @@ MonoBehaviour:
   catchupFactor: 0.2
   catchupVeloThreshold: 10
   lookReleaseThreshold: 10
-  minVerticalAngle: -30
-  maxVerticalAngle: 60
-  minHorizontalAngle: 45
-  maxHorizontalAngle: 75
+  minVerticalAngle: -89
+  maxVerticalAngle: 89
+  minHorizontalAngle: -89
+  maxHorizontalAngle: 89
   obstructionMask:
     serializedVersion: 2
-    m_Bits: 4294967295
+    m_Bits: 19457
   alignDelay: 5
   alignSmoothRange: 45
-  LockCursor: 1
+  LockCursor: 0
   manualPositionOffset: {x: 1.5, y: 2}
-  manualRotationOffset: {x: 0, y: 0, z: 0}
 --- !u!124 &2808058908603988585
 Behaviour:
   m_ObjectHideFlags: 0
