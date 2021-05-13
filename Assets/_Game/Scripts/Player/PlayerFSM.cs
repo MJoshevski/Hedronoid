@@ -786,10 +786,14 @@ namespace Hedronoid.Player
             }
             else if (maxAirJumps > 0 && jumpPhase <= maxAirJumps)
             {
-                if (jumpPhase == 0)
-                {
-                    jumpPhase = 1;
-                }
+                // Uncomment this, if you want the double jump to not be performed when falling,
+                // i.e. if you are fell from a platform, you can only single jump.
+                //
+                //if (jumpPhase == 0)
+                //{
+                //    jumpPhase = 1;
+                //}
+
                 jumpDirection = contactNormal;
             }
             else
