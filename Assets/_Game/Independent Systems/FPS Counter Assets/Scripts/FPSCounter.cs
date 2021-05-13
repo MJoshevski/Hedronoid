@@ -75,7 +75,9 @@ public class FPSCounter : MonoBehaviour {
         // Otherwise setup the FPS display
         else
         {
-            DontDestroyOnLoad(transform.gameObject);    // Makes game object persistant on scene changes
+            // Commented this because we use the PersistentInstantiator to keep this loaded at all times
+            //
+            // DontDestroyOnLoad(transform.gameObject);    // Makes game object persistant on scene changes
             ResetFPSCounter();
             gameObject.GetComponentInChildren<Camera>().enabled = m_isRunning;
         }

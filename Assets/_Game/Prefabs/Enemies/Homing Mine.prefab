@@ -1648,8 +1648,6 @@ GameObject:
   m_Component:
   - component: {fileID: 6376073102376690728}
   - component: {fileID: 6376073102376690722}
-  - component: {fileID: 6376073102376690734}
-  - component: {fileID: 6376073102376690735}
   - component: {fileID: 6376073102376690732}
   - component: {fileID: 5433167557568923675}
   m_Layer: 14
@@ -1682,63 +1680,6 @@ MeshFilter:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 6376073102376690729}
   m_Mesh: {fileID: 10208, guid: 0000000000000000e000000000000000, type: 0}
---- !u!114 &6376073102376690734
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 6376073102376690729}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 5d568d4c17b0f7b4da2db56d69060353, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  target: {fileID: 0}
-  targetLesionAreaRadius: 0
-  targetPathUpdateOffset: 0
-  circleRadius: 30
-  detonationRadius: 15
-  detonationCountdown: 2
-  detonationForce: 1500
-  detonationForceMode: 1
-  deathPfx: {fileID: 908998429119571563}
-  blastFX: {fileID: 2586822164874389425}
---- !u!114 &6376073102376690735
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 6376073102376690729}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 1610b6d613a65ce48a4ed403d65f2aa1, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  xMin: -166
-  xMax: 166
-  yMin: -122
-  yMax: 230
-  zMin: -180
-  zMax: 166
-  selectedPFAlg: 0
-  pathfindingLevel: 0
-  inEditorPathfindingTraverce: 0
-  heuristicFactor: 0.9
-  trajectoryOptimization: 1
-  trajectorySmoothing: 1
-  speed: 0.3
-  moveVectorOrientation: 1
-  turnSpeed: 5
-  reckDynamicObstacles: 0
-  generateEventMessages: 0
-  generateCondMessages: 0
-  showPathfindingZone: 1
-  tracePath: 0
-  lineWidth: 1.04
-  lineMaterial: {fileID: 2100000, guid: c1d4b719757831541b34cd7f0d90112d, type: 2}
-  spaceManagerInstance: {fileID: 0}
 --- !u!54 &6376073102376690732
 Rigidbody:
   m_ObjectHideFlags: 0
@@ -2624,12 +2565,6 @@ PrefabInstance:
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: e1b08032bec16ba4eb1ae23cbd572664, type: 3}
---- !u!198 &908998429119571563 stripped
-ParticleSystem:
-  m_CorrespondingSourceObject: {fileID: 198917022394846920, guid: e1b08032bec16ba4eb1ae23cbd572664,
-    type: 3}
-  m_PrefabInstance: {fileID: 1035784737233365155}
-  m_PrefabAsset: {fileID: 0}
 --- !u!4 &1031411186539135125 stripped
 Transform:
   m_CorrespondingSourceObject: {fileID: 4388947112716342, guid: e1b08032bec16ba4eb1ae23cbd572664,
