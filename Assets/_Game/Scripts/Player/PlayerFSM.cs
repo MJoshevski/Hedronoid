@@ -623,8 +623,6 @@ namespace Hedronoid.Player
         {
             Run = FMODUnity.RuntimeManager.CreateInstance(m_playerAudioData.footsteps);
             FMODUnity.RuntimeManager.AttachInstanceToGameObject(Run, transform, GetComponent<Rigidbody>());
-
-            BulletPrimary = FMODUnity.RuntimeManager.CreateInstance(m_playerAudioData.bulletPrimary[0]);
         }
 
         private void CreateFSMStates()
