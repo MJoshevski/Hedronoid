@@ -5,7 +5,7 @@ using UnityEngine;
 using System.Linq;
 using System;
 
-namespace Hedronoid
+namespace Hedronoid.Gravity
 {
     [CustomEditor(typeof(GravityManager))]
     class GravityManagerEditor : Editor
