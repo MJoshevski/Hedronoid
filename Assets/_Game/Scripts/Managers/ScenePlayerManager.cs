@@ -11,6 +11,7 @@ namespace Hedronoid.Core
     public class ScenePlayerManager : HNDGameObject, IGameplaySceneContextInjector
     {
         public GameObject Player;
+        public HNDGameObject PlayerPrefab;
 
         public GameplaySceneContext GameplaySceneContext { get; set; }
 
@@ -24,15 +25,15 @@ namespace Hedronoid.Core
 
         private void OnStartLevel(StartLevel e)
         {
-            StartCoroutine(InitializePlayersCoroutine());
+            StartCoroutine(InitializePlayerCoroutine());
         }
 
-        private IEnumerator InitializePlayersCoroutine()
+        private IEnumerator InitializePlayerCoroutine()
         {
-            if (!Player) Player = FindObjectOfType<PlayerFSM>().cachedGameObject;
+            if (!Player) CreatePlayer();
 
             yield return new WaitForEndOfFrame();
-            //HNDEvents.Instance.Raise(new PlayersCreatedAndInitialized());
+            HNDEvents.Instance.Raise(new PlayerCreatedAndInitialized());            
         }
 
         void Update()
@@ -50,18 +51,18 @@ namespace Hedronoid.Core
             }
         }
 
-        //private void CreatePlayer()
-        //{
-        //    HNDGameObject p = Instantiate(PlayerPrefab, GameplaySceneContext.cachedTransform);
-        //    p.name = "Player";
-        //    p.cachedTransform.position = GameplaySceneContext.PlayerSpawner.GetSpawnPoint(0).position;
-        //    p.cachedTransform.rotation = GameplaySceneContext.PlayerSpawner.GetSpawnPoint(0).rotation;
-        //    Player = p;
-        //}
-        
+        private void CreatePlayer()
+        {
+            HNDGameObject p = Instantiate(PlayerPrefab, GameplaySceneContext.cachedTransform);
+            p.name = "Player";
+            p.cachedTransform.position = GameplaySceneContext.PlayerSpawner.GetSpawnPoint(0).position;
+            p.cachedTransform.rotation = GameplaySceneContext.PlayerSpawner.GetSpawnPoint(0).rotation;
+            Player = p.cachedGameObject;
+        }
+
         private void RespawnPlayerAtCheckpoint()
         {
-            //if (!Player) CreatePlayer();
+            if (!Player) CreatePlayer();
             Transform activeSpawnPoint = GameplaySceneContext.PlayerSpawner.ActiveSpawnPoint;
 
             float prevFollowSpeed = GameplaySceneContext.OrbitCamera.followSpeed;

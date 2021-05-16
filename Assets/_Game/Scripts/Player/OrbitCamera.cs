@@ -4,6 +4,7 @@ using UnityEngine;
 using Gizmos = Popcron.Gizmos;
 using Hedronoid.Core;
 using Hedronoid.Player;
+using Hedronoid.Events;
 
 namespace Hedronoid
 {
@@ -18,7 +19,7 @@ namespace Hedronoid
         #region PUBLIC/VISIBLE VARS
         public GameplaySceneContext GameplaySceneContext { get; set; }
 
-        [Header("References")]
+        [HideInInspector]
         public Transform focus;
         [HideInInspector]
         public Camera orbitCamera;
@@ -103,6 +104,7 @@ namespace Hedronoid
         private float lastManualRotationTime;
         private float distanceThreshold;
         private bool shoulderFocused = true;
+        private bool m_playerCreatedAndInitialized = false;
 
         private Quaternion gravityAlignment = Quaternion.identity;
         private Quaternion orbitRotation;
@@ -146,8 +148,10 @@ namespace Hedronoid
             base.Awake();
             this.Inject(gameObject);
 
-            Player = GameplaySceneContext.Player;
-            focusPoint = focus.position;
+            HNDEvents.Instance.AddListener<PlayerCreatedAndInitialized>(OnPlayerCreatedAndInitialized);
+            HNDEvents.Instance.AddListener<DebugMenuOpened>(OnDebugMenuOpened);
+            HNDEvents.Instance.AddListener<DebugMenuClosed>(OnDebugMenuClosed);
+
             distanceThreshold = manualPositionOffset.x * 2f;
             gravityAlignment = Quaternion.identity;
             orbitCamera = GetComponent<Camera>();
@@ -160,6 +164,7 @@ namespace Hedronoid
 
         public void LateUpdate()
         {
+            if (!m_playerCreatedAndInitialized) return;
             OnValidate();
             UpdateGravityAlignment();
             UpdateFocusPoint();
@@ -479,6 +484,27 @@ namespace Hedronoid
         {
             float angle = Mathf.Acos(direction.y) * Mathf.Rad2Deg;
             return direction.x < 0f ? 360f - angle : angle;
+        }
+        #endregion
+
+        #region EVENT HANDLERS
+        private void OnPlayerCreatedAndInitialized(PlayerCreatedAndInitialized e)
+        {
+            Player = GameplaySceneContext.Player;
+            focus = Player.cachedGameObject.transform;
+            focusPoint = Player.cachedGameObject.transform.position;
+
+            m_playerCreatedAndInitialized = true;
+        }
+
+        private void OnDebugMenuOpened(DebugMenuOpened e)
+        {
+            LockCursor = false;
+        }
+
+        private void OnDebugMenuClosed(DebugMenuClosed e)
+        {
+            LockCursor = true;
         }
         #endregion
     }

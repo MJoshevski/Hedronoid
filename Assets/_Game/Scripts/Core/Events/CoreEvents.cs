@@ -20,7 +20,6 @@ public class PlayerCreatedAndInitialized : HNDBaseEvent
 {
 }
 
-
 public class IntroStarted : HNDBaseEvent
 {
 }
@@ -38,5 +37,16 @@ public class BattleEnded : HNDBaseEvent
 }
 
 public class SkipIntro : HNDBaseEvent
+{
+}
+
+//////////////////////////////
+// DEBUG                    //
+//////////////////////////////
+public class DebugMenuOpened : HNDBaseEvent
+{
+}
+
+public class DebugMenuClosed : HNDBaseEvent
 {
 }

@@ -8,6 +8,7 @@ using static System.Net.Mime.MediaTypeNames;
 using DG.Tweening;
 using Hedronoid.Core;
 using UnityEngine.SceneManagement;
+using Hedronoid.Events;
 
 namespace Hedronoid
 {
@@ -151,11 +152,13 @@ namespace Hedronoid
                 {
                     m_TimeManager.SetPaused(true, false);
                     DebugPanel.SetActive(true);
+                    HNDEvents.Instance.Raise(new DebugMenuOpened());
                 }
                 else
                 {
                     DebugPanel.SetActive(false);
                     m_TimeManager.SetPaused(false, false);
+                    HNDEvents.Instance.Raise(new DebugMenuClosed());
                 }
             }
 
