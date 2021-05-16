@@ -3,7 +3,7 @@
 /// <summary>
 /// For saving or loading Transform values
 /// </summary>
-public struct NNTransformValues
+public struct HNDTransformValues
 {
     public Vector3 Position;
     public Quaternion Rotation;

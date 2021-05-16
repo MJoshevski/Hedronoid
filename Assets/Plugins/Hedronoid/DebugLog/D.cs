@@ -20,6 +20,8 @@ public class D
     public const string CATEGORY_AUDIO = "Audio";
     public const string CATEGORY_HNDLoc = "HNDLoc";
     public const string CATEGORY_UI = "UI";
+    public const string CATEGORY_AI = "AI";
+    public const string CATEGORY_GRAVITY = "Gravity";
     public const string CATEGORY_PROFILE = "Profile";
 
 #if UNITY_EDITOR
@@ -203,5 +205,21 @@ public class D
     public static DBG.TaggedFormatLogger ProfileWarningFormat { get { if (!_initialized) Init(); return DBG.GetTaggedWarningFormat(CATEGORY_PROFILE); } }
     public static DBG.TaggedLogger ProfileError { get { if (!_initialized) Init(); return DBG.GetTaggedError(CATEGORY_PROFILE); } }
     public static DBG.TaggedFormatLogger ProfileErrorFormat { get { if (!_initialized) Init(); return DBG.GetTaggedErrorFormat(CATEGORY_PROFILE); } }
+    
+
+    public static DBG.TaggedLogger GravLog { get { if (!_initialized) Init(); return DBG.GetTaggedLog(CATEGORY_GRAVITY); } }
+    public static DBG.TaggedFormatLogger GravLogFormat { get { if (!_initialized) Init(); return DBG.GetTaggedLogFormat(CATEGORY_GRAVITY); } }
+    public static DBG.TaggedLogger GravWarning { get { if (!_initialized) Init(); return DBG.GetTaggedWarning(CATEGORY_GRAVITY); } }
+    public static DBG.TaggedFormatLogger GravWarningFormat { get { if (!_initialized) Init(); return DBG.GetTaggedWarningFormat(CATEGORY_GRAVITY); } }
+    public static DBG.TaggedLogger GravError { get { if (!_initialized) Init(); return DBG.GetTaggedError(CATEGORY_GRAVITY); } }
+    public static DBG.TaggedFormatLogger GravErrorFormat { get { if (!_initialized) Init(); return DBG.GetTaggedErrorFormat(CATEGORY_GRAVITY); } }
+
+
+    public static DBG.TaggedLogger AILog { get { if (!_initialized) Init(); return DBG.GetTaggedLog(CATEGORY_AI); } }
+    public static DBG.TaggedFormatLogger AILogFormat { get { if (!_initialized) Init(); return DBG.GetTaggedLogFormat(CATEGORY_AI); } }
+    public static DBG.TaggedLogger AIWarning { get { if (!_initialized) Init(); return DBG.GetTaggedWarning(CATEGORY_AI); } }
+    public static DBG.TaggedFormatLogger AIWarningFormat { get { if (!_initialized) Init(); return DBG.GetTaggedWarningFormat(CATEGORY_AI); } }
+    public static DBG.TaggedLogger AIError { get { if (!_initialized) Init(); return DBG.GetTaggedError(CATEGORY_AI); } }
+    public static DBG.TaggedFormatLogger AIErrorFormat { get { if (!_initialized) Init(); return DBG.GetTaggedErrorFormat(CATEGORY_AI); } }
 
 }

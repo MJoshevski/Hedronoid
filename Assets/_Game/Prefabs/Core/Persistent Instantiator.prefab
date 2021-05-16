@@ -1,0 +1,54 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!1 &432517052402169497
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 432517052402169503}
+  - component: {fileID: 432517052402169502}
+  m_Layer: 0
+  m_Name: Persistent Instantiator
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &432517052402169503
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 432517052402169497}
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: -2215.0752, y: -2360.9497, z: 41.3085}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_Children: []
+  m_Father: {fileID: 0}
+  m_RootOrder: 0
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &432517052402169502
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 432517052402169497}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 19c63a227e9f2394d8730ff1a30d44b0, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  m_Spawns:
+  - {fileID: 5737059434086398456, guid: f722901573383924db4c36baf25ee21b, type: 3}
+  - {fileID: 5330268984567110332, guid: 4e7258e4245179e43b605d76a22010fe, type: 3}
+  - {fileID: 699618580408894149, guid: 84237020fd151744d94667f0f8d22056, type: 3}
+  - {fileID: 4220932287852850665, guid: 2e601339bb845a6409b6dba9b8dbe19a, type: 3}
+  - {fileID: 1288259757227584, guid: 10a38c9942f31f04ba1ce078cee26f1b, type: 3}
+  - {fileID: 4512929657947208682, guid: 657bce01d7436fd419262caa41d7d17d, type: 3}
+  - {fileID: 2245967728745167568, guid: bbda643f8f62d894da449da413dfd9f5, type: 3}
+  - {fileID: 2819064773174493511, guid: 1c0ee3f8e3224524b915671196c5cac7, type: 3}

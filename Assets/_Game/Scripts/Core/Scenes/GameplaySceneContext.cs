@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using Hedronoid.Player;
 using Hedronoid.ObjectPool;
+using Hedronoid.Weapons;
 
 namespace Hedronoid.Core
 {
@@ -22,45 +23,45 @@ namespace Hedronoid.Core
             }
         }
 
-        //private ScenePlayerManager m_ScenePlayerManager;
-        //public ScenePlayerManager ScenePlayerManager
-        //{
-        //    get
-        //    {
-        //        if (m_ScenePlayerManager == null)
-        //        {
-        //            m_ScenePlayerManager = cachedGameObject.GetComponentInChildren<ScenePlayerManager>(true);
-        //        }
-
-        //        return m_ScenePlayerManager;
-        //    }
-        //}
-
-        //private PlayerSpawner m_PlayerSpawner;
-        //public PlayerSpawner PlayerSpawner
-        //{
-        //    get
-        //    {
-        //        if (m_PlayerSpawner == null)
-        //        {
-        //            m_PlayerSpawner = cachedGameObject.GetComponentInChildren<PlayerSpawner>(true);
-        //        }
-
-        //        return m_PlayerSpawner;
-        //    }
-        //}
-
-        private HNDPoolManager m_PoolManager;
-        public HNDPoolManager PoolManager
+        private ScenePlayerManager m_ScenePlayerManager;
+        public ScenePlayerManager ScenePlayerManager
         {
             get
             {
-                if (m_PoolManager == null)
+                if (m_ScenePlayerManager == null)
                 {
-                    m_PoolManager = cachedGameObject.GetComponentInChildren<HNDPoolManager>(true);
+                    m_ScenePlayerManager = cachedGameObject.GetComponentInChildren<ScenePlayerManager>(true);
                 }
 
-                return m_PoolManager;
+                return m_ScenePlayerManager;
+            }
+        }
+
+        private PlayerSpawner m_PlayerSpawner;
+        public PlayerSpawner PlayerSpawner
+        {
+            get
+            {
+                if (m_PlayerSpawner == null)
+                {
+                    m_PlayerSpawner = cachedGameObject.GetComponentInChildren<PlayerSpawner>(true);
+                }
+
+                return m_PlayerSpawner;
+            }
+        }
+
+        private BulletPoolManager m_BulletPoolManager;
+        public BulletPoolManager BulletPoolManager
+        {
+            get
+            {
+                if (m_BulletPoolManager == null)
+                {
+                    m_BulletPoolManager = cachedGameObject.GetComponentInChildren<BulletPoolManager>(true);
+                }
+
+                return m_BulletPoolManager;
             }
         }
 

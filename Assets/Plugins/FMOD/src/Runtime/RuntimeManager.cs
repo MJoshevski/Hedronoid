@@ -1112,6 +1112,7 @@ retry:
         {
             var instance = CreateInstance(guid);
             AttachInstanceToGameObject(instance, gameObject.transform, gameObject.GetComponent<Rigidbody>());
+            instance.set3DAttributes(RuntimeUtils.To3DAttributes(gameObject.transform));
             instance.start();
             instance.release();
         }

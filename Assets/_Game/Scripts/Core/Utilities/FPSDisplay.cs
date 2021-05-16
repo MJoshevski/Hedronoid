@@ -1,6 +1,7 @@
 ﻿using UnityEngine;
 using System.Collections;
 using UnityEngine.UI;
+using TMPro;
 
 public class FPSDisplay : MonoBehaviour
 {
@@ -8,7 +9,7 @@ public class FPSDisplay : MonoBehaviour
     public float UpdateInterval = 1f;
 
     [Header("Refs")]
-    public Text Text;
+    public TextMeshProUGUI Text;
 
     float _accumulator = 0.0f; // FPS accumulated over the interval
     int _frames = 0; // Frames drawn over the interval

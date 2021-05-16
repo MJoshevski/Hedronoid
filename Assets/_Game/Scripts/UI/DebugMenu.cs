@@ -116,7 +116,7 @@ namespace Hedronoid
 
         private void SetHorizontalSensitivity(float sensitivity)
         {
-            Debug.LogFormat("SetHorizontalSensitivity(float {0})", sensitivity);
+            D.UILogFormat("SetHorizontalSensitivity(float {0})", sensitivity);
             InputManager.Instance.MouseHorizontalSensitivity = sensitivity;
             HorizontalSensitivityInputField.text = sensitivity.ToString();
             HorizontalSensitivitySlider.value = sensitivity;
@@ -124,7 +124,7 @@ namespace Hedronoid
 
         void SetVerticalSensitivity(float sensitivity)
         {
-            Debug.LogFormat("SetVerticalSensitivity(float {0})", sensitivity);
+            D.UILogFormat("SetVerticalSensitivity(float {0})", sensitivity);
             InputManager.Instance.MouseVerticalSensitivity = sensitivity;
             VerticalSensitivityInputField.text = sensitivity.ToString();
             VerticalSensitivitySlider.value = sensitivity;

@@ -1,0 +1,214 @@
+﻿using System.Collections;
+using System.Collections.Generic;
+using UnityEngine;
+using Hedronoid;
+using Hedronoid.Events;
+
+namespace Chimparty.Particles
+{
+    public class ChimpsParticleSystem : HNDGameObject
+    {
+        [Header("Player Coloring")]
+        [SerializeField]
+        ParticleSystem[] m_PlayerColoredParticleSystems = new ParticleSystem[0];
+        [SerializeField]
+        TrailRenderer[] m_PlayerColoredTrailRenderers = new TrailRenderer[0];
+
+        [SerializeField]
+        private bool m_ColorStartColor = true;
+        [SerializeField]
+        private bool m_ColorColorOverLifeTime = true;
+        [SerializeField]
+        private bool m_ColorRenderer = true;
+
+        private Transform m_FollowTransform;
+        private Quaternion m_FollowRotation;
+        private Vector3 m_FollowOffset;
+        private bool m_FollowPositionOnly;
+        private ParticleSystem m_cachedParticleSystem;
+        public ParticleSystem cachedParticleSystem
+        {
+            get
+            {
+                // Particle systems in Hedronoid should be structured with an empty game object 
+                // holder as the parentand one child object, which contains the actual particle system.
+
+                if (m_cachedParticleSystem == null)
+                    m_cachedParticleSystem = cachedTransform.GetChild(0).GetComponent<ParticleSystem>();
+                return m_cachedParticleSystem;
+            }
+        }
+
+        bool b_HasParticleSystem;
+
+        private Dictionary<ParticleSystem, float> m_ParticleSystemDefaultStartSizes = new Dictionary<ParticleSystem, float>();
+
+        protected override void Awake()
+        {
+            base.Awake();
+
+            // Some 'particle systems' are not actually particles. 
+            // Since it's all prefab based, this will not change at runtime, 
+            // so we cache whether or not an actual particle system exists here.
+
+            b_HasParticleSystem = cachedParticleSystem != null;
+
+            foreach (var particleSys in GetComponentsInChildren<ParticleSystem>())
+            {
+                m_ParticleSystemDefaultStartSizes.Add(particleSys, particleSys.GetStartSize());
+            }
+        }
+
+        public void Play()
+        {
+            if (b_HasParticleSystem)
+            {
+                cachedParticleSystem.Play(true);
+            }
+        }
+
+        public void Play(Vector3 position, Vector3 normal, Transform followTransform, bool followPositionOnly)
+        {
+            if (followTransform != null)
+                m_FollowOffset = position - followTransform.position;
+
+            m_FollowPositionOnly = followPositionOnly;
+
+            cachedTransform.position = position;
+
+            m_FollowRotation = Quaternion.FromToRotation(Vector3.forward, normal);
+            cachedTransform.rotation = m_FollowRotation;
+
+            m_FollowTransform = followTransform;
+
+            Play();
+        }
+
+        protected void Update()
+        {
+            if (m_FollowTransform != null)
+            {
+                cachedTransform.position = m_FollowTransform.position + m_FollowOffset;
+                if (!m_FollowPositionOnly)
+                {
+                    cachedTransform.rotation = m_FollowTransform.rotation * m_FollowRotation;
+                }
+            }
+        }
+
+        public void Stop()
+        {
+            D.CoreWarningFormat("DEBUG : Particle [{0}] stopped.", name);
+            if (b_HasParticleSystem)
+            {
+                cachedParticleSystem.Stop(true, ParticleSystemStopBehavior.StopEmitting);
+            }
+        }
+
+        public void SetScale(float scale)
+        {
+            foreach (var particleSys in GetComponentsInChildren<ParticleSystem>())
+            {
+                float defaultSize = m_ParticleSystemDefaultStartSizes[particleSys];
+                particleSys.SetStartSize(scale * defaultSize);
+            }
+
+            foreach (var meshRend in GetComponentsInChildren<MeshRenderer>())
+            {
+                meshRend.transform.localScale = Vector3.one * scale;
+            }
+
+            foreach (var lineRend in GetComponentsInChildren<LineRenderer>())
+            {
+                D.CoreWarning("Scaling PRT-LineRenderer is not possible!");
+                // lineRend.transform.localScale = scale;
+            }
+        }
+
+        public float GetDuration()
+        {
+            if (cachedParticleSystem)
+            {
+                return cachedParticleSystem.main.duration + cachedParticleSystem.main.startLifetime.constant + cachedParticleSystem.main.startDelay.constant;
+            }
+
+            return -1;
+        }
+
+        public bool IsLooping()
+        {
+            if (cachedParticleSystem)
+            {
+                return cachedParticleSystem.IsLooping();
+            }
+
+            return true;
+        }
+
+        public void SetColors(Color color)
+        {
+            if (m_PlayerColoredParticleSystems == null || m_PlayerColoredTrailRenderers == null) return;
+
+            for (int i = 0; i < m_PlayerColoredParticleSystems.Length; i++)
+            {
+                ParticleSystem s = m_PlayerColoredParticleSystems[i];
+                if (s != null)
+                {
+                    // start color
+                    if (m_ColorStartColor)
+                    {
+                        var mainModule = m_PlayerColoredParticleSystems[i].main;
+                        mainModule.startColor = new ParticleSystem.MinMaxGradient(color);
+                    }
+
+                    if (m_ColorColorOverLifeTime)
+                    {
+                        // color over lifetime
+                        var colorOverLifeTimeModule = m_PlayerColoredParticleSystems[i].colorOverLifetime;
+                        if (colorOverLifeTimeModule.color.gradient != null)
+                        {
+                            var gradient = new Gradient();
+                            GradientColorKey[] colorKeys;
+                            if (colorOverLifeTimeModule.color.gradient.colorKeys != null)
+                            {
+                                colorKeys = new GradientColorKey[colorOverLifeTimeModule.color.gradient.colorKeys.Length];
+
+                                for (int j = 0; j < colorOverLifeTimeModule.color.gradient.colorKeys.Length; j++)
+                                {
+                                    var colorKey = colorOverLifeTimeModule.color.gradient.colorKeys[j];
+                                    colorKeys[j] = new GradientColorKey(color, colorKey.time);
+                                }
+
+                                gradient.colorKeys = colorKeys;
+                                gradient.alphaKeys = colorOverLifeTimeModule.color.gradient.alphaKeys;
+                                gradient.mode = colorOverLifeTimeModule.color.gradient.mode;
+                                colorOverLifeTimeModule.color = gradient;
+                            }
+                        }
+                        else
+                        {
+                            colorOverLifeTimeModule.color = new ParticleSystem.MinMaxGradient(color);
+                        }
+                    }
+
+                    if (m_ColorRenderer)
+                    {
+                        var particleRenderer = m_PlayerColoredParticleSystems[i].gameObject.GetComponent<Renderer>();
+                        particleRenderer.material.SetColor("_Color", color);
+                    }
+                }
+            }
+
+            for (int i = 0; i < m_PlayerColoredTrailRenderers.Length; i++)
+            {
+                TrailRenderer ts = m_PlayerColoredTrailRenderers[i];
+                if (ts != null)
+                {
+                    if (m_ColorStartColor) ts.startColor = color;
+                    if (m_ColorColorOverLifeTime) ts.endColor = color;
+                    if (m_ColorRenderer) ts.material.color = color;
+                }
+            }
+        }
+    }
+}

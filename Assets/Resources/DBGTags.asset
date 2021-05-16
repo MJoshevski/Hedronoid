@@ -13,8 +13,44 @@ MonoBehaviour:
   m_Name: DBGTags
   m_EditorClassIdentifier: 
   defaultTag:
-    tag: 
-    show: 0
-    color: {r: 0, g: 0, b: 0, a: 0}
+    tag: Default
+    show: 1
+    color: {r: 0.745283, g: 0.745283, b: 0.745283, a: 0}
     minLogSeverity: 0
-  tags: []
+  tags:
+  - tag: Game
+    show: 1
+    color: {r: 0.3443396, g: 0.71698594, b: 1, a: 0}
+    minLogSeverity: 0
+  - tag: Core
+    show: 1
+    color: {r: 0.5801887, g: 1, b: 0.62664807, a: 0}
+    minLogSeverity: 0
+  - tag: Gravity
+    show: 1
+    color: {r: 1, g: 0.7019608, b: 0.44705883, a: 0}
+    minLogSeverity: 0
+  - tag: Network
+    show: 1
+    color: {r: 0.8962264, g: 0.43543077, b: 0.7383574, a: 0}
+    minLogSeverity: 0
+  - tag: Audio
+    show: 1
+    color: {r: 0.8867924, g: 0.83014196, b: 0.020914912, a: 0}
+    minLogSeverity: 0
+  - tag: AI
+    show: 1
+    color: {r: 0.19339621, g: 0.26254258, b: 1, a: 0}
+    minLogSeverity: 0
+  - tag: UI
+    show: 1
+    color: {r: 0.069321744, g: 0.5566038, b: 0, a: 0}
+    minLogSeverity: 0
+  - tag: Localization
+    show: 1
+    color: {r: 0.2924528, g: 0, b: 0.25723466, a: 0}
+    minLogSeverity: 0
+  - tag: Profile
+    show: 1
+    color: {r: 0, g: 0.9911959, b: 1, a: 0}
+    minLogSeverity: 0
