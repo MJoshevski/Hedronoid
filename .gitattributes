@@ -4,15 +4,15 @@
 *.shader  text
 
 # Unity YAML
-*.mat merge=unityyamlmerge eol=lf
-*.anim merge=unityyamlmerge eol=lf
-*.unity merge=unityyamlmerge eol=lf
-*.prefab merge=unityyamlmerge eol=lf
-*.physicMaterial2D merge=unityyamlmerge eol=lf
-*.physicMaterial merge=unityyamlmerge eol=lf
-*.asset merge=unityyamlmerge eol=lf
-*.meta merge=unityyamlmerge eol=lf
-*.controller merge=unityyamlmerge eol=lf
+*.mat merge=unityyamlmerge eol=crlf
+*.anim merge=unityyamlmerge eol=crlf
+*.unity merge=unityyamlmerge eol=crlf
+*.prefab merge=unityyamlmerge eol=crlf
+*.physicMaterial2D merge=unityyamlmerge eol=crlf
+*.physicMaterial merge=unityyamlmerge eol=crlf
+*.asset merge=unityyamlmerge eol=crlf
+*.meta merge=unityyamlmerge eol=crlf
+*.controller merge=unityyamlmerge eol=crlf
 
 # Unity LFS
 *.cubemap       filter=lfs diff=lfs merge=lfs -text
