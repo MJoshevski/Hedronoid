@@ -18,6 +18,7 @@ public class EnemyHealthBase : HealthBase
     protected override void UpdateHealthBarOrientation()
     {
         if (!m_healthBar) return;
+
         m_healthBar.position = m_rootTransform.position + (upAxis * textOffset.y) + (rightAxis * textOffset.x);
         m_healthBar.position = Vector3.MoveTowards(m_healthBar.transform.position, Camera.main.transform.position, textOffset.z);
         m_healthBar.LookAt(2 * m_healthBar.position - Camera.main.transform.position, upAxis);

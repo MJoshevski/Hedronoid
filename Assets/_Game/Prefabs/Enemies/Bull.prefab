@@ -1396,13 +1396,16 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 6130878890443013017}
-  - component: {fileID: 2419484500514599867}
-  - component: {fileID: 2419484500514599868}
-  - component: {fileID: 2419484500514599869}
+  - component: {fileID: 6913372972342011298}
+  - component: {fileID: 3884656012681038049}
+  - component: {fileID: 7046115863271154030}
   - component: {fileID: 2419484500514599870}
   - component: {fileID: 2419484500514599866}
   - component: {fileID: 2419484500514599865}
   - component: {fileID: 2419484500514599864}
+  - component: {fileID: 1863859129580342314}
+  - component: {fileID: 8669656132193663254}
+  - component: {fileID: 5487204551221528642}
   m_Layer: 0
   m_Name: Bull
   m_TagString: Untagged
@@ -1419,13 +1422,13 @@ Transform:
   m_GameObject: {fileID: 3129708451264162560}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
   m_LocalPosition: {x: 2.42, y: 5.11, z: -0.22}
-  m_LocalScale: {x: 1.48, y: 1.48, z: 1.48}
+  m_LocalScale: {x: 1.4799998, y: 1.4800003, z: 1.48}
   m_Children:
   - {fileID: 5957721135649989069}
   m_Father: {fileID: 0}
   m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!114 &2419484500514599867
+--- !u!114 &6913372972342011298
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -1434,7 +1437,7 @@ MonoBehaviour:
   m_GameObject: {fileID: 3129708451264162560}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: dbddb5dc74e2987488f53c82ef048606, type: 3}
+  m_Script: {fileID: 11500000, guid: 444f9c145742d224c92ffb2793b60e77, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
   _currentState: 
@@ -1442,17 +1445,18 @@ MonoBehaviour:
   m_Target: {fileID: 0}
   m_MinWaypoints: 3
   m_MaxWaypoints: 7
-  m_MinWayPointDistance: 2
-  m_MaxWayPointDistance: 4
+  m_MinWayPointDistance: 5
+  m_MaxWayPointDistance: 25
   m_RadiusForGroundDetection: 0.5
   m_GroundDetectionDistance: 0.55
-  m_sensorRange: 100
-  m_sensorCutoffRange: 120
-  m_dashDistance: 50
+  m_Rb: {fileID: 0}
+  m_sensorRange: 3
+  m_sensorCutoffRange: 20
+  m_dashDistance: 8
   m_sensorTimestep: 0.25
   m_physicsCullRange: 30
   m_GruntFreeze: 0
---- !u!114 &2419484500514599868
+--- !u!114 &3884656012681038049
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -1461,7 +1465,7 @@ MonoBehaviour:
   m_GameObject: {fileID: 3129708451264162560}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 320b1245796061e4b991a69dc0fbab9f, type: 3}
+  m_Script: {fileID: 11500000, guid: 50392fab0258453469445d4347148d10, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
   m_Navigation: {fileID: 0}
@@ -1475,7 +1479,7 @@ MonoBehaviour:
   dashInProgress: 0
   m_Damage: 1
   m_DashStartParticle: {fileID: 0}
---- !u!114 &2419484500514599869
+--- !u!114 &7046115863271154030
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -1484,7 +1488,7 @@ MonoBehaviour:
   m_GameObject: {fileID: 3129708451264162560}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: bec8e8761759adf4c8b315606d85800c, type: 3}
+  m_Script: {fileID: 11500000, guid: 9b16b4d7b842e3d49b381ee21f68716b, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
   m_RayCastDistance: 60
@@ -1501,6 +1505,8 @@ MonoBehaviour:
     m_PreInfinity: 2
     m_PostInfinity: 2
     m_RotationOrder: 4
+  maxDistance: 35
+  coneAngle: 15
 --- !u!195 &2419484500514599870
 NavMeshAgent:
   m_ObjectHideFlags: 0
@@ -1565,6 +1571,64 @@ BoxCollider:
   serializedVersion: 2
   m_Size: {x: 2.88, y: 2.29, z: 3.14}
   m_Center: {x: 0.05, y: 0.47, z: 0.48}
+--- !u!114 &1863859129580342314
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 3129708451264162560}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 79ce3f06c60ef6a46a2450e887295c4c, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  animator: {fileID: 0}
+  m_hitReactionAnimations: []
+--- !u!114 &8669656132193663254
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 3129708451264162560}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 6f1ff952e671cda4c824a00ce0aa05f6, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  m_handlerID: 
+  m_BlinkRenderer: {fileID: 8156360328773761405}
+  m_DamageBlinkTexture: {fileID: 0}
+  m_DamagesItCanRecieve: 
+  m_DamageTypeMultipliers: []
+  m_LODGroup: {fileID: 0}
+  m_Static: 0
+  m_Invulnernable: 0
+  m_InvulnerableTime: 0.4
+  m_damagePushForce: 0
+  m_damageRecoverSpeed: 1
+  m_OnDeathSpawnObjects: []
+  m_Health: {fileID: 0}
+--- !u!114 &5487204551221528642
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 3129708451264162560}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: c99949f821defe647b6128c9637923af, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  m_MaxHealth: 10
+  m_CurrentHealth: 10
+  m_shouldRagdollOnDeath: 0
+  HealthBarPrefab: {fileID: 8629237540992185893, guid: 43507c12172c17a4abe442b07013d457,
+    type: 3}
+  m_rootTransform: {fileID: 6130878890443013017}
+  textOffset: {x: 0, y: 10, z: 0}
 --- !u!1 &3155028053906985631
 GameObject:
   m_ObjectHideFlags: 0

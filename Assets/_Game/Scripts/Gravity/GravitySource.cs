@@ -114,7 +114,11 @@ namespace Hedronoid
         {           
             List<GravitySource> activeGravities = GravityService.GetActiveGravitySources();
             Dictionary<GravitySource, float> srcAngleDictionary = new Dictionary<GravitySource, float>();
-            Vector3 moveDir = GameplaySceneContext.Player.movementVariables.MoveDirection;
+
+            Vector3 moveDir = Vector3.zero;
+
+            if (GameplaySceneContext.Player)
+                moveDir = GameplaySceneContext.Player.movementVariables.MoveDirection;
 
             if (activeGravities.Count > 1 && moveDir != null && moveDir != Vector3.zero)
             {

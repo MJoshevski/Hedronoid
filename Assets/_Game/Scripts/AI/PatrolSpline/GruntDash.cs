@@ -90,8 +90,10 @@ namespace Hedronoid.AI
         {
         }
 
-        protected virtual void Update()
+        protected override void Update()
         {
+            base.Update();
+
             if (m_GruntNavigation.m_GruntFreeze)
                 m_turnRate = 0;
             else

@@ -241,8 +241,6 @@ public class FlockingManager : HNDMonoBehaviour
     public JobHandle sensoryRaycastsJobHandle;
     public JobHandle UpdateAgentTransformsJobHandle;
 
-    bool jobscheduled = false;
-
     static float tempSeparationDistance = 4.0f;
     static float tempFollowDistance = 60.0f;
 

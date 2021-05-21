@@ -37,15 +37,13 @@ namespace Hedronoid
 
         // SHOOTING
         private float lastFired_Auto = 0f;
-        private float lastFired_Shotgun = 0f;
-        private float lastFired_Rail = 0f;
+
         [HideInInspector]
         public Ray LookRay;
         [HideInInspector]
         public RaycastHit RayHit;
         private Rigidbody rb_auto;
         private System.Action onDespawnAction;
-        private float fireCountdown = 0f;
 
         [Header("Use Laser")]
         public bool useLaser = false;

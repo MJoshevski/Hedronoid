@@ -147,7 +147,6 @@ namespace Hedronoid.Player
         private int jumpPhase;
         private int stepsSinceLastGrounded, stepsSinceLastJump;
         private Vector3 connectionWorldPosition, connectionLocalPosition;
-        private Coroutine _forceApplyCoroutine = null;
         private float minGroundDotProduct, minStairsDotProduct;
         private bool inVacuum;
         [SerializeField]
@@ -481,8 +480,6 @@ namespace Hedronoid.Player
 
         private void OnExitDashing(FSMState fromstate)
         {
-            _forceApplyCoroutine = null;
-
             secondaryGravityMultiplier = 1f;
 
             // Dead stop on dash-end

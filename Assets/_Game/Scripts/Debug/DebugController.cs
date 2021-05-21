@@ -94,10 +94,8 @@ namespace Hedronoid
 
         // PRIVATE FIELDS
         private Dictionary<EShortcuts, bool> m_ShortcutPressedDict = new Dictionary<EShortcuts, bool>(new EShortcutsComparer());
-        private int m_ControllerType = 0;
         private HNDTimeManager m_TimeManager;
         private bool m_skippedFrame = false;
-        private float m_DeltaTime = 0.01f;
 
         protected override void Awake()
         {
