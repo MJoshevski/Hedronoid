@@ -377,6 +377,7 @@ namespace Hedronoid.AI
             {
                 return false;
             }
+
             // First make sure that the destination is grounded
             var groundDetectStart = new Vector3(destination.x, destination.y + 1f, destination.z);
             RaycastHit rh;

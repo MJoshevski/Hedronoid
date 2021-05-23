@@ -13,12 +13,18 @@ namespace Hedronoid.AI
 
         private Physics physics;
         private float coneRadius;
+
         public Transform GetTargetInsideCone(Vector3 direction)
         {
             coneRadius = Mathf.Tan((coneAngle / 2f * 0.5f * Mathf.Deg2Rad)) * maxDistance;
 
-            // First check if we have any players in range
-            RaycastHit[] players = physics.ConeCastNonAlloc(transform.position, coneRadius, direction, m_colliderBuffer.Length, maxDistance, coneAngle);
+            // First check if we have any players in the cone
+            RaycastHit[] players = physics.ConeCastNonAlloc(
+                transform.position, 
+                coneRadius, 
+                direction, 
+                m_colliderBuffer.Length, 
+                maxDistance, coneAngle);
 
             if (players.Length > 0)
             {

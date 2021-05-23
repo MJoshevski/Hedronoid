@@ -12,14 +12,15 @@ using Hedronoid.Weapons;
 namespace Hedronoid.AI
 {
     /// <summary>
-    /// This is used for Blockehad grunts to dash forward towards a target.
+    /// This is used for Grunts to dash forward towards a target.
     /// A call to move will trigger the dash.
     /// </summary>
+    /// 
     public class GruntDash : AIBaseMotor
     {
         [Header("Dash controls")]
         [SerializeField]
-        [Tooltip("The blockhead will turn towards you before dashing. This is how far it turns.")]
+        [Tooltip("The grunt will turn towards you before dashing. This is how far it turns.")]
         protected float m_turnRate;
 
         public float TurnRate
@@ -28,7 +29,7 @@ namespace Hedronoid.AI
         }
 
         [SerializeField]
-        [Tooltip("After turning, The blockhead will wait a bit before dashing.")]
+        [Tooltip("After turning, The grunt will wait a bit before dashing.")]
         protected float m_windupTime = 1;
         [SerializeField]
         protected float m_dashSpeed = 15;
@@ -36,13 +37,14 @@ namespace Hedronoid.AI
         [Tooltip("Dash for this long")]
         protected float m_dashTime = 1;
         [SerializeField]
-        [Tooltip("After dashing, The blockhead will wait a bit before resuming navigation.")]
+        [Tooltip("After dashing, The grunt will wait a bit before resuming navigation.")]
         protected float m_cooldownTime = 5;
         [SerializeField]
-        [Tooltip("After dashing, The blockhead will be vulnerable for a while.")]
+        [Tooltip("After dashing, The grunt will be vulnerable for a while.")]
         protected float m_VulnerableTimeAfterDash = 4f;
 
         protected GruntNavigation m_GruntNavigation;
+        protected GruntSensor m_GruntSensor;
         protected Material m_sharedMaterial;
         protected DamageHandler m_DamageHandler;
 
@@ -74,6 +76,7 @@ namespace Hedronoid.AI
             m_tempStorageRate = m_turnRate;
             m_DamageHandler = GetComponent<DamageHandler>();
             m_GruntNavigation = GetComponent<GruntNavigation>();
+            m_GruntSensor = GetComponent<GruntSensor>();
             m_sharedMaterial = m_GruntNavigation.GetComponentInChildren<SkinnedMeshRenderer>().materials[1];
             if (m_DamageHandler)
                 m_DamageHandler.IsInvulnerable = false;
@@ -216,7 +219,7 @@ namespace Hedronoid.AI
                 yield return null;
             }
 
-            if (distanceToTarget > m_GruntNavigation.SensorCutoffRange)
+            if (distanceToTarget > m_GruntSensor.SensorCutoffRange)
             {
                 //animator.SetTrigger("ForceIdle");
 

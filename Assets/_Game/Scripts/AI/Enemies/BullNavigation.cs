@@ -11,6 +11,14 @@ namespace Hedronoid.AI
     {
         private Vector3 targetDirection;
 
+        protected BullSensor m_BullSensor;
+
+        protected override void Awake()
+        {
+            base.Awake();
+            m_BullSensor = (BullSensor)m_GruntSensor;
+        }
+
         public override bool SetAgentDestination(Vector3 destination)
         {
             if (!agent.isOnNavMesh)
@@ -53,7 +61,7 @@ namespace Hedronoid.AI
                     }
                 }
 
-                if (distanceToTarget > m_sensorCutoffRange)
+                if (distanceToTarget > m_BullSensor.SensorCutoffRange)
                 {
                     // We can no longer see the target. Pick a waypoint
                     ChangeState(EStates.DefaultMovement);
@@ -86,10 +94,10 @@ namespace Hedronoid.AI
         {
             Transform newTarget;
 
-            newTarget = (m_Sensor as BullSensor).GetTargetInsideCone(m_Rb.transform.forward);
+            newTarget = m_BullSensor.GetTargetInsideCone(m_Rb.transform.forward);
 
             if (!newTarget)
-                newTarget = (m_Sensor as BullSensor).GetTargetWithinReach(m_sensorRange);
+                newTarget = m_BullSensor.GetTargetWithinReach(m_BullSensor.SensorRange);
 
             if (newTarget)
             {
@@ -107,10 +115,10 @@ namespace Hedronoid.AI
             }
             else
             {
-                remainingSensorTime = m_sensorTimestep;
+                remainingSensorTime = m_BullSensor.SensorTimeStep;
             }
         }
-
+         
         public override Vector3 CreateRandomWaypoint(Vector3 lastPos, float minRange, float maxRange)
         {
             Vector3 upAxis = m_Rb.transform.up;

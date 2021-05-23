@@ -35,10 +35,6 @@ namespace Hedronoid.AI
                 yield break;
             dashInProgress = true;
 
-            // SoundRouter.CutsceneAudioFilter("Blockhead_Prepare");
-
-            SetAnimatorTrigger("DashAttackWarning");
-
             yield return new WaitForSeconds(.5f);
 
             // Turn towards the target direction while winding up, and then go, remove y so we don't look up or down.
@@ -60,7 +56,7 @@ namespace Hedronoid.AI
                 yield return null;
             }
 
-            if (distanceToTarget > m_GruntNavigation.SensorCutoffRange)
+            if (distanceToTarget > m_GruntSensor.SensorCutoffRange)
             {
                 //animator.SetTrigger("ForceIdle");
 
