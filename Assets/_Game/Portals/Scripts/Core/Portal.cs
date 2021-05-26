@@ -2,6 +2,8 @@
 using System.Collections.Generic;
 using UnityEngine;
 using Hedronoid;
+using UnityEngine.Rendering.Universal;
+using UnityEngine.Rendering;
 
 public class Portal : HNDMonoBehaviour {
     [Header ("Main Settings")]
@@ -14,12 +16,12 @@ public class Portal : HNDMonoBehaviour {
     public float nearClipLimit = 0.2f;
 
     // Private variables
-    RenderTexture viewTexture;
-    Camera portalCam;
-    Camera playerCam;
-    Material firstRecursionMat;
+    public RenderTexture viewTexture;
+    public Camera portalCam;
+    public Camera playerCam;
+    public Material firstRecursionMat;
     List<PortalTraveller> trackedTravellers;
-    MeshFilter screenMeshFilter;
+    public MeshFilter screenMeshFilter;
 
     protected override void Awake ()
     {
@@ -73,7 +75,7 @@ public class Portal : HNDMonoBehaviour {
 
     // Manually render the camera attached to this portal
     // Called after PrePortalRender, and before PostPortalRender
-    public void Render () {
+    public void Render (ScriptableRenderContext context) {
 
         // Skip rendering the view from this portal if player is not looking at the linked portal
         if (!CameraUtility.VisibleFromCamera(linkedPortal.screen, playerCam))
@@ -114,7 +116,11 @@ public class Portal : HNDMonoBehaviour {
             portalCam.transform.SetPositionAndRotation (renderPositions[i], renderRotations[i]);
             SetNearClipPlane ();
             HandleClipping ();
-            portalCam.Render ();
+
+            // URP doesn't support directly rendering to camera, rather requires calling this
+            // RenderSingleCamera event
+            //portalCam.Render ();
+            UniversalRenderPipeline.RenderSingleCamera(context, portalCam);
 
             if (i == startIndex) {
                 linkedPortal.screen.material.SetInt ("displayMask", 1);
@@ -192,10 +198,11 @@ public class Portal : HNDMonoBehaviour {
                 viewTexture.Release ();
             }
             viewTexture = new RenderTexture (Screen.width, Screen.height, 0);
+
             // Render the view from the portal camera to the view texture
             portalCam.targetTexture = viewTexture;
             // Display the view texture on the screen of the linked portal
-            linkedPortal.screen.material.SetTexture ("_MainTex", viewTexture);
+            linkedPortal.screen.material.SetTexture("_MainTex", viewTexture);
         }
     }
 
