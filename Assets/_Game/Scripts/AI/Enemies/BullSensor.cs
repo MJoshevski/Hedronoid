@@ -8,15 +8,18 @@ namespace Hedronoid.AI
     {
         [SerializeField]
         protected float maxDistance = 35f;
+        public float MaxConeDistance { get { return maxDistance; } }
         [SerializeField]
+        [Range(1f, 90f)]
         protected float coneAngle = 15f;
 
         private Physics physics;
+        [SerializeField]
         private float coneRadius;
 
         public Transform GetTargetInsideCone(Vector3 direction)
         {
-            coneRadius = Mathf.Tan((coneAngle / 2f * 0.5f * Mathf.Deg2Rad)) * maxDistance;
+            coneRadius = maxDistance * Mathf.Abs(Mathf.Tan(coneAngle * Mathf.Deg2Rad));
 
             // First check if we have any players in the cone
             RaycastHit[] players = physics.ConeCastNonAlloc(
@@ -36,10 +39,8 @@ namespace Hedronoid.AI
             return null;
         }
 
-        private void FixedUpdate()
+        private void Update()
         {
-            Popcron.Gizmos.Enabled = true;
-
             Popcron.Gizmos.Cone(
                 transform.position,
                 transform.rotation,

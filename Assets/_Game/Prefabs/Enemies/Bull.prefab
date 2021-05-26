@@ -1443,10 +1443,10 @@ MonoBehaviour:
   _currentState: 
   m_DefaultTarget: {fileID: 0}
   m_Target: {fileID: 0}
-  m_MinWaypoints: 3
-  m_MaxWaypoints: 7
-  m_MinWayPointDistance: 25
-  m_MaxWayPointDistance: 55
+  m_MinWaypoints: 1
+  m_MaxWaypoints: 1
+  m_MinWayPointDistance: 1
+  m_MaxWayPointDistance: 1
   m_RadiusForGroundDetection: 0.5
   m_GroundDetectionDistance: 0.55
   m_Rb: {fileID: 0}
@@ -1466,7 +1466,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   m_Navigation: {fileID: 0}
-  m_turnRate: 0
+  m_turnRate: 1
   m_windupTime: 1
   m_dashSpeed: 200
   m_dashTime: 1
@@ -1490,11 +1490,12 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   m_RayCastDistance: 60
   m_RayCastOffset: 1.2
-  m_sensorRange: 40
-  m_sensorCutoffRange: 55
+  m_sensorRange: 30
+  m_sensorCutoffRange: 60
   m_sensorTimestep: 0.25
-  maxDistance: 35
-  coneAngle: 15
+  maxDistance: 65
+  coneAngle: 50
+  coneRadius: 0
 --- !u!195 &2419484500514599870
 NavMeshAgent:
   m_ObjectHideFlags: 0

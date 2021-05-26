@@ -61,7 +61,8 @@ namespace Hedronoid.AI
                     }
                 }
 
-                if (distanceToTarget > m_BullSensor.SensorCutoffRange)
+                if (/*distanceToTarget > m_BullSensor.SensorCutoffRange ||*/
+                    distanceToTarget > m_BullSensor.MaxConeDistance)
                 {
                     // We can no longer see the target. Pick a waypoint
                     ChangeState(EStates.DefaultMovement);
@@ -90,15 +91,25 @@ namespace Hedronoid.AI
             }
         }
 
-        public override void ChangeTarget()
+        Transform newTarget;
+        protected override void FixedUpdate()
         {
-            Transform newTarget;
+            base.FixedUpdate();
 
             newTarget = m_BullSensor.GetTargetInsideCone(m_Rb.transform.forward);
 
-            if (!newTarget)
-                newTarget = m_BullSensor.GetTargetWithinReach(m_BullSensor.SensorRange);
+            //if (!newTarget)
+            //    newTarget = m_BullSensor.GetTargetWithinReach(m_BullSensor.SensorRange);
 
+            if (newTarget)
+            {
+                m_Target = newTarget.transform;
+            }
+        }
+
+
+        public override void ChangeTarget()
+        {
             if (newTarget)
             {
                 m_Target = newTarget.transform;
