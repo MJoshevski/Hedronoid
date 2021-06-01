@@ -68,6 +68,10 @@ namespace Pathfinding.Legacy {
 
 		protected override void Awake () {
 			base.Awake();
+			if (rvoController != null) {
+				if (rvoController is LegacyRVOController) (rvoController as LegacyRVOController).enableRotation = false;
+				else Debug.LogError("The LegacyAIPath component only works with the legacy RVOController, not the latest one. Please upgrade this component", this);
+			}
 		}
 
 		/// <summary>
@@ -120,9 +124,9 @@ namespace Pathfinding.Legacy {
 				dir /= magn;
 				int steps = (int)(magn/pickNextWaypointDist);
 
-#if ASTARDEBUG
+	#if ASTARDEBUG
 				Debug.DrawLine(p1, p2, Color.red, 1);
-#endif
+	#endif
 
 				for (int i = 0; i <= steps; i++) {
 					CalculateVelocity(p1);
@@ -131,7 +135,7 @@ namespace Pathfinding.Legacy {
 			}
 		}
 
-		protected override void Update () {
+		protected override void OnUpdate (float dt) {
 			if (!canMove) { return; }
 
 			Vector3 dir = CalculateVelocity(GetFeetPosition());
@@ -139,12 +143,15 @@ namespace Pathfinding.Legacy {
 			//Rotate towards targetDirection (filled in by CalculateVelocity)
 			RotateTowards(targetDirection);
 
+			if (rvoController != null) {
+				rvoController.Move(dir);
+			} else
 			if (controller != null) {
 				controller.SimpleMove(dir);
 			} else if (rigid != null) {
 				rigid.AddForce(dir);
 			} else {
-				tr.Translate(dir*Time.deltaTime, Space.World);
+				tr.Translate(dir*dt, Space.World);
 			}
 		}
 
@@ -227,13 +234,13 @@ namespace Pathfinding.Legacy {
 			float dot = Vector3.Dot(dir.normalized, forward);
 			float sp = maxSpeed * Mathf.Max(dot, minMoveScale) * slowdown;
 
-#if ASTARDEBUG
+	#if ASTARDEBUG
 			Debug.DrawLine(vPath[currentWaypointIndex-1], vPath[currentWaypointIndex], Color.black);
 			Debug.DrawLine(GetFeetPosition(), targetPosition, Color.red);
 			Debug.DrawRay(targetPosition, Vector3.up, Color.red);
 			Debug.DrawRay(GetFeetPosition(), dir, Color.yellow);
 			Debug.DrawRay(GetFeetPosition(), forward*sp, Color.cyan);
-#endif
+	#endif
 
 			if (Time.deltaTime > 0) {
 				sp = Mathf.Clamp(sp, 0, targetDist/(Time.deltaTime*2));

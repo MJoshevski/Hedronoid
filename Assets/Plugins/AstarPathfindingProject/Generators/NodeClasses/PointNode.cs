@@ -42,7 +42,9 @@ namespace Pathfinding {
 			position = value;
 		}
 
-		public PointNode (AstarPath astar) : base(astar) {
+		public PointNode() { }
+		public PointNode (AstarPath astar) {
+			astar.InitializeNode(this);
 		}
 
 		public override void GetConnections (System.Action<GraphNode> action) {

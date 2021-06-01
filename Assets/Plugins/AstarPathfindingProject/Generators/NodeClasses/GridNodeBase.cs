@@ -1,12 +1,10 @@
+#define PREALLOCATE_NODES
 using UnityEngine;
 using Pathfinding.Serialization;
 
 namespace Pathfinding {
 	/// <summary>Base class for GridNode and LevelGridNode</summary>
 	public abstract class GridNodeBase : GraphNode {
-		protected GridNodeBase (AstarPath astar) : base(astar) {
-		}
-
 		const int GridFlagsWalkableErosionOffset = 8;
 		const int GridFlagsWalkableErosionMask = 1 << GridFlagsWalkableErosionOffset;
 

@@ -1,6 +1,7 @@
 using UnityEngine;
 using UnityEditor;
 using Pathfinding.Serialization;
+using System.Collections.Generic;
 
 namespace Pathfinding {
 	using Pathfinding.Util;
@@ -52,12 +53,7 @@ namespace Pathfinding {
 			DrawMiddleSection(graph);
 			Separator();
 			DrawCollisionEditor(graph.collision);
-
-			if (graph.collision.use2D) {
-				if (Mathf.Abs(Vector3.Dot(Vector3.forward, Quaternion.Euler(graph.rotation) * Vector3.up)) < 0.9f) {
-					EditorGUILayout.HelpBox("When using 2D physics it is recommended to rotate the graph so that it aligns with the 2D plane.", MessageType.Warning);
-				}
-			}
+			DrawRules(graph);
 
 			Separator();
 			DrawLastSection(graph);
@@ -117,6 +113,10 @@ namespace Pathfinding {
 					break;
 				}
 				graph.inspectorGridMode = newMode;
+			}
+
+			if (graph.inspectorGridMode == InspectorGridMode.Hexagonal && graph.useJumpPointSearch) {
+				EditorGUILayout.HelpBox("Jump Point Search does not work with hexagonal graphs.", MessageType.Error);
 			}
 		}
 
@@ -320,6 +320,9 @@ namespace Pathfinding {
 			if (graph.inspectorGridMode == InspectorGridMode.Hexagonal) return;
 
 			graph.cutCorners = EditorGUILayout.Toggle(new GUIContent("Cut Corners", "Enables or disables cutting corners. See docs for image example"), graph.cutCorners);
+			if (!graph.cutCorners && graph.useJumpPointSearch) {
+				EditorGUILayout.HelpBox("Jump Point Search only works if 'Cut Corners' is enabled.", MessageType.Error);
+			}
 		}
 
 		protected virtual void DrawNeighbours (GridGraph graph) {
@@ -348,12 +351,21 @@ namespace Pathfinding {
 			}
 
 			EditorGUI.indentLevel--;
+
+			if (graph.neighbours != NumNeighbours.Eight && graph.useJumpPointSearch) {
+				EditorGUILayout.HelpBox("Jump Point Search only works for 8 neighbours.", MessageType.Error);
+			}
 		}
 
 		protected virtual void DrawMaxClimb (GridGraph graph) {
 			if (!graph.collision.use2D) {
-				graph.maxClimb = EditorGUILayout.FloatField(new GUIContent("Max Climb", "How high in world units, relative to the graph, should a climbable level be. A zero (0) indicates infinity"), graph.maxClimb);
-				if (graph.maxClimb < 0) graph.maxClimb = 0;
+				graph.maxStepHeight = EditorGUILayout.FloatField(new GUIContent("Max Step Height", "How high a step can be while still allowing the AI to go up/down it. A zero (0) indicates infinity. This affects for example how the graph is generated around ledges and stairs."), graph.maxStepHeight);
+				if (graph.maxStepHeight < 0) graph.maxStepHeight = 0;
+				if (graph.maxStepHeight > 0) {
+					EditorGUI.indentLevel++;
+					graph.maxStepUsesSlope = EditorGUILayout.Toggle(new GUIContent("Account for slopes", "Account for slopes when calculating the step sizes. See documentation for more info."), graph.maxStepUsesSlope);
+					EditorGUI.indentLevel--;
+				}
 			}
 		}
 
@@ -370,12 +382,12 @@ namespace Pathfinding {
 			if (graph.erodeIterations > 0) {
 				EditorGUI.indentLevel++;
 				graph.erosionUseTags = EditorGUILayout.Toggle(new GUIContent("Erosion Uses Tags", "Instead of making nodes unwalkable, " +
-					"nodes will have their tag set to a value corresponding to their erosion level, " +
-					"which is a quite good measurement of their distance to the closest wall.\nSee online documentation for more info."),
+						"nodes will have their tag set to a value corresponding to their erosion level, " +
+						"which is a quite good measurement of their distance to the closest wall.\nSee online documentation for more info."),
 					graph.erosionUseTags);
 				if (graph.erosionUseTags) {
 					EditorGUI.indentLevel++;
-					graph.erosionFirstTag = EditorGUILayoutx.TagField("First Tag", graph.erosionFirstTag, () => AstarPathEditor.EditTags());
+					graph.erosionFirstTag = EditorGUILayoutHelper.TagField("First Tag", graph.erosionFirstTag, () => AstarPathEditor.EditTags());
 					EditorGUI.indentLevel--;
 				}
 				EditorGUI.indentLevel--;
@@ -392,45 +404,29 @@ namespace Pathfinding {
 
 			GUILayout.Label(new GUIContent("Advanced"), EditorStyles.boldLabel);
 
-			DrawPenaltyModifications(graph);
 			DrawJPS(graph);
 		}
 
-		void DrawPenaltyModifications (GridGraph graph) {
-			showExtra = EditorGUILayout.Foldout(showExtra, "Penalty Modifications");
-
-			if (showExtra) {
-				EditorGUI.indentLevel += 2;
-
-				graph.penaltyAngle = ToggleGroup(new GUIContent("Angle Penalty", "Adds a penalty based on the slope of the node"), graph.penaltyAngle);
-				if (graph.penaltyAngle) {
-					EditorGUI.indentLevel++;
-					graph.penaltyAngleFactor = EditorGUILayout.FloatField(new GUIContent("Factor", "Scale of the penalty. A negative value should not be used"), graph.penaltyAngleFactor);
-					graph.penaltyAnglePower = EditorGUILayout.Slider("Power", graph.penaltyAnglePower, 0.1f, 10f);
-					EditorGUILayout.HelpBox("Applies penalty to nodes based on the angle of the hit surface during the Height Testing\nPenalty applied is: P=(1-cos(angle)^power)*factor.", MessageType.None);
-
-					EditorGUI.indentLevel--;
-				}
-
-				graph.penaltyPosition = ToggleGroup("Position Penalty", graph.penaltyPosition);
-				if (graph.penaltyPosition) {
-					EditorGUI.indentLevel++;
-					graph.penaltyPositionOffset = EditorGUILayout.FloatField("Offset", graph.penaltyPositionOffset);
-					graph.penaltyPositionFactor = EditorGUILayout.FloatField("Factor", graph.penaltyPositionFactor);
-					EditorGUILayout.HelpBox("Applies penalty to nodes based on their Y coordinate\nSampled in Int3 space, i.e it is multiplied with Int3.Precision first ("+Int3.Precision+")\n" +
-						"Be very careful when using negative values since a negative penalty will underflow and instead get really high", MessageType.None);
-					EditorGUI.indentLevel--;
-				}
-
-				GUI.enabled = false;
-				ToggleGroup(new GUIContent("Use Texture", "A* Pathfinding Project Pro only feature\nThe Pro version can be bought on the A* Pathfinding Project homepage."), false);
-				GUI.enabled = true;
-				EditorGUI.indentLevel -= 2;
-			}
-		}
-
 		protected virtual void DrawJPS (GridGraph graph) {
-			// Jump point search is a pro only feature
+			graph.useJumpPointSearch = EditorGUILayout.Toggle(new GUIContent("Use Jump Point Search", "Jump Point Search can significantly speed up pathfinding. But only works on uniformly weighted graphs"), graph.useJumpPointSearch);
+			if (graph.useJumpPointSearch) {
+				EditorGUILayout.HelpBox("Jump Point Search assumes that there are no penalties applied to the graph. Tag penalties cannot be used either.", MessageType.Warning);
+
+#if !ASTAR_JPS
+				EditorGUILayout.HelpBox("JPS needs to be enabled using a compiler directive before it can be used.\n" +
+					"Enabling this will add ASTAR_JPS to the Scriping Define Symbols field in the Unity Player Settings", MessageType.Warning);
+				if (GUILayout.Button("Enable Jump Point Search support")) {
+					OptimizationHandler.EnableDefine("ASTAR_JPS");
+				}
+#endif
+			} else {
+#if ASTAR_JPS
+				EditorGUILayout.HelpBox("If you are not using JPS in any scene, you can disable it to save memory", MessageType.Info);
+				if (GUILayout.Button("Disable Jump Point Search support")) {
+					OptimizationHandler.DisableDefine("ASTAR_JPS");
+				}
+#endif
+			}
 		}
 
 		/// <summary>Draws the inspector for a \link Pathfinding.GraphCollision GraphCollision class \endlink</summary>
@@ -441,6 +437,7 @@ namespace Pathfinding {
 
 			collision.collisionCheck = ToggleGroup("Collision testing", collision.collisionCheck);
 			if (collision.collisionCheck) {
+				EditorGUI.indentLevel++;
 				string[] colliderOptions = collision.use2D ? new [] { "Circle", "Point" } : new [] { "Sphere", "Capsule", "Ray" };
 				int[] colliderValues = collision.use2D ? new [] { 0, 2 } : new [] { 0, 1, 2 };
 				// In 2D the Circle (Sphere) mode will replace both the Sphere and the Capsule modes
@@ -465,6 +462,7 @@ namespace Pathfinding {
 				}
 
 				collision.mask = EditorGUILayoutx.LayerMaskField("Obstacle Layer Mask", collision.mask);
+				EditorGUI.indentLevel--;
 			}
 
 			GUILayout.Space(2);
@@ -476,6 +474,7 @@ namespace Pathfinding {
 			} else {
 				collision.heightCheck = ToggleGroup("Height testing", collision.heightCheck);
 				if (collision.heightCheck) {
+					EditorGUI.indentLevel++;
 					collision.fromHeight = EditorGUILayout.FloatField(new GUIContent("Ray length", "The height from which to check for ground"), collision.fromHeight);
 
 					collision.heightMask = EditorGUILayoutx.LayerMaskField("Mask", collision.heightMask);
@@ -489,15 +488,151 @@ namespace Pathfinding {
 					}
 
 					collision.unwalkableWhenNoGround = EditorGUILayout.Toggle(new GUIContent("Unwalkable when no ground", "Make nodes unwalkable when no ground was found with the height raycast. If height raycast is turned off, this doesn't affect anything"), collision.unwalkableWhenNoGround);
+					EditorGUI.indentLevel--;
 				}
 			}
 		}
 
 		protected virtual void DrawUse2DPhysics (GraphCollision collision) {
 			collision.use2D = EditorGUILayout.Toggle(new GUIContent("Use 2D Physics", "Use the Physics2D API for collision checking"), collision.use2D);
+
+			if (collision.use2D) {
+				var graph = target as GridGraph;
+				if (Mathf.Abs(Vector3.Dot(Vector3.forward, Quaternion.Euler(graph.rotation) * Vector3.up)) < 0.9f) {
+					EditorGUILayout.HelpBox("When using 2D physics it is recommended to rotate the graph so that it aligns with the 2D plane.", MessageType.Warning);
+				}
+			}
 		}
 
+		static Dictionary<System.Type, System.Type> ruleEditors;
+		static Dictionary<System.Type, string> ruleHeaders;
+		static List<System.Type> ruleTypes;
+		Dictionary<GridGraphRule, IGridGraphRuleEditor> ruleEditorInstances = new Dictionary<GridGraphRule, IGridGraphRuleEditor>();
 
+		static void FindRuleEditors () {
+			ruleEditors = new Dictionary<System.Type, System.Type>();
+			ruleHeaders = new Dictionary<System.Type, string>();
+			ruleTypes = new List<System.Type>();
+			foreach (var type in TypeCache.GetTypesWithAttribute<CustomGridGraphRuleEditorAttribute>()) {
+				var attrs = type.GetCustomAttributes(typeof(CustomGridGraphRuleEditorAttribute), false);
+				foreach (CustomGridGraphRuleEditorAttribute attr in attrs) {
+					ruleEditors[attr.type] = type;
+					ruleHeaders[attr.type] = attr.name;
+				}
+			}
+
+			foreach (var type in TypeCache.GetTypesDerivedFrom<GridGraphRule>()) {
+				if (!type.IsAbstract) ruleTypes.Add(type);
+			}
+		}
+
+		IGridGraphRuleEditor GetEditor (GridGraphRule rule) {
+			if (ruleEditors == null) FindRuleEditors();
+			IGridGraphRuleEditor ruleEditor;
+			if (!ruleEditorInstances.TryGetValue(rule, out ruleEditor)) {
+				if (ruleEditors.ContainsKey(rule.GetType())) {
+					ruleEditor = ruleEditorInstances[rule] = (IGridGraphRuleEditor)System.Activator.CreateInstance(ruleEditors[rule.GetType()]);
+				}
+			}
+			return ruleEditor;
+		}
+
+		protected virtual void DrawRules (GridGraph graph) {
+			graph.rules.rules = graph.rules.rules ?? new List<GridGraphRule>();
+			for (int i = 0; i < graph.rules.rules.Count; i++) {
+				var rule = graph.rules.rules[i];
+				if (rule != null) {
+					var ruleEditor = GetEditor(rule);
+					var ruleType = rule.GetType();
+					GUILayout.BeginHorizontal();
+					rule.enabled = ToggleGroup(ruleHeaders.ContainsKey(ruleType) ? ruleHeaders[ruleType] : ruleType.Name, rule.enabled);
+					if (GUILayout.Button("", AstarPathEditor.astarSkin.FindStyle("SimpleDeleteButton"))) {
+						graph.rules.rules.Remove(rule);
+						ruleEditorInstances.Remove(rule);
+						rule.enabled = false;
+						rule.DisposeUnmanagedData();
+					}
+					GUILayout.EndHorizontal();
+
+					if (rule.enabled) {
+						if (ruleEditor != null) {
+							EditorGUI.indentLevel++;
+							EditorGUI.BeginChangeCheck();
+							ruleEditor.OnInspectorGUI(graph, rule);
+							if (EditorGUI.EndChangeCheck()) rule.SetDirty();
+							EditorGUI.indentLevel--;
+						} else {
+							EditorGUILayout.HelpBox("No editor found for " + rule.GetType().Name, MessageType.Error);
+						}
+					}
+				}
+			}
+
+			EditorGUILayout.Separator();
+
+			GUILayout.BeginHorizontal();
+			GUILayout.Space(10);
+			if (GUILayout.Button("Add Rule")) {
+				if (ruleEditors == null) FindRuleEditors();
+				GenericMenu menu = new GenericMenu();
+				foreach (var type in ruleTypes) {
+					menu.AddItem(new GUIContent(ruleHeaders.ContainsKey(type) ? ruleHeaders[type] : type.Name), false, ruleType => graph.rules.rules.Add(System.Activator.CreateInstance((System.Type)ruleType) as GridGraphRule), type);
+				}
+				menu.ShowAsContext();
+			}
+			GUILayout.Space(10);
+			GUILayout.EndHorizontal();
+		}
+
+		static void SaveReferenceTexture (GridGraph graph) {
+			if (graph.nodes == null || graph.nodes.Length != graph.width * graph.depth) {
+				AstarPath.active.Scan();
+			}
+
+			if (graph.nodes.Length != graph.width * graph.depth) {
+				Debug.LogError("Couldn't create reference image since width*depth != nodes.Length");
+				return;
+			}
+
+			if (graph.nodes.Length == 0) {
+				Debug.LogError("Couldn't create reference image since the graph is too small (0*0)");
+				return;
+			}
+
+			var tex = new Texture2D(graph.width, graph.depth);
+
+			float maxY = float.NegativeInfinity;
+			for (int i = 0; i < graph.nodes.Length; i++) {
+				Vector3 p = graph.transform.InverseTransform((Vector3)graph.nodes[i].position);
+				maxY = p.y > maxY ? p.y : maxY;
+			}
+
+			var cols = new Color[graph.width*graph.depth];
+
+			for (int z = 0; z < graph.depth; z++) {
+				for (int x = 0; x < graph.width; x++) {
+					GraphNode node = graph.nodes[z*graph.width+x];
+					float v = node.Walkable ? 1F : 0.0F;
+					Vector3 p = graph.transform.InverseTransform((Vector3)node.position);
+					float q = p.y / maxY;
+					cols[z*graph.width+x] = new Color(v, q, 0);
+				}
+			}
+			tex.SetPixels(cols);
+			tex.Apply();
+
+			string path = AssetDatabase.GenerateUniqueAssetPath("Assets/gridReference.png");
+
+			using (var outstream = new System.IO.StreamWriter(path)) {
+				using (var outfile = new System.IO.BinaryWriter(outstream.BaseStream)) {
+					outfile.Write(tex.EncodeToPNG());
+				}
+			}
+			AssetDatabase.Refresh();
+			Object obj = AssetDatabase.LoadAssetAtPath(path, typeof(Texture));
+
+			EditorGUIUtility.PingObject(obj);
+		}
 
 		public static GridPivot PivotPointSelector (GridPivot pivot) {
 			// Find required styles
@@ -562,11 +697,7 @@ namespace Pathfinding {
 
 			Handles.matrix = Matrix4x4.identity;
 			Handles.color = AstarColor.BoundsHandles;
-#if UNITY_5_5_OR_NEWER
 			Handles.CapFunction cap = Handles.CylinderHandleCap;
-#else
-			Handles.DrawCapFunction cap = Handles.CylinderCap;
-#endif
 
 			var center = currentTransform.Transform(new Vector3(0.5f, 0, 0.5f));
 			if (Tools.current == Tool.Scale) {
@@ -611,7 +742,16 @@ namespace Pathfinding {
 				}
 			}
 
-			Handles.matrix = Matrix4x4.identity;
+			graph.rules.rules = graph.rules.rules ?? new List<GridGraphRule>();
+			for (int i = 0; i < graph.rules.rules.Count; i++) {
+				var rule = graph.rules.rules[i];
+				if (rule != null && rule.enabled) {
+					var ruleEditor = GetEditor(rule);
+					if (ruleEditor != null) {
+						ruleEditor.OnSceneGUI(graph, rule);
+					}
+				}
+			}
 		}
 
 		public enum GridPivot {

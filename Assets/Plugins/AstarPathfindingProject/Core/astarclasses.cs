@@ -6,7 +6,11 @@ using System.Collections.Generic;
 namespace Pathfinding.RVO {}
 
 namespace Pathfinding {
+	using Pathfinding.Jobs;
 	using Pathfinding.Util;
+	using Unity.Burst;
+	using Unity.Collections;
+	using Unity.Jobs;
 
 #if UNITY_5_0
 	/// <summary>Used in Unity 5.0 since the HelpURLAttribute was first added in Unity 5.1</summary>
@@ -377,11 +381,11 @@ namespace Pathfinding {
 			position = internalInfo.clampedPosition;
 		}
 
-		public static explicit operator Vector3(NNInfo ob) {
+		public static explicit operator Vector3 (NNInfo ob) {
 			return ob.position;
 		}
 
-		public static explicit operator GraphNode(NNInfo ob) {
+		public static explicit operator GraphNode (NNInfo ob) {
 			return ob.node;
 		}
 	}
@@ -496,6 +500,8 @@ namespace Pathfinding {
 		/// area than the original GUO bounds because of the Grid Graph -> Collision Testing -> Diameter setting (it is enlarged by that value). So some extra nodes have their penalties reset.
 		///
 		/// [Open online documentation to see images]
+		///
+		/// \bug Not working with burst
 		/// </summary>
 		public bool resetPenaltyOnPhysics = true;
 
@@ -519,6 +525,8 @@ namespace Pathfinding {
 		/// When updateErosion=False, all nodes walkability are simply set to be walkable in this example.
 		///
 		/// See: Pathfinding.GridGraph
+		///
+		/// \bug Not working with burst
 		/// </summary>
 		public bool updateErosion = true;
 
@@ -578,7 +586,7 @@ namespace Pathfinding {
 		/// <param name="node">The node to save fields for. If null, nothing will be done</param>
 		public virtual void WillUpdateNode (GraphNode node) {
 			if (trackChangedNodes && node != null) {
-				if (changedNodes == null) { changedNodes = ListPool<GraphNode>.Claim (); backupData = ListPool<uint>.Claim (); backupPositionData = ListPool<Int3>.Claim (); }
+				if (changedNodes == null) { changedNodes = ListPool<GraphNode>.Claim(); backupData = ListPool<uint>.Claim(); backupPositionData = ListPool<Int3>.Claim(); }
 				changedNodes.Add(node);
 				backupPositionData.Add(node.position);
 				backupData.Add(node.Penalty);
@@ -627,9 +635,9 @@ namespace Pathfinding {
 					changedNodes[i].SetConnectivityDirty();
 				}
 
-				ListPool<GraphNode>.Release (ref changedNodes);
-				ListPool<uint>.Release (ref backupData);
-				ListPool<Int3>.Release (ref backupPositionData);
+				ListPool<GraphNode>.Release(ref changedNodes);
+				ListPool<uint>.Release(ref backupData);
+				ListPool<Int3>.Release(ref backupPositionData);
 			} else {
 				throw new System.InvalidOperationException("Changed nodes have not been tracked, cannot revert from backup. Please set trackChangedNodes to true before applying the update.");
 			}
@@ -647,6 +655,73 @@ namespace Pathfinding {
 				//Update tags
 				if (modifyTag) node.Tag = (uint)setTag;
 			}
+		}
+
+		/// <summary>Provides burst-readable data to a graph update job</summary>
+		public struct GraphUpdateData {
+			public NativeArray<Vector3> nodePositions;
+			public NativeArray<uint> nodePenalties;
+			public NativeArray<bool> nodeWalkable;
+			public NativeArray<int> nodeTags;
+		};
+
+		/// <summary>Helper for iterating through the nodes that should be updated</summary>
+		public interface INodeIndexMapper {
+			int Count { get; }
+			int this[int index] { get; }
+		}
+
+		/// <summary>Job for applying a graph update object</summary>
+		[BurstCompile]
+		public struct JobGraphUpdate<T> : IJob where T : INodeIndexMapper {
+			public T mapper;
+			public GraphUpdateShape.BurstShape shape;
+			public NativeArray<Vector3> nodePositions;
+			public NativeArray<uint> nodePenalties;
+			public NativeArray<bool> nodeWalkable;
+			public NativeArray<int> nodeTags;
+
+			public Bounds bounds;
+			public int penaltyDelta;
+			public bool modifyWalkability;
+			public bool walkabilityValue;
+			public bool modifyTag;
+			public int tagValue;
+
+			public void Execute () {
+				for (int i = 0; i < mapper.Count; i++) {
+					var node = mapper[i];
+					if (bounds.Contains(nodePositions[node]) && shape.Contains(nodePositions[node])) {
+						nodePenalties[node] += (uint)penaltyDelta;
+						if (modifyWalkability) nodeWalkable[node] = walkabilityValue;
+						if (modifyTag) nodeTags[node] = tagValue;
+					}
+				}
+			}
+		};
+
+		/// <summary>
+		/// Update a set of nodes using this GUO's settings.
+		/// This is far more efficient since it can utilize the Burst compiler.
+		///
+		/// This method may be called by graph generators instead of the <see cref="Apply"/> method to update the graph more efficiently.
+		/// </summary>
+		public virtual void ApplyJob<T>(T mapper, GraphUpdateData data, JobDependencyTracker dependencyTracker) where T : INodeIndexMapper {
+			new JobGraphUpdate<T> {
+				mapper = mapper,
+				shape = shape != null ? new GraphUpdateShape.BurstShape(shape, Allocator.Persistent) : GraphUpdateShape.BurstShape.Everything,
+				nodePositions = data.nodePositions,
+				nodePenalties = data.nodePenalties,
+				nodeWalkable = data.nodeWalkable,
+				nodeTags = data.nodeTags,
+
+				bounds = bounds,
+				penaltyDelta = addPenalty,
+				modifyWalkability = modifyWalkability,
+				walkabilityValue = setWalkability,
+				modifyTag = modifyTag,
+				tagValue = setTag,
+			}.Schedule(dependencyTracker);
 		}
 
 		public GraphUpdateObject () {
@@ -688,6 +763,10 @@ namespace Pathfinding {
 
 		public bool Contains (int x, int y) {
 			return !(x < xmin || y < ymin || x > xmax || y > ymax);
+		}
+
+		public bool Contains (IntRect other) {
+			return xmin <= other.xmin && xmax >= other.xmax && ymin <= other.ymin && ymax >= other.ymax;
 		}
 
 		public int Width {
@@ -770,6 +849,11 @@ namespace Pathfinding {
 				System.Math.Max(xmax, x),
 				System.Math.Max(ymax, y)
 				);
+		}
+
+		/// <summary>Returns a new IntRect which has been moved by an offset</summary>
+		public IntRect Offset (Int2 offset) {
+			return new IntRect(xmin + offset.x, ymin + offset.y, xmax + offset.x, ymax + offset.y);
 		}
 
 		/// <summary>Returns a new rect which is expanded by range in all directions.</summary>
@@ -911,6 +995,7 @@ namespace Pathfinding {
 
 	#region Enums
 
+	[System.Flags]
 	public enum GraphUpdateThreading {
 		/// <summary>
 		/// Call UpdateArea in the unity thread.

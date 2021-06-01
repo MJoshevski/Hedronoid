@@ -127,6 +127,17 @@ namespace Pathfinding {
 		void EnsureValidFloodFill ();
 
 		/// <summary>
+		/// Call to send a GraphModifier.EventType.PreUpdate event to all graph modifiers.
+		/// The difference between this and GraphModifier.TriggerEvent(GraphModifier.EventType.PreUpdate) is that using this method
+		/// ensures that multiple PreUpdate events will not be issued during a single update.
+		///
+		/// Once an event has been sent no more events will be sent until all work items are complete and a PostUpdate or PostScan event is sent.
+		///
+		/// When scanning a graph PreUpdate events are never sent. However a PreScan event is always sent before a scan begins.
+		/// </summary>
+		void PreUpdate ();
+
+		/// <summary>
 		/// Trigger a graph modification event.
 		/// This will cause a <see cref="Pathfinding.GraphModifier.PostUpdate"/> event to be issued after all graph updates have finished.
 		/// Some scripts listen for this event. For example off-mesh links listen to it and will recalculate which nodes they are connected to when it it sent.
@@ -136,24 +147,22 @@ namespace Pathfinding {
 	}
 
 	class WorkItemProcessor : IWorkItemContext {
+		public event System.Action OnGraphsUpdated;
+
 		/// <summary>Used to prevent waiting for work items to complete inside other work items as that will cause the program to hang</summary>
 		public bool workItemsInProgressRightNow { get; private set; }
 
 		readonly AstarPath astar;
 		readonly IndexedQueue<AstarWorkItem> workItems = new IndexedQueue<AstarWorkItem>();
 
+
 		/// <summary>True if any work items are queued right now</summary>
 		public bool anyQueued {
 			get { return workItems.Count > 0; }
 		}
 
-		/// <summary>
-		/// True if any work items have queued a flood fill.
-		/// See: QueueWorkItemFloodFill
-		/// </summary>
-		bool queuedWorkItemFloodFill = false;
-
 		bool anyGraphsDirty = true;
+		bool preUpdateEventSent = false;
 
 		/// <summary>
 		/// True while a batch of work items are being processed.
@@ -214,9 +223,17 @@ namespace Pathfinding {
 		/// to ensure that a flood fill is done if any earlier work items queued one.
 		///
 		/// Once a flood fill is queued it will be done after all WorkItems have been executed.
+		///
+		/// Deprecated: This method no longer does anything.
 		/// </summary>
 		void IWorkItemContext.QueueFloodFill () {
-			queuedWorkItemFloodFill = true;
+		}
+
+		void IWorkItemContext.PreUpdate () {
+			if (!preUpdateEventSent && !astar.isScanning) {
+				preUpdateEventSent = true;
+				GraphModifier.TriggerEvent(GraphModifier.EventType.PreUpdate);
+			}
 		}
 
 		void IWorkItemContext.SetGraphDirty (NavGraph graph) {
@@ -225,19 +242,11 @@ namespace Pathfinding {
 
 		/// <summary>If a WorkItem needs to have a valid area information during execution, call this method to ensure there are no pending flood fills</summary>
 		public void EnsureValidFloodFill () {
-			if (queuedWorkItemFloodFill) {
-				astar.hierarchicalGraph.RecalculateAll();
-			} else {
-				astar.hierarchicalGraph.RecalculateIfNecessary();
-			}
+			astar.hierarchicalGraph.RecalculateIfNecessary();
 		}
 
 		public WorkItemProcessor (AstarPath astar) {
 			this.astar = astar;
-		}
-
-		public void OnFloodFill () {
-			queuedWorkItemFloodFill = false;
 		}
 
 		/// <summary>
@@ -249,21 +258,9 @@ namespace Pathfinding {
 			workItems.Enqueue(item);
 		}
 
-		/// <summary>
-		/// Process graph updating work items.
-		/// Process all queued work items, e.g graph updates and the likes.
-		///
-		/// Returns:
-		/// - false if there are still items to be processed.
-		/// - true if the last work items was processed and pathfinding threads are ready to be resumed.
-		///
-		/// See: AddWorkItem
-		/// See: threadSafeUpdateState
-		/// See: Update
-		/// </summary>
-		public bool ProcessWorkItems (bool force) {
+		bool ProcessWorkItems (bool force, bool sendEvents) {
 			if (workItemsInProgressRightNow) throw new System.Exception("Processing work items recursively. Please do not wait for other work items to be completed inside work items. " +
-				"If you think this is not caused by any of your scripts, this might be a bug.");
+					"If you think this is not caused by any of your scripts, this might be a bug.");
 
 			workItemsInProgressRightNow = true;
 			astar.data.LockGraphStructure(true);
@@ -271,7 +268,6 @@ namespace Pathfinding {
 				// Working on a new batch
 				if (!workItemsInProgress) {
 					workItemsInProgress = true;
-					queuedWorkItemFloodFill = false;
 				}
 
 				// Peek at first item in the queue
@@ -321,17 +317,62 @@ namespace Pathfinding {
 				}
 			}
 
-			EnsureValidFloodFill();
+			if (sendEvents) {
+				Profiler.BeginSample("PostUpdate");
+				if (anyGraphsDirty) GraphModifier.TriggerEvent(GraphModifier.EventType.PostUpdateBeforeAreaRecalculation);
+				Profiler.EndSample();
 
-			Profiler.BeginSample("PostUpdate");
-			if (anyGraphsDirty) GraphModifier.TriggerEvent(GraphModifier.EventType.PostUpdate);
-			Profiler.EndSample();
+				EnsureValidFloodFill();
 
+				Profiler.BeginSample("PostUpdate");
+				if (anyGraphsDirty) {
+					GraphModifier.TriggerEvent(GraphModifier.EventType.PostUpdate);
+					if (OnGraphsUpdated != null) OnGraphsUpdated();
+				}
+				Profiler.EndSample();
+			}
+
+			// Reset flags at the end
 			anyGraphsDirty = false;
+			preUpdateEventSent = false;
+
 			workItemsInProgressRightNow = false;
 			workItemsInProgress = false;
 			astar.data.UnlockGraphStructure();
 			return true;
+		}
+
+		/// <summary>
+		/// Process graph updating work items.
+		/// Process all queued work items, e.g graph updates and the likes.
+		///
+		/// Returns:
+		/// - false if there are still items to be processed.
+		/// - true if the last work items was processed and pathfinding threads are ready to be resumed.
+		///
+		/// This will not call <see cref="EnsureValidFloodFill"/>	in contrast to <see cref="ProcessWorkItemsForUpdate"/>.
+		///
+		/// See: <see cref="AstarPath.AddWorkItem"/>
+		/// </summary>
+		public bool ProcessWorkItemsForScan (bool force) {
+			return ProcessWorkItems(force, false);
+		}
+
+		/// <summary>
+		/// Process graph updating work items.
+		/// Process all queued work items, e.g graph updates and the likes.
+		///
+		/// Returns:
+		/// - false if there are still items to be processed.
+		/// - true if the last work items was processed and pathfinding threads are ready to be resumed.
+		///
+		/// See: <see cref="AstarPath.AddWorkItem"/>
+		///
+		/// This method also calls GraphModifier.TriggerEvent(PostUpdate) if any graphs were dirtied.
+		/// It also calls <see cref="EnsureValidFloodFill"/> after the work items are done
+		/// </summary>
+		public bool ProcessWorkItemsForUpdate (bool force) {
+			return ProcessWorkItems(force, true);
 		}
 	}
 }

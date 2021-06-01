@@ -72,15 +72,6 @@ namespace Pathfinding.Util {
 			}
 		}
 
-		/// <summary>Appends the remaining path between <see cref="position"/> and <see cref="endPoint"/> to buffer</summary>
-		public void GetRemainingPath (List<Vector3> buffer) {
-			if (!valid) throw new System.Exception("PathInterpolator is not valid");
-			buffer.Add(position);
-			for (int i = segmentIndex+1; i < path.Count; i++) {
-				buffer.Add(path[i]);
-			}
-		}
-
 		/// <summary>
 		/// Set the path to interpolate along.
 		/// This will reset all interpolation variables.
@@ -170,7 +161,7 @@ namespace Pathfinding.Util {
 			else MoveToSegment(segmentIndex, factor2);
 		}
 
-		public void MoveToCircleIntersection2D (Vector3 circleCenter3D, float radius, IMovementPlane transform) {
+		public void MoveToCircleIntersection2D<T>(Vector3 circleCenter3D, float radius, T transform) where T : IMovementPlane {
 			if (path == null) return;
 
 			// Move forwards as long as we are getting closer to circleCenter3D

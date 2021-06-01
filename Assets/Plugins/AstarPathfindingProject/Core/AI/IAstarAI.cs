@@ -1,5 +1,4 @@
 using UnityEngine;
-using System.Collections.Generic;
 
 namespace Pathfinding {
 	/// <summary>
@@ -10,20 +9,20 @@ namespace Pathfinding {
 	/// </summary>
 	public interface IAstarAI {
 		/// <summary>
-		/// Height of the agent in world units.
+		/// Radius of the agent in world units.
 		/// This is visualized in the scene view as a yellow cylinder around the character.
-		///
-		/// This value is currently only used if an RVOController is attached to the same GameObject, otherwise it is only used for drawing nice gizmos in the scene view.
-		/// However since the height value is used for some things, the radius field is always visible for consistency and easier visualization of the character.
-		/// That said, it may be used for something in a future release.
 		///
 		/// Note: The <see cref="Pathfinding.AILerp"/> script doesn't really have any use of knowing the radius or the height of the character, so this property will always return 0 in that script.
 		/// </summary>
 		float radius { get; set; }
 
 		/// <summary>
-		/// Radius of the agent in world units.
+		/// Height of the agent in world units.
 		/// This is visualized in the scene view as a yellow cylinder around the character.
+		///
+		/// This value is currently only used if an RVOController is attached to the same GameObject, otherwise it is only used for drawing nice gizmos in the scene view.
+		/// However since the height value is used for some things, the radius field is always visible for consistency and easier visualization of the character.
+		/// That said, it may be used for something in a future release.
 		///
 		/// Note: The <see cref="Pathfinding.AILerp"/> script doesn't really have any use of knowing the radius or the height of the character, so this property will always return 0 in that script.
 		/// </summary>
@@ -60,8 +59,39 @@ namespace Pathfinding {
 		/// In world units per second.
 		///
 		/// See: <see cref="velocity"/>
+		///
+		/// Note: The <see cref="Pathfinding.AILerp"/> movement script doesn't use local avoidance or gravity so this property will always be identical to <see cref="velocity"/> on that component.
 		/// </summary>
 		Vector3 desiredVelocity { get; }
+
+		/// <summary>
+		/// Velocity that this agent wants to move with before taking local avoidance into account.
+		///
+		/// Includes gravity.
+		/// In world units per second.
+		///
+		/// Setting this property will set the current velocity that the agent is trying to move with, including gravity.
+		/// This can be useful if you want to make the agent come to a complete stop in a single frame or if you want to modify the velocity in some way.
+		///
+		/// <code>
+		/// // Set the velocity to zero, but keep the current gravity
+		/// var newVelocity = new Vector3(0, ai.desiredVelocityWithoutLocalAvoidance.y, 0);
+		///
+		/// ai.desiredVelocityWithoutLocalAvoidance = newVelocity;
+		/// </code>
+		///
+		/// Note: The <see cref="Pathfinding.AILerp"/> movement script doesn't use local avoidance so this property will always be identical to <see cref="velocity"/> on that component.
+		///
+		/// Warning: Trying to set this property on an AILerp component will throw an exception since its velocity cannot meaningfully be changed abitrarily.
+		///
+		/// If you are not using local avoidance then this property will in almost all cases be identical to <see cref="desiredVelocity"/> plus some noise due to floating point math.
+		///
+		/// See: <see cref="velocity"/>
+		/// See: <see cref="desiredVelocity"/>
+		/// See: <see cref="Move"/>
+		/// See: <see cref="MovementUpdate"/>
+		/// </summary>
+		Vector3 desiredVelocityWithoutLocalAvoidance { get; set; }
 
 		/// <summary>
 		/// Remaining distance along the current path to the end of the path.
@@ -248,22 +278,6 @@ namespace Pathfinding {
 		/// See: Take a look at the <see cref="Pathfinding.AIDestinationSetter"/> source code for an example of how it can be used.
 		/// </summary>
 		System.Action onSearchPath { get; set; }
-
-		/// <summary>
-		/// Fills buffer with the remaining path.
-		///
-		/// <code>
-		/// var buffer = new List<Vector3>();
-		/// ai.GetRemainingPath(buffer, out bool stale);
-		/// for (int i = 0; i < buffer.Count - 1; i++) {
-		///     Debug.DrawLine(buffer[i], buffer[i+1], Color.red);
-		/// }
-		/// </code>
-		/// [Open online documentation to see images]
-		/// </summary>
-		/// <param name="buffer">The buffer will be cleared and replaced with the path. The first point is the current position of the agent.</param>
-		/// <param name="stale">May be true if the path is invalid in some way. For example if the agent has no path or (for the RichAI script only) if the agent has detected that some nodes in the path have been destroyed.</param>
-		void GetRemainingPath (List<Vector3> buffer, out bool stale);
 
 		/// <summary>
 		/// Recalculate the current path.

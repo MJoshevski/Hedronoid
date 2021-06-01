@@ -220,6 +220,12 @@ namespace Pathfinding.Serialization {
 		/// <summary>Cached version object for 4.1.0</summary>
 		public static readonly System.Version V4_1_0 = new System.Version(4, 1, 0);
 
+		/// <summary>Cached version object for 4.3.2</summary>
+		public static readonly System.Version V4_3_2 = new System.Version(4, 3, 2);
+
+		/// <summary>Cached version object for 4.3.6</summary>
+		public static readonly System.Version V4_3_6 = new System.Version(4, 3, 6);
+
 		public AstarSerializer (AstarData data) {
 			this.data = data;
 			settings = SerializeSettings.Settings;

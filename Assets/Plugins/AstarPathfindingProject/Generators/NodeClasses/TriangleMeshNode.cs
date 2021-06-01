@@ -21,7 +21,10 @@ namespace Pathfinding {
 
 	/// <summary>Node represented by a triangle</summary>
 	public class TriangleMeshNode : MeshNode {
-		public TriangleMeshNode (AstarPath astar) : base(astar) {}
+		public TriangleMeshNode () { }
+		public TriangleMeshNode (AstarPath astar) {
+			astar.InitializeNode(this);
+		}
 
 		/// <summary>Internal vertex index for the first vertex</summary>
 		public int v0;
@@ -339,7 +342,7 @@ namespace Pathfinding {
 			// No connection was found between the nodes
 			// Check if there is a node link that connects them
 			if (edge == -1) {
-#if !ASTAR_NO_POINT_GRAPH
+				#if !ASTAR_NO_POINT_GRAPH
 				if (connections != null) {
 					for (int i = 0; i < connections.Length; i++) {
 						if (connections[i].node.GraphIndex != GraphIndex) {
@@ -352,7 +355,7 @@ namespace Pathfinding {
 						}
 					}
 				}
-#endif
+				#endif
 
 				return false;
 			}

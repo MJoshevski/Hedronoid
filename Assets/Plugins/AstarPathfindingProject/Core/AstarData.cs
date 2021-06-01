@@ -37,6 +37,12 @@ namespace Pathfinding {
 		/// Updated at scanning time
 		/// </summary>
 		public GridGraph gridGraph { get; private set; }
+
+		/// <summary>
+		/// Shortcut to the first LayerGridGraph.
+		/// Updated at scanning time.
+		/// </summary>
+		public LayerGridGraph layerGridGraph { get; private set; }
 #endif
 
 #if !ASTAR_NO_POINT_GRAPH
@@ -47,6 +53,11 @@ namespace Pathfinding {
 		public PointGraph pointGraph { get; private set; }
 #endif
 
+		/// <summary>
+		/// Shortcut to the first RecastGraph.
+		/// Updated at scanning time.
+		/// </summary>
+		public RecastGraph recastGraph { get; private set; }
 
 		/// <summary>
 		/// All supported graph types.
@@ -62,11 +73,13 @@ namespace Pathfinding {
 		public static readonly System.Type[] DefaultGraphTypes = new System.Type[] {
 #if !ASTAR_NO_GRID_GRAPH
 			typeof(GridGraph),
+			typeof(LayerGridGraph),
 #endif
 #if !ASTAR_NO_POINT_GRAPH
 			typeof(PointGraph),
 #endif
 			typeof(NavMeshGraph),
+			typeof(RecastGraph),
 		};
 #endif
 
@@ -108,10 +121,10 @@ namespace Pathfinding {
 					data = upgradeData;
 					upgradeData = null;
 				}
-				return dataString != null? System.Convert.FromBase64String (dataString) : null;
+				return dataString != null ? System.Convert.FromBase64String(dataString) : null;
 			}
 			set {
-				dataString = value != null? System.Convert.ToBase64String (value) : null;
+				dataString = value != null ? System.Convert.ToBase64String(value) : null;
 			}
 		}
 
@@ -236,11 +249,14 @@ namespace Pathfinding {
 
 #if !ASTAR_NO_GRID_GRAPH
 			gridGraph = (GridGraph)FindGraphOfType(typeof(GridGraph));
+			layerGridGraph = (LayerGridGraph)FindGraphOfType(typeof(LayerGridGraph));
 #endif
 
 #if !ASTAR_NO_POINT_GRAPH
 			pointGraph = (PointGraph)FindGraphOfType(typeof(PointGraph));
 #endif
+
+			recastGraph = (RecastGraph)FindGraphOfType(typeof(RecastGraph));
 		}
 
 		/// <summary>Load from data from <see cref="file_cachedStartup"/></summary>
@@ -293,9 +309,9 @@ namespace Pathfinding {
 			sr.SerializeExtraInfo();
 			byte[] bytes = sr.CloseSerialize();
 			checksum = sr.GetChecksum();
-#if ASTARDEBUG
+	#if ASTARDEBUG
 			Debug.Log("Got a whole bunch of data, "+bytes.Length+" bytes");
-#endif
+	#endif
 			graphLock.Release();
 			return bytes;
 		}
@@ -318,6 +334,16 @@ namespace Pathfinding {
 			}
 			graphs = null;
 			UpdateShortcuts();
+		}
+
+		public void DisposeUnmanagedData () {
+			if (graphs == null) return;
+			AssertSafe();
+			for (int i = 0; i < graphs.Length; i++) {
+				if (graphs[i] != null) {
+					((IGraphInternals)graphs[i]).DisposeUnmanagedData();
+				}
+			}
 		}
 
 		public void OnDestroy () {
@@ -355,7 +381,7 @@ namespace Pathfinding {
 						Debug.Log("Invalid data file (cannot read zip).\nThe data is either corrupt or it was saved using a 3.0.x or earlier version of the system");
 					}
 				} else {
-					throw new System.ArgumentNullException("bytes");
+					throw new System.ArgumentNullException(nameof(bytes));
 				}
 				active.VerifyIntegrity();
 			} catch (System.Exception e) {
@@ -364,6 +390,7 @@ namespace Pathfinding {
 			}
 
 			UpdateShortcuts();
+			GraphModifier.TriggerEvent(GraphModifier.EventType.PostGraphLoad);
 			graphLock.Release();
 		}
 

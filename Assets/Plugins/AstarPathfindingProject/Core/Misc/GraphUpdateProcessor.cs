@@ -15,8 +15,6 @@ namespace Pathfinding {
 #endif
 
 	class GraphUpdateProcessor {
-		public event System.Action OnGraphsUpdated;
-
 		/// <summary>Holds graphs that can be updated</summary>
 		readonly AstarPath astar;
 
@@ -133,7 +131,7 @@ namespace Pathfinding {
 		}
 
 		/// <summary>Schedules graph updates internally</summary>
-		void QueueGraphUpdatesInternal () {
+		void QueueGraphUpdatesInternal (IWorkItemContext context) {
 			while (graphUpdateQueue.Count > 0) {
 				GraphUpdateObject ob = graphUpdateQueue.Dequeue();
 
@@ -145,11 +143,12 @@ namespace Pathfinding {
 						guo.obj = ob;
 						guo.graph = g;
 						graphUpdateQueueRegular.Enqueue(guo);
+						context.SetGraphDirty(gr);
 					}
 				}
 			}
 
-			GraphModifier.TriggerEvent(GraphModifier.EventType.PreUpdate);
+			context.PreUpdate();
 			anyGraphUpdateInProgress = true;
 		}
 
@@ -163,17 +162,17 @@ namespace Pathfinding {
 		/// </summary>
 		/// <param name="force">If true, all graph updates will be processed before this function returns. The return value
 		/// will be True.</param>
-		bool ProcessGraphUpdates (bool force) {
+		bool ProcessGraphUpdates (IWorkItemContext context, bool force) {
 			Assert.IsTrue(anyGraphUpdateInProgress);
 
 			if (force) {
 				asyncGraphUpdatesComplete.WaitOne();
 			} else {
-#if !UNITY_WEBGL
+				#if !UNITY_WEBGL
 				if (!asyncGraphUpdatesComplete.WaitOne(0)) {
 					return false;
 				}
-#endif
+				#endif
 			}
 
 			Assert.AreEqual(graphUpdateQueueAsync.Count, 0, "Queue should be empty at this stage");
@@ -182,9 +181,6 @@ namespace Pathfinding {
 			if (!ProcessRegularUpdates(force)) {
 				return false;
 			}
-
-			GraphModifier.TriggerEvent(GraphModifier.EventType.PostUpdate);
-			if (OnGraphsUpdated != null) OnGraphsUpdated();
 
 			Assert.AreEqual(graphUpdateQueueRegular.Count, 0, "QueueRegular should be empty at this stage");
 			Assert.AreEqual(graphUpdateQueueAsync.Count, 0, "QueueAsync should be empty at this stage");
@@ -295,7 +291,7 @@ namespace Pathfinding {
 			}
 		}
 
-#if !UNITY_WEBGL
+	#if !UNITY_WEBGL
 		/// <summary>
 		/// Graph update thread.
 		/// Async graph updates will be executed by this method in another thread.

@@ -1,3 +1,4 @@
+#define PREALLOCATE_NODES
 using UnityEngine;
 using System.Collections.Generic;
 using Pathfinding.Serialization;
@@ -91,16 +92,6 @@ namespace Pathfinding {
 			}
 		}
 
-		/// <summary>Constructor for a graph node.</summary>
-		protected GraphNode (AstarPath astar) {
-			if (!System.Object.ReferenceEquals(astar, null)) {
-				this.nodeIndex = astar.GetNewNodeIndex();
-				astar.InitializeNode(this);
-			} else {
-				throw new System.Exception("No active AstarPath object to bind to");
-			}
-		}
-
 		/// <summary>
 		/// Destroys the node.
 		/// Cleans up any temporary pathfinding data used for this node.
@@ -141,7 +132,7 @@ namespace Pathfinding {
 		/// Every node will get a unique index.
 		/// This index is not necessarily correlated with e.g the position of the node in the graph.
 		/// </summary>
-		public int NodeIndex { get { return nodeIndex & NodeIndexMask; } private set { nodeIndex = (nodeIndex & ~NodeIndexMask) | value; } }
+		public int NodeIndex { get { return nodeIndex & NodeIndexMask; } internal set { nodeIndex = (nodeIndex & ~NodeIndexMask) | value; } }
 
 		/// <summary>
 		/// Temporary flag for internal purposes.
@@ -192,8 +183,10 @@ namespace Pathfinding {
 
 		/// <summary>Start of tag bits. See: <see cref="Tag"/></summary>
 		const int FlagsTagOffset = 19;
+		/// <summary>Max number of tags - 1. Always a power of 2 minus one</summary>
+		public const int MaxTagIndex = 32 - 1;
 		/// <summary>Mask of tag bits. See: <see cref="Tag"/></summary>
-		const uint FlagsTagMask = (32-1) << FlagsTagOffset;
+		const uint FlagsTagMask = MaxTagIndex << FlagsTagOffset;
 
 		#endregion
 
@@ -564,9 +557,6 @@ namespace Pathfinding {
 	}
 
 	public abstract class MeshNode : GraphNode {
-		protected MeshNode (AstarPath astar) : base(astar) {
-		}
-
 		/// <summary>
 		/// All connections from this node.
 		/// See: <see cref="AddConnection"/>
@@ -610,7 +600,7 @@ namespace Pathfinding {
 				}
 			}
 
-			ArrayPool<Connection>.Release (ref connections, true);
+			ArrayPool<Connection>.Release(ref connections, true);
 			AstarPath.active.hierarchicalGraph.AddDirtyNode(this);
 		}
 
@@ -687,7 +677,7 @@ namespace Pathfinding {
 			// Create new arrays which include the new connection
 			int connLength = connections != null ? connections.Length : 0;
 
-			var newconns = ArrayPool<Connection>.ClaimWithExactLength (connLength+1);
+			var newconns = ArrayPool<Connection>.ClaimWithExactLength(connLength+1);
 			for (int i = 0; i < connLength; i++) {
 				newconns[i] = connections[i];
 			}
@@ -695,7 +685,7 @@ namespace Pathfinding {
 			newconns[connLength] = new Connection(node, cost, (byte)shapeEdge);
 
 			if (connections != null) {
-				ArrayPool<Connection>.Release (ref connections, true);
+				ArrayPool<Connection>.Release(ref connections, true);
 			}
 
 			connections = newconns;
@@ -719,7 +709,7 @@ namespace Pathfinding {
 					// Create new arrays which have the specified node removed
 					int connLength = connections.Length;
 
-					var newconns = ArrayPool<Connection>.ClaimWithExactLength (connLength-1);
+					var newconns = ArrayPool<Connection>.ClaimWithExactLength(connLength-1);
 					for (int j = 0; j < i; j++) {
 						newconns[j] = connections[j];
 					}
@@ -728,7 +718,7 @@ namespace Pathfinding {
 					}
 
 					if (connections != null) {
-						ArrayPool<Connection>.Release (ref connections, true);
+						ArrayPool<Connection>.Release(ref connections, true);
 					}
 
 					connections = newconns;
@@ -796,7 +786,7 @@ namespace Pathfinding {
 			if (count == -1) {
 				connections = null;
 			} else {
-				connections = ArrayPool<Connection>.ClaimWithExactLength (count);
+				connections = ArrayPool<Connection>.ClaimWithExactLength(count);
 
 				for (int i = 0; i < count; i++) {
 					connections[i] = new Connection(
