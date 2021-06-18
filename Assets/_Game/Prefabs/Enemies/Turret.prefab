@@ -70,6 +70,7 @@ MonoBehaviour:
   impactLight: {fileID: 0}
   partToRotate: {fileID: 3350958549674326251}
   turnSpeed: 10
+  m_enemyAudioData: {fileID: 0}
 --- !u!114 &1291726390
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -194,7 +195,7 @@ MeshRenderer:
   m_RenderingLayerMask: 1
   m_RendererPriority: 0
   m_Materials:
-  - {fileID: 2100000, guid: 83f92ca95d1f2fc4aab00de0ff1358aa, type: 2}
+  - {fileID: 2100000, guid: 927d51a14f86c4842983f1301ef5cd3c, type: 2}
   m_StaticBatchInfo:
     firstSubMesh: 0
     subMeshCount: 0
@@ -314,7 +315,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!4 &8289163347631584542
 Transform:
   m_ObjectHideFlags: 0
@@ -356,7 +357,7 @@ MeshRenderer:
   m_RenderingLayerMask: 1
   m_RendererPriority: 0
   m_Materials:
-  - {fileID: -6478536213147159724, guid: f0319ae5f2644554a9960b05810a57f3, type: 3}
+  - {fileID: 2100000, guid: 439238e84a31ca843a1dba38b90f9bd8, type: 2}
   m_StaticBatchInfo:
     firstSubMesh: 0
     subMeshCount: 0
