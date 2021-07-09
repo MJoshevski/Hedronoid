@@ -6,12 +6,12 @@ using Hedronoid.AI;
 
 namespace Hedronoid.AI
 {
-    [CustomEditor(typeof(GruntNavigation))]
-    public class GruntNavigationEditor : Editor
+    [CustomEditor(typeof(BullNavigation))]
+    public class BullNavigationEditor : Editor
     {
         protected void OnSceneGUI()
         {
-            var navigation = (GruntNavigation)target;
+            var navigation = (BullNavigation)target;
             if (navigation && navigation.DefaultTarget)
             {
                 for (int i = 0; i < navigation.DefaultTarget.childCount; i++)

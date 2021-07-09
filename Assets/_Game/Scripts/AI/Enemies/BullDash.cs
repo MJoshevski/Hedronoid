@@ -4,36 +4,198 @@ using UnityEngine;
 using Hedronoid.AI;
 using Hedronoid;
 using UnityEngine.AI;
+using Hedronoid.Health;
+using Hedronoid.Events;
+using Hedronoid.Weapons;
 
 namespace Hedronoid.AI
 {
-    public class BullDash : GruntDash
+    public class BullDash : AIBaseMotor
     {
-        protected Rigidbody m_GruntRb;
+        protected Rigidbody m_BullRb;
         protected NavMeshAgent agent;
         protected Vector3 upAxis;
+
+        [Header("Dash controls")]
+        [SerializeField]
+        [Tooltip("The grunt will turn towards you before dashing. This is how far it turns.")]
+        protected float m_turnRate;
+
+        public float TurnRate
+        {
+            get { return m_turnRate; }
+        }
+
+        [SerializeField]
+        [Tooltip("After turning, The grunt will wait a bit before dashing.")]
+        protected float m_windupTime = 1;
+        [SerializeField]
+        protected float m_dashSpeed = 15;
+        [SerializeField]
+        [Tooltip("Dash for this long")]
+        protected float m_dashTime = 1;
+        [SerializeField]
+        [Tooltip("After dashing, The bull will wait a bit before resuming navigation.")]
+        protected float m_cooldownTime = 5;
+        [SerializeField]
+        [Tooltip("After dashing, The bull will be vulnerable for a while.")]
+        protected float m_VulnerableTimeAfterDash = 4f;
+
+        protected BullNavigation m_BullNavigation;
+        protected BullSensor m_BullSensor;
+        protected Material m_sharedMaterial;
+        protected DamageHandler m_DamageHandler;
+
+        [SerializeField]
+        protected Animator animator;
+
+        [SerializeField]
+        protected bool dashInProgress = false;
+
+        public bool DashInProgress
+        {
+            get { return dashInProgress; }
+        }
+
+        protected bool dashDamage = false;
+        [SerializeField]
+        protected float m_Damage = 1f;
+        [SerializeField]
+        protected GameObject m_DashStartParticle;
+        protected GameObject m_InstantiatedDashStartParticle;
+
+        private float m_tempStorageRate;
 
         protected override void Awake()
         {
             base.Awake();
-            m_GruntRb = GetComponent<Rigidbody>();
-            agent = GetComponent<NavMeshAgent>();
+            //animator = GetComponentInChildren<Animator>();
+
+            m_tempStorageRate = m_turnRate;
+            m_DamageHandler = GetComponent<DamageHandler>();
+            m_BullNavigation = GetComponent<BullNavigation>();
+            m_BullSensor = GetComponent<BullSensor>();
+            m_BullRb = GetComponent<Rigidbody>();
+            m_sharedMaterial = m_BullNavigation.GetComponentInChildren<SkinnedMeshRenderer>().materials[1];
+            
+            if (m_DamageHandler)
+                m_DamageHandler.IsInvulnerable = false;
+
+            HNDEvents.Instance.AddListener<KillEvent>(KillEvent);
         }
 
-        protected override void FixedUpdate()
+        void KillEvent(KillEvent e)
         {
-            base.FixedUpdate();
-
-            GravityService.CurrentGravity =
-             GravityService.GetGravity(m_GruntRb.position, out upAxis);
+            if (e.GOID != gameObject.GetInstanceID()) return;
+            ReturnToIdle();
         }
 
-        protected override IEnumerator Dash(Transform target)
+        public override void Move(Vector3 target)
+        {
+        }
+
+        protected override void Update()
+        {
+            base.Update();
+
+            if (m_BullNavigation.m_GruntFreeze)
+                m_turnRate = 0;
+            else
+                m_turnRate = m_tempStorageRate;
+        }
+
+        public void PointSpear(Transform target)
+        {
+            if (!dashInProgress)
+                StartCoroutine(AntiAir(target));
+        }
+
+        public void DoDash(Transform target)
+        {
+            if (!gameObject.activeInHierarchy) return;
+
+            if (!dashInProgress)
+            {
+                StartCoroutine(Dash(target));
+            }
+        }
+
+        protected void ReturnToIdle()
+        {
+            StopCoroutine("Dash");
+
+            SetAnimatorTrigger("ForceIdle");
+            dashInProgress = false;
+            dashDamage = false;
+            if (m_DamageHandler)
+                m_DamageHandler.IsInvulnerable = false;
+
+            if (m_InstantiatedDashStartParticle != null) Destroy(m_InstantiatedDashStartParticle);
+            if (m_Navigation is BullNavigation)
+            {
+                (m_Navigation as BullNavigation).DashDone();
+            }
+        }
+
+        protected IEnumerator DashParticle()
+        {
+            m_InstantiatedDashStartParticle = Instantiate(m_DashStartParticle, transform.position + transform.forward * 0.5f, Quaternion.identity);
+            m_InstantiatedDashStartParticle.transform.parent = transform;
+            float timestamp = Time.time;
+            while (timestamp + 0.8f > Time.time)
+            {
+                if (m_InstantiatedDashStartParticle != null)
+                {
+                    if (cachedRigidbody.velocity.magnitude == 0f)
+                    {
+                        m_InstantiatedDashStartParticle.transform.rotation = cachedRigidbody.transform.rotation;
+
+                    }
+                    else if (cachedRigidbody.velocity != Vector3.zero)
+                    {
+                        m_InstantiatedDashStartParticle.transform.rotation = Quaternion.LookRotation(cachedRigidbody.velocity);
+
+                    }
+                    m_InstantiatedDashStartParticle.transform.localScale = Vector3.one * 4f;
+                }
+                else
+                {
+                    yield break;
+                }
+
+                yield return new WaitForFixedUpdate();
+            }
+            Destroy(m_InstantiatedDashStartParticle);
+            yield return null;
+        }
+
+        private IEnumerator AntiAir(Transform target)
+        {
+            if (dashInProgress)
+                yield break;
+
+            SetAnimatorTrigger("DashAttackWarning");
+
+            yield return new WaitForSeconds(3f);
+
+            SetAnimatorTrigger("ForceIdle");
+
+
+            if (m_Navigation is BullNavigation)
+            {
+                (m_Navigation as BullNavigation).PointUpDone();
+            }
+        }
+        protected virtual IEnumerator Dash(Transform target)
         {
             //Turn invulnerable at dash start
             if (dashInProgress)
                 yield break;
             dashInProgress = true;
+
+            // SoundRouter.CutsceneAudioFilter("Blockhead_Prepare");
+
+            SetAnimatorTrigger("DashAttackWarning");
 
             yield return new WaitForSeconds(.5f);
 
@@ -56,7 +218,7 @@ namespace Hedronoid.AI
                 yield return null;
             }
 
-            if (distanceToTarget > m_GruntSensor.SensorCutoffRange)
+            if (distanceToTarget > m_BullSensor.SensorCutoffRange)
             {
                 //animator.SetTrigger("ForceIdle");
 
@@ -75,9 +237,9 @@ namespace Hedronoid.AI
                     cachedRigidbody.isKinematic = false;
                 }
 
-                if (m_Navigation is GruntNavigation)
+                if (m_Navigation is BullNavigation)
                 {
-                    (m_Navigation as GruntNavigation).DashDone();
+                    (m_Navigation as BullNavigation).DashDone();
                 }
 
                 yield break;
@@ -93,8 +255,9 @@ namespace Hedronoid.AI
             }
             remainingTime = m_dashTime;
             var targetDir = TurnTowardsTarget(target);
+            targetDir.y = 0f;
 
-            var lookRot = Quaternion.LookRotation(targetDir, upAxis);
+            var lookRot = Quaternion.LookRotation(targetDir);
             while ((remainingTime -= Time.fixedDeltaTime) > 0 && dashInProgress)
             {
                 if (!m_Navigation.OnImpact)
@@ -109,7 +272,6 @@ namespace Hedronoid.AI
                     yield return new WaitForFixedUpdate();
                 }
             }
-
             dashDamage = false;
             if (!m_Navigation.OnImpact)
             {
@@ -146,19 +308,60 @@ namespace Hedronoid.AI
             yield return new WaitForSeconds(1f); // giving animation one second to stand up without turning when no cooldown is used... or whatever.
 
             dashInProgress = false;
-            if (m_Navigation is GruntNavigation)
+            if (m_Navigation is BullNavigation)
             {
-                (m_Navigation as GruntNavigation).DashDone();
+                (m_Navigation as BullNavigation).DashDone();
             }
         }
 
-        protected override Vector3 TurnTowardsTarget(Transform target)
+        protected virtual Vector3 TurnTowardsTarget(Transform target)
         {
             var targetPos = target.position;
+            targetPos.y = transform.position.y;
             var lookDir = (targetPos - transform.position).normalized;
-            var lookRot = Quaternion.LookRotation(lookDir, upAxis);
+            var lookRot = Quaternion.LookRotation(lookDir);
             cachedRigidbody.rotation = Quaternion.RotateTowards(transform.rotation, lookRot, m_turnRate * Time.deltaTime);
             return lookDir;
+        }
+
+        void OnCollisionEnter(Collision collision)
+        {
+            if (!collision.gameObject.CompareTag(HNDAI.Settings.PlayerTag) || !dashInProgress || !dashDamage)
+            {
+                return;
+            }
+
+            if (!m_Navigation.OnImpact)
+            {
+                cachedRigidbody.isKinematic = true;
+                cachedRigidbody.velocity = Vector3.zero;
+                cachedRigidbody.angularVelocity = Vector3.zero;
+                cachedRigidbody.isKinematic = false;
+                dashInProgress = false;
+            }
+
+            HNDEvents.Instance.Raise(new DoDamagePlayer
+            {
+                Damage = m_Damage,
+                RecieverGOID = collision.gameObject.GetInstanceID(),
+                SenderGOID = gameObject.GetInstanceID(),
+                Collision = collision
+            });
+        }
+
+        protected void SetAnimatorTrigger(string name)
+        {
+            if (animator != null)
+            {
+                animator.SetTrigger(name);
+            }
+        }
+        protected override void FixedUpdate()
+        {
+            base.FixedUpdate();
+
+            GravityService.CurrentGravity =
+             GravityService.GetGravity(m_BullRb.position, out upAxis);
         }
     }
 }
