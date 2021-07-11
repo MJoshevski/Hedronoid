@@ -123,17 +123,6 @@ public class TelegraphShoot : HNDGameObject
         yield return new WaitForSeconds(m_DelayAfterShoot);
         m_Shooting = false;
 
-        // if (m_Navigation is FredNavigation)
-        // {
-        //     (m_Navigation as FredNavigation).ShotDone();
-        // }
-
-        if (m_Navigation is LeaderNavigation)
-        {
-            (m_Navigation as LeaderNavigation).ShotDone();
-        }
-
-
         yield return null;
     }
 }

@@ -17,11 +17,6 @@ namespace Hedronoid.AI
         [SerializeField]
         private float coneRadius;
 
-        // [SerializeField]
-        // private LayerMask m_NPCLayer;
-        // [SerializeField]
-        // private NPC.NPCType m_NPCTypeToHunt;
-
         protected Collider[] m_colliderBuffer = new Collider[10];
         protected List<Transform> m_targetsInRange = new List<Transform>(10);
 

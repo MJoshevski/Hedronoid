@@ -13,7 +13,6 @@ namespace Hedronoid.AI
     public class BullDash : AIBaseMotor
     {
         protected Rigidbody m_BullRb;
-        protected NavMeshAgent agent;
         protected Vector3 upAxis;
 
         [Header("Dash controls")]
@@ -76,6 +75,7 @@ namespace Hedronoid.AI
             m_BullNavigation = GetComponent<BullNavigation>();
             m_BullSensor = GetComponent<BullSensor>();
             m_BullRb = GetComponent<Rigidbody>();
+
             m_sharedMaterial = m_BullNavigation.GetComponentInChildren<SkinnedMeshRenderer>().materials[1];
             
             if (m_DamageHandler)
@@ -90,18 +90,11 @@ namespace Hedronoid.AI
             ReturnToIdle();
         }
 
-        public override void Move(Vector3 target)
-        {
-        }
-
         protected override void Update()
         {
             base.Update();
 
-            if (m_BullNavigation.m_GruntFreeze)
-                m_turnRate = 0;
-            else
-                m_turnRate = m_tempStorageRate;
+            m_turnRate = m_tempStorageRate;
         }
 
         public void PointSpear(Transform target)

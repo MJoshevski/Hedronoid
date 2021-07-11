@@ -93,7 +93,6 @@ namespace Hedronoid.AI
             }
             if (IsInState(ERangedStates.ShootAtPlayer))
             {
-                agent.enabled = false;
                 if (m_Motor is RangedShoot)
                 {
                     (m_Motor as RangedShoot).DoShoot(m_Target);
@@ -104,7 +103,6 @@ namespace Hedronoid.AI
         public void ShotDone()
         {
             D.AILog("RangedNavigation ShotDone()");
-            agent.enabled = true;
 
             // After the shooting we will check if the player is still within range.
             // If not we will lose him as a target.
@@ -161,11 +159,11 @@ namespace Hedronoid.AI
             }
 
             // Check if we are close to the waypoint that we are moving for
-            if (agent.isOnNavMesh && agent.remainingDistance < 1f)
-            {
-                nextWaypoint = (nextWaypoint + 1) % waypoints.Length;
-                SetAgentDestination(waypoints[nextWaypoint].position);
-            }
+            //if (agent.isOnNavMesh && agent.remainingDistance < 1f)
+            //{
+            //    nextWaypoint = (nextWaypoint + 1) % waypoints.Length;
+            //    SetAgentDestination(waypoints[nextWaypoint].position);
+            //}
         }
 
         public override void OnGoToTargetUpdate()
@@ -193,10 +191,6 @@ namespace Hedronoid.AI
                 }
 
                 bool setAgentDestination = false;
-                if (!agent.hasPath)
-                {
-                    setAgentDestination = true;
-                }
 
                 // If the target has moved too far from where it originally was, update the destination
                 if (Vector3.Distance(lastEvaluationPosition, m_Target.position) >= m_targetEvaluationDistance)
@@ -225,13 +219,13 @@ namespace Hedronoid.AI
 #if UNITY_EDITOR
         private void OnDrawGizmosSelected()
         {
-            if (agent)
-            {
-                Gizmos.color = Color.yellow;
-                Gizmos.DrawSphere(agent.destination, 1f);
-                Gizmos.color = (agent.hasPath) ? Color.green : Color.red;
-                Gizmos.DrawLine(transform.position, agent.destination);
-            }
+            //if (agent)
+            //{
+            //    Gizmos.color = Color.yellow;
+            //    Gizmos.DrawSphere(agent.destination, 1f);
+            //    Gizmos.color = (agent.hasPath) ? Color.green : Color.red;
+            //    Gizmos.DrawLine(transform.position, agent.destination);
+            //}
 
             if (DefaultTarget && DefaultTarget.childCount > 1)
             {

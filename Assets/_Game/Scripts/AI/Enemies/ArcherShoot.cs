@@ -79,17 +79,6 @@ namespace Hedronoid.AI
             Arrow aproject = projectile.GetComponent<Arrow>();
             if (aproject)
                 aproject.ShootAt(target);
-            
-            // if (m_Navigation is ArcherNavigation)
-            // {
-            //     (m_Navigation as ArcherNavigation).ShotDone();
-            // }
-
-            if (m_Navigation is LeaderNavigation)
-            {
-                (m_Navigation as LeaderNavigation).ShotDone();
-            }
-
         }
 
         private Vector3 TurnTowardsTarget(Transform target)
