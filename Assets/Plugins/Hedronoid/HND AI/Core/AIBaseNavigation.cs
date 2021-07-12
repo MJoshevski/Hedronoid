@@ -6,6 +6,7 @@ using System.Collections;
 using Hedronoid.Health;
 using Hedronoid.HNDFSM;
 using Pathfinding;
+using Pathfinding.RVO;
 
 /// <summary>
 /// 
@@ -85,6 +86,8 @@ namespace Hedronoid.AI
         protected Animator [] m_Animators;
         protected AIBaseSensor m_Sensor;
         protected AIBaseMotor m_Motor;
+        protected RVOController m_RVOController;
+        protected Seeker m_Seeker;
         public Rigidbody m_Rb;
         protected HealthBase m_HealthBase;
 
@@ -105,9 +108,21 @@ namespace Hedronoid.AI
             if (m_Animators == null || m_Animators.Length == 0) m_Animators = GetComponentsInChildren<Animator>();
             if (!m_Rb) m_Rb = GetComponent<Rigidbody>();
             if (!m_HealthBase) m_HealthBase = GetComponent<HealthBase>();
+            m_RVOController = GetComponent<RVOController>();
+            m_Seeker = GetComponent<Seeker>();
+        }
+        protected override void OnEnable()
+        {
+            base.OnEnable();
+
             if (ai == null) ai = GetComponent<IAstarAI>();
+            if (ai != null) ai.onSearchPath += Update;
         }
 
+        protected override void OnDisable()
+        {
+            if (ai != null) ai.onSearchPath -= Update;
+        }
         protected override void Start()
         {
             base.Start();

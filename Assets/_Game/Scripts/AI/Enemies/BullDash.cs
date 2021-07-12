@@ -76,7 +76,7 @@ namespace Hedronoid.AI
             m_BullSensor = GetComponent<BullSensor>();
             m_BullRb = GetComponent<Rigidbody>();
 
-            m_sharedMaterial = m_BullNavigation.GetComponentInChildren<SkinnedMeshRenderer>().materials[1];
+            m_sharedMaterial = m_BullNavigation.GetComponentInChildren<SkinnedMeshRenderer>().materials[0];
             
             if (m_DamageHandler)
                 m_DamageHandler.IsInvulnerable = false;
@@ -95,12 +95,6 @@ namespace Hedronoid.AI
             base.Update();
 
             m_turnRate = m_tempStorageRate;
-        }
-
-        public void PointSpear(Transform target)
-        {
-            if (!dashInProgress)
-                StartCoroutine(AntiAir(target));
         }
 
         public void DoDash(Transform target)
@@ -160,24 +154,6 @@ namespace Hedronoid.AI
             }
             Destroy(m_InstantiatedDashStartParticle);
             yield return null;
-        }
-
-        private IEnumerator AntiAir(Transform target)
-        {
-            if (dashInProgress)
-                yield break;
-
-            SetAnimatorTrigger("DashAttackWarning");
-
-            yield return new WaitForSeconds(3f);
-
-            SetAnimatorTrigger("ForceIdle");
-
-
-            if (m_Navigation is BullNavigation)
-            {
-                (m_Navigation as BullNavigation).PointUpDone();
-            }
         }
         protected virtual IEnumerator Dash(Transform target)
         {

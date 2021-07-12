@@ -18,7 +18,7 @@ namespace Hedronoid.AI
     [RequireComponent(typeof(BullSensor))]
     public class BullNavigation : AIBaseNavigation
     {
-        public enum EGruntStates
+        public enum EBullStates
         {
             DashToTarget = EStates.Highest + 1,
         }
@@ -44,8 +44,6 @@ namespace Hedronoid.AI
         protected Transform[] m_playerTx = new Transform[2] { null, null };
         protected BullSensor m_BullSensor;
         protected BullDash m_BullDash;
-        protected RVOController m_RVOController;
-        protected Seeker m_Seeker;
         protected DamageHandler m_damageHandler;
 
         protected DamageInfo damage;
@@ -76,16 +74,13 @@ namespace Hedronoid.AI
 
             m_BullSensor = (BullSensor) m_Sensor;
             m_BullDash = GetComponent<BullDash>();
-            m_RVOController = GetComponent<RVOController>();
-            m_Seeker = GetComponent<Seeker>();
 
             m_damageHandler = GetComponent<DamageHandler>();
-            CreateState(EGruntStates.DashToTarget, OnDashUpdate, null, null);
+            CreateState(EBullStates.DashToTarget, OnDashUpdate, null, null);
 
             enemyEmojis = GetComponent<EnemyEmojis>();
             HNDEvents.Instance.AddListener<KillEvent>(OnKilled);
         }
-
         private void OnCollisionEnter(Collision collision)
         {
             if (collision.gameObject.layer == LayerMask.NameToLayer("PlayerBullet"))
@@ -172,15 +167,13 @@ namespace Hedronoid.AI
             // This is not actually being used in the current code, but if someone wants it they will get the last direction moved.
             return transform.forward;
         }
-
-
         public override void ChangeState(System.Enum newState)
         {
             if (m_BullDash.DashInProgress) return;
 
             base.ChangeState(newState);
 
-            if (IsInState(EGruntStates.DashToTarget))
+            if (IsInState(EBullStates.DashToTarget))
             {
                 if (m_Motor is BullDash)
                 {
@@ -243,18 +236,7 @@ namespace Hedronoid.AI
             dashed = false;
             StartCoroutine(WaitImpactDashDone());
         }
-
-        public void PointUpDone()
-        {
-            ChangeState(EStates.DefaultMovement);
-        }
-
         public void OnDashUpdate()
-        {
-            // We are not doing anything here. It got started when we changed state.
-        }
-
-        public void OnSpearUpdate()
         {
             // We are not doing anything here. It got started when we changed state.
         }
@@ -263,10 +245,10 @@ namespace Hedronoid.AI
         }
         public override void OnGoToTargetUpdate()
         {
-            if (m_isFrozen) return;
-
             if (m_Target)
             {
+                ai.destination = m_Target.position;
+
                 var distanceToTarget = Vector3.Distance(transform.position, m_Target.position);
 
                 // If we are within dash distance, change to the dash state
@@ -274,7 +256,7 @@ namespace Hedronoid.AI
                 {
                     if (!dashed)
                     {
-                        ChangeState(EGruntStates.DashToTarget);
+                        ChangeState(EBullStates.DashToTarget);
                         dashed = true;
                         return;
                     }
@@ -308,95 +290,95 @@ namespace Hedronoid.AI
 
         Transform newTarget;
 
-        protected override void Update()
-        {
-            base.Update();
+        //protected override void Update()
+        //{
+        //    base.Update();
 
-            if (Time.time >= nextRepath && canSearchAgain)
-            {
-                RecalculatePath();
-            }
+        //    if (Time.time >= nextRepath && canSearchAgain)
+        //    {
+        //        RecalculatePath();
+        //    }
 
-            Vector3 pos = transform.position;
+        //    Vector3 pos = transform.position;
 
-            if (vectorPath != null && vectorPath.Count != 0)
-            {
-                while ((m_RVOController.To2D(pos - vectorPath[wp]).sqrMagnitude < moveNextDist * moveNextDist && wp != vectorPath.Count - 1) || wp == 0)
-                {
-                    wp++;
-                }
+        //    if (vectorPath != null && vectorPath.Count != 0)
+        //    {
+        //        while ((m_RVOController.To2D(pos - vectorPath[wp]).sqrMagnitude < moveNextDist * moveNextDist && wp != vectorPath.Count - 1) || wp == 0)
+        //        {
+        //            wp++;
+        //        }
 
-                // Current path segment goes from vectorPath[wp-1] to vectorPath[wp]
-                // We want to find the point on that segment that is 'moveNextDist' from our current position.
-                // This can be visualized as finding the intersection of a circle with radius 'moveNextDist'
-                // centered at our current position with that segment.
-                var p1 = vectorPath[wp - 1];
-                var p2 = vectorPath[wp];
+        //        // Current path segment goes from vectorPath[wp-1] to vectorPath[wp]
+        //        // We want to find the point on that segment that is 'moveNextDist' from our current position.
+        //        // This can be visualized as finding the intersection of a circle with radius 'moveNextDist'
+        //        // centered at our current position with that segment.
+        //        var p1 = vectorPath[wp - 1];
+        //        var p2 = vectorPath[wp];
 
-                // Calculate the intersection with the circle. This involves some math.
-                var t = VectorMath.LineCircleIntersectionFactor(m_RVOController.To2D(transform.position), m_RVOController.To2D(p1), m_RVOController.To2D(p2), moveNextDist);
-                // Clamp to a point on the segment
-                t = Mathf.Clamp01(t);
-                Vector3 waypoint = Vector3.Lerp(p1, p2, t);
+        //        // Calculate the intersection with the circle. This involves some math.
+        //        var t = VectorMath.LineCircleIntersectionFactor(m_RVOController.To2D(transform.position), m_RVOController.To2D(p1), m_RVOController.To2D(p2), moveNextDist);
+        //        // Clamp to a point on the segment
+        //        t = Mathf.Clamp01(t);
+        //        Vector3 waypoint = Vector3.Lerp(p1, p2, t);
 
-                // Calculate distance to the end of the path
-                float remainingDistance = m_RVOController.To2D(waypoint - pos).magnitude + m_RVOController.To2D(waypoint - p2).magnitude;
-                for (int i = wp; i < vectorPath.Count - 1; i++) remainingDistance += m_RVOController.To2D(vectorPath[i + 1] - vectorPath[i]).magnitude;
+        //        // Calculate distance to the end of the path
+        //        float remainingDistance = m_RVOController.To2D(waypoint - pos).magnitude + m_RVOController.To2D(waypoint - p2).magnitude;
+        //        for (int i = wp; i < vectorPath.Count - 1; i++) remainingDistance += m_RVOController.To2D(vectorPath[i + 1] - vectorPath[i]).magnitude;
 
-                // Set the target to a point in the direction of the current waypoint at a distance
-                // equal to the remaining distance along the path. Since the rvo agent assumes that
-                // it should stop when it reaches the target point, this will produce good avoidance
-                // behavior near the end of the path. When not close to the end point it will act just
-                // as being commanded to move in a particular direction, not toward a particular point
-                var rvoTarget = (waypoint - pos).normalized * remainingDistance + pos;
-                // When within [slowdownDistance] units from the target, use a progressively lower speed
-                var desiredSpeed = Mathf.Clamp01(remainingDistance / slowdownDistance) * maxSpeed;
-                Debug.DrawLine(transform.position, waypoint, Color.red);
-                m_RVOController.SetTarget(rvoTarget, desiredSpeed, maxSpeed);
-            }
-            else
-            {
-                // Stand still
-                m_RVOController.SetTarget(pos, maxSpeed, maxSpeed);
-            }
+        //        // Set the target to a point in the direction of the current waypoint at a distance
+        //        // equal to the remaining distance along the path. Since the rvo agent assumes that
+        //        // it should stop when it reaches the target point, this will produce good avoidance
+        //        // behavior near the end of the path. When not close to the end point it will act just
+        //        // as being commanded to move in a particular direction, not toward a particular point
+        //        var rvoTarget = (waypoint - pos).normalized * remainingDistance + pos;
+        //        // When within [slowdownDistance] units from the target, use a progressively lower speed
+        //        var desiredSpeed = Mathf.Clamp01(remainingDistance / slowdownDistance) * maxSpeed;
+        //        Debug.DrawLine(transform.position, waypoint, Color.red);
+        //        m_RVOController.SetTarget(rvoTarget, desiredSpeed, maxSpeed);
+        //    }
+        //    else
+        //    {
+        //        // Stand still
+        //        m_RVOController.SetTarget(pos, maxSpeed, maxSpeed);
+        //    }
 
-            // Get a processed movement delta from the rvo controller and move the character.
-            // This is based on information from earlier frames.
-            var movementDelta = m_RVOController.CalculateMovementDelta(Time.deltaTime);
-            pos += movementDelta;
+        //    // Get a processed movement delta from the rvo controller and move the character.
+        //    // This is based on information from earlier frames.
+        //    var movementDelta = m_RVOController.CalculateMovementDelta(Time.deltaTime);
+        //    pos += movementDelta;
 
-            // Rotate the character if the velocity is not extremely small
-            if (Time.deltaTime > 0 && movementDelta.magnitude / Time.deltaTime > 0.01f)
-            {
-                var rot = transform.rotation;
-                var targetRot = Quaternion.LookRotation(movementDelta, m_RVOController.To3D(Vector2.zero, 1));
-                const float RotationSpeed = 5;
-                if (m_RVOController.movementPlaneMode == MovementPlane.XY)
-                {
-                    targetRot = targetRot * Quaternion.Euler(-90, 180, 0);
-                }
-                transform.rotation = Quaternion.Slerp(rot, targetRot, Time.deltaTime * RotationSpeed);
-            }
+        //    // Rotate the character if the velocity is not extremely small
+        //    if (Time.deltaTime > 0 && movementDelta.magnitude / Time.deltaTime > 0.01f)
+        //    {
+        //        var rot = transform.rotation;
+        //        var targetRot = Quaternion.LookRotation(movementDelta, m_RVOController.To3D(Vector2.zero, 1));
+        //        const float RotationSpeed = 5;
+        //        if (m_RVOController.movementPlaneMode == MovementPlane.XY)
+        //        {
+        //            targetRot = targetRot * Quaternion.Euler(-90, 180, 0);
+        //        }
+        //        transform.rotation = Quaternion.Slerp(rot, targetRot, Time.deltaTime * RotationSpeed);
+        //    }
 
-            if (m_RVOController.movementPlaneMode == MovementPlane.XZ)
-            {
-                RaycastHit hit;
-                if (Physics.Raycast(pos + Vector3.up, Vector3.down, out hit, 2, groundMask))
-                {
-                    pos.y = hit.point.y;
-                }
-            }
+        //    if (m_RVOController.movementPlaneMode == MovementPlane.XZ)
+        //    {
+        //        RaycastHit hit;
+        //        if (Physics.Raycast(pos + Vector3.up, Vector3.down, out hit, 2, groundMask))
+        //        {
+        //            pos.y = hit.point.y;
+        //        }
+        //    }
 
-            transform.position = pos;
-        }
+        //    transform.position = pos;
+        //}
         protected override void FixedUpdate()
         {
             base.FixedUpdate();
 
             newTarget = m_BullSensor.GetTargetInsideCone(m_Rb.transform.forward);
 
-            //if (!newTarget)
-            //    newTarget = m_BullSensor.GetTargetWithinReach(m_BullSensor.SensorRange);
+            if (!newTarget)
+                newTarget = m_BullSensor.GetTargetWithinReach(m_BullSensor.SensorRange);
 
             if (newTarget)
             {
