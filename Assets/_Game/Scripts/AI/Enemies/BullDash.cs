@@ -236,7 +236,8 @@ namespace Hedronoid.AI
                     dashDamage = true;
                     if (dashInProgress)
                     {
-                        cachedRigidbody.AddForce(targetDir * Time.fixedDeltaTime * m_dashSpeed, ForceMode.VelocityChange);
+                        cachedRigidbody.transform.position += targetDir * Time.fixedDeltaTime * m_dashSpeed;
+                        //cachedRigidbody.AddForce(targetDir * Time.fixedDeltaTime * m_dashSpeed, ForceMode.VelocityChange);
                     }
                     yield return new WaitForFixedUpdate();
                 }
