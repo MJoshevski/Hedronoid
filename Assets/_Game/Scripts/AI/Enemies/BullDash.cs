@@ -39,6 +39,11 @@ namespace Hedronoid.AI
         [SerializeField]
         [Tooltip("After dashing, The bull will be vulnerable for a while.")]
         protected float m_VulnerableTimeAfterDash = 4f;
+        [Tooltip("Distance of the ground contact probe.")]
+        [Min(0f)]
+        public float m_dashProbeDistance = 5f;
+        [Tooltip("Layer mask for ground contact probing and stairs.")]
+        public LayerMask m_probeMask = -1;
 
         protected BullNavigation m_BullNavigation;
         protected BullSensor m_BullSensor;
@@ -234,9 +239,11 @@ namespace Hedronoid.AI
                     cachedRigidbody.rotation = Quaternion.RotateTowards(transform.rotation, lookRot, m_turnRate * Time.fixedDeltaTime);
                     cachedRigidbody.angularVelocity = Vector3.zero;
                     dashDamage = true;
+                    
                     if (dashInProgress)
                     {
-                        cachedRigidbody.transform.position += targetDir * Time.fixedDeltaTime * m_dashSpeed;
+                        cachedRigidbody.transform.position +=
+                            targetDir * Time.fixedDeltaTime * m_dashSpeed;
                         //cachedRigidbody.AddForce(targetDir * Time.fixedDeltaTime * m_dashSpeed, ForceMode.VelocityChange);
                     }
                     yield return new WaitForFixedUpdate();
@@ -284,6 +291,31 @@ namespace Hedronoid.AI
             }
         }
 
+        void SnapToGround()
+        {
+            if (!Physics.Raycast(
+                m_BullRb.position, -upAxis, out RaycastHit hit,
+                m_dashProbeDistance, m_probeMask
+            ))
+            {
+                return;
+            }
+
+            float upDot = Vector3.Dot(-upAxis, hit.normal);
+            if (upDot < GetMinDot(hit.collider.gameObject.layer))
+            {
+                return;
+            }
+            m_BullRb.position = hit.point;
+            Popcron.Gizmos.Circle(hit.point, 1f, Camera.main, Color.red);
+        }
+
+        private float minGroundDotProduct, minStairsDotProduct;
+        public float GetMinDot(int layer)
+        {
+            return (m_probeMask & (1 << layer)) == 0 ?
+                minGroundDotProduct : minStairsDotProduct;
+        }
         protected virtual Vector3 TurnTowardsTarget(Transform target)
         {
             var targetPos = target.position;
@@ -329,6 +361,8 @@ namespace Hedronoid.AI
         protected override void FixedUpdate()
         {
             base.FixedUpdate();
+
+            SnapToGround();
 
             GravityService.CurrentGravity =
              GravityService.GetGravity(m_BullRb.position, out upAxis);
