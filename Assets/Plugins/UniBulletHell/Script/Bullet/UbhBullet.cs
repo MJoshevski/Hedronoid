@@ -138,9 +138,7 @@ public class UbhBullet : UbhMonoBehaviour
 
         if (target == null)
         {
-            //m_transformCache.SetEulerAnglesX(m_baseAngle - m_angle);
             m_transformCache.SetEulerAnglesY(m_baseAngle - m_angle);
-
         }
         else
             m_transformCache.LookAt(target);

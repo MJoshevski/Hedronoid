@@ -12,6 +12,9 @@ public class UbhNwayShot : UbhBaseShot
     // "Set a number of shot way."
     [FormerlySerializedAs("_WayNum")]
     public int m_wayNum = 5;
+    // "Set a number of shot row."
+    [FormerlySerializedAs("_RowNum")]
+    public int m_rowNum = 5;
     // "Set a center angle of shot. (0 to 360)"
     [Range(0f, 360f), FormerlySerializedAs("_CenterAngle")]
     public float m_centerAngle = 180f;
@@ -59,22 +62,21 @@ public class UbhNwayShot : UbhBaseShot
             }
         }
 
-        for (int j = 0; j < 5; j++)
+        for (int j = 0; j < m_rowNum; j++)
         {
-            Vector3 pos = new Vector3(
-                transform.position.x,
-                transform.position.y /*+ j*/,
-                transform.position.z);
+            float baseAngleRow = m_rowNum % 2 == 0 ? m_centerAngle - (m_betweenAngle / 2f) : m_centerAngle;
+
+            float angleRow = UbhUtil.GetShiftedAngle(j, baseAngleRow, m_betweenAngle);
 
             Vector3 rot = new Vector3(
-                transform.rotation.eulerAngles.x + j*10,
+                transform.rotation.eulerAngles.x + angleRow,
                 transform.rotation.eulerAngles.y,
                 transform.rotation.eulerAngles.z);
 
             for (int i = 0; i < m_wayNum; i++)
             {
-                UbhBullet bullet = GetBullet(pos);
-                bullet.transform.SetPositionAndRotation(pos, Quaternion.Euler(rot));
+                UbhBullet bullet = GetBullet(transform.position);
+                bullet.transform.SetPositionAndRotation(transform.position, Quaternion.Euler(rot));
 
                 if (bullet == null)
                 {
