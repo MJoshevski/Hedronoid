@@ -9,6 +9,7 @@ public class UbhBullet : UbhMonoBehaviour
     private Transform m_transformCache;
     private UbhBaseShot m_parentBaseShot;
     private float m_speed;
+    private Transform m_target;
     private float m_angle;
     private float m_accelSpeed;
     private float m_accelTurn;
@@ -24,7 +25,6 @@ public class UbhBullet : UbhMonoBehaviour
     private float m_resumeTime;
     private bool m_useAutoRelease;
     private float m_autoReleaseTime;
-    private UbhUtil.AXIS m_axisMove;
     private bool m_useMaxSpeed;
     private float m_maxSpeed;
     private bool m_useMinSpeed;
@@ -92,13 +92,13 @@ public class UbhBullet : UbhMonoBehaviour
     /// Bullet Shot
     /// </summary>
     public void Shot(UbhBaseShot parentBaseShot,
-                     float speed, float angle, float accelSpeed, float accelTurn,
+                     float speed, Transform target, float angle, float accelSpeed, float accelTurn,
                      bool homing, Transform homingTarget, float homingAngleSpeed,
                      bool sinWave, float sinWaveSpeed, float sinWaveRangeSize, bool sinWaveInverse,
                      bool pauseAndResume, float pauseTime, float resumeTime,
                      bool useAutoRelease, float autoReleaseTime,
-                     UbhUtil.AXIS axisMove, bool inheritAngle,
-                     bool useMaxSpeed, float maxSpeed, bool useMinSpeed, float minSpeed)
+                     bool inheritAngle, bool useMaxSpeed, 
+                     float maxSpeed, bool useMinSpeed, float minSpeed)
     {
         if (m_shooting)
         {
@@ -109,6 +109,7 @@ public class UbhBullet : UbhMonoBehaviour
         m_parentBaseShot = parentBaseShot;
 
         m_speed = speed;
+        m_target = target;
         m_angle = angle;
         m_accelSpeed = accelSpeed;
         m_accelTurn = accelTurn;
@@ -124,7 +125,6 @@ public class UbhBullet : UbhMonoBehaviour
         m_resumeTime = resumeTime;
         m_useAutoRelease = useAutoRelease;
         m_autoReleaseTime = autoReleaseTime;
-        m_axisMove = axisMove;
         m_useMaxSpeed = useMaxSpeed;
         m_maxSpeed = maxSpeed;
         m_useMinSpeed = useMinSpeed;
@@ -133,28 +133,17 @@ public class UbhBullet : UbhMonoBehaviour
         m_baseAngle = 0f;
         if (inheritAngle && m_parentBaseShot.lockOnShot == false)
         {
-            if (m_axisMove == UbhUtil.AXIS.X_AND_Z)
-            {
-                // X and Z axis
-                m_baseAngle = m_parentBaseShot.shotCtrl.transform.eulerAngles.y;
-            }
-            else
-            {
-                // X and Y axis
-                m_baseAngle = m_parentBaseShot.shotCtrl.transform.eulerAngles.z;
-            }
+            m_baseAngle = m_parentBaseShot.shotCtrl.transform.eulerAngles.y;
         }
 
-        if (m_axisMove == UbhUtil.AXIS.X_AND_Z)
+        if (target == null)
         {
-            // X and Z axis
+            //m_transformCache.SetEulerAnglesX(m_baseAngle - m_angle);
             m_transformCache.SetEulerAnglesY(m_baseAngle - m_angle);
+
         }
         else
-        {
-            // X and Y axis
-            m_transformCache.SetEulerAnglesZ(m_baseAngle + m_angle);
-        }
+            m_transformCache.LookAt(target);
 
         m_selfFrameCnt = 0f;
         m_selfTimeCount = 0f;
@@ -200,51 +189,27 @@ public class UbhBullet : UbhMonoBehaviour
             // homing target.
             if (m_homingTarget != null && 0f < m_homingAngleSpeed)
             {
-                float rotAngle = UbhUtil.GetAngleFromTwoPosition(m_transformCache, m_homingTarget, m_axisMove);
-                float myAngle = 0f;
-                if (m_axisMove == UbhUtil.AXIS.X_AND_Z)
-                {
-                    // X and Z axis
-                    myAngle = -myAngles.y;
-                }
-                else
-                {
-                    // X and Y axis
-                    myAngle = myAngles.z;
-                }
+                Quaternion rotation = Quaternion.LookRotation((m_homingTarget.position - m_transformCache.position).normalized);
 
-                float toAngle = Mathf.MoveTowardsAngle(myAngle, rotAngle, deltaTime * m_homingAngleSpeed);
+                Quaternion toRotation = 
+                    Quaternion.RotateTowards(transform.rotation, rotation, deltaTime * m_homingAngleSpeed);
 
-                if (m_axisMove == UbhUtil.AXIS.X_AND_Z)
-                {
-                    // X and Z axis
-                    newRotation = Quaternion.Euler(myAngles.x, -toAngle, myAngles.z);
-                }
-                else
-                {
-                    // X and Y axis
-                    newRotation = Quaternion.Euler(myAngles.x, myAngles.y, toAngle);
-                }
+                newRotation = toRotation;
             }
         }
         else if (m_sinWave)
         {
-            // acceleration turning.
+            //// acceleration turning.
             m_angle += (m_accelTurn * deltaTime);
+
             // sin wave.
             if (0f < m_sinWaveSpeed && 0f < m_sinWaveRangeSize)
             {
-                float waveAngle = m_angle + (m_sinWaveRangeSize / 2f * (Mathf.Sin(m_selfFrameCnt * m_sinWaveSpeed / 100f) * (m_sinWaveInverse ? -1f : 1f)));
-                if (m_axisMove == UbhUtil.AXIS.X_AND_Z)
-                {
-                    // X and Z axis
-                    newRotation = Quaternion.Euler(myAngles.x, m_baseAngle - waveAngle, myAngles.z);
-                }
-                else
-                {
-                    // X and Y axis
-                    newRotation = Quaternion.Euler(myAngles.x, myAngles.y, m_baseAngle + waveAngle);
-                }
+                float waveAngleXZ = m_angle + (m_sinWaveRangeSize / 2f * (Mathf.Sin(m_selfFrameCnt * m_sinWaveSpeed / 100f) * (m_sinWaveInverse ? -1f : 1f)));
+
+                newRotation = Quaternion.Euler(
+                    myAngles.x, m_baseAngle - waveAngleXZ, myAngles.z);
+
             }
             m_selfFrameCnt += UbhTimer.instance.deltaFrameCount;
         }
@@ -252,16 +217,9 @@ public class UbhBullet : UbhMonoBehaviour
         {
             // acceleration turning.
             float addAngle = m_accelTurn * deltaTime;
-            if (m_axisMove == UbhUtil.AXIS.X_AND_Z)
-            {
-                // X and Z axis
-                newRotation = Quaternion.Euler(myAngles.x, myAngles.y - addAngle, myAngles.z);
-            }
-            else
-            {
-                // X and Y axis
-                newRotation = Quaternion.Euler(myAngles.x, myAngles.y, myAngles.z + addAngle);
-            }
+
+            newRotation = Quaternion.Euler(
+                myAngles.x, myAngles.y - addAngle, myAngles.z + addAngle);
         }
 
         // acceleration speed.
@@ -279,16 +237,9 @@ public class UbhBullet : UbhMonoBehaviour
 
         // move.
         Vector3 newPosition;
-        if (m_axisMove == UbhUtil.AXIS.X_AND_Z)
-        {
-            // X and Z axis
-            newPosition = m_transformCache.position + (m_transformCache.forward * (m_speed * deltaTime));
-        }
-        else
-        {
-            // X and Y axis
-            newPosition = m_transformCache.position + (m_transformCache.up * (m_speed * deltaTime));
-        }
+        newPosition = m_transformCache.position + 
+            (m_transformCache.forward * (m_speed * deltaTime));
+
 
         // set new position and rotation
         m_transformCache.SetPositionAndRotation(newPosition, newRotation);

@@ -58,7 +58,7 @@ public class UbhHoleCircleShot : UbhBaseShot
                 break;
             }
 
-            ShotBullet(bullet, m_bulletSpeed, angle);
+            ShotBullet(bullet, m_bulletSpeed, null, angle);
         }
 
         FiredShot();

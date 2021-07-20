@@ -79,7 +79,7 @@ public class UbhSinWaveBulletNwayShot : UbhBaseShot
 
             float angle = UbhUtil.GetShiftedAngle(i, baseAngle, m_betweenAngle);
 
-            ShotBullet(bullet, m_bulletSpeed, angle, false, null, 0f, true, m_waveSpeed, m_waveRangeSize, m_waveInverse);
+            ShotBullet(bullet, m_bulletSpeed, null, angle, false, null, 0f, true, m_waveSpeed, m_waveRangeSize, m_waveInverse);
 
             m_nowIndex++;
             if (m_nowIndex >= m_bulletNum)

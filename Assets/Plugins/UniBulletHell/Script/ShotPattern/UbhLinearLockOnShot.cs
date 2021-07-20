@@ -20,8 +20,6 @@ public class UbhLinearLockOnShot : UbhLinearShot
     // "Transform of lock on target."
     // "It is not necessary if you want to specify target in tag."
     // "Overwrite Angle in direction of target to Transform.position."
-    [FormerlySerializedAs("_TargetTransform")]
-    public Transform m_targetTransform;
     // "Always aim to target."
     [FormerlySerializedAs("_Aiming")]
     public bool m_aiming;
@@ -52,10 +50,6 @@ public class UbhLinearLockOnShot : UbhLinearShot
         if (m_targetTransform == null && m_setTargetFromTag)
         {
             m_targetTransform = UbhUtil.GetTransformFromTagName(m_targetTagName, m_randomSelectTagTarget);
-        }
-        if (m_targetTransform != null)
-        {
-            m_angle = UbhUtil.GetAngleFromTwoPosition(transform, m_targetTransform, shotCtrl.m_axisMove);
         }
     }
 }

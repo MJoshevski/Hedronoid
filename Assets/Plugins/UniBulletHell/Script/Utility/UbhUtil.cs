@@ -17,16 +17,6 @@ public static class UbhUtil
     public static readonly Quaternion QUATERNION_IDENTITY = Quaternion.identity;
 
     /// <summary>
-    /// Move axis types.
-    /// </summary>
-    public enum AXIS
-    {
-        X_AND_Y,
-        X_AND_Z,
-        X_Y_AND_Z
-    }
-
-    /// <summary>
     /// Time types.
     /// </summary>
     public enum TIME
@@ -106,29 +96,9 @@ public static class UbhUtil
     }
 
     /// <summary>
-    /// Get angle from two transforms position.
-    /// </summary>
-    public static float GetAngleFromTwoPosition(Transform fromTrans, Transform toTrans, AXIS axisMove)
-    {
-        switch (axisMove)
-        {
-            case AXIS.X_AND_Y:
-                return GetZangleFromTwoPosition(fromTrans, toTrans);
-            case AXIS.X_AND_Z:
-                return GetYangleFromTwoPosition(fromTrans, toTrans);
-            case AXIS.X_Y_AND_Z:
-                return Mathf.DeltaAngle(
-                    GetZangleFromTwoPosition(fromTrans, toTrans), 
-                    GetYangleFromTwoPosition(fromTrans, toTrans));
-            default:
-                return 0f;
-        }
-    }
-
-    /// <summary>
     /// Get Z angle from two transforms position.
     /// </summary>
-    private static float GetZangleFromTwoPosition(Transform fromTrans, Transform toTrans)
+    public static float GetZangleFromTwoPosition(Transform fromTrans, Transform toTrans)
     {
         if (fromTrans == null || toTrans == null)
         {
@@ -145,7 +115,7 @@ public static class UbhUtil
     /// <summary>
     /// Get Y angle from two transforms position.
     /// </summary>
-    private static float GetYangleFromTwoPosition(Transform fromTrans, Transform toTrans)
+    public static float GetYangleFromTwoPosition(Transform fromTrans, Transform toTrans)
     {
         if (fromTrans == null || toTrans == null)
         {
@@ -157,5 +127,14 @@ public static class UbhUtil
         angle = GetNormalizedAngle(angle);
 
         return angle;
+    }
+
+    public static float[] GetZYangleFromTwoPosition(Transform fromTrans, Transform toTrans)
+    {
+        float[] angles = new float[2];
+        angles[0] = GetZangleFromTwoPosition(fromTrans, toTrans);
+        angles[1] = GetYangleFromTwoPosition(fromTrans, toTrans);
+
+        return angles;
     }
 }

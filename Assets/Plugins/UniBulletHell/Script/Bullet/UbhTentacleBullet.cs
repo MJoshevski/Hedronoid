@@ -18,8 +18,6 @@ public sealed class UbhTentacleBullet : MonoBehaviour
     public float m_distanceBetweenBullets = 0.5f;
     // "Enable or disable center bullet."
     public bool m_enableCenterBullet = true;
-    // "Axis on bullet move."
-    public UbhUtil.AXIS m_axisMove = UbhUtil.AXIS.X_AND_Y;
     // "Rotation Speed of tentacles."
     public float m_rotationSpeed = 90f;
 
@@ -41,32 +39,17 @@ public sealed class UbhTentacleBullet : MonoBehaviour
         for (int i = 0; i < m_numOfTentacles; i++)
         {
             Quaternion quat = Quaternion.identity;
-            switch (m_axisMove)
-            {
-                case UbhUtil.AXIS.X_AND_Y:
-                    quat = Quaternion.Euler(new Vector3(0f, 0f, addAngle * i));
-                    break;
-                case UbhUtil.AXIS.X_AND_Z:
-                    quat = Quaternion.Euler(new Vector3(0f, addAngle * i, 0f));
-                    break;
-                default:
-                    break;
-            }
+
+            quat = Quaternion.Euler(new Vector3(0f, addAngle * i, addAngle * i));
+
 
             for (int k = 0; k < m_numOfBulletsForOneTentacle; k++)
             {
                 var transBullet = ((GameObject)Instantiate(m_centerBullet, m_rootTransform)).GetComponent<Transform>();
-                switch (m_axisMove)
-                {
-                    case UbhUtil.AXIS.X_AND_Y:
-                        transBullet.position += (quat * Vector3.up * ((k + 1) * m_distanceBetweenBullets));
-                        break;
-                    case UbhUtil.AXIS.X_AND_Z:
-                        transBullet.position += (quat * Vector3.forward * ((k + 1) * m_distanceBetweenBullets));
-                        break;
-                    default:
-                        break;
-                }
+                
+                transBullet.position += (quat * Vector3.up * ((k + 1) * m_distanceBetweenBullets));
+                //XY
+                //transBullet.position += (quat * Vector3.forward * ((k + 1) * m_distanceBetweenBullets));
             }
         }
 
@@ -78,18 +61,9 @@ public sealed class UbhTentacleBullet : MonoBehaviour
     /// </summary>
     public void UpdateRotate()
     {
-        switch (m_axisMove)
-        {
-            case UbhUtil.AXIS.X_AND_Y:
-                m_rootTransform.AddEulerAnglesZ(m_rotationSpeed * UbhTimer.instance.deltaTime);
-                break;
+        m_rootTransform.AddEulerAnglesZ(m_rotationSpeed * UbhTimer.instance.deltaTime);
+        //XY
+        //m_rootTransform.AddEulerAnglesY(-m_rotationSpeed * UbhTimer.instance.deltaTime);
 
-            case UbhUtil.AXIS.X_AND_Z:
-                m_rootTransform.AddEulerAnglesY(-m_rotationSpeed * UbhTimer.instance.deltaTime);
-                break;
-
-            default:
-                break;
-        }
     }
 }

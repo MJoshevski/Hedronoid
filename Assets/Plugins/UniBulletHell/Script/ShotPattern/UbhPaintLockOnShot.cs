@@ -41,7 +41,7 @@ public class UbhPaintLockOnShot : UbhPaintShot
         }
         if (m_targetTransform != null)
         {
-            m_paintCenterAngle = UbhUtil.GetAngleFromTwoPosition(transform, m_targetTransform, shotCtrl.m_axisMove);
+            //m_paintCenterAngle = UbhUtil.GetAngleFromTwoPosition(transform, m_targetTransform);
         }
     }
 }

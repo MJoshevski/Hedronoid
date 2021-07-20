@@ -55,7 +55,7 @@ public class UbhWavingNwayLockOnShot : UbhWavingNwayShot
         }
         if (m_targetTransform != null)
         {
-            m_waveCenterAngle = UbhUtil.GetAngleFromTwoPosition(transform, m_targetTransform, shotCtrl.m_axisMove);
+            //m_waveCenterAngle = UbhUtil.GetAngleFromTwoPosition(transform, m_targetTransform);
         }
     }
 }

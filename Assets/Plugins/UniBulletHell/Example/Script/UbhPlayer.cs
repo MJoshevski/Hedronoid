@@ -13,9 +13,6 @@ public class UbhPlayer : UbhMonoBehaviour
     private readonly Vector2 VIEW_PORT_LEFT_BOTTOM = UbhUtil.VECTOR2_ZERO;
     private readonly Vector2 VIEW_PORT_RIGHT_TOP = UbhUtil.VECTOR2_ONE;
 
-    [SerializeField, FormerlySerializedAs("_UseAxis")]
-    private UbhUtil.AXIS m_useAxis = UbhUtil.AXIS.X_AND_Y;
-
     private UbhSpaceship m_spaceship;
     private UbhGameManager m_manager;
     private Transform m_backgroundTransform;
@@ -101,24 +98,19 @@ public class UbhPlayer : UbhMonoBehaviour
         }
 
         Vector2 pos = transform.position;
-        if (m_useAxis == UbhUtil.AXIS.X_AND_Z)
-        {
-            pos.y = transform.position.z;
-        }
+
+        //XZ
+        pos.y = transform.position.z;
 
         pos += direction * m_spaceship.m_speed * UbhTimer.instance.deltaTime;
 
         pos.x = Mathf.Clamp(pos.x, min.x, max.x);
         pos.y = Mathf.Clamp(pos.y, min.y, max.y);
 
-        if (m_useAxis == UbhUtil.AXIS.X_AND_Z)
-        {
-            transform.SetPosition(pos.x, transform.position.y, pos.y);
-        }
-        else
-        {
-            transform.position = pos;
-        }
+        //XZ
+        transform.SetPosition(pos.x, transform.position.y, pos.y);
+        //XY
+        //transform.position = pos;
     }
 
     private void Damage()

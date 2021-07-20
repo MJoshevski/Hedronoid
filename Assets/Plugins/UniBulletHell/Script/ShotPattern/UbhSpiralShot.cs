@@ -65,7 +65,7 @@ public class UbhSpiralShot : UbhBaseShot
 
         float angle = m_startAngle + (m_shiftAngle * m_nowIndex);
 
-        ShotBullet(bullet, m_bulletSpeed, angle);
+        ShotBullet(bullet, m_bulletSpeed, null, angle);
         FiredShot();
 
         m_nowIndex++;

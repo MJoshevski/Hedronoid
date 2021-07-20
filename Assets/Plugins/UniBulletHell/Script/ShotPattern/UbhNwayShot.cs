@@ -59,24 +59,39 @@ public class UbhNwayShot : UbhBaseShot
             }
         }
 
-        for (int i = 0; i < m_wayNum; i++)
+        for (int j = 0; j < 5; j++)
         {
-            UbhBullet bullet = GetBullet(transform.position);
-            if (bullet == null)
+            Vector3 pos = new Vector3(
+                transform.position.x,
+                transform.position.y /*+ j*/,
+                transform.position.z);
+
+            Vector3 rot = new Vector3(
+                transform.rotation.eulerAngles.x + j*10,
+                transform.rotation.eulerAngles.y,
+                transform.rotation.eulerAngles.z);
+
+            for (int i = 0; i < m_wayNum; i++)
             {
-                break;
-            }
+                UbhBullet bullet = GetBullet(pos);
+                bullet.transform.SetPositionAndRotation(pos, Quaternion.Euler(rot));
 
-            float baseAngle = m_wayNum % 2 == 0 ? m_centerAngle - (m_betweenAngle / 2f) : m_centerAngle;
+                if (bullet == null)
+                {
+                    break;
+                }
 
-            float angle = UbhUtil.GetShiftedAngle(i, baseAngle, m_betweenAngle);
+                float baseAngle = m_wayNum % 2 == 0 ? m_centerAngle - (m_betweenAngle / 2f) : m_centerAngle;
 
-            ShotBullet(bullet, m_bulletSpeed, angle);
+                float angle = UbhUtil.GetShiftedAngle(i, baseAngle, m_betweenAngle);
 
-            m_nowIndex++;
-            if (m_nowIndex >= m_bulletNum)
-            {
-                break;
+                ShotBullet(bullet, m_bulletSpeed, null, angle);
+
+                m_nowIndex++;
+                if (m_nowIndex >= m_bulletNum)
+                {
+                    break;
+                }
             }
         }
 

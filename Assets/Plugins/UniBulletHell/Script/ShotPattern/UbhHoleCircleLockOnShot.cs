@@ -41,7 +41,7 @@ public class UbhHoleCircleLockOnShot : UbhHoleCircleShot
         }
         if (m_targetTransform != null)
         {
-            m_holeCenterAngle = UbhUtil.GetAngleFromTwoPosition(transform, m_targetTransform, shotCtrl.m_axisMove);
+            //m_holeCenterAngle = UbhUtil.GetAngleFromTwoPosition(transform, m_targetTransform);
         }
     }
 }

@@ -70,7 +70,7 @@ public class UbhSpiralMultiShot : UbhBaseShot
 
             float angle = m_startAngle + (spiralWayShiftAngle * i) + (m_shiftAngle * Mathf.Floor(m_nowIndex / m_spiralWayNum));
 
-            ShotBullet(bullet, m_bulletSpeed, angle);
+            ShotBullet(bullet, m_bulletSpeed, null, angle);
 
             m_nowIndex++;
             if (m_nowIndex >= m_bulletNum)

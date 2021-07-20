@@ -147,7 +147,7 @@ public abstract class UbhBaseShot : UbhMonoBehaviour
     /// <summary>
     /// Shot UbhBullet object.
     /// </summary>
-    protected void ShotBullet(UbhBullet bullet, float speed, float angle,
+    protected void ShotBullet(UbhBullet bullet, float speed, Transform target, float angle,
                                bool homing = false, Transform homingTarget = null, float homingAngleSpeed = 0f,
                                bool sinWave = false, float sinWaveSpeed = 0f, float sinWaveRangeSize = 0f, bool sinWaveInverse = false)
     {
@@ -156,12 +156,11 @@ public abstract class UbhBaseShot : UbhMonoBehaviour
             return;
         }
         bullet.Shot(this,
-                    speed, angle, m_accelerationSpeed, m_accelerationTurn,
+                    speed, target, angle, m_accelerationSpeed, m_accelerationTurn,
                     homing, homingTarget, homingAngleSpeed,
                     sinWave, sinWaveSpeed, sinWaveRangeSize, sinWaveInverse,
                     m_usePauseAndResume, m_pauseTime, m_resumeTime,
-                    m_useAutoRelease, m_autoReleaseTime,
-                    m_shotCtrl.m_axisMove, m_shotCtrl.m_inheritAngle,
+                    m_useAutoRelease, m_autoReleaseTime, m_shotCtrl.m_inheritAngle,
                     m_useMaxSpeed, m_maxSpeed, m_useMinSpeed, m_minSpeed);
     }
 }

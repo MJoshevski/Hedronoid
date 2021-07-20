@@ -31,9 +31,6 @@ public sealed class UbhShotCtrl : UbhMonoBehaviour
         public float m_afterDelay;
     }
 
-    // "Axis on bullet move."
-    [FormerlySerializedAs("_AxisMove")]
-    public UbhUtil.AXIS m_axisMove = UbhUtil.AXIS.X_AND_Y;
     // "Flag that inherits angle of UbhShotCtrl."
     public bool m_inheritAngle = false;
     // "This flag starts a shot routine at same time as instantiate."

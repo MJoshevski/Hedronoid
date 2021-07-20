@@ -72,7 +72,7 @@ public class UbhSpreadNwayShot : UbhBaseShot
 
             float angle = UbhUtil.GetShiftedAngle(wayIndex, baseAngle, m_betweenAngle);
 
-            ShotBullet(bullet, bulletSpeed, angle);
+            ShotBullet(bullet, bulletSpeed, null, angle);
 
             wayIndex++;
         }

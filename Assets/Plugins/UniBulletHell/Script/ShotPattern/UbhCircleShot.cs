@@ -41,7 +41,7 @@ public class UbhCircleShot : UbhBaseShot
 
             float angle = shiftAngle * i;
 
-            ShotBullet(bullet, m_bulletSpeed, angle);
+            ShotBullet(bullet, m_bulletSpeed, null, angle);
         }
 
         FiredShot();
