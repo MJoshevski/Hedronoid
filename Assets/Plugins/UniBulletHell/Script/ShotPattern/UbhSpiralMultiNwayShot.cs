@@ -15,6 +15,18 @@ public class UbhSpiralMultiNwayShot : UbhBaseShot
     // "Set a number of shot way."
     [FormerlySerializedAs("_WayNum")]
     public int m_wayNum = 5;
+    // "Set a number of shot row."
+    [FormerlySerializedAs("_RowNum")]
+    public int m_rowNum = 5;
+    // "Set a angle between bullet rows. (0 to 360)"
+    [Range(0f, 360f), FormerlySerializedAs("_BetweenRowAngle")]
+    public float m_betweenRowAngle = 10f;
+    // "Set distance between bullet rows. (0 to 360)"
+    [FormerlySerializedAs("_RowDistance")]
+    public float m_rowDistance = 0f;
+    // "Set a center angle for the row alignment. (0 to 360)"
+    [Range(0f, 360f), FormerlySerializedAs("_StartAngle")]
+    public float m_centerRowAngle = 180f;
     // "Set a starting angle of shot. (0 to 360)"
     [Range(0f, 360f), FormerlySerializedAs("_StartAngle")]
     public float m_startAngle = 180f;
@@ -65,51 +77,71 @@ public class UbhSpiralMultiNwayShot : UbhBaseShot
             }
         }
 
-        float spiralWayShiftAngle = 360f / m_spiralWayNum;
-
-        for (int i = 0; i < m_spiralWayNum; i++)
+        for (int j = 0; j < m_rowNum; j++)
         {
-            for (int k = 0; k < m_wayNum; k++)
+            float baseAngleRow = m_rowNum % 2 == 0 ? m_centerRowAngle - (m_betweenRowAngle / 2f) : m_centerRowAngle;
+
+            float angleRow = UbhUtil.GetShiftedAngle(j, baseAngleRow, m_betweenRowAngle);
+
+            Vector3 pos = new Vector3(
+                transform.position.x,
+                transform.position.y + m_rowDistance,
+                transform.position.z);
+
+            Vector3 rot = new Vector3(
+                transform.rotation.eulerAngles.x + angleRow,
+                transform.rotation.eulerAngles.y,
+                transform.rotation.eulerAngles.z);
+
+
+            float spiralWayShiftAngle = 360f / m_spiralWayNum;
+
+            for (int i = 0; i < m_spiralWayNum; i++)
             {
-                UbhBullet bullet = GetBullet(transform.position);
-                if (bullet == null)
+                for (int k = 0; k < m_wayNum; k++)
                 {
-                    break;
+                    UbhBullet bullet = GetBullet(pos);
+                    bullet.transform.SetPositionAndRotation(pos, Quaternion.Euler(rot));
+
+                    if (bullet == null)
+                    {
+                        break;
+                    }
+
+                    float centerAngle = m_startAngle + (spiralWayShiftAngle * i) + (m_shiftAngle * Mathf.Floor(m_nowIndex / m_wayNum));
+
+                    float baseAngle = m_wayNum % 2 == 0 ? centerAngle - (m_betweenAngle / 2f) : centerAngle;
+
+                    float angle = UbhUtil.GetShiftedAngle(k, baseAngle, m_betweenAngle);
+
+                    ShotBullet(bullet, m_bulletSpeed, null, angle);
+
+                    m_nowIndex++;
+                    if (m_nowIndex >= m_bulletNum)
+                    {
+                        break;
+                    }
                 }
 
-                float centerAngle = m_startAngle + (spiralWayShiftAngle * i) + (m_shiftAngle * Mathf.Floor(m_nowIndex / m_wayNum));
-
-                float baseAngle = m_wayNum % 2 == 0 ? centerAngle - (m_betweenAngle / 2f) : centerAngle;
-
-                float angle = UbhUtil.GetShiftedAngle(k, baseAngle, m_betweenAngle);
-
-                ShotBullet(bullet, m_bulletSpeed, null, angle);
-
-                m_nowIndex++;
                 if (m_nowIndex >= m_bulletNum)
                 {
                     break;
                 }
             }
 
+            FiredShot();
+
             if (m_nowIndex >= m_bulletNum)
             {
-                break;
+                FinishedShot();
             }
-        }
-
-        FiredShot();
-
-        if (m_nowIndex >= m_bulletNum)
-        {
-            FinishedShot();
-        }
-        else
-        {
-            m_delayTimer = m_nextLineDelay;
-            if (m_delayTimer <= 0f)
+            else
             {
-                Update();
+                m_delayTimer = m_nextLineDelay;
+                if (m_delayTimer <= 0f)
+                {
+                    Update();
+                }
             }
         }
     }

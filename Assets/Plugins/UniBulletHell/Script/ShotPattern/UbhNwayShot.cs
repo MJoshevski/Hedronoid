@@ -21,6 +21,9 @@ public class UbhNwayShot : UbhBaseShot
     // "Set a angle between bullet and next bullet. (0 to 360)"
     [Range(0f, 360f), FormerlySerializedAs("_BetweenAngle")]
     public float m_betweenAngle = 10f;
+    // "Set distance between bullet rows. (0 to 360)"
+    [FormerlySerializedAs("_RowDistance")]
+    public float m_rowDistance = 0f;
     // "Set a delay time between shot and next line shot. (sec)"
     [FormerlySerializedAs("_NextLineDelay")]
     public float m_nextLineDelay = 0.1f;
@@ -68,6 +71,11 @@ public class UbhNwayShot : UbhBaseShot
 
             float angleRow = UbhUtil.GetShiftedAngle(j, baseAngleRow, m_betweenAngle);
 
+            Vector3 pos = new Vector3(
+                transform.position.x,
+                transform.position.y + m_rowDistance,
+                transform.position.z);
+
             Vector3 rot = new Vector3(
                 transform.rotation.eulerAngles.x + angleRow,
                 transform.rotation.eulerAngles.y,
@@ -75,8 +83,8 @@ public class UbhNwayShot : UbhBaseShot
 
             for (int i = 0; i < m_wayNum; i++)
             {
-                UbhBullet bullet = GetBullet(transform.position);
-                bullet.transform.SetPositionAndRotation(transform.position, Quaternion.Euler(rot));
+                UbhBullet bullet = GetBullet(pos);
+                bullet.transform.SetPositionAndRotation(pos, Quaternion.Euler(rot));
 
                 if (bullet == null)
                 {
