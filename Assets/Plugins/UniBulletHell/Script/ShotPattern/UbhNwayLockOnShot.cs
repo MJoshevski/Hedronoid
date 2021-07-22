@@ -20,8 +20,8 @@ public class UbhNwayLockOnShot : UbhNwayShot
     // "Transform of lock on target."
     // "It is not necessary if you want to specify target in tag."
     // "Overwrite CenterAngle in direction of target to Transform.position."
-    [FormerlySerializedAs("_TargetTransform")]
-    public Transform m_targetTransform;
+    //[FormerlySerializedAs("_TargetTransform")]
+    //public Transform m_targetTransform;
     // "Always aim to target."
     [FormerlySerializedAs("_Aiming")]
     public bool m_aiming;

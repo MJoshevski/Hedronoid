@@ -35,6 +35,18 @@ public class UbhRandomSpiralMultiShot : UbhBaseShot
     // "Set a maximum delay time between bullet and next bullet. (sec)"
     [FormerlySerializedAs("_RandomDelayMax")]
     public float m_randomDelayMax = 0.1f;
+    // "Set a number of shot row."
+    [FormerlySerializedAs("_RowNum")]
+    public int m_rowNum = 5;
+    // "Set a angle between bullet rows. (0 to 360)"
+    [Range(0f, 360f), FormerlySerializedAs("_BetweenRowAngle")]
+    public float m_betweenRowAngle = 10f;
+    // "Set distance between bullet rows. (0 to 360)"
+    [FormerlySerializedAs("_RowDistance")]
+    public float m_rowDistance = 0f;
+    // "Set a center angle for the row alignment. (0 to 360)"
+    [Range(0f, 360f), FormerlySerializedAs("_StartAngle")]
+    public float m_centerRowAngle = 180f;
 
     private int m_nowIndex;
     private float m_delayTimer;
@@ -73,44 +85,63 @@ public class UbhRandomSpiralMultiShot : UbhBaseShot
             }
         }
 
-        float spiralWayShiftAngle = 360f / m_spiralWayNum;
-
-        for (int i = 0; i < m_spiralWayNum; i++)
+        for (int j = 0; j < m_rowNum; j++)
         {
-            UbhBullet bullet = GetBullet(transform.position);
-            if (bullet == null)
+            float baseAngleRow = m_rowNum % 2 == 0 ? m_centerRowAngle - (m_betweenRowAngle / 2f) : m_centerRowAngle;
+
+            float angleRow = UbhUtil.GetShiftedAngle(j, baseAngleRow, m_betweenRowAngle);
+
+            Vector3 pos = new Vector3(
+                transform.position.x,
+                transform.position.y + m_rowDistance,
+                transform.position.z);
+
+            Vector3 rot = new Vector3(
+                transform.rotation.eulerAngles.x + angleRow,
+                transform.rotation.eulerAngles.y,
+                transform.rotation.eulerAngles.z);
+
+            float spiralWayShiftAngle = 360f / m_spiralWayNum;
+
+            for (int i = 0; i < m_spiralWayNum; i++)
             {
-                break;
+                UbhBullet bullet = GetBullet(pos);
+                bullet.transform.SetPositionAndRotation(pos, Quaternion.Euler(rot));
+
+                if (bullet == null)
+                {
+                    break;
+                }
+
+                float bulletSpeed = Random.Range(m_randomSpeedMin, m_randomSpeedMax);
+
+                float centerAngle = m_startAngle + (spiralWayShiftAngle * i) + (m_shiftAngle * Mathf.Floor(m_nowIndex / m_spiralWayNum));
+                float minAngle = centerAngle - (m_randomRangeSize / 2f);
+                float maxAngle = centerAngle + (m_randomRangeSize / 2f);
+                float angle = Random.Range(minAngle, maxAngle);
+
+                ShotBullet(bullet, bulletSpeed, null, angle);
+
+                m_nowIndex++;
+                if (m_nowIndex >= m_bulletNum)
+                {
+                    break;
+                }
             }
 
-            float bulletSpeed = Random.Range(m_randomSpeedMin, m_randomSpeedMax);
+            FiredShot();
 
-            float centerAngle = m_startAngle + (spiralWayShiftAngle * i) + (m_shiftAngle * Mathf.Floor(m_nowIndex / m_spiralWayNum));
-            float minAngle = centerAngle - (m_randomRangeSize / 2f);
-            float maxAngle = centerAngle + (m_randomRangeSize / 2f);
-            float angle = Random.Range(minAngle, maxAngle);
-
-            //ShotBullet(bullet, bulletSpeed, angle, angle);
-
-            m_nowIndex++;
             if (m_nowIndex >= m_bulletNum)
             {
-                break;
+                FinishedShot();
             }
-        }
-
-        FiredShot();
-
-        if (m_nowIndex >= m_bulletNum)
-        {
-            FinishedShot();
-        }
-        else
-        {
-            m_delayTimer = Random.Range(m_randomDelayMin, m_randomDelayMax);
-            if (m_delayTimer <= 0f)
+            else
             {
-                Update();
+                m_delayTimer = Random.Range(m_randomDelayMin, m_randomDelayMax);
+                if (m_delayTimer <= 0f)
+                {
+                    Update();
+                }
             }
         }
     }

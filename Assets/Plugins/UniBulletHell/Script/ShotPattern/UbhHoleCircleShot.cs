@@ -14,6 +14,18 @@ public class UbhHoleCircleShot : UbhBaseShot
     // "Set a size of hole. (0 to 360)"
     [Range(0f, 360f), FormerlySerializedAs("_HoleSize")]
     public float m_holeSize = 20f;
+    // "Set a number of shot row."
+    [FormerlySerializedAs("_RowNum")]
+    public int m_rowNum = 5;
+    // "Set a angle between bullet rows. (0 to 360)"
+    [Range(0f, 360f), FormerlySerializedAs("_BetweenRowAngle")]
+    public float m_betweenRowAngle = 10f;
+    // "Set distance between bullet rows. (0 to 360)"
+    [FormerlySerializedAs("_RowDistance")]
+    public float m_rowDistance = 0f;
+    // "Set a center angle for the row alignment. (0 to 360)"
+    [Range(0f, 360f), FormerlySerializedAs("_StartAngle")]
+    public float m_centerRowAngle = 180f;
 
     public override void Shot()
     {
@@ -38,31 +50,50 @@ public class UbhHoleCircleShot : UbhBaseShot
             return;
         }
 
-        m_holeCenterAngle = UbhUtil.GetNormalizedAngle(m_holeCenterAngle);
-        float startAngle = m_holeCenterAngle - (m_holeSize / 2f);
-        float endAngle = m_holeCenterAngle + (m_holeSize / 2f);
-
-        float shiftAngle = 360f / (float)m_bulletNum;
-
-        for (int i = 0; i < m_bulletNum; i++)
+        for (int j = 0; j < m_rowNum; j++)
         {
-            float angle = shiftAngle * i;
-            if (startAngle <= angle && angle <= endAngle)
+            float baseAngleRow = m_rowNum % 2 == 0 ? m_centerRowAngle - (m_betweenRowAngle / 2f) : m_centerRowAngle;
+
+            float angleRow = UbhUtil.GetShiftedAngle(j, baseAngleRow, m_betweenRowAngle);
+
+            Vector3 pos = new Vector3(
+                transform.position.x,
+                transform.position.y + m_rowDistance,
+                transform.position.z);
+
+            Vector3 rot = new Vector3(
+                transform.rotation.eulerAngles.x + angleRow,
+                transform.rotation.eulerAngles.y,
+                transform.rotation.eulerAngles.z);
+
+            m_holeCenterAngle = UbhUtil.GetNormalizedAngle(m_holeCenterAngle);
+            float startAngle = m_holeCenterAngle - (m_holeSize / 2f);
+            float endAngle = m_holeCenterAngle + (m_holeSize / 2f);
+
+            float shiftAngle = 360f / (float)m_bulletNum;
+
+            for (int i = 0; i < m_bulletNum; i++)
             {
-                continue;
+                float angle = shiftAngle * i;
+                if (startAngle <= angle && angle <= endAngle)
+                {
+                    continue;
+                }
+
+                UbhBullet bullet = GetBullet(pos);
+                bullet.transform.SetPositionAndRotation(pos, Quaternion.Euler(rot));
+
+                if (bullet == null)
+                {
+                    break;
+                }
+
+                ShotBullet(bullet, m_bulletSpeed, null, angle);
             }
 
-            UbhBullet bullet = GetBullet(transform.position);
-            if (bullet == null)
-            {
-                break;
-            }
+            FiredShot();
 
-            ShotBullet(bullet, m_bulletSpeed, null, angle);
+            FinishedShot();
         }
-
-        FiredShot();
-
-        FinishedShot();
     }
 }

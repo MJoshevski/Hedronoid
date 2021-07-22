@@ -1,10 +1,11 @@
-﻿using UnityEngine;
+﻿using Hedronoid;
+using UnityEngine;
 
 /// <summary>
 /// Ubh bullet.
 /// </summary>
 [DisallowMultipleComponent]
-public class UbhBullet : UbhMonoBehaviour
+public class UbhBullet : HNDMonoBehaviour
 {
     private Transform m_transformCache;
     private UbhBaseShot m_parentBaseShot;
@@ -141,7 +142,14 @@ public class UbhBullet : UbhMonoBehaviour
             m_transformCache.SetEulerAnglesY(m_baseAngle - m_angle);
         }
         else
-            m_transformCache.LookAt(target);
+        {
+            //float m_XYAngle = UbhUtil.GetYangleFromTwoPosition(m_transformCache, target);
+            float m_XZAngle = UbhUtil.GetZangleFromTwoPosition(m_transformCache, target);
+            m_transformCache.SetEulerAnglesZ(m_baseAngle + m_XZAngle);
+            //m_transformCache.SetEulerAnglesY(m_baseAngle - m_XYAngle);
+
+            //m_transformCache.LookAt(target);
+        }
 
         m_selfFrameCnt = 0f;
         m_selfTimeCount = 0f;

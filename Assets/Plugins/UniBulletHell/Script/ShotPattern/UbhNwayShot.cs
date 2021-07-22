@@ -27,6 +27,8 @@ public class UbhNwayShot : UbhBaseShot
     // "Set a delay time between shot and next line shot. (sec)"
     [FormerlySerializedAs("_NextLineDelay")]
     public float m_nextLineDelay = 0.1f;
+    [FormerlySerializedAs("_TargetTransform")]
+    public Transform m_targetTransform = null;
 
     private int m_nowIndex;
     private float m_delayTimer;
@@ -95,7 +97,7 @@ public class UbhNwayShot : UbhBaseShot
 
                 float angle = UbhUtil.GetShiftedAngle(i, baseAngle, m_betweenAngle);
 
-                ShotBullet(bullet, m_bulletSpeed, null, angle);
+                ShotBullet(bullet, m_bulletSpeed, m_targetTransform, angle);
 
                 m_nowIndex++;
                 if (m_nowIndex >= m_bulletNum)

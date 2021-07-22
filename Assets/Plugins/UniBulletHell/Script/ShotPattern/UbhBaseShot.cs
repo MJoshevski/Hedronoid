@@ -1,4 +1,5 @@
-﻿using System.Collections;
+﻿using Hedronoid;
+using System.Collections;
 using UnityEngine;
 using UnityEngine.Events;
 using UnityEngine.Serialization;
@@ -7,7 +8,7 @@ using UnityEngine.Serialization;
 /// Ubh base shot.
 /// Each shot pattern classes inherit this class.
 /// </summary>
-public abstract class UbhBaseShot : UbhMonoBehaviour
+public abstract class UbhBaseShot : HNDMonoBehaviour
 {
     [Header("===== Common Settings =====")]
     // "Set a bullet prefab for the shot. (ex. sprite or model)"
@@ -88,8 +89,10 @@ public abstract class UbhBaseShot : UbhMonoBehaviour
     /// Call from override OnDisable method in inheriting classes.
     /// Example : protected override void OnDisable () { base.OnDisable (); }
     /// </summary>
-    protected virtual void OnDisable()
+    protected override void OnDisable()
     {
+        base.OnDisable();
+
         m_shooting = false;
     }
 

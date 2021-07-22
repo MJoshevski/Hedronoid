@@ -59,7 +59,6 @@ public class UbhCircleShot : UbhBaseShot
                 transform.rotation.eulerAngles.y,
                 transform.rotation.eulerAngles.z);
 
-
             float shiftAngle = 360f / (float)m_bulletNum;
 
             for (int i = 0; i < m_bulletNum; i++)

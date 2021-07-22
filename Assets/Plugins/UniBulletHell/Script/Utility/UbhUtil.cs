@@ -129,6 +129,23 @@ public static class UbhUtil
         return angle;
     }
 
+    /// <summary>
+    /// Get X angle from two transforms position.
+    /// </summary>
+    public static float GetXangleFromTwoPosition(Transform fromTrans, Transform toTrans)
+    {
+        if (fromTrans == null || toTrans == null)
+        {
+            return 0f;
+        }
+        float yDistance = toTrans.position.y - fromTrans.position.y;
+        float zDistance = toTrans.position.z - fromTrans.position.z;
+        float angle = (Mathf.Atan2(zDistance, yDistance) * Mathf.Rad2Deg) - 90f;
+        angle = GetNormalizedAngle(angle);
+
+        return angle;
+    }
+
     public static float[] GetZYangleFromTwoPosition(Transform fromTrans, Transform toTrans)
     {
         float[] angles = new float[2];
