@@ -2820,6 +2820,10 @@ PrefabInstance:
       propertyPath: m_bulletPrefab
       value: 
       objectReference: {fileID: 100000, guid: 1109e62242928964fa089052e6107caf, type: 3}
+    - target: {fileID: 11400000, guid: 8bc2b1ef6e9ee4746973c725c3da77bf, type: 3}
+      propertyPath: m_betweenAngle
+      value: 2
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 8bc2b1ef6e9ee4746973c725c3da77bf, type: 3}
 --- !u!4 &572978395 stripped
@@ -4283,8 +4287,8 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   m_goShotCtrlList:
-  - {fileID: 773651990}
-  - {fileID: 2075298561}
+  - {fileID: 1570047684}
+  - {fileID: 1926735921}
   - {fileID: 577413785}
   - {fileID: 1304670118}
   - {fileID: 1375651452}
