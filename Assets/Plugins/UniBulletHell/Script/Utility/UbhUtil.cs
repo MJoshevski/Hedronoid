@@ -145,13 +145,4 @@ public static class UbhUtil
 
         return angle;
     }
-
-    public static float[] GetZYangleFromTwoPosition(Transform fromTrans, Transform toTrans)
-    {
-        float[] angles = new float[2];
-        angles[0] = GetZangleFromTwoPosition(fromTrans, toTrans);
-        angles[1] = GetYangleFromTwoPosition(fromTrans, toTrans);
-
-        return angles;
-    }
 }

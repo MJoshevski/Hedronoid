@@ -107,7 +107,7 @@ public class UbhSpiralNwayShot : UbhBaseShot
 
                 float angle = UbhUtil.GetShiftedAngle(i, baseAngle, m_betweenAngle);
 
-                ShotBullet(bullet, m_bulletSpeed, null, angle);
+                //ShotBullet(bullet, m_bulletSpeed, null, angle);
 
                 m_nowIndex++;
                 if (m_nowIndex >= m_bulletNum)

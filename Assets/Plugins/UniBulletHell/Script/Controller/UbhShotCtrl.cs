@@ -1,4 +1,5 @@
-﻿using System;
+﻿using Hedronoid;
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
@@ -9,7 +10,7 @@ using UnityEngine.Serialization;
 /// Ubh shot ctrl.
 /// </summary>
 [AddComponentMenu("UniBulletHell/Controller/Shot Controller")]
-public sealed class UbhShotCtrl : UbhMonoBehaviour
+public sealed class UbhShotCtrl : HNDMonoBehaviour
 {
     private enum UpdateStep
     {

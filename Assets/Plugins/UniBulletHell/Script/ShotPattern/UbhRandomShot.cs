@@ -139,7 +139,7 @@ public class UbhRandomShot : UbhBaseShot
                 angle = Random.Range(minAngle, maxAngle);
             }
 
-            ShotBullet(bullet, bulletSpeed, null, angle);
+            //ShotBullet(bullet, bulletSpeed, null, angle);
             FiredShot();
 
             m_numList.RemoveAt(index);

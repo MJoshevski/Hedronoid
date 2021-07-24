@@ -135,7 +135,7 @@ public class UbhPaintShot : UbhBaseShot
 
                     float angle = m_paintStartAngle + (m_betweenAngle * i);
 
-                    ShotBullet(bullet, m_bulletSpeed, null, angle);
+                    //ShotBullet(bullet, m_bulletSpeed, null, angle);
                 }
             }
 

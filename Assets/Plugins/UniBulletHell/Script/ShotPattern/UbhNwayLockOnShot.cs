@@ -55,7 +55,8 @@ public class UbhNwayLockOnShot : UbhNwayShot
         }
         if (m_targetTransform != null)
         {
-            //m_centerAngle = UbhUtil.GetAngleFromTwoPosition(transform, m_targetTransform);
+            m_horizontalAngle = UbhUtil.GetYangleFromTwoPosition(transform, m_targetTransform);
+            m_verticalAngle = UbhUtil.GetXangleFromTwoPosition(transform, m_targetTransform);
         }
     }
 }

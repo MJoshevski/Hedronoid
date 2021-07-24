@@ -114,7 +114,7 @@ public class UbhRandomSpiralShot : UbhBaseShot
             float maxAngle = centerAngle + (m_randomRangeSize / 2f);
             float angle = Random.Range(minAngle, maxAngle);
 
-            ShotBullet(bullet, bulletSpeed, null, angle);
+            //ShotBullet(bullet, bulletSpeed, null, angle);
             FiredShot();
 
             m_nowIndex++;

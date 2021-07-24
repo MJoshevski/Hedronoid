@@ -88,7 +88,7 @@ public class UbhLinearShot : UbhBaseShot
             return;
         }
 
-        ShotBullet(bullet, m_bulletSpeed, m_targetTransform, 0f);
+        //ShotBullet(bullet, m_bulletSpeed, m_targetTransform, 0f);
         FiredShot();
 
         m_nowIndex++;
