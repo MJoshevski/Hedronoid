@@ -23,6 +23,9 @@ public class UbhLinearLockOnShot : UbhLinearShot
     // "Always aim to target."
     [FormerlySerializedAs("_Aiming")]
     public bool m_aiming;
+    // "Set a angle of shot. (0 to 360)"
+    [FormerlySerializedAs("_TargetTransform")]
+    public Transform m_targetTransform;
 
     /// <summary>
     /// is lock on shot flag.
@@ -50,6 +53,13 @@ public class UbhLinearLockOnShot : UbhLinearShot
         if (m_targetTransform == null && m_setTargetFromTag)
         {
             m_targetTransform = UbhUtil.GetTransformFromTagName(m_targetTagName, m_randomSelectTagTarget);
+        }
+
+        if (m_targetTransform != null)
+        {
+            Quaternion rot = Quaternion.LookRotation((m_targetTransform.position - transform.position), transform.up);
+            m_verticalAngle = rot.eulerAngles.x;
+            m_horizontalAngle = rot.eulerAngles.y;
         }
     }
 }

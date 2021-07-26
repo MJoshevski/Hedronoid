@@ -55,7 +55,8 @@ public class UbhRandomLockOnShot : UbhRandomShot
         }
         if (m_targetTransform != null)
         {
-            //m_randomCenterAngle = UbhUtil.GetAngleFromTwoPosition(transform, m_targetTransform);
+            m_horizontalAngle = UbhUtil.GetYangleFromTwoPosition(transform, m_targetTransform);
+            m_verticalAngle = UbhUtil.GetXangleFromTwoPosition(transform, m_targetTransform);
         }
     }
 }

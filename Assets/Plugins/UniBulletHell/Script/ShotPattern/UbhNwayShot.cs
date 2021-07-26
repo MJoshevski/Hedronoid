@@ -16,10 +16,10 @@ public class UbhNwayShot : UbhBaseShot
     [FormerlySerializedAs("_RowNum")]
     public int m_rowNum = 5;
     // "Set a center angle of rows. (0 to 360)"
-    [Range(0f, 360f), FormerlySerializedAs("_CenterAngle")]
+    [Range(0f, 360f), FormerlySerializedAs("_VerticalAngle")]
     public float m_verticalAngle = 180f;
     // "Set a center angle of shot. (0 to 360)"
-    [Range(0f, 360f), FormerlySerializedAs("_CenterAngle")]
+    [Range(0f, 360f), FormerlySerializedAs("_HorizontalAngle")]
     public float m_horizontalAngle = 180f;
     // "Set a angle between bullet rows. (0 to 360)"
     [Range(0f, 360f), FormerlySerializedAs("_BetweenAngle")]
@@ -89,7 +89,7 @@ public class UbhNwayShot : UbhBaseShot
 
                 float angle = UbhUtil.GetShiftedAngle(i, baseAngle, m_betweenAngle);
 
-                ShotBullet(bullet, m_bulletSpeed, null, angle, angleRow);
+                ShotBullet(bullet, m_bulletSpeed, angle, angleRow);
 
                 m_nowIndex++;
                 if (m_nowIndex >= m_bulletNum)

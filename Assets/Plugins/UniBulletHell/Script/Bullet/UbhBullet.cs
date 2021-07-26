@@ -10,7 +10,6 @@ public class UbhBullet : HNDMonoBehaviour
     private Transform m_transformCache;
     private UbhBaseShot m_parentBaseShot;
     private float m_speed;
-    private Transform m_target;
     private float m_angleHorizontal;
     private float m_angleVertical;
     private float m_accelSpeed;
@@ -32,7 +31,7 @@ public class UbhBullet : HNDMonoBehaviour
     private bool m_useMinSpeed;
     private float m_minSpeed;
 
-    private float m_baseAngle;
+    private Vector2 m_baseAngles;
     private float m_selfFrameCnt;
     private float m_selfTimeCount;
 
@@ -98,7 +97,7 @@ public class UbhBullet : HNDMonoBehaviour
     /// Bullet Shot
     /// </summary>
     public void Shot(UbhBaseShot parentBaseShot,
-                     float speed, Transform target, float angle, float angle2, float accelSpeed, float accelTurn,
+                     float speed, float angleHorizontal, float angleVertical, float accelSpeed, float accelTurn,
                      bool homing, Transform homingTarget, float homingAngleSpeed,
                      bool sinWave, float sinWaveSpeed, float sinWaveRangeSize, bool sinWaveInverse,
                      bool pauseAndResume, float pauseTime, float resumeTime,
@@ -115,9 +114,8 @@ public class UbhBullet : HNDMonoBehaviour
         m_parentBaseShot = parentBaseShot;
 
         m_speed = speed;
-        m_target = target;
-        m_angleHorizontal = angle;
-        m_angleVertical = angle2;
+        m_angleHorizontal = angleHorizontal;
+        m_angleVertical = angleVertical;
         m_accelSpeed = accelSpeed;
         m_accelTurn = accelTurn;
         m_homing = homing;
@@ -137,14 +135,17 @@ public class UbhBullet : HNDMonoBehaviour
         m_useMinSpeed = useMinSpeed;
         m_minSpeed = minSpeed;
 
-        m_baseAngle = 0f;
+        m_baseAngles = Vector2.zero;
         if (inheritAngle && m_parentBaseShot.lockOnShot == false)
         {
-            m_baseAngle = m_parentBaseShot.shotCtrl.transform.eulerAngles.y;
+            m_baseAngles.x = m_parentBaseShot.shotCtrl.transform.eulerAngles.x;
+            m_baseAngles.y = m_parentBaseShot.shotCtrl.transform.eulerAngles.y;
         }
 
-        m_transformCache.SetEulerAnglesX(m_baseAngle + m_angleVertical);
-        m_transformCache.SetEulerAnglesY(m_baseAngle - m_angleHorizontal);
+        m_transformCache.SetEulerAngles(
+            m_baseAngles.x + m_angleVertical,
+            m_baseAngles.y + m_angleHorizontal,
+            0f);
 
         m_selfFrameCnt = 0f;
         m_selfTimeCount = 0f;
@@ -209,7 +210,7 @@ public class UbhBullet : HNDMonoBehaviour
                 float waveAngleXZ = m_angleHorizontal + (m_sinWaveRangeSize / 2f * (Mathf.Sin(m_selfFrameCnt * m_sinWaveSpeed / 100f) * (m_sinWaveInverse ? -1f : 1f)));
 
                 newRotation = Quaternion.Euler(
-                    myAngles.x, m_baseAngle - waveAngleXZ, myAngles.z);
+                    myAngles.x, m_baseAngles.y - waveAngleXZ, myAngles.z);
 
             }
             m_selfFrameCnt += UbhTimer.instance.deltaFrameCount;
