@@ -41,7 +41,9 @@ public class UbhHoleCircleLockOnShot : UbhHoleCircleShot
         }
         if (m_targetTransform != null)
         {
-            //m_holeCenterAngle = UbhUtil.GetAngleFromTwoPosition(transform, m_targetTransform);
+            Quaternion rot = Quaternion.LookRotation((m_targetTransform.position - transform.position), transform.up);
+            m_verticalAngle = rot.eulerAngles.x;
+            m_horizontalAngle = rot.eulerAngles.y;
         }
     }
 }

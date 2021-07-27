@@ -16,12 +16,12 @@ public class UbhPaintShot : UbhBaseShot
     // "BulletNum is ignored."
     [FormerlySerializedAs("_PaintDataText")]
     public TextAsset m_paintDataText;
-    // "Set a center angle of shot. (0 to 360) (center of first line)"
-    [Range(0f, 360f), FormerlySerializedAs("_PaintCenterAngle")]
-    public float m_paintCenterAngle = 180f;
-    // "Set a center angle of shot. (0 to 360) (center of first line)"
-    [Range(0f, 360f), FormerlySerializedAs("_PaintCenterAngle")]
-    public float m_rowCenterAngle = 180f;
+    // "Set a center angle of rows. (0 to 360)"
+    [Range(0f, 360f), FormerlySerializedAs("_VerticalAngle")]
+    public float m_verticalAngle = 180f;
+    // "Set a center angle of shot. (0 to 360)"
+    [Range(0f, 360f), FormerlySerializedAs("_HorizontalAngle")]
+    public float m_horizontalAngle = 180f;
     // "Set a angle between bullet and next bullet. (0 to 360)"
     [Range(0f, 360f), FormerlySerializedAs("_BetweenAngle")]
     public float m_betweenAngle = 3f;
@@ -31,9 +31,6 @@ public class UbhPaintShot : UbhBaseShot
     // "Set a delay time between shot and next line shot. (sec)"
     [FormerlySerializedAs("_NextLineDelay")]
     public float m_nextLineDelay = 0.1f;
-    // "Set distance between bullet rows. (0 to 360)"
-    [FormerlySerializedAs("_RowDistance")]
-    public float m_rowDistance = 0f;
 
     private int m_nowIndex;
     private float m_delayTimer;
@@ -72,7 +69,7 @@ public class UbhPaintShot : UbhBaseShot
             return;
         }
 
-        m_paintStartAngle = m_paintCenterAngle - (m_paintData[0].Count % 2 == 0 ?
+        m_paintStartAngle = m_horizontalAngle - (m_paintData[0].Count % 2 == 0 ?
                                                   (m_betweenRowAngle * m_paintData[0].Count / 2f) + (m_betweenRowAngle / 2f) :
                                                   m_betweenRowAngle * Mathf.Floor(m_paintData[0].Count / 2f));
 
@@ -102,19 +99,9 @@ public class UbhPaintShot : UbhBaseShot
 
         for (int j = 0; j < m_paintData.Count; j++)
         {
-            float baseAngleRow = m_paintData.Count % 2 == 0 ? m_rowCenterAngle - (m_betweenRowAngle / 2f) : m_rowCenterAngle;
+            float baseAngleRow = m_paintData.Count % 2 == 0 ? m_verticalAngle - (m_betweenRowAngle / 2f) : m_verticalAngle;
 
             float angleRow = UbhUtil.GetShiftedAngle(j, baseAngleRow, m_betweenRowAngle);
-
-            Vector3 pos = new Vector3(
-                transform.position.x,
-                transform.position.y + m_rowDistance,
-                transform.position.z);
-
-            Vector3 rot = new Vector3(
-                transform.rotation.eulerAngles.x + angleRow,
-                transform.rotation.eulerAngles.y,
-                transform.rotation.eulerAngles.z);
 
             if (up) index = index + m_nowIndex;
             else index = index - m_nowIndex;
@@ -125,8 +112,7 @@ public class UbhPaintShot : UbhBaseShot
             {
                 if (lineData[i] == 1)
                 {
-                    UbhBullet bullet = GetBullet(pos);
-                    bullet.transform.SetPositionAndRotation(pos, Quaternion.Euler(rot));
+                    UbhBullet bullet = GetBullet(transform.position);
 
                     if (bullet == null)
                     {
@@ -135,7 +121,7 @@ public class UbhPaintShot : UbhBaseShot
 
                     float angle = m_paintStartAngle + (m_betweenAngle * i);
 
-                    //ShotBullet(bullet, m_bulletSpeed, null, angle);
+                    ShotBullet(bullet, m_bulletSpeed, angle, angleRow);
                 }
             }
 

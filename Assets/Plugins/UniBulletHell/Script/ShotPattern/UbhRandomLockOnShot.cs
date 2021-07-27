@@ -55,8 +55,9 @@ public class UbhRandomLockOnShot : UbhRandomShot
         }
         if (m_targetTransform != null)
         {
-            m_horizontalAngle = UbhUtil.GetYangleFromTwoPosition(transform, m_targetTransform);
-            m_verticalAngle = UbhUtil.GetXangleFromTwoPosition(transform, m_targetTransform);
+            Quaternion rot = Quaternion.LookRotation((m_targetTransform.position - transform.position), transform.up);
+            m_verticalAngle = rot.eulerAngles.x;
+            m_horizontalAngle = rot.eulerAngles.y;
         }
     }
 }

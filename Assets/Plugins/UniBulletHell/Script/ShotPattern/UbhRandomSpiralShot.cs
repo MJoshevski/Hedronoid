@@ -9,9 +9,18 @@ using UnityEngine.Serialization;
 public class UbhRandomSpiralShot : UbhBaseShot
 {
     [Header("===== RandomSpiralShot Settings =====")]
-    // "Set a starting angle of shot. (0 to 360)"
+    // "Set a number of shot row."
+    [FormerlySerializedAs("_RowNum")]
+    public int m_rowNum = 5;
+    // "Center angle of random range."
+    [Range(0f, 360f), FormerlySerializedAs("_RandomCenterAngle")]
+    public float m_verticalAngle = 180f;
+    // "Set a center angle for the row alignment. (0 to 360)"
     [Range(0f, 360f), FormerlySerializedAs("_StartAngle")]
-    public float m_startAngle = 180f;
+    public float m_horizontalAngle = 180f;
+    // "Set a angle between bullet rows. (0 to 360)"
+    [Range(0f, 360f), FormerlySerializedAs("_BetweenRowAngle")]
+    public float m_betweenRowAngle = 10f;
     // "Set a shift angle of spiral. (-360 to 360)"
     [Range(-360f, 360f), FormerlySerializedAs("_ShiftAngle")]
     public float m_shiftAngle = 5f;
@@ -32,18 +41,6 @@ public class UbhRandomSpiralShot : UbhBaseShot
     // "Set a maximum delay time between bullet and next bullet. (sec)"
     [FormerlySerializedAs("_RandomDelayMax")]
     public float m_randomDelayMax = 0.1f;
-    // "Set a number of shot row."
-    [FormerlySerializedAs("_RowNum")]
-    public int m_rowNum = 5;
-    // "Set a angle between bullet rows. (0 to 360)"
-    [Range(0f, 360f), FormerlySerializedAs("_BetweenRowAngle")]
-    public float m_betweenRowAngle = 10f;
-    // "Set distance between bullet rows. (0 to 360)"
-    [FormerlySerializedAs("_RowDistance")]
-    public float m_rowDistance = 0f;
-    // "Set a center angle for the row alignment. (0 to 360)"
-    [Range(0f, 360f), FormerlySerializedAs("_StartAngle")]
-    public float m_centerRowAngle = 180f;
 
     private int m_nowIndex;
     private float m_delayTimer;
@@ -84,22 +81,11 @@ public class UbhRandomSpiralShot : UbhBaseShot
 
         for (int j = 0; j < m_rowNum; j++)
         {
-            float baseAngleRow = m_rowNum % 2 == 0 ? m_centerRowAngle - (m_betweenRowAngle / 2f) : m_centerRowAngle;
+            float baseAngleRow = m_rowNum % 2 == 0 ? m_verticalAngle - (m_betweenRowAngle / 2f) : m_verticalAngle;
 
             float angleRow = UbhUtil.GetShiftedAngle(j, baseAngleRow, m_betweenRowAngle);
 
-            Vector3 pos = new Vector3(
-                transform.position.x,
-                transform.position.y + m_rowDistance,
-                transform.position.z);
-
-            Vector3 rot = new Vector3(
-                transform.rotation.eulerAngles.x + angleRow,
-                transform.rotation.eulerAngles.y,
-                transform.rotation.eulerAngles.z);
-
-            UbhBullet bullet = GetBullet(pos);
-            bullet.transform.SetPositionAndRotation(pos, Quaternion.Euler(rot));
+            UbhBullet bullet = GetBullet(transform.position);
 
             if (bullet == null)
             {
@@ -109,12 +95,12 @@ public class UbhRandomSpiralShot : UbhBaseShot
 
             float bulletSpeed = Random.Range(m_randomSpeedMin, m_randomSpeedMax);
 
-            float centerAngle = m_startAngle + (m_shiftAngle * m_nowIndex);
+            float centerAngle = m_horizontalAngle + (m_shiftAngle * m_nowIndex);
             float minAngle = centerAngle - (m_randomRangeSize / 2f);
             float maxAngle = centerAngle + (m_randomRangeSize / 2f);
             float angle = Random.Range(minAngle, maxAngle);
 
-            //ShotBullet(bullet, bulletSpeed, null, angle);
+            ShotBullet(bullet, bulletSpeed, angle, angleRow);
             FiredShot();
 
             m_nowIndex++;

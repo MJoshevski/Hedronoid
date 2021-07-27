@@ -20,8 +20,8 @@ public class UbhNwayLockOnShot : UbhNwayShot
     // "Transform of lock on target."
     // "It is not necessary if you want to specify target in tag."
     // "Overwrite CenterAngle in direction of target to Transform.position."
-    //[FormerlySerializedAs("_TargetTransform")]
-    //public Transform m_targetTransform;
+    [FormerlySerializedAs("_TargetTransform")]
+    public Transform m_targetTransform;
     // "Always aim to target."
     [FormerlySerializedAs("_Aiming")]
     public bool m_aiming;
@@ -55,8 +55,9 @@ public class UbhNwayLockOnShot : UbhNwayShot
         }
         if (m_targetTransform != null)
         {
-            m_horizontalAngle = UbhUtil.GetYangleFromTwoPosition(transform, m_targetTransform);
-            m_verticalAngle = UbhUtil.GetXangleFromTwoPosition(transform, m_targetTransform);
+            Quaternion rot = Quaternion.LookRotation((m_targetTransform.position - transform.position), transform.up);
+            m_verticalAngle = rot.eulerAngles.x;
+            m_horizontalAngle = rot.eulerAngles.y;
         }
     }
 }

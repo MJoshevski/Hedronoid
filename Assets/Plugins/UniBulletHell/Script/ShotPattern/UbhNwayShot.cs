@@ -30,8 +30,6 @@ public class UbhNwayShot : UbhBaseShot
     // "Set a delay time between shot and next line shot. (sec)"
     [FormerlySerializedAs("_NextLineDelay")]
     public float m_nextLineDelay = 0.1f;
-    [FormerlySerializedAs("_TargetTransform")]
-    public Transform m_targetTransform = null;
 
     private int m_nowIndex;
     private float m_delayTimer;

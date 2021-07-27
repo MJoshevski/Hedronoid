@@ -77,7 +77,7 @@ public class UbhHomingShot : UbhBaseShot
             m_targetTransform = UbhUtil.GetTransformFromTagName(m_targetTagName, m_randomSelectTagTarget);
         }
 
-        //ShotBullet(bullet, m_bulletSpeed, null, 0f, true, m_targetTransform, m_homingAngleSpeed);
+        ShotBullet(bullet, m_bulletSpeed, 0f, 0f, true, m_targetTransform, m_homingAngleSpeed);
 
 
         FiredShot();

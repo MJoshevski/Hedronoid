@@ -12,9 +12,15 @@ public class UbhWavingNwayShot : UbhBaseShot
     // "Set a number of shot way."
     [FormerlySerializedAs("_WayNum")]
     public int m_wayNum = 5;
-    // "Set a center angle of wave range. (0 to 360)"
-    [Range(0f, 360f), FormerlySerializedAs("_WaveCenterAngle")]
-    public float m_waveCenterAngle = 180f;
+    // "Set a number of shot row."
+    [FormerlySerializedAs("_RowNum")]
+    public int m_rowNum = 5;
+    // "Set a center angle of rows. (0 to 360)"
+    [Range(0f, 360f), FormerlySerializedAs("_VerticalAngle")]
+    public float m_verticalAngle = 180f;
+    // "Set a center angle of shot. (0 to 360)"
+    [Range(0f, 360f), FormerlySerializedAs("_HorizontalAngle")]
+    public float m_horizontalAngle = 180f;
     // "Set a size of wave range. (0 to 360)"
     [Range(0f, 360f), FormerlySerializedAs("_WaveRangeSize")]
     public float m_waveRangeSize = 40f;
@@ -24,18 +30,9 @@ public class UbhWavingNwayShot : UbhBaseShot
     // "Set a angle between bullet and next bullet. (0 to 360)"
     [Range(0f, 360f), FormerlySerializedAs("_BetweenAngle")]
     public float m_betweenAngle = 5f;
-    // "Set a number of shot row."
-    [FormerlySerializedAs("_RowNum")]
-    public int m_rowNum = 5;
     // "Set a angle between bullet rows. (0 to 360)"
     [Range(0f, 360f), FormerlySerializedAs("_BetweenRowAngle")]
     public float m_betweenRowAngle = 10f;
-    // "Set distance between bullet rows. (0 to 360)"
-    [FormerlySerializedAs("_RowDistance")]
-    public float m_rowDistance = 0f;
-    // "Set a center angle for the row alignment. (0 to 360)"
-    [Range(0f, 360f), FormerlySerializedAs("_StartAngle")]
-    public float m_centerRowAngle = 180f;
     // "Set a delay time between shot and next line shot. (sec)"
     [FormerlySerializedAs("_NextLineDelay")]
     public float m_nextLineDelay = 0.1f;
@@ -79,37 +76,26 @@ public class UbhWavingNwayShot : UbhBaseShot
 
         for (int j = 0; j < m_rowNum; j++)
         {
-            float baseAngleRow = m_rowNum % 2 == 0 ? m_centerRowAngle - (m_betweenRowAngle / 2f) : m_centerRowAngle;
+            float baseAngleRow = m_rowNum % 2 == 0 ? m_verticalAngle - (m_betweenRowAngle / 2f) : m_verticalAngle;
 
             float angleRow = UbhUtil.GetShiftedAngle(j, baseAngleRow, m_betweenRowAngle);
 
-            Vector3 pos = new Vector3(
-                transform.position.x,
-                transform.position.y + m_rowDistance,
-                transform.position.z);
-
-            Vector3 rot = new Vector3(
-                transform.rotation.eulerAngles.x + angleRow,
-                transform.rotation.eulerAngles.y,
-                transform.rotation.eulerAngles.z);
-
             for (int i = 0; i < m_wayNum; i++)
             {
-                UbhBullet bullet = GetBullet(pos);
-                bullet.transform.SetPositionAndRotation(pos, Quaternion.Euler(rot));
+                UbhBullet bullet = GetBullet(transform.position);
 
                 if (bullet == null)
                 {
                     break;
                 }
 
-                float centerAngle = m_waveCenterAngle + (m_waveRangeSize / 2f * Mathf.Sin(UbhTimer.instance.totalFrameCount * m_waveSpeed / 100f));
+                float centerAngle = m_horizontalAngle + (m_waveRangeSize / 2f * Mathf.Sin(UbhTimer.instance.totalFrameCount * m_waveSpeed / 100f));
 
                 float baseAngle = m_wayNum % 2 == 0 ? centerAngle - (m_betweenAngle / 2f) : centerAngle;
 
                 float angle = UbhUtil.GetShiftedAngle(i, baseAngle, m_betweenAngle);
 
-                //ShotBullet(bullet, m_bulletSpeed, null, angle);
+                ShotBullet(bullet, m_bulletSpeed, angle, angleRow);
 
                 m_nowIndex++;
                 if (m_nowIndex >= m_bulletNum)

@@ -203,6 +203,7 @@ public class UbhBullet : HNDMonoBehaviour
         {
             //// acceleration turning.
             m_angleHorizontal += (m_accelTurn * deltaTime);
+            m_angleVertical += (m_accelTurn * deltaTime);
 
             // sin wave.
             if (0f < m_sinWaveSpeed && 0f < m_sinWaveRangeSize)
@@ -210,7 +211,7 @@ public class UbhBullet : HNDMonoBehaviour
                 float waveAngleXZ = m_angleHorizontal + (m_sinWaveRangeSize / 2f * (Mathf.Sin(m_selfFrameCnt * m_sinWaveSpeed / 100f) * (m_sinWaveInverse ? -1f : 1f)));
 
                 newRotation = Quaternion.Euler(
-                    myAngles.x, m_baseAngles.y - waveAngleXZ, myAngles.z);
+                    m_baseAngles.x + m_angleVertical, m_baseAngles.y + waveAngleXZ, myAngles.z);
 
             }
             m_selfFrameCnt += UbhTimer.instance.deltaFrameCount;
