@@ -19,24 +19,11 @@ namespace Hedronoid
         public GameplaySceneContext GameplaySceneContext { get; set; }
 
         private HNDFiniteStateMachine playerFSM;
+        private UbhShotCtrl shotCtrl;
         private Transform target;
 
         [Header("General")]
-
         public float range = 15f;
-
-        [Header("Shooting Variables")]
-        [Tooltip("Spawn position of each bullet.")]
-        public Transform bulletOrigin;
-        [Tooltip("Seconds between each shot.")]
-        public float fireRatePrimary = 0.2f, fireRateSecondary = 2f, fireRateTertiary = 5f;
-        [Tooltip("Force of each shot.")]
-        public float shootForcePrimary = 8000f, shootForceSecondary = 5000f, shootForceTertiary = 100000f;
-        [Tooltip("Prefab of the respective weapon's bullet.")]
-        public GameObject bulletPrimary, bulletSecondary, bulletTertiary;
-
-        // SHOOTING
-        private float lastFired_Auto = 0f;
 
         [HideInInspector]
         public Ray LookRay;
@@ -47,16 +34,13 @@ namespace Hedronoid
 
         [Header("Use Laser")]
         public bool useLaser = false;
-
         public int damageOverTime = 30;
         public float slowAmount = .5f;
-
         public LineRenderer lineRenderer;
         public ParticleSystem impactEffect;
         public Light impactLight;
 
         [Header("Unity Setup Fields")]
-
         public Transform partToRotate;
         public float turnSpeed = 10f;
 
@@ -69,35 +53,49 @@ namespace Hedronoid
         {
             base.Awake();
             this.Inject(gameObject);
+
+            TryGetComponent(out shotCtrl);
         }
 
         protected override void Start()
         {
             base.Start();
-            playerFSM = GameplaySceneContext.Player;
 
             InvokeRepeating("UpdateTarget", 0f, 0.5f);
         }
 
         void UpdateTarget()
         {
-            float distanceToPlayer = Vector3.Distance(transform.position, playerFSM.transform.position);
+            if (GameplaySceneContext.Player == null) return;
 
-            if (distanceToPlayer <= range)
-            {
-                target = playerFSM.transform;
-            }
-            else
-            {
-                target = null;
-            }
+            playerFSM = GameplaySceneContext.Player;
 
+            float distanceToPlayer = Vector3.Distance(transform.position, playerFSM.cachedTransform.position);
+
+            foreach (UbhShotCtrl.ShotInfo ubs in shotCtrl.m_shotList)
+            {
+                if (ubs.m_shotObj is UbhLinearLockOnShot)
+                {
+                    UbhLinearLockOnShot lockOnShot = (UbhLinearLockOnShot)ubs.m_shotObj;
+
+                    if (distanceToPlayer <= range)
+                    {
+                        lockOnShot.m_targetTransform = playerFSM.transform;
+                    }
+                    else
+                    {
+                        lockOnShot.m_targetTransform = null;
+                    }
+                }
+            }
         }
 
         // Update is called once per frame
         protected override void Update()
         {
             base.Update();
+
+            UpdateTarget();
 
             if (target == null)
             {
@@ -140,10 +138,10 @@ namespace Hedronoid
                 impactLight.enabled = true;
             }
 
-            lineRenderer.SetPosition(0, bulletOrigin.position);
+            lineRenderer.SetPosition(0, transform.position);
             lineRenderer.SetPosition(1, target.position);
 
-            Vector3 dir = bulletOrigin.position - target.position;
+            Vector3 dir = transform.position - target.position;
 
             impactEffect.transform.position = target.position + dir.normalized;
 
@@ -152,27 +150,7 @@ namespace Hedronoid
 
         void Shoot()
         {
-            Vector3 shootDirection;
-            if (target) shootDirection = target.position - bulletOrigin.position;
-            else return;
-
-            if (Time.realtimeSinceStartup - lastFired_Auto > fireRatePrimary)
-            {
-                BulletPoolManager.BulletConfig bulletConf = new BulletPoolManager.BulletConfig();
-                bulletConf.Prefab = bulletPrimary;
-                bulletConf.Position = bulletOrigin.position;
-                bulletConf.Rotation = Quaternion.identity;
-                bulletConf.Parent = null;
-                bulletConf.Duration = 5f;
-
-                GameObject auto = GameplaySceneContext.BulletPoolManager.GetBulletToFire(bulletConf);
-
-                rb_auto = auto.GetComponent<Rigidbody>();
-                rb_auto.AddForce(shootDirection.normalized * shootForcePrimary);
-                lastFired_Auto = Time.realtimeSinceStartup;
-
-                FMODUnity.RuntimeManager.PlayOneShot(m_enemyAudioData.bulletPrimary[0], transform.position);
-            }
+            FMODUnity.RuntimeManager.PlayOneShot(m_enemyAudioData.bulletPrimary[0], transform.position);
         }
 
         private System.Action onDespawnReset(GameObject bullet)
@@ -185,7 +163,7 @@ namespace Hedronoid
                 bulletRb.velocity = Vector3.zero;
 
             // Return bullet pos/rot to origin
-            bullet.transform.SetPositionAndRotation(bulletOrigin.position, Quaternion.identity);
+            bullet.transform.SetPositionAndRotation(transform.position, Quaternion.identity);
 
             bullet.SetActive(true);
 
