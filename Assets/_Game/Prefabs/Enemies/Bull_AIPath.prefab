@@ -15,7 +15,6 @@ GameObject:
   - component: {fileID: 2415351336847820648}
   - component: {fileID: 8907817913611903896}
   - component: {fileID: 244110233432673805}
-  - component: {fileID: 5692076920164773135}
   - component: {fileID: 4022924576723074657}
   - component: {fileID: 7194409861292240300}
   - component: {fileID: 169626021980919952}
@@ -36,7 +35,7 @@ Transform:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 5864982932959398534}
-  m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
   m_LocalPosition: {x: 86.44, y: 50.67, z: -50.48}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children:
@@ -220,20 +219,6 @@ MonoBehaviour:
   wallAvoidFalloff: 1
   priority: 0.5
   debug: 0
---- !u!114 &5692076920164773135
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 5864982932959398534}
-  m_Enabled: 0
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: c9679e68a0f1144e79c664d9a11ca121, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  version: 1
-  target: {fileID: 0}
 --- !u!114 &4022924576723074657
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -331,7 +316,7 @@ BoxCollider:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 5864982932959398534}
-  m_Material: {fileID: 0}
+  m_Material: {fileID: 13400000, guid: c2815a7ab32e42c4bb42f59caacb8ec1, type: 2}
   m_IsTrigger: 1
   m_Enabled: 1
   serializedVersion: 2
