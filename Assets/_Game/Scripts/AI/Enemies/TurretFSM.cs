@@ -18,10 +18,6 @@ namespace Hedronoid
     {
         public GameplaySceneContext GameplaySceneContext { get; set; }
 
-        private HNDFiniteStateMachine playerFSM;
-        private UbhShotCtrl shotCtrl;
-        private Transform target;
-
         [Header("General")]
         public float range = 15f;
 
@@ -47,14 +43,21 @@ namespace Hedronoid
         [Header("FMOD Audio Data")]
         public NPCAudioData m_enemyAudioData;
 
-        // Use this for initialization
 
+        private HNDFiniteStateMachine playerFSM;
+        private UbhShotCtrl shotCtrl;
+        private Transform target;
+        protected DamageInfo damage;
+        protected DamageHandler m_damageHandler;
+
+        // Use this for initialization
         protected override void Awake()
         {
             base.Awake();
             this.Inject(gameObject);
 
             TryGetComponent(out shotCtrl);
+            TryGetComponent(out m_damageHandler);
         }
 
         protected override void Start()
@@ -151,6 +154,18 @@ namespace Hedronoid
         void Shoot()
         {
             FMODUnity.RuntimeManager.PlayOneShot(m_enemyAudioData.bulletPrimary[0], transform.position);
+        }
+
+        private void OnCollisionEnter(Collision collision)
+        {
+            if (collision.gameObject.layer == LayerMask.NameToLayer("PlayerBullet"))
+            {
+                damage = new DamageInfo();
+                damage.sender = collision.gameObject;
+                damage.Damage = 1;
+
+                m_damageHandler.DoDamage(damage);
+            }
         }
 
         private System.Action onDespawnReset(GameObject bullet)

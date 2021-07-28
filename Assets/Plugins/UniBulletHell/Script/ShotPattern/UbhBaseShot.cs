@@ -14,6 +14,9 @@ public abstract class UbhBaseShot : HNDMonoBehaviour
     // "Set a bullet prefab for the shot. (ex. sprite or model)"
     [FormerlySerializedAs("_BulletPrefab")]
     public GameObject m_bulletPrefab;
+    // "Set a bullet origin for the shot."
+    [FormerlySerializedAs("_BulletOrigin")]
+    public Transform m_bulletOrigin;
     // "Set a bullet number of shot."
     [FormerlySerializedAs("_BulletNum")]
     public int m_bulletNum = 10;
@@ -84,6 +87,17 @@ public abstract class UbhBaseShot : HNDMonoBehaviour
     /// is lock on shot flag.
     /// </summary>
     public virtual bool lockOnShot { get { return false; } }
+
+    protected override void Start()
+    {
+        base.Start();
+
+        // If we haven't assigned a bullet origin, we fire shots
+        // from the game object's transform itself.
+
+        if (m_bulletOrigin == null)
+            m_bulletOrigin = transform;
+    }
 
     /// <summary>
     /// Call from override OnDisable method in inheriting classes.

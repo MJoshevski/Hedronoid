@@ -103,7 +103,7 @@ public class UbhRandomShot : UbhBaseShot
 
             int index = Random.Range(0, m_numList.Count);
 
-            UbhBullet bullet = GetBullet(transform.position);
+            UbhBullet bullet = GetBullet(m_bulletOrigin.position);
 
             if (bullet == null)
             {

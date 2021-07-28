@@ -49,22 +49,11 @@ public class UbhCircleShot : UbhBaseShot
 
             float angleRow = UbhUtil.GetShiftedAngle(j, baseAngleRow, m_betweenRowAngle);
 
-            Vector3 pos = new Vector3(
-                transform.position.x,
-                transform.position.y + m_rowDistance,
-                transform.position.z);
-
-            Vector3 rot = new Vector3(
-                transform.rotation.eulerAngles.x + angleRow,
-                transform.rotation.eulerAngles.y,
-                transform.rotation.eulerAngles.z);
-
             float shiftAngle = 360f / (float)m_bulletNum;
 
             for (int i = 0; i < m_bulletNum; i++)
             {
-                UbhBullet bullet = GetBullet(pos);
-                bullet.transform.SetPositionAndRotation(pos, Quaternion.Euler(rot));
+                UbhBullet bullet = GetBullet(m_bulletOrigin.position);
 
                 if (bullet == null)
                 {
@@ -73,7 +62,7 @@ public class UbhCircleShot : UbhBaseShot
 
                 float angle = shiftAngle * i;
 
-                //ShotBullet(bullet, m_bulletSpeed, null, angle);
+                ShotBullet(bullet, m_bulletSpeed, angle, angleRow);
             }
 
             FiredShot();

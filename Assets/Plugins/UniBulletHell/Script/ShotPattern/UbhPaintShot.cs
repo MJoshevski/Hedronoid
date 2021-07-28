@@ -112,7 +112,7 @@ public class UbhPaintShot : UbhBaseShot
             {
                 if (lineData[i] == 1)
                 {
-                    UbhBullet bullet = GetBullet(transform.position);
+                    UbhBullet bullet = GetBullet(m_bulletOrigin.position);
 
                     if (bullet == null)
                     {

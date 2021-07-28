@@ -92,7 +92,7 @@ public class UbhRandomSpiralMultiShot : UbhBaseShot
 
             for (int i = 0; i < m_spiralWayNum; i++)
             {
-                UbhBullet bullet = GetBullet(transform.position);
+                UbhBullet bullet = GetBullet(m_bulletOrigin.position);
 
                 if (bullet == null)
                 {

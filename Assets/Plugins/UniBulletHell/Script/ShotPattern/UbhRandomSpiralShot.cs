@@ -85,7 +85,7 @@ public class UbhRandomSpiralShot : UbhBaseShot
 
             float angleRow = UbhUtil.GetShiftedAngle(j, baseAngleRow, m_betweenRowAngle);
 
-            UbhBullet bullet = GetBullet(transform.position);
+            UbhBullet bullet = GetBullet(m_bulletOrigin.position);
 
             if (bullet == null)
             {

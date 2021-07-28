@@ -84,7 +84,7 @@ public class UbhSinWaveBulletNwayShot : UbhBaseShot
 
             for (int i = 0; i < m_wayNum; i++)
             {
-                UbhBullet bullet = GetBullet(transform.position);
+                UbhBullet bullet = GetBullet(m_bulletOrigin.position);
 
                 if (bullet == null)
                 {

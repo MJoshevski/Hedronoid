@@ -56,7 +56,7 @@ public class UbhLinearShot : UbhBaseShot
             }
         }
 
-        UbhBullet bullet = GetBullet(transform.position);
+        UbhBullet bullet = GetBullet(m_bulletOrigin.position);
         if (bullet == null)
         {
             FinishedShot();
