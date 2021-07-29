@@ -103,19 +103,19 @@ namespace Hedronoid.AI
             CreateState(EStates.ReturnToDefault, OnReturnToDefaultUpdate, null, null);
 
             if (!DefaultTarget) DefaultTarget = transform;
-            if (!m_Sensor) m_Sensor = GetComponent<AIBaseSensor>();
-            if (!m_Motor) m_Motor = GetComponent<AIBaseMotor>();
+            if (!m_Sensor) TryGetComponent(out m_Sensor);
+            if (!m_Motor) TryGetComponent(out m_Motor);
             if (m_Animators == null || m_Animators.Length == 0) m_Animators = GetComponentsInChildren<Animator>();
-            if (!m_Rb) m_Rb = GetComponent<Rigidbody>();
-            if (!m_HealthBase) m_HealthBase = GetComponent<HealthBase>();
-            m_RVOController = GetComponent<RVOController>();
-            m_Seeker = GetComponent<Seeker>();
+            if (!m_Rb) TryGetComponent(out m_Rb); ;
+            if (!m_HealthBase) TryGetComponent(out m_HealthBase); ;
+            if (!m_RVOController) TryGetComponent(out m_RVOController);
+            if (!m_Seeker) TryGetComponent(out m_Seeker);
         }
         protected override void OnEnable()
         {
             base.OnEnable();
 
-            if (ai == null) ai = GetComponent<IAstarAI>();
+            if (ai == null) TryGetComponent(out ai);
             if (ai != null) ai.onSearchPath += Update;
         }
 
