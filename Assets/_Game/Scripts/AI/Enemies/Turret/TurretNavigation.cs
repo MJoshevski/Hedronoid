@@ -22,9 +22,6 @@ namespace Hedronoid
             AttackTarget = EStates.Highest + 1,
         }
 
-        [Header("General")]
-        public float range = 15f;
-
         [HideInInspector]
         public Ray LookRay;
         [HideInInspector]
@@ -48,7 +45,8 @@ namespace Hedronoid
 
         protected HNDFiniteStateMachine playerFSM;
         protected UbhShotCtrl shotCtrl;
-        protected Transform target;
+        protected TurretSensor m_TurretSensor;
+
         protected DamageInfo damage;
         protected DamageHandler m_damageHandler;
 
@@ -62,6 +60,7 @@ namespace Hedronoid
 
             TryGetComponent(out shotCtrl);
             TryGetComponent(out m_damageHandler);
+            m_TurretSensor = (TurretSensor) m_Sensor;
         }
 
         protected override void Start()
@@ -76,51 +75,7 @@ namespace Hedronoid
         }
         public virtual void OnAttackTargetUpdate()
         {
-            throw new NotImplementedException();
-        }
-        public override void OnReturnToDefaultUpdate()
-        {
-            throw new NotImplementedException();
-        }
-        public override void OnDefaultMovementUpdate()
-        {
-            throw new NotImplementedException();
-        }
-
-        void UpdateTarget()
-        {
-            if (GameplaySceneContext.Player == null) return;
-
-            playerFSM = GameplaySceneContext.Player;
-
-            float distanceToPlayer = Vector3.Distance(transform.position, playerFSM.cachedTransform.position);
-
-            foreach (UbhShotCtrl.ShotInfo ubs in shotCtrl.m_shotList)
-            {
-                if (ubs.m_shotObj is UbhLinearLockOnShot)
-                {
-                    UbhLinearLockOnShot lockOnShot = (UbhLinearLockOnShot)ubs.m_shotObj;
-
-                    if (distanceToPlayer <= range)
-                    {
-                        lockOnShot.m_targetTransform = playerFSM.transform;
-                    }
-                    else
-                    {
-                        lockOnShot.m_targetTransform = null;
-                    }
-                }
-            }
-        }
-
-        // Update is called once per frame
-        protected override void Update()
-        {
-            base.Update();
-
-            UpdateTarget();
-
-            if (target == null)
+            if (m_Target == null)
             {
                 if (useLaser)
                 {
@@ -131,7 +86,7 @@ namespace Hedronoid
                         impactLight.enabled = false;
                     }
                 }
-
+                ChangeState(EStates.DefaultMovement);
                 return;
             }
 
@@ -143,10 +98,29 @@ namespace Hedronoid
                 Laser();
             }
         }
+        public override void OnReturnToDefaultUpdate()
+        {
+            throw new NotImplementedException();
+        }
+        public override void OnDefaultMovementUpdate()
+        {
+            if (m_Target)
+                ChangeState(ETurretStates.AttackTarget);
+        }
 
+        void UpdateTarget()
+        {
+            m_Target = m_TurretSensor.GetTargetWithinReach(m_TurretSensor.SensorRange);
+
+            foreach (UbhShotCtrl.ShotInfo ubs in shotCtrl.m_shotList)
+            {
+                ubs.m_shotObj.m_targetTransform = m_Target;
+                ubs.m_shotObj.disableShooting = m_Target != null ? false : true;
+            }
+        }
         void LockOnTarget()
         {
-            Vector3 dir = target.position - transform.position;
+            Vector3 dir = m_Target.position - transform.position;
             Quaternion lookRotation = Quaternion.LookRotation(dir);
             Vector3 rotation = Quaternion.Lerp(partToRotate.rotation, lookRotation, Time.deltaTime * turnSpeed).eulerAngles;
             partToRotate.rotation = Quaternion.Euler(0f, rotation.y, 0f);
@@ -162,18 +136,18 @@ namespace Hedronoid
             }
 
             lineRenderer.SetPosition(0, transform.position);
-            lineRenderer.SetPosition(1, target.position);
+            lineRenderer.SetPosition(1, m_Target.position);
 
-            Vector3 dir = transform.position - target.position;
+            Vector3 dir = transform.position - m_Target.position;
 
-            impactEffect.transform.position = target.position + dir.normalized;
+            impactEffect.transform.position = m_Target.position + dir.normalized;
 
             impactEffect.transform.rotation = Quaternion.LookRotation(dir);
         }
 
         void Shoot()
         {
-            FMODUnity.RuntimeManager.PlayOneShot(m_enemyAudioData.bulletPrimary[0], transform.position);
+            //FMODUnity.RuntimeManager.PlayOneShot(m_enemyAudioData.bulletPrimary[0], transform.position);
         }
 
         private void OnCollisionEnter(Collision collision)
@@ -203,12 +177,6 @@ namespace Hedronoid
             bullet.SetActive(true);
 
             return null;
-        }
-
-        void OnDrawGizmosSelected()
-        {
-            Gizmos.color = Color.red;
-            Gizmos.DrawWireSphere(transform.position, range);
         }
     }
 }

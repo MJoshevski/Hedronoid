@@ -43,7 +43,6 @@ namespace UnityMovementAI
         public override void OnDefaultMovementUpdate()
         {
             // Some default patrol movement or just a simple animation should go here
-            throw new NotImplementedException();
         }
         protected override void Start()
         {

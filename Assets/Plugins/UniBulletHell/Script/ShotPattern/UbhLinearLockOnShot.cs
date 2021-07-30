@@ -24,8 +24,6 @@ public class UbhLinearLockOnShot : UbhLinearShot
     [FormerlySerializedAs("_Aiming")]
     public bool m_aiming;
     // "Set a angle of shot. (0 to 360)"
-    [FormerlySerializedAs("_TargetTransform")]
-    public Transform m_targetTransform;
 
     /// <summary>
     /// is lock on shot flag.

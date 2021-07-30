@@ -6,6 +6,7 @@ using Hedronoid.HNDFSM;
 using Hedronoid.Core;
 using Hedronoid.Events;
 using Hedronoid.Weapons;
+using UnityEngine.SceneManagement;
 
 namespace Hedronoid.Player
 {
@@ -101,6 +102,14 @@ namespace Hedronoid.Player
         [Tooltip("Prefab of the respective weapon's bullet.")]
         public GameObject bulletPrimary, bulletSecondary, bulletTertiary;
 
+        [Header("Visual")]
+        [SerializeField]
+        private GameObject playerModel;
+        [SerializeField]
+        private ParticleSystem deathPfx;
+        [SerializeField]
+        private ParticleSystem dashStartPFX, dashingPFX;
+
         [Header("FMOD Audio Data")]
         public PlayerAudioData m_playerAudioData;
 
@@ -153,8 +162,6 @@ namespace Hedronoid.Player
         private float secondaryGravityMultiplier = 1f;
 
         //DASH VARS
-        [SerializeField]
-        private ParticleSystem dashStartPFX, dashingPFX;
         private Vector3 posBeforeDash;
         private float timeOnDashEnter;
 
@@ -956,10 +963,24 @@ namespace Hedronoid.Player
         {
             yield return new WaitForSeconds(duration);
         }
+
+        public IEnumerator Die()
+        {
+            playerModel.SetActive(false);
+
+            if(deathPfx)
+                deathPfx.Play();
+
+            yield return new WaitForSeconds(3f);
+            GameController.Instance.LoadScene(SceneManager.GetActiveScene().buildIndex);
+        }
         void OnCollisionEnter(Collision collision)
         {
             if (collision.gameObject.layer == LayerMask.NameToLayer("Enemy"))
+            {
                 FMODUnity.RuntimeManager.PlayOneShot(m_playerAudioData.recieveHit, transform.position);
+                StartCoroutine(Die());
+            }
 
             EvaluateCollision(collision);
         }

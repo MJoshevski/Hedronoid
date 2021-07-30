@@ -20,8 +20,6 @@ public class UbhSpreadNwayLockOnShot : UbhSpreadNwayShot
     // "Transform of lock on target."
     // "It is not necessary if you want to specify target in tag."
     // "Overwrite CenterAngle in direction of target to Transform.position."
-    [FormerlySerializedAs("_TargetTransform")]
-    public Transform m_targetTransform;
 
     /// <summary>
     /// is lock on shot flag.

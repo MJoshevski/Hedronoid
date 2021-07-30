@@ -11,6 +11,8 @@ using UnityEngine.Serialization;
 public abstract class UbhBaseShot : HNDMonoBehaviour
 {
     [Header("===== Common Settings =====")]
+    [FormerlySerializedAs("_TargetTransform")]
+    public Transform m_targetTransform;
     // "Set a bullet prefab for the shot. (ex. sprite or model)"
     [FormerlySerializedAs("_BulletPrefab")]
     public GameObject m_bulletPrefab;
@@ -63,6 +65,7 @@ public abstract class UbhBaseShot : HNDMonoBehaviour
     public UnityEvent m_shotFinishedCallbackEvents = new UnityEvent();
 
     protected bool m_shooting;
+    protected bool m_disableShooting = false;
 
     private UbhShotCtrl m_shotCtrl;
 
@@ -87,6 +90,8 @@ public abstract class UbhBaseShot : HNDMonoBehaviour
     /// is lock on shot flag.
     /// </summary>
     public virtual bool lockOnShot { get { return false; } }
+
+    public virtual bool disableShooting { get { return m_disableShooting; } set { m_disableShooting = value; } }
 
     protected override void Start()
     {
@@ -168,10 +173,11 @@ public abstract class UbhBaseShot : HNDMonoBehaviour
                                bool homing = false, Transform homingTarget = null, float homingAngleSpeed = 0f,
                                bool sinWave = false, float sinWaveSpeed = 0f, float sinWaveRangeSize = 0f, bool sinWaveInverse = false)
     {
-        if (bullet == null)
+        if (bullet == null || m_disableShooting)
         {
             return;
         }
+
         bullet.Shot(this,
                     speed, angleH, angleV, m_accelerationSpeed, m_accelerationTurn,
                     homing, homingTarget, homingAngleSpeed,
