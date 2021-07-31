@@ -8,6 +8,7 @@ using Hedronoid.HNDFSM;
 using Hedronoid.Core;
 using Hedronoid.AI;
 using Hedronoid.Weapons;
+using Hedronoid.Events;
 
 /// <summary>
 /// 
@@ -61,6 +62,8 @@ namespace Hedronoid
             TryGetComponent(out shotCtrl);
             TryGetComponent(out m_damageHandler);
             m_TurretSensor = (TurretSensor) m_Sensor;
+
+            HNDEvents.Instance.AddListener<KillEvent>(OnKilled);
         }
 
         protected override void Start()
@@ -148,6 +151,13 @@ namespace Hedronoid
         void Shoot()
         {
             //FMODUnity.RuntimeManager.PlayOneShot(m_enemyAudioData.bulletPrimary[0], transform.position);
+        }
+
+        private void OnKilled(KillEvent e)
+        {
+            if (e.GOID != gameObject.GetInstanceID()) return;
+            StopAllCoroutines();
+            this.enabled = false;
         }
 
         private void OnCollisionEnter(Collision collision)

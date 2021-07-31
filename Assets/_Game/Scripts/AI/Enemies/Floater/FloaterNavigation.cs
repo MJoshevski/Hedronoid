@@ -1,29 +1,56 @@
 ﻿using Hedronoid;
 using Hedronoid.AI;
 using Hedronoid.Core;
+using Hedronoid.Events;
+using Hedronoid.Health;
 using Hedronoid.HNDFSM;
 using System;
+using System.Collections;
 using UnityEngine;
 
 namespace UnityMovementAI
 {
     public class FloaterNavigation : AIBaseNavigation, IGameplaySceneContextInjector
     {
+        [SerializeField]
+        protected float detonationRadius = 15f;
+        [SerializeField]
+        protected float detonationCountdown = 2f;
+        [SerializeField]
+        protected float detonationForce = 150f;
+        [SerializeField]
+        protected ForceMode detonationForceMode = ForceMode.Impulse;
+        [SerializeField]
+        protected GameObject model;
+        [SerializeField]
+        protected GameObject blastFX;
+        [SerializeField]
+        protected ParticleSystem deathPfx;
+
+        protected FloaterSensor m_FloaterSensor;
+        protected DamageHandler m_damageHandler;
+        protected DamageInfo damage;
+
+        private SteeringBasics steeringBasics;
+        private bool detonationStarted = false;
         public enum EFloaterStates
         {
             AttackTarget = EStates.Highest + 1,
         }
-
-        public Transform target;
         public GameplaySceneContext GameplaySceneContext { get; set; }
-        SteeringBasics steeringBasics;
 
         protected override void Awake()
         {
             base.Awake();
             this.Inject(gameObject);
 
+            TryGetComponent(out m_damageHandler);
+            TryGetComponent(out m_FloaterSensor);
+
             CreateState(EFloaterStates.AttackTarget, OnAttackTargetUpdate, null, null);
+
+            HNDEvents.Instance.AddListener<KillEvent>(OnKilled);
+
         }
         public override void OnGoToTargetUpdate()
         {
@@ -32,7 +59,30 @@ namespace UnityMovementAI
 
         public virtual void OnAttackTargetUpdate()
         {
-            throw new NotImplementedException();
+            if (m_Target)
+            {
+                float distance = Vector3.Distance(m_Target.position, transform.position);
+
+                if (!detonationStarted)
+                {
+                    if (distance <= steeringBasics.targetRadius)
+                    {
+                        steeringBasics.Arrive(transform.position);
+                        StartDetonationSequence();
+                    }
+                    else
+                    {
+
+                        Vector3 accel = steeringBasics.Arrive(m_Target.position);
+
+                        steeringBasics.Steer(accel);
+                        steeringBasics.LookWhereYoureGoing();
+                    }
+                }
+            }
+            else
+                ChangeState(EStates.DefaultMovement);
+
         }
 
         public override void OnReturnToDefaultUpdate()
@@ -42,7 +92,9 @@ namespace UnityMovementAI
 
         public override void OnDefaultMovementUpdate()
         {
-            // Some default patrol movement or just a simple animation should go here
+            if (m_Target)
+                ChangeState(EFloaterStates.AttackTarget);
+            else steeringBasics.Arrive(transform.position);
         }
         protected override void Start()
         {
@@ -55,14 +107,54 @@ namespace UnityMovementAI
         {
             base.FixedUpdate();
 
-            if (GameplaySceneContext.Player.cachedTransform == null) return;
+            m_Target = m_FloaterSensor.GetTargetWithinReach(m_FloaterSensor.SensorRange);
+        }
 
-            target = GameplaySceneContext.Player.cachedTransform;
+        private void OnKilled(KillEvent e)
+        {
+            if (e.GOID != gameObject.GetInstanceID()) return;
+            StopAllCoroutines();
+            this.enabled = false;
+        }
 
-            Vector3 accel = steeringBasics.Seek(target.position);
+        public void StartDetonationSequence()
+        {
+            detonationStarted = true;
+            StartCoroutine(Detonate());
+        }
 
-            steeringBasics.Steer(accel);
-            steeringBasics.LookWhereYoureGoing();
+        private IEnumerator Detonate()
+        {
+            float elapsedTime = 0f;
+
+            while (elapsedTime < detonationCountdown)
+            {
+                blastFX.transform.localScale =
+                    Vector3.Lerp(blastFX.transform.localScale, Vector3.one * detonationRadius, elapsedTime / detonationCountdown);
+                elapsedTime += Time.deltaTime;
+
+                // Yield here
+                yield return null;
+            }
+            Collider[] colliders = 
+                Physics.OverlapSphere(transform.position, detonationRadius, HNDAI.Settings.PlayerLayer);
+
+            foreach (Collider hit in colliders)
+            {
+                Rigidbody rb = hit.GetComponent<Rigidbody>();
+
+                if (rb != null)
+                {
+                    rb.AddExplosionForce(detonationForce, transform.position, detonationRadius, 3.0f, detonationForceMode);
+                }
+            }
+
+            if (deathPfx) deathPfx.Play();
+            model.SetActive(false);
+
+            yield return new WaitForSeconds(deathPfx.main.duration);
+
+            m_damageHandler.Die();
         }
     }
 }

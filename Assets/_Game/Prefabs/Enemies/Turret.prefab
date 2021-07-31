@@ -10,13 +10,14 @@ GameObject:
   m_Component:
   - component: {fileID: 3350958549674326251}
   - component: {fileID: 4978699149799199097}
+  - component: {fileID: 2272918633432743662}
   - component: {fileID: 3881113284998567336}
   - component: {fileID: 1291726390}
   - component: {fileID: 8932399924862993474}
   - component: {fileID: 1067443033114305791}
   - component: {fileID: 1291726391}
   - component: {fileID: 3881113284998567339}
-  m_Layer: 0
+  m_Layer: 14
   m_Name: Turret
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -55,7 +56,15 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   _currentState: 
-  range: 100
+  m_DefaultTarget: {fileID: 0}
+  m_Target: {fileID: 0}
+  m_MinWaypoints: 3
+  m_MaxWaypoints: 7
+  m_MinWayPointDistance: 2
+  m_MaxWayPointDistance: 4
+  m_RadiusForGroundDetection: 0.5
+  m_GroundDetectionDistance: 0.55
+  m_Rb: {fileID: 0}
   useLaser: 0
   damageOverTime: 30
   slowAmount: 0.5
@@ -65,6 +74,23 @@ MonoBehaviour:
   partToRotate: {fileID: 3350958549674326251}
   turnSpeed: 10
   m_enemyAudioData: {fileID: 0}
+--- !u!114 &2272918633432743662
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2723322795606221393}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 44099a47c38c0454da35a8975ea64001, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  m_RayCastDistance: 10
+  m_RayCastOffset: 1.2
+  m_sensorRange: 130
+  m_sensorCutoffRange: 150
+  m_sensorTimestep: 0.25
 --- !u!114 &3881113284998567336
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -461,6 +487,10 @@ PrefabInstance:
       propertyPath: m_Name
       value: LinearLockOnShot
       objectReference: {fileID: 0}
+    - target: {fileID: 100000, guid: 8c8d5b277ed74314cb2886fd63d918fe, type: 3}
+      propertyPath: m_Layer
+      value: 0
+      objectReference: {fileID: 0}
     - target: {fileID: 400000, guid: 8c8d5b277ed74314cb2886fd63d918fe, type: 3}
       propertyPath: m_LocalPosition.x
       value: 0
@@ -511,7 +541,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 11400000, guid: 8c8d5b277ed74314cb2886fd63d918fe, type: 3}
       propertyPath: m_bulletSpeed
-      value: 15
+      value: 35
       objectReference: {fileID: 0}
     - target: {fileID: 11400000, guid: 8c8d5b277ed74314cb2886fd63d918fe, type: 3}
       propertyPath: m_betweenDelay
