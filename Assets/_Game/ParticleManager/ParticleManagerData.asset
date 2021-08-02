@@ -1,0 +1,31 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: ce4da617fb29f7149aa003951b883457, type: 3}
+  m_Name: ParticleManagerData
+  m_EditorClassIdentifier: 
+  m_ParticleSystems:
+  - Name: BigExplosion_HNDPFX
+    GUID: 597627626
+    ParticleSystemPrefab: {fileID: 5783577700639084824, guid: 8a582261cbdf72e4b8d734182f8b1828,
+      type: 3}
+  - Name: EnergyExplosion_HNDPFX
+    GUID: 719155896
+    ParticleSystemPrefab: {fileID: 8772827267185391322, guid: 3ce45887252614a498d76fe3a7d39e33,
+      type: 3}
+  - Name: PlayerDashStart_HNDPFX
+    GUID: 1328606610
+    ParticleSystemPrefab: {fileID: 3843396426106728185, guid: 4b286a0135d81c14e8490f0dfb2979f3,
+      type: 3}
+  - Name: PlayerDashTrail_HNDPFX
+    GUID: 336653277
+    ParticleSystemPrefab: {fileID: 300427525079099777, guid: 08560eba5e5ec774581bb27ac84f6f1f,
+      type: 3}

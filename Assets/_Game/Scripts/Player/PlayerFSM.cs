@@ -7,6 +7,8 @@ using Hedronoid.Core;
 using Hedronoid.Events;
 using Hedronoid.Weapons;
 using UnityEngine.SceneManagement;
+using Hedronoid.Health;
+using Hedronoid.Particle;
 
 namespace Hedronoid.Player
 {
@@ -105,10 +107,9 @@ namespace Hedronoid.Player
         [Header("Visual")]
         [SerializeField]
         private GameObject playerModel;
-        [SerializeField]
-        private ParticleSystem deathPfx;
-        [SerializeField]
-        private ParticleSystem dashStartPFX, dashingPFX;
+        public ParticleList.ParticleSystems DeathParticle = ParticleList.ParticleSystems.ENERGYEXPLOSION_HNDPFX;
+        public ParticleList.ParticleSystems DashStartParticle = ParticleList.ParticleSystems.PLAYERDASHSTART_HNDPFX;
+        public ParticleList.ParticleSystems DashTrailParticle = ParticleList.ParticleSystems.PLAYERDASHTRAIL_HNDPFX;
 
         [Header("FMOD Audio Data")]
         public PlayerAudioData m_playerAudioData;
@@ -190,8 +191,8 @@ namespace Hedronoid.Player
             base.Awake();
             this.Inject(gameObject);
 
-            orbitCamera = GameplaySceneContext.OrbitCamera.GetComponent<Camera>();
-            Rigidbody = GetComponent<Rigidbody>();
+            if (!orbitCamera) GameplaySceneContext.OrbitCamera.TryGetComponent(out orbitCamera);
+            if (!Rigidbody) TryGetComponent(out Rigidbody);
             Animator = GetComponentInChildren<Animator>();
             animHashes = new AnimatorHashes();
             animData = new AnimatorData(Animator);
@@ -205,8 +206,7 @@ namespace Hedronoid.Player
             CreateFSMStates();
             CreateFMODEvents();
 
-            dashStartPFX.Stop();
-            dashingPFX.Stop();
+            HNDEvents.Instance.AddListener<KillEvent>(OnKilled);
         }
 
         protected override void Start()
@@ -449,11 +449,8 @@ namespace Hedronoid.Player
 
             FMODUnity.RuntimeManager.PlayOneShotAttached(m_playerAudioData.dash, gameObject);
 
-            dashStartPFX.Stop();
-            dashStartPFX.Play();
-
-            dashingPFX.Stop();
-            dashingPFX.Play();
+            ParticleHelper.PlayParticleSystem(DashStartParticle, cachedTransform.position, -transform.forward, 3f);
+            ParticleHelper.PlayParticleSystem(DashTrailParticle, cachedTransform.position, -transform.forward, 2f);
 
             secondaryGravityMultiplier = 1f; ;
             Rigidbody.ApplyForce(forceDirection * dashVariables.PhysicalForce.Multiplier, dashVariables.PhysicalForce.ForceMode);
@@ -491,7 +488,6 @@ namespace Hedronoid.Player
 
             // Dead stop on dash-end
             Rigidbody.velocity = Vector3.zero;
-            dashingPFX.Stop();
 
             StopAllCoroutines();
             StartCoroutine(LerpCameraFov(120, 100));
@@ -963,23 +959,21 @@ namespace Hedronoid.Player
         {
             yield return new WaitForSeconds(duration);
         }
-
-        public IEnumerator Die()
+        private void OnKilled(KillEvent e)
         {
+            if (e.GOID != gameObject.GetInstanceID()) return;
+
+            ParticleHelper.PlayParticleSystem(DeathParticle, cachedTransform.position, cachedTransform.forward);
             playerModel.SetActive(false);
-
-            if(deathPfx)
-                deathPfx.Play();
-
-            yield return new WaitForSeconds(3f);
             GameController.Instance.LoadScene(SceneManager.GetActiveScene().buildIndex);
+            StopAllCoroutines();
+            enabled = false;
         }
         void OnCollisionEnter(Collision collision)
         {
             if (collision.gameObject.layer == LayerMask.NameToLayer("Enemy"))
             {
                 FMODUnity.RuntimeManager.PlayOneShot(m_playerAudioData.recieveHit, transform.position);
-                StartCoroutine(Die());
             }
 
             EvaluateCollision(collision);

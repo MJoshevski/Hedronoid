@@ -53,6 +53,8 @@ namespace Hedronoid.AI
         private Transform m_tempTarget;
 
         protected bool m_isFrozen = false;
+        protected DamageHandler m_damageHandler;
+        protected DamageInfo damage;
         public bool IsFrozen
         {
             get { return m_isFrozen; }
@@ -107,7 +109,8 @@ namespace Hedronoid.AI
             if (!m_Motor) TryGetComponent(out m_Motor);
             if (m_Animators == null || m_Animators.Length == 0) m_Animators = GetComponentsInChildren<Animator>();
             if (!m_Rb) TryGetComponent(out m_Rb); ;
-            if (!m_HealthBase) TryGetComponent(out m_HealthBase); ;
+            if (!m_HealthBase) TryGetComponent(out m_HealthBase);
+            if (!m_damageHandler) TryGetComponent(out m_damageHandler);
             if (!m_RVOController) TryGetComponent(out m_RVOController);
             if (!m_Seeker) TryGetComponent(out m_Seeker);
         }
@@ -236,6 +239,18 @@ namespace Hedronoid.AI
 
         public virtual void ChangeTarget(Transform trans)
         {
+        }
+
+        protected virtual void OnCollisionEnter(Collision collision)
+        {
+            if (collision.gameObject.layer == LayerMask.NameToLayer("PlayerBullet"))
+            {
+                damage = new DamageInfo();
+                damage.sender = collision.gameObject;
+                damage.Damage = 1;
+
+                m_damageHandler.DoDamage(damage);
+            }
         }
 
     }

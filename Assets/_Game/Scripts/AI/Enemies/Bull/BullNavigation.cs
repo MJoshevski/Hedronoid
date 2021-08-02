@@ -44,9 +44,7 @@ namespace Hedronoid.AI
         protected Transform[] m_playerTx = new Transform[2] { null, null };
         protected BullSensor m_BullSensor;
         protected BullDash m_BullDash;
-        protected DamageHandler m_damageHandler;
 
-        protected DamageInfo damage;
         protected float remainingSensorTime;
         protected float m_targetEvaluationDistance = 3f;
 
@@ -73,24 +71,12 @@ namespace Hedronoid.AI
             base.Awake();
 
             m_BullSensor = (BullSensor) m_Sensor;
-            m_BullDash = GetComponent<BullDash>();
+            if (!m_BullDash) TryGetComponent(out m_BullDash);
 
-            m_damageHandler = GetComponent<DamageHandler>();
             CreateState(EBullStates.DashToTarget, OnDashUpdate, null, null);
 
             enemyEmojis = GetComponent<EnemyEmojis>();
             HNDEvents.Instance.AddListener<KillEvent>(OnKilled);
-        }
-        private void OnCollisionEnter(Collision collision)
-        {
-            if (collision.gameObject.layer == LayerMask.NameToLayer("PlayerBullet"))
-            {
-                damage = new DamageInfo();
-                damage.sender = collision.gameObject;
-                damage.Damage = 1;
-
-                m_damageHandler.DoDamage(damage);
-            }
         }
 
         private void OnKilled(KillEvent e)

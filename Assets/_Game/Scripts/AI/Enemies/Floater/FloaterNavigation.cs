@@ -28,8 +28,6 @@ namespace UnityMovementAI
         protected ParticleSystem deathPfx;
 
         protected FloaterSensor m_FloaterSensor;
-        protected DamageHandler m_damageHandler;
-        protected DamageInfo damage;
 
         private SteeringBasics steeringBasics;
         private bool detonationStarted = false;
@@ -44,7 +42,6 @@ namespace UnityMovementAI
             base.Awake();
             this.Inject(gameObject);
 
-            TryGetComponent(out m_damageHandler);
             TryGetComponent(out m_FloaterSensor);
 
             CreateState(EFloaterStates.AttackTarget, OnAttackTargetUpdate, null, null);
@@ -136,16 +133,22 @@ namespace UnityMovementAI
                 // Yield here
                 yield return null;
             }
-            Collider[] colliders = 
-                Physics.OverlapSphere(transform.position, detonationRadius, HNDAI.Settings.PlayerLayer);
+
+            Collider[] colliders = Physics.OverlapSphere(
+                transform.position, detonationRadius, HNDAI.Settings.PlayerLayer | HNDAI.Settings.EnemyLayer);
 
             foreach (Collider hit in colliders)
             {
-                Rigidbody rb = hit.GetComponent<Rigidbody>();
+                Rigidbody rb;
+                HealthBase hb;
+                hit.TryGetComponent(out rb);
+                hit.TryGetComponent(out hb);
 
-                if (rb != null)
+                if (rb != null && rb.gameObject != gameObject)
                 {
                     rb.AddExplosionForce(detonationForce, transform.position, detonationRadius, 3.0f, detonationForceMode);
+
+                    if (hb) hb.InstaKill();
                 }
             }
 

@@ -48,9 +48,6 @@ namespace Hedronoid
         protected UbhShotCtrl shotCtrl;
         protected TurretSensor m_TurretSensor;
 
-        protected DamageInfo damage;
-        protected DamageHandler m_damageHandler;
-
         // Use this for initialization
         protected override void Awake()
         {
@@ -60,7 +57,6 @@ namespace Hedronoid
             CreateState(ETurretStates.AttackTarget, OnAttackTargetUpdate, null, null);
 
             TryGetComponent(out shotCtrl);
-            TryGetComponent(out m_damageHandler);
             m_TurretSensor = (TurretSensor) m_Sensor;
 
             HNDEvents.Instance.AddListener<KillEvent>(OnKilled);
@@ -159,19 +155,6 @@ namespace Hedronoid
             StopAllCoroutines();
             this.enabled = false;
         }
-
-        private void OnCollisionEnter(Collision collision)
-        {
-            if (collision.gameObject.layer == LayerMask.NameToLayer("PlayerBullet"))
-            {
-                damage = new DamageInfo();
-                damage.sender = collision.gameObject;
-                damage.Damage = 1;
-
-                m_damageHandler.DoDamage(damage);
-            }
-        }
-
         private System.Action onDespawnReset(GameObject bullet)
         {
             bullet.SetActive(false);

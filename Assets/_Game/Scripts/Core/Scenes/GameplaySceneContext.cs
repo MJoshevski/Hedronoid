@@ -4,6 +4,7 @@ using UnityEngine;
 using Hedronoid.Player;
 using Hedronoid.ObjectPool;
 using Hedronoid.Weapons;
+using Hedronoid.Particle;
 
 namespace Hedronoid.Core
 {
@@ -90,6 +91,20 @@ namespace Hedronoid.Core
                 }
 
                 return m_orbitCamera;
+            }
+        }
+
+        private ParticleManager m_particleManager;
+        public ParticleManager ParticleManager
+        {
+            get
+            {
+                if (m_particleManager == null)
+                {
+                    m_particleManager = cachedGameObject.GetComponentInChildren<ParticleManager>(true);
+                }
+
+                return m_particleManager;
             }
         }
     }
