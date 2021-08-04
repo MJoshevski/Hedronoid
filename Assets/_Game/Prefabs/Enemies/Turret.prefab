@@ -31,7 +31,7 @@ Transform:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 2723322795606221393}
-  m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
   m_LocalPosition: {x: -0.3995037, y: 31.000454, z: -67.10571}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children:
@@ -162,8 +162,9 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   m_handlerID: 
-  m_BlinkRenderer: {fileID: 0}
-  m_DamageBlinkTexture: {fileID: 0}
+  m_BlinkRenderer: {fileID: 520639644231286251}
+  m_DamageBlinkTexture: {fileID: 2800000, guid: 5bebf67f0bcbb7d45bef83eda9830da1,
+    type: 3}
   m_DamagesItCanRecieve: 
   m_DamageTypeMultipliers: []
   m_LODGroup: {fileID: 0}

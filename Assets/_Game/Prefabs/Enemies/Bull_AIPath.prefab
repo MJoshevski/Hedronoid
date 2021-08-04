@@ -262,8 +262,9 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   m_handlerID: 
-  m_BlinkRenderer: {fileID: 0}
-  m_DamageBlinkTexture: {fileID: 0}
+  m_BlinkRenderer: {fileID: 1871755802401916015}
+  m_DamageBlinkTexture: {fileID: 2800000, guid: 5bebf67f0bcbb7d45bef83eda9830da1,
+    type: 3}
   m_DamagesItCanRecieve: 
   m_DamageTypeMultipliers: []
   m_LODGroup: {fileID: 0}
@@ -394,6 +395,12 @@ PrefabInstance:
 --- !u!4 &1871755802405393739 stripped
 Transform:
   m_CorrespondingSourceObject: {fileID: 400004, guid: 441f793bb9298e849a87791e7be24b16,
+    type: 3}
+  m_PrefabInstance: {fileID: 1871755802404999119}
+  m_PrefabAsset: {fileID: 0}
+--- !u!137 &1871755802401916015 stripped
+SkinnedMeshRenderer:
+  m_CorrespondingSourceObject: {fileID: 13700000, guid: 441f793bb9298e849a87791e7be24b16,
     type: 3}
   m_PrefabInstance: {fileID: 1871755802404999119}
   m_PrefabAsset: {fileID: 0}
