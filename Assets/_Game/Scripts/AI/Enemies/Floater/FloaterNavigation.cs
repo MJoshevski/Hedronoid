@@ -30,6 +30,7 @@ namespace UnityMovementAI
         protected FloaterSensor m_FloaterSensor;
 
         private SteeringBasics steeringBasics;
+        private WallAvoidance wallAvoidance;
         private bool detonationStarted = false;
         public enum EFloaterStates
         {
@@ -43,7 +44,7 @@ namespace UnityMovementAI
             this.Inject(gameObject);
 
             TryGetComponent(out m_FloaterSensor);
-
+            TryGetComponent(out wallAvoidance);
             CreateState(EFloaterStates.AttackTarget, OnAttackTargetUpdate, null, null);
 
             HNDEvents.Instance.AddListener<KillEvent>(OnKilled);
@@ -74,6 +75,9 @@ namespace UnityMovementAI
 
                         steeringBasics.Steer(accel);
                         steeringBasics.LookWhereYoureGoing();
+                        accel = wallAvoidance.GetSteering();
+                        steeringBasics.Steer(accel);
+
                     }
                 }
             }

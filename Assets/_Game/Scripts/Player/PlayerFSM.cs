@@ -124,6 +124,8 @@ namespace Hedronoid.Player
         public Rigidbody Rigidbody, connectedRb, prevConnectedRb;
         private Camera orbitCamera;
         private Animator Animator;
+        private DamageHandler m_damageHandler;
+        private HealthBase m_healthBase;
         private AnimatorHashes animHashes;
         private AnimatorData animData;
 
@@ -193,6 +195,8 @@ namespace Hedronoid.Player
 
             if (!orbitCamera) GameplaySceneContext.OrbitCamera.TryGetComponent(out orbitCamera);
             if (!Rigidbody) TryGetComponent(out Rigidbody);
+            if (!m_healthBase) TryGetComponent(out m_healthBase);
+
             Animator = GetComponentInChildren<Animator>();
             animHashes = new AnimatorHashes();
             animData = new AnimatorData(Animator);
@@ -963,7 +967,7 @@ namespace Hedronoid.Player
         {
             if (e.GOID != gameObject.GetInstanceID()) return;
 
-            ParticleHelper.PlayParticleSystem(DeathParticle, cachedTransform.position, cachedTransform.forward);
+            ParticleHelper.PlayParticleSystem(DeathParticle, cachedTransform.position, cachedTransform.forward, 2f);
             playerModel.SetActive(false);
             GameController.Instance.LoadScene(SceneManager.GetActiveScene().buildIndex);
             StopAllCoroutines();
@@ -974,6 +978,7 @@ namespace Hedronoid.Player
             if (collision.gameObject.layer == LayerMask.NameToLayer("Enemy"))
             {
                 FMODUnity.RuntimeManager.PlayOneShot(m_playerAudioData.recieveHit, transform.position);
+                m_healthBase.InstaKill();
             }
 
             EvaluateCollision(collision);

@@ -45,6 +45,7 @@ GameObject:
   - component: {fileID: 4694109190309803873}
   - component: {fileID: 3498913750409828534}
   - component: {fileID: 3498913750409811480}
+  - component: {fileID: 558086918}
   - component: {fileID: 4694109190309803872}
   - component: {fileID: 4694109190309803903}
   - component: {fileID: 4694109190309803902}
@@ -64,7 +65,7 @@ Transform:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 6376073102376690729}
-  m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
   m_LocalPosition: {x: 48.7, y: 49.9, z: -88.3}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children:
@@ -158,6 +159,27 @@ MonoBehaviour:
   timeToTarget: 0.1
   smoothing: 1
   numSamplesForSmoothing: 5
+--- !u!114 &558086918
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 6376073102376690729}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: e008bb997f9e8cc42a7861ed1e5b45ea, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  maxAcceleration: 40
+  wallDetection: 1
+  castMask:
+    serializedVersion: 2
+    m_Bits: 4294967035
+  wallAvoidDistance: 4
+  mainWhiskerLen: 5
+  sideWhiskerLen: 2
+  sideWhiskerAngle: 45
 --- !u!114 &4694109190309803872
 MonoBehaviour:
   m_ObjectHideFlags: 0

@@ -55,7 +55,7 @@ public class UbhLinearLockOnShot : UbhLinearShot
 
         if (m_targetTransform != null)
         {
-            Quaternion rot = Quaternion.LookRotation((m_targetTransform.position - transform.position), transform.up);
+            Quaternion rot = Quaternion.LookRotation((m_targetTransform.position - m_bulletOrigin.position), transform.up);
             m_verticalAngle = rot.eulerAngles.x;
             m_horizontalAngle = rot.eulerAngles.y;
         }
