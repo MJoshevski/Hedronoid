@@ -114,6 +114,7 @@ namespace Hedronoid
         {           
             List<GravitySource> activeGravities = GravityService.GetActiveGravitySources();
             Dictionary<GravitySource, float> srcAngleDictionary = new Dictionary<GravitySource, float>();
+            Dictionary<GravitySource, float> srcDistanceDictionary = new Dictionary<GravitySource, float>();
 
             Vector3 moveDir = Vector3.zero;
 
@@ -137,8 +138,10 @@ namespace Hedronoid
                 {
                     Vector3 playerToGravityDir = (gs.transform.position - position).normalized;
                     float angle = Vector3.Angle(playerToGravityDir, moveDir);
+                    float distance = Vector3.Distance(gs.transform.position, position);
 
                     srcAngleDictionary.Add(gs, angle);
+                    srcAngleDictionary.Add(gs, distance);
                     //Debug.LogErrorFormat("SOURCE {0} has angle with player {1}.", gs.transform.parent.name, angle);
                 }
 
@@ -153,6 +156,16 @@ namespace Hedronoid
 
                     if (srcAngleDictionary[l] > srcAngleDictionary[r])
                         l = r;
+                    else if (srcAngleDictionary[l] == srcAngleDictionary[r])
+                    {
+                        if (srcDistanceDictionary[l] < srcDistanceDictionary[r])
+                            l = r;
+                        else if (srcDistanceDictionary[l] == srcDistanceDictionary[r])
+                        {
+
+                        }
+                    }
+
                 }
 
                 //Debug.LogErrorFormat("MIN>>>>>SRC {0} has angle with player {1}. And this is src: {2}",
