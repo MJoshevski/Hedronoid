@@ -1,5 +1,6 @@
 ﻿using Unity.Properties;
 using UnityEngine;
+using UnityEngine.Serialization;
 
 /// <summary>
 /// Ubh circle shot.
