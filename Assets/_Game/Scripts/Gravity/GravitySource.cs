@@ -2,6 +2,8 @@
 using System.Collections.Generic;
 using System;
 using Hedronoid.Core;
+using System.Linq;
+using Hedronoid.AI;
 
 namespace Hedronoid
 {
@@ -17,7 +19,6 @@ namespace Hedronoid
         [Tooltip("Should the boundaries control the scale/position of the trigger collider?")]
         [SerializeField]
         protected bool AutomaticColliderSize = true;
-        public bool ParentToEmbededSource = false;
 
         [HideInInspector]
         [Range(1,10)]
@@ -28,19 +29,30 @@ namespace Hedronoid
         public List<GravitySource> OverlappingSources { get; private set; } = new List<GravitySource>();
 
         protected Rigidbody m_Rb;
+        protected Collider m_triggerCol;
+        public Collider TriggerCol
+        {
+            get { return m_triggerCol; }
+        }
 
         protected override void Awake()
         {
             base.Awake();
             this.Inject(gameObject);
 
+            TryGetComponent(out m_triggerCol);
+            if (!m_triggerCol || !m_triggerCol.isTrigger)
+            {
+                m_triggerCol = null;
+                D.GravErrorFormat("Gravity source with name {0} has no trigger attached to it. Please attach one.", name);
+            }
+
             OnValidate();
         }
 
         protected virtual void OnValidate()
         {
-            if (!m_Rb)
-                m_Rb = GetComponent<Rigidbody>();
+            if (!m_Rb) TryGetComponent(out m_Rb);               
 
             if (m_Rb && m_Rb.useGravity)
                 m_Rb.useGravity = false;
@@ -74,7 +86,7 @@ namespace Hedronoid
             if (grSrc && !OverlappingSources.Contains(grSrc))
                     OverlappingSources.Add(grSrc);
 
-            if (other.gameObject.layer == LayerMask.NameToLayer("Player"))
+            if ((other.gameObject.layer & (1 << HNDAI.Settings.PlayerLayer)) > 0)
             {
                 IsPlayerInGravity = true;
 
@@ -85,6 +97,7 @@ namespace Hedronoid
                     foreach (GravitySource gs in OverlappingSources)
                         gs.CurrentPriorityWeight = 1;
                 }
+                PrioritizeActiveOverlappedGravities(other.transform.position);
             }
         }
 
@@ -92,8 +105,9 @@ namespace Hedronoid
         {
             if (!IsInLayerMask(other)) return;
 
-            if (other.gameObject.layer == LayerMask.NameToLayer("Player"))
+            if ((other.gameObject.layer & (1 << HNDAI.Settings.PlayerLayer)) > 0)
             {
+                PrioritizeActiveOverlappedGravities(other.transform.position);
             }
         }
 
@@ -105,14 +119,19 @@ namespace Hedronoid
             if (grSrc && OverlappingSources.Contains(grSrc))
                 OverlappingSources.Remove(grSrc);
 
-            if (other.gameObject.layer == LayerMask.NameToLayer("Player"))
+            if ((other.gameObject.layer & (1 << HNDAI.Settings.PlayerLayer)) > 0)
+            {
                 IsPlayerInGravity = false;
+                CurrentPriorityWeight = 1;
+                PrioritizeActiveOverlappedGravities(other.transform.position);
+            }
         }
 
         private float lastTimestampPrioritization = 0;
         protected void PrioritizeActiveOverlappedGravities(Vector3 position)
-        {           
+        {
             List<GravitySource> activeGravities = GravityService.GetActiveGravitySources();
+            List<Vector3> activeGrvPositions = new List<Vector3>();
             Dictionary<GravitySource, float> srcAngleDictionary = new Dictionary<GravitySource, float>();
             Dictionary<GravitySource, float> srcDistanceDictionary = new Dictionary<GravitySource, float>();
 
@@ -123,12 +142,12 @@ namespace Hedronoid
 
             if (activeGravities.Count > 1 && moveDir != null && moveDir != Vector3.zero)
             {
-                // HACK (Maybe..): This prevents the update priority to execute on each frame. 
+                // This prevents the update priority to execute on each frame. 
                 // WHY: Jittering between gravities bug. When we are between overlapping 
                 // gravities the movement direction rotates to accomodate for the new gravity. 
                 // By doing so it made a small angle and overrode the priority system by reverting 
                 // the gravity back to the previous one.
-                // By constraining the execution step, we avoid this issue (so far).
+                // By constraining the execution step (with a sweetspot of 0.2s), we avoid this issue (so far).
 
                 if (Time.realtimeSinceStartup - lastTimestampPrioritization <= 0.2f) return;
                 else lastTimestampPrioritization = Time.realtimeSinceStartup;
@@ -140,47 +159,65 @@ namespace Hedronoid
                     float angle = Vector3.Angle(playerToGravityDir, moveDir);
                     float distance = Vector3.Distance(gs.transform.position, position);
 
+                    activeGrvPositions.Add(gs.transform.position);
                     srcAngleDictionary.Add(gs, angle);
-                    srcAngleDictionary.Add(gs, distance);
-                    //Debug.LogErrorFormat("SOURCE {0} has angle with player {1}.", gs.transform.parent.name, angle);
+                    srcDistanceDictionary.Add(gs, distance);
+                    //Debug.LogErrorFormat("SOURCE {0} has angle with player {1}.", gs.name, angle);
                 }
 
                 GravitySource[] srcs = new GravitySource[srcAngleDictionary.Count];
                 srcAngleDictionary.Keys.CopyTo(srcs, 0);
 
+                List<float> angleVals = srcAngleDictionary.Values.ToList();
+                List<float> distanceVals = srcDistanceDictionary.Values.ToList();
                 GravitySource l = srcs[0];
 
-                for (int i = 1; i < srcs.Length; ++i)
+                if (activeGrvPositions.All(o => o != activeGrvPositions[0]))
                 {
-                    GravitySource r = srcs[i];
-
-                    if (srcAngleDictionary[l] > srcAngleDictionary[r])
-                        l = r;
-                    else if (srcAngleDictionary[l] == srcAngleDictionary[r])
+                    if (angleVals.Any(o => o != angleVals[0]))
                     {
-                        if (srcDistanceDictionary[l] < srcDistanceDictionary[r])
-                            l = r;
-                        else if (srcDistanceDictionary[l] == srcDistanceDictionary[r])
+                        GravitySource r;
+                        for (int i = 1; i < srcs.Length; ++i)
                         {
-
+                            r = srcs[i];
+                            if (srcAngleDictionary[l] > srcAngleDictionary[r])
+                                l = r;
                         }
                     }
-
+                    else if (distanceVals.Any(o => o != distanceVals[0]))
+                    {
+                        GravitySource r;
+                        for (int i = 1; i < srcs.Length; ++i)
+                        {
+                            r = srcs[i];
+                            if (srcDistanceDictionary[l] > srcDistanceDictionary[r])
+                                l = r;
+                        }
+                    }
+                }
+                else
+                {
+                    l = PrioritizeEmbeddedGravities(position, activeGravities);
                 }
 
-                //Debug.LogErrorFormat("MIN>>>>>SRC {0} has angle with player {1}. And this is src: {2}",
-                //    l.transform.parent.name, srcAngleDictionary[l], this.transform.parent.name);
+                //Debug.LogErrorFormat("UNO:  SRC {0} has angle with player {1}. And this is src: {2}",
+                //    srcs[0].name, srcAngleDictionary[srcs[0]], name);
+                //Debug.LogErrorFormat("DUE:  SRC {0} has angle with player {1}. And this is src: {2}",
+                //    srcs[1].name, srcAngleDictionary[srcs[1]], name);
 
-                if (l is GravityPlane)
+                //Debug.LogErrorFormat("MIN>>>>>SRC {0} has angle with player {1}. And this is src: {2}",
+                //    l.name, srcAngleDictionary[l], name);
+
+                if (this != l)
                 {
-                    if (this != l)
-                    {
-                        CurrentPriorityWeight = 2;
-                    }
-                    else
-                    {
-                        CurrentPriorityWeight = 3;
-                    }
+                    if (CurrentPriorityWeight > 1)
+                        CurrentPriorityWeight--;
+                    //Debug.LogErrorFormat("NAME: {0} ,THIS IS NOT MIN. CURR GRAV W: {1}", name, CurrentPriorityWeight);
+                }
+                else if (CurrentPriorityWeight < activeGravities.Count)
+                {
+                    CurrentPriorityWeight = activeGravities.Count;
+                    //Debug.LogErrorFormat("NAME: {0} ,THIS IS IT!!!. CURR GRAV W: {1}", l.name, l.CurrentPriorityWeight);
                 }
             }
             else if (activeGravities.Count == 1 && activeGravities[0] == this)
@@ -190,6 +227,31 @@ namespace Hedronoid
                 foreach (GravitySource gs in OverlappingSources)
                     gs.CurrentPriorityWeight = 1;
             }
+        }
+
+        protected GravitySource PrioritizeEmbeddedGravities(Vector3 position, List<GravitySource> sources)
+        {
+            List<float> colliderSizes = new List<float>();
+
+            foreach (GravitySource src in sources)
+            {
+                if (src.TriggerCol && src.TriggerCol.isTrigger)
+                {
+                    //Debug.LogErrorFormat("SRC NAME: {0}, BOUNDS: {1}", src.name, src.TriggerCol.bounds.size.sqrMagnitude);
+                    colliderSizes.Add(src.TriggerCol.bounds.size.sqrMagnitude);
+                }
+                else D.GravError("One of the embedded gravities doesn't have a collider attached.");
+            }
+
+            float smallest = colliderSizes[0];
+
+            for (int i = 1; i < colliderSizes.Count; ++i)
+                if (smallest > colliderSizes[i])
+                {
+                    smallest = colliderSizes[i];
+                }
+
+            return sources[colliderSizes.FindIndex(o => o == smallest)];
         }
 
         protected void EnableDisableSources(List<GravitySource> sources, bool enable)

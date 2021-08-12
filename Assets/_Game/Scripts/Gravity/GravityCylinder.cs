@@ -59,50 +59,6 @@ namespace Hedronoid
                 boundsCollider.center = Vector3.zero;
             }
         }
-        public override void OnTriggerEnter(Collider other)
-        {
-            if (other.gameObject.layer == LayerMask.NameToLayer("Player"))
-            {
-                IsPlayerInGravity = true;
-
-                CurrentPriorityWeight = 2;
-                foreach (GravitySource gs in GravityService.GetActiveGravitySources())
-                    if (gs is GravityPlane)
-                    {
-                    }
-                    else if (gs != this && !gs.ParentToEmbededSource)
-                        gs.CurrentPriorityWeight = 1;
-            }
-        }
-
-        public override void OnTriggerStay(Collider other)
-        {
-            base.OnTriggerStay(other);
-
-            if (other.gameObject.layer == LayerMask.NameToLayer("Player"))
-            {
-                List<GravitySource> activeGravities = GravityService.GetActiveGravitySources();
-
-                if (activeGravities.Count == 1 &&
-                    activeGravities[0] == this &&
-                    CurrentPriorityWeight == 1 &&
-                    activeGravities[0] is GravityCylinder)
-                {
-                    CurrentPriorityWeight = 2;
-                }
-            }
-        }
-
-        public override void OnTriggerExit(Collider other)
-        {
-            base.OnTriggerExit(other);
-
-
-            if (other.gameObject.layer == LayerMask.NameToLayer("Player"))
-            {
-                CurrentPriorityWeight = 1;
-            }
-        }
 
         public override Vector3 GetGravity(Vector3 position)
         {
@@ -181,9 +137,6 @@ namespace Hedronoid
                Color.yellow);
 
         }
-#endif
-
-#if UNITY_EDITOR
         public static void DrawWireCylinder(Vector3 _pos, Quaternion _rot, float _height, float _radius, Color _color = default(Color))
         {
             if (_color != default(Color))

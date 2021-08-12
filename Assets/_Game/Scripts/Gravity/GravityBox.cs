@@ -58,51 +58,6 @@ namespace Hedronoid
             }
         }
 
-        public override void OnTriggerEnter(Collider other)
-        {
-            if (other.gameObject.layer == LayerMask.NameToLayer("Player"))
-            {
-                IsPlayerInGravity = true;
-
-                CurrentPriorityWeight = 2;
-                foreach (GravitySource gs in GravityService.GetActiveGravitySources())
-                    if (gs is GravityPlane)
-                    {
-                    }
-                    else if (gs != this)
-                        gs.CurrentPriorityWeight = 1;
-            }
-        }
-
-        public override void OnTriggerStay(Collider other)
-        {
-            base.OnTriggerStay(other);
-
-            if (other.gameObject.layer == LayerMask.NameToLayer("Player"))
-            {
-                List<GravitySource> activeGravities = GravityService.GetActiveGravitySources();
-
-                if(activeGravities.Count == 1 && 
-                    activeGravities[0] == this && 
-                    CurrentPriorityWeight == 1 && 
-                    activeGravities[0] is GravityBox)
-                {
-                    CurrentPriorityWeight = 2;
-                }
-            }
-        }
-
-        public override void OnTriggerExit(Collider other)
-        {
-            base.OnTriggerExit(other);
-
-
-            if (other.gameObject.layer == LayerMask.NameToLayer("Player"))
-            {
-                CurrentPriorityWeight = 1;
-            }
-        }
-
         public override Vector3 GetGravity(Vector3 position)
         {
             if (CurrentPriorityWeight < GravityService.GetMaxPriorityWeight())
@@ -206,6 +161,7 @@ namespace Hedronoid
             return coordinate > 0f ? -g : g;
         }
 
+#if UNITY_EDITOR
         void OnDrawGizmosSelected()
         {
             Gizmos.matrix =
@@ -287,5 +243,7 @@ namespace Hedronoid
             size.z = 2f * (size.z + distance);
             Gizmos.DrawWireCube(Vector3.zero, size);
         }
+#endif
+
     }
 }

@@ -42,22 +42,8 @@ namespace Hedronoid
             }
 
         }
-
-        public override void OnTriggerExit(Collider other)
-        {
-            base.OnTriggerExit(other);
-
-
-            if (other.gameObject.layer == LayerMask.NameToLayer("Player"))
-            {
-                CurrentPriorityWeight = 2;
-            }
-        }
-
         public override Vector3 GetGravity(Vector3 position)
         {
-            PrioritizeActiveOverlappedGravities(position);
-
             if (CurrentPriorityWeight < GravityService.GetMaxPriorityWeight())
                 return Vector3.zero;
 
@@ -113,6 +99,7 @@ namespace Hedronoid
             return transform.TransformDirection(g * vector);
         }
 
+#if UNITY_EDITOR
         void OnDrawGizmosSelected()
         {
             Gizmos.matrix =
@@ -156,5 +143,7 @@ namespace Hedronoid
             Gizmos.DrawLine(c, d);
             Gizmos.DrawLine(d, a);
         }
+#endif
+
     }
 }

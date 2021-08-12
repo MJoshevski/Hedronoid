@@ -49,52 +49,6 @@ namespace Hedronoid
                 boundsCollider.center = Vector3.zero;
             }
         }
-
-        public override void OnTriggerEnter(Collider other)
-        {
-            if (other.gameObject.layer == LayerMask.NameToLayer("Player"))
-            {
-                IsPlayerInGravity = true;
-
-                CurrentPriorityWeight = 2;
-                foreach (GravitySource gs in GravityService.GetActiveGravitySources())
-                    if (gs is GravityPlane)
-                    {
-                    }
-                    else if (gs != this)
-                        gs.CurrentPriorityWeight = 1;
-            }
-        }
-
-        public override void OnTriggerStay(Collider other)
-        {
-            base.OnTriggerStay(other);
-
-            if (other.gameObject.layer == LayerMask.NameToLayer("Player"))
-            {
-                List<GravitySource> activeGravities = GravityService.GetActiveGravitySources();
-
-                if (activeGravities.Count == 1 &&
-                    activeGravities[0] == this &&
-                    CurrentPriorityWeight == 1 &&
-                    activeGravities[0] is GravitySphere)
-                {
-                    CurrentPriorityWeight = 2;
-                }
-            }
-        }
-
-        public override void OnTriggerExit(Collider other)
-        {
-            base.OnTriggerExit(other);
-
-
-            if (other.gameObject.layer == LayerMask.NameToLayer("Player"))
-            {
-                CurrentPriorityWeight = 1;
-            }
-        }
-
         public override Vector3 GetGravity(Vector3 position)
         {
             if (CurrentPriorityWeight < GravityService.GetMaxPriorityWeight())
@@ -118,6 +72,7 @@ namespace Hedronoid
             return g * vector;
         }
 
+#if UNITY_EDITOR
         void OnDrawGizmosSelected()
         {
             Vector3 p = transform.position;
@@ -138,5 +93,7 @@ namespace Hedronoid
                 Gizmos.DrawWireSphere(p, outerFalloffRadius);
             }
         }
+#endif
+
     }
 }
