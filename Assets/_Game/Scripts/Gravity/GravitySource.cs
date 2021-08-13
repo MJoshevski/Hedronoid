@@ -130,29 +130,46 @@ namespace Hedronoid
         private float lastTimestampPrioritization = 0;
         protected void PrioritizeActiveOverlappedGravities(Vector3 position)
         {
-            List<GravitySource> activeGravities = GravityService.GetActiveGravitySources();
+            Dictionary<Vector3, List<GravitySource>> filteredSrcs = FilterEmbeddedGravities();
+            List<GravitySource> activeGravities = new List<GravitySource>();
+
+            if (filteredSrcs.Count == 1)
+                activeGravities = filteredSrcs.First().Value;
+            else activeGravities = filteredSrcs[Vector3.zero];
+
+            if (activeGravities == null || activeGravities.Count == 0)
+            {
+                Vector3 key = filteredSrcs.First().Key;
+                float distance = Vector3.Distance(key, position);
+                Vector3 candidate = Vector3.zero;
+
+                foreach (Vector3 srcPos in filteredSrcs.Keys)
+                {
+                    if (srcPos == key) break;
+
+                    float curr = Vector3.Distance(srcPos, position);
+
+                    if (distance > curr)
+                    {
+                        distance = curr;
+                        candidate = srcPos;
+                    }
+                }
+
+                if (candidate != Vector3.zero)
+                    activeGravities = filteredSrcs[candidate];
+            }
+            Debug.LogError("FILTERED COUNT: " + filteredSrcs.Count);
             List<Vector3> activeGrvPositions = new List<Vector3>();
             Dictionary<GravitySource, float> srcAngleDictionary = new Dictionary<GravitySource, float>();
             Dictionary<GravitySource, float> srcDistanceDictionary = new Dictionary<GravitySource, float>();
-
             Vector3 moveDir = Vector3.zero;
 
             if (GameplaySceneContext.Player)
                 moveDir = GameplaySceneContext.Player.movementVariables.MoveDirection;
 
-            if (activeGravities.Count > 1 && moveDir != null && moveDir != Vector3.zero)
+            if (activeGravities.Count > 1)
             {
-                // This prevents the update priority to execute on each frame. 
-                // WHY: Jittering between gravities bug. When we are between overlapping 
-                // gravities the movement direction rotates to accomodate for the new gravity. 
-                // By doing so it made a small angle and overrode the priority system by reverting 
-                // the gravity back to the previous one.
-                // By constraining the execution step (with a sweetspot of 0.2s), we avoid this issue (so far).
-
-                if (Time.realtimeSinceStartup - lastTimestampPrioritization <= 0.2f) return;
-                else lastTimestampPrioritization = Time.realtimeSinceStartup;
-                //
-
                 foreach (GravitySource gs in activeGravities)
                 {
                     Vector3 playerToGravityDir = (gs.transform.position - position).normalized;
@@ -165,19 +182,30 @@ namespace Hedronoid
                     //Debug.LogErrorFormat("SOURCE {0} has angle with player {1}.", gs.name, angle);
                 }
 
-                GravitySource[] srcs = new GravitySource[srcAngleDictionary.Count];
-                srcAngleDictionary.Keys.CopyTo(srcs, 0);
-
+                List<GravitySource> srcs = srcAngleDictionary.Keys.ToList();
                 List<float> angleVals = srcAngleDictionary.Values.ToList();
                 List<float> distanceVals = srcDistanceDictionary.Values.ToList();
+
                 GravitySource l = srcs[0];
 
-                if (activeGrvPositions.All(o => o != activeGrvPositions[0]))
+                if (activeGrvPositions.Any(o => o != activeGrvPositions[0]))
                 {
+                    // This prevents the update priority to execute on each frame. 
+                    // WHY: Jittering between gravities bug. When we are between overlapping 
+                    // gravities the movement direction rotates to accomodate for the new gravity. 
+                    // By doing so it made a small angle and overrode the priority system by reverting 
+                    // the gravity back to the previous one.
+                    // By constraining the execution step (with a sweetspot of 0.2s), we avoid this issue (so far).
+
+                    if (Time.realtimeSinceStartup - lastTimestampPrioritization <= 0.2f) return;
+                    else lastTimestampPrioritization = Time.realtimeSinceStartup;
+                    //
+                    if (moveDir == null || moveDir == Vector3.zero) return;
+
                     if (angleVals.Any(o => o != angleVals[0]))
                     {
                         GravitySource r;
-                        for (int i = 1; i < srcs.Length; ++i)
+                        for (int i = 1; i < srcs.Count; ++i)
                         {
                             r = srcs[i];
                             if (srcAngleDictionary[l] > srcAngleDictionary[r])
@@ -187,7 +215,7 @@ namespace Hedronoid
                     else if (distanceVals.Any(o => o != distanceVals[0]))
                     {
                         GravitySource r;
-                        for (int i = 1; i < srcs.Length; ++i)
+                        for (int i = 1; i < srcs.Count; ++i)
                         {
                             r = srcs[i];
                             if (srcDistanceDictionary[l] > srcDistanceDictionary[r])
@@ -210,13 +238,15 @@ namespace Hedronoid
 
                 if (this != l)
                 {
+                    //Debug.LogErrorFormat("BEFORE!!!! NAME: {0} ,THIS IS NOT MIN. CURR GRAV W: {1}", name, CurrentPriorityWeight);
+
                     if (CurrentPriorityWeight > 1)
                         CurrentPriorityWeight--;
                     //Debug.LogErrorFormat("NAME: {0} ,THIS IS NOT MIN. CURR GRAV W: {1}", name, CurrentPriorityWeight);
                 }
-                else if (CurrentPriorityWeight < activeGravities.Count)
+                else 
                 {
-                    CurrentPriorityWeight = activeGravities.Count;
+                    CurrentPriorityWeight = activeGravities.Count + 1;
                     //Debug.LogErrorFormat("NAME: {0} ,THIS IS IT!!!. CURR GRAV W: {1}", l.name, l.CurrentPriorityWeight);
                 }
             }
@@ -252,6 +282,45 @@ namespace Hedronoid
                 }
 
             return sources[colliderSizes.FindIndex(o => o == smallest)];
+        }
+
+        protected Dictionary<Vector3, List<GravitySource>> FilterEmbeddedGravities()
+        {
+            List<GravitySource> activeGravities = GravityService.GetActiveGravitySources();
+            Dictionary<Vector3, List<GravitySource>> dict = new Dictionary<Vector3, List<GravitySource>>();
+            Dictionary<Vector3, List<GravitySource>> sortedDict = new Dictionary<Vector3, List<GravitySource>>();
+
+            for (int i = 0; i < activeGravities.Count; i++)
+            {
+                List<GravitySource> dummyList = new List<GravitySource>();
+
+                for (int j = 0; j < activeGravities.Count; j++)
+                {
+                    if (activeGravities[i].transform.position == 
+                        activeGravities[j].transform.position)
+                        dummyList.Add(activeGravities[j]);
+                }
+
+                if (!dummyList.Contains(activeGravities[i]))
+                    dummyList.Add(activeGravities[i]);
+
+                if (!dict.ContainsKey(activeGravities[i].transform.position))
+                    dict.Add(activeGravities[i].transform.position, dummyList);
+            }
+
+            //Sort out between embedded and non-embedded
+            List<GravitySource> nonEmd = new List<GravitySource>();
+            foreach (var item in dict)
+            {
+                if (item.Value.Count > 1 && !sortedDict.Contains(item))
+                    sortedDict.Add(item.Key, item.Value);
+                else nonEmd.Add(item.Value[0]);
+            }
+
+            if (nonEmd.Count > 0)
+                sortedDict.Add(Vector3.zero, nonEmd);
+
+            return sortedDict;
         }
 
         protected void EnableDisableSources(List<GravitySource> sources, bool enable)
