@@ -135,13 +135,13 @@ namespace Hedronoid
 
             if (filteredSrcs.Count == 1)
                 activeGravities = filteredSrcs.First().Value;
-            else activeGravities = filteredSrcs[Vector3.zero];
-
-            if (activeGravities == null || activeGravities.Count == 0)
+            else if (filteredSrcs.ContainsKey(Vector3.zero))
+                activeGravities = filteredSrcs[Vector3.zero];
+            else if (activeGravities == null || activeGravities.Count == 0)
             {
                 Vector3 key = filteredSrcs.First().Key;
                 float distance = Vector3.Distance(key, position);
-                Vector3 candidate = Vector3.zero;
+                Vector3 candidate = key;
 
                 foreach (Vector3 srcPos in filteredSrcs.Keys)
                 {
@@ -159,7 +159,7 @@ namespace Hedronoid
                 if (candidate != Vector3.zero)
                     activeGravities = filteredSrcs[candidate];
             }
-            Debug.LogError("FILTERED COUNT: " + filteredSrcs.Count);
+
             List<Vector3> activeGrvPositions = new List<Vector3>();
             Dictionary<GravitySource, float> srcAngleDictionary = new Dictionary<GravitySource, float>();
             Dictionary<GravitySource, float> srcDistanceDictionary = new Dictionary<GravitySource, float>();
@@ -226,6 +226,7 @@ namespace Hedronoid
                 else
                 {
                     l = PrioritizeEmbeddedGravities(position, activeGravities);
+                    //Debug.LogError("NAME: " + l.name);
                 }
 
                 //Debug.LogErrorFormat("UNO:  SRC {0} has angle with player {1}. And this is src: {2}",
@@ -270,7 +271,7 @@ namespace Hedronoid
                     //Debug.LogErrorFormat("SRC NAME: {0}, BOUNDS: {1}", src.name, src.TriggerCol.bounds.size.sqrMagnitude);
                     colliderSizes.Add(src.TriggerCol.bounds.size.sqrMagnitude);
                 }
-                else D.GravError("One of the embedded gravities doesn't have a collider attached.");
+                else D.GravError("One of the embedded gravities doesn't have a trigger collider attached.");
             }
 
             float smallest = colliderSizes[0];
