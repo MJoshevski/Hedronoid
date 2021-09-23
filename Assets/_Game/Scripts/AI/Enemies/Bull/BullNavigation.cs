@@ -93,6 +93,20 @@ namespace Hedronoid.AI
             ChangeState(EStates.DefaultMovement);
         }
 
+        protected override void OnDisable()
+        {
+            base.OnDisable();
+
+            HNDEvents.Instance.RemoveListener<KillEvent>(OnKilled);
+        }
+
+        protected override void OnDestroy()
+        {
+            base.OnDestroy();
+
+            HNDEvents.Instance.RemoveListener<KillEvent>(OnKilled);
+        }
+
         public override void SetAgentDestination(Vector3 target)
         {
             m_TargetV3 = target;

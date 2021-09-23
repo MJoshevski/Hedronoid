@@ -51,6 +51,21 @@ namespace Hedronoid.Core
             }
         }
 
+        protected override void OnDestroy()
+        {
+            base.OnDestroy();
+
+            HNDEvents.Instance.RemoveListener<StartLevel>(OnStartLevel);
+        }
+
+        protected override void OnDisable()
+        {
+            base.OnDisable();
+
+            HNDEvents.Instance.RemoveListener<StartLevel>(OnStartLevel);
+
+        }
+
         private void CreatePlayer()
         {
             HNDGameObject p = Instantiate(PlayerPrefab, GameplaySceneContext.cachedTransform);

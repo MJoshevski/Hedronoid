@@ -34,6 +34,21 @@ namespace Hedronoid.Core
             m_EndState = CreateCoroutineState(EGenericGameStates.END, OnUpdateEnd, OnEnterEnd, OnExitEnd);
         }
 
+        protected override void OnDisable()
+        {
+            base.OnDisable();
+
+            HNDEvents.Instance.RemoveListener<StartLevel>(OnStartLevel);
+        }
+
+        protected override void OnDestroy()
+        {
+            base.OnDestroy();
+
+            HNDEvents.Instance.RemoveListener<StartLevel>(OnStartLevel);
+        }
+
+
         private void OnStartLevel(StartLevel e)
         {
             ChangeState(EGenericGameStates.INTRO);

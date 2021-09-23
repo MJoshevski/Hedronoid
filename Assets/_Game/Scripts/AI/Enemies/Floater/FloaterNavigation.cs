@@ -50,6 +50,21 @@ namespace UnityMovementAI
             HNDEvents.Instance.AddListener<KillEvent>(OnKilled);
 
         }
+
+        protected override void OnDisable()
+        {
+            base.OnDisable();
+
+            HNDEvents.Instance.RemoveListener<KillEvent>(OnKilled);
+        }
+
+        protected override void OnDestroy()
+        {
+            base.OnDestroy();
+
+            HNDEvents.Instance.RemoveListener<KillEvent>(OnKilled);
+        }
+
         public override void OnGoToTargetUpdate()
         {
             throw new NotImplementedException();

@@ -92,7 +92,7 @@ MeshRenderer:
   m_RenderingLayerMask: 1
   m_RendererPriority: 0
   m_Materials:
-  - {fileID: 2100000, guid: 0e6d9344d5bbb9a4abca1058f4e295d6, type: 2}
+  - {fileID: -4475654472737668437, guid: 6e7b502234ffd3046924a60e1c448504, type: 3}
   m_StaticBatchInfo:
     firstSubMesh: 0
     subMeshCount: 0
@@ -391,7 +391,9 @@ MonoBehaviour:
   triggerLayers:
     serializedVersion: 2
     m_Bits: 66048
-  priorityWeight: 1
+  AutomaticColliderSize: 1
+  CurrentPriorityWeight: 1
+  IsPlayerInGravity: 0
   gravity: 9.81
   boundaryDistance: {x: 13.96, y: 11.9}
   outerDistance: 5

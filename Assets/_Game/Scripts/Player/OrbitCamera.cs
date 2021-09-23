@@ -162,6 +162,24 @@ namespace Hedronoid
             Cursor.lockState = LockCursor ? CursorLockMode.Locked : CursorLockMode.None;
         }
 
+        protected override void OnDisable()
+        {
+            base.OnDisable();
+
+            HNDEvents.Instance.RemoveListener<PlayerCreatedAndInitialized>(OnPlayerCreatedAndInitialized);
+            HNDEvents.Instance.RemoveListener<DebugMenuOpened>(OnDebugMenuOpened);
+            HNDEvents.Instance.RemoveListener<DebugMenuClosed>(OnDebugMenuClosed);
+        }
+
+        protected override void OnDestroy()
+        {
+            base.OnDestroy();
+
+            HNDEvents.Instance.RemoveListener<PlayerCreatedAndInitialized>(OnPlayerCreatedAndInitialized);
+            HNDEvents.Instance.RemoveListener<DebugMenuOpened>(OnDebugMenuOpened);
+            HNDEvents.Instance.RemoveListener<DebugMenuClosed>(OnDebugMenuClosed);
+        }
+
         public void LateUpdate()
         {
             if (!m_playerCreatedAndInitialized) return;

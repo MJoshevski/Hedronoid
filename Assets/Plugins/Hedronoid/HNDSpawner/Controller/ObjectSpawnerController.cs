@@ -58,6 +58,20 @@ namespace Hedronoid.Spawners
             m_SpawnInfo.Update(Time.deltaTime);
         }
 
+        protected override void OnDestroy()
+        {
+            base.OnDestroy();
+
+            HNDEvents.Instance.RemoveListener<SpawnObjectEvent>(OnSpawnObjectEvent);
+        }
+
+        protected override void OnDisable()
+        {
+            base.OnDisable();
+
+            HNDEvents.Instance.RemoveListener<SpawnObjectEvent>(OnSpawnObjectEvent);
+        }
+
         /// <summary>
         /// Listens for a SpawnObjectEvent and spawns an object in response
         /// </summary>

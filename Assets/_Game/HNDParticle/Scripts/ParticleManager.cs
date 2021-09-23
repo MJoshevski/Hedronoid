@@ -63,6 +63,22 @@ namespace Hedronoid.Particle
             D.CoreLog("Particle manager end time: " + Time.realtimeSinceStartup);
         }
 
+        protected override void OnDestroy()
+        {
+            HNDEvents.Instance.RemoveListener<PlayParticleSystem>(OnPlayParticleSystem);
+            HNDEvents.Instance.RemoveListener<StopParticleSystem>(OnStopParticleSystem);
+            HNDEvents.Instance.RemoveListener<StopAllParticleSystems>(OnStopAllParticleSystems);
+
+        }
+
+        protected override void OnDisable()
+        {
+            HNDEvents.Instance.RemoveListener<PlayParticleSystem>(OnPlayParticleSystem);
+            HNDEvents.Instance.RemoveListener<StopParticleSystem>(OnStopParticleSystem);
+            HNDEvents.Instance.RemoveListener<StopAllParticleSystems>(OnStopAllParticleSystems);
+
+        }
+
         private void OnPlayParticleSystem(PlayParticleSystem e)
         {
             HNDParticleSystem prefab = GetParticleSystemPrefabFromName(e.Config.Name);

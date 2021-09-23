@@ -316,6 +316,20 @@ namespace Hedronoid.Player
             ClearState();
         }
 
+        protected override void OnDisable()
+        {
+            base.OnDisable();
+
+            HNDEvents.Instance.RemoveListener<KillEvent>(OnKilled);
+        }
+
+        protected override void OnDestroy()
+        {
+            base.OnDestroy();
+
+            HNDEvents.Instance.RemoveListener<KillEvent>(OnKilled);
+        }
+
         #endregion
 
         #region STATE: GROUND_MOVEMENT

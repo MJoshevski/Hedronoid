@@ -59,6 +59,24 @@ namespace Hedronoid.Weapons
             D.CoreLog("Bullet pool manager end time: " + Time.realtimeSinceStartup);
         }
 
+        protected override void OnDisable()
+        {
+            base.OnDisable();
+
+            HNDEvents.Instance.RemoveListener<GetBulletToFire>(OnGetBulletToFire);
+            HNDEvents.Instance.RemoveListener<DestroyFiredBullet>(OnDestroyFiredBullet);
+            HNDEvents.Instance.RemoveListener<DestroyAllFiredBullets>(OnDestroyAllFiredBullets);
+        }
+
+        protected override void OnDestroy()
+        {
+            base.OnDestroy();
+
+            HNDEvents.Instance.RemoveListener<GetBulletToFire>(OnGetBulletToFire);
+            HNDEvents.Instance.RemoveListener<DestroyFiredBullet>(OnDestroyFiredBullet);
+            HNDEvents.Instance.RemoveListener<DestroyAllFiredBullets>(OnDestroyAllFiredBullets);
+        }
+
         public GameObject GetBulletToFire(BulletPoolManager.BulletConfig Config)
         {
             if (Config.Prefab == null)

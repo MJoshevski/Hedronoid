@@ -89,6 +89,22 @@ namespace Hedronoid.AI
             HNDEvents.Instance.AddListener<KillEvent>(KillEvent);
         }
 
+        protected override void OnDestroy()
+        {
+            base.OnDestroy();
+
+            HNDEvents.Instance.RemoveListener<KillEvent>(KillEvent);
+
+        }
+
+        protected override void OnDisable()
+        {
+            base.OnDisable();
+
+            HNDEvents.Instance.RemoveListener<KillEvent>(KillEvent);
+
+        }
+
         void KillEvent(KillEvent e)
         {
             if (e.GOID != gameObject.GetInstanceID()) return;
