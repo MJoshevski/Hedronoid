@@ -20,6 +20,15 @@ namespace Hedronoid
         [SerializeField]
         protected bool AutomaticColliderSize = true;
 
+        [Serializable]
+        public struct FilteredSources
+        {
+            public Vector3 pos;
+            public List<GravitySource> sources;
+        }
+
+        public FilteredSources[] filteredSources;
+
         [HideInInspector]
         [Range(1,10)]
         public int CurrentPriorityWeight = 1;
@@ -48,6 +57,19 @@ namespace Hedronoid
             }
 
             OnValidate();
+        }
+
+        private void FixedUpdate()
+        {
+            Dictionary<Vector3, List<GravitySource>> dict = GravityService.FilterEmbeddedGravities();
+            filteredSources = null;
+            filteredSources = new FilteredSources[dict.Keys.Count];
+            for (int i = 0; i < filteredSources.Length; i++)
+            {
+                filteredSources[i].pos = dict.Keys.ToArray()[i];
+                filteredSources[i].sources = dict.Values.ToArray()[i];
+
+            }
         }
 
         protected virtual void OnValidate()

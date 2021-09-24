@@ -258,7 +258,9 @@ namespace Hedronoid
                             activeGravities[j].transform.position)
                         {
                             notEqual = false;
-                            nonZeroList.Add(activeGravities[j]);
+
+                            if (!nonZeroList.Contains(activeGravities[j]))
+                                nonZeroList.Add(activeGravities[j]);
                         }
                         else
                         {
@@ -282,12 +284,14 @@ namespace Hedronoid
                         dict.Add(activeGravities[i].transform.position, nonZeroList);
                 }
             }
-            else zeroList.Add(activeGravities[0]);
+            else if (!zeroList.Contains(activeGravities[0]))
+                zeroList.Add(activeGravities[0]);
 
 
             if (zeroList.Count > 0)
             {
-                dict.Add(Vector3.zero, zeroList);
+                if (!dict.ContainsKey(Vector3.zero) && !dict.ContainsValue(zeroList))
+                    dict.Add(Vector3.zero, zeroList);
             }
             return dict;
         }

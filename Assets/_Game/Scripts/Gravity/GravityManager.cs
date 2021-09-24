@@ -16,9 +16,16 @@ namespace Hedronoid.Gravity
 
         public List<GravitySource> gravitySourcesInScene = new List<GravitySource>();
         public List<string> gravityParentNamesInScene;
-
+        public FilteredSources[] filteredSources;
         private PlayerFSM player;
         private List<GravitySource> activeSources = new List<GravitySource>();
+
+        [Serializable]
+        public struct FilteredSources
+        {
+            public Vector3 pos;
+            public List<GravitySource> sources;
+        }
         protected override void Awake()
         {
             base.Awake();

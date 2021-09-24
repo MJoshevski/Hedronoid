@@ -11,7 +11,6 @@ namespace Hedronoid.Gravity
     class GravityManagerEditor : Editor
     {
         GravityManager thisGM;
-
         void OnEnable()
         {
             thisGM = (GravityManager) target;
@@ -21,6 +20,7 @@ namespace Hedronoid.Gravity
         }
         public override bool RequiresConstantRepaint()
         {
+            thisGM.ScanForGravitySources();
             return true;
         }
         public override void OnInspectorGUI()
@@ -30,6 +30,8 @@ namespace Hedronoid.Gravity
             GUI.enabled = true;
 
             List<GravitySource> list = thisGM.gravitySourcesInScene;
+
+            if (list.Count == 0 || list == null) return;
 
             // Populate list of sources
             int newCount = Mathf.Max(0, EditorGUILayout.DelayedIntField("Size", list.Count));
