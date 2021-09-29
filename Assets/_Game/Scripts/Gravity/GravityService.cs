@@ -280,8 +280,20 @@ namespace Hedronoid
                         nonZeroList.Add(activeGravities[i]);
                     }
 
+
+                    List<GravitySource> filteredZeroList = new List<GravitySource>(zeroList);
+                    List<GravitySource> filteredNonZeroList = new List<GravitySource>();
+
+                    foreach (GravitySource gs in nonZeroList)
+                        if (gs.transform.position == activeGravities[i].transform.position)
+                            filteredNonZeroList.Add(gs);
+
+                    foreach (GravitySource gs in filteredZeroList)
+                        if (nonZeroList.Contains(gs))
+                            zeroList.Remove(gs);
+
                     if (!dict.ContainsKey(activeGravities[i].transform.position))
-                        dict.Add(activeGravities[i].transform.position, nonZeroList);
+                        dict.Add(activeGravities[i].transform.position, filteredNonZeroList);
                 }
             }
             else if (!zeroList.Contains(activeGravities[0]))
