@@ -10,20 +10,37 @@ namespace Hedronoid
         float gravity = 9.81f;
 
         [SerializeField]
+        [Tooltip("Boundary box dimensions. Color = Red")]
         Vector3 boundaryDistance = Vector3.one;
 
+        [Header("Inner")]
         [SerializeField, Min(0f)]
-        float innerDistance = 0f, innerFalloffDistance = 0f;
+        [Tooltip("Inner box dimensions. Color = Cyan")]
+        float innerDistance = 0f;
+        [SerializeField, Min(0f)]
+        [Tooltip("Inner falloff box dimensions. Color = Yellow")]
+        float innerFalloffDistance = 0f;
 
+        [Header("Outer")]
         [SerializeField, Min(0f)]
-        float outerDistance = 0f, outerFalloffDistance = 0f;
+        [Tooltip("Outer box dimensions. Color = Yellow")]
+        float outerDistance = 0f;
+        [SerializeField, Min(0f)]
+        [Tooltip("Outer falloff box dimensions. Color = Cyan")]
+        float outerFalloffDistance = 0f;
 
         float innerFalloffFactor, outerFalloffFactor;
+        public Vector3 ResizedBounds { get { return resizedBounds; } }
+
+        [Header("Resized")]
+        [SerializeField, Min(0f)]
+        [Tooltip("Resized box dimensions. Color = Black")]
+        Vector3 resizedBounds;
+        Vector3 originalBounds;
 
         // BOUNDS
         [HideInInspector]
         public BoxCollider boundsCollider;
-
         protected override void OnValidate()
         {
             base.OnValidate();
@@ -58,9 +75,16 @@ namespace Hedronoid
             }
         }
 
+        protected override void Awake()
+        {
+            base.Awake();
+
+            originalBounds = boundsCollider.size;
+        }
+
         public override Vector3 GetGravity(Vector3 position)
         {
-            if (CurrentPriorityWeight < GravityService.GetMaxPriorityWeight())
+            if (CurrentPriorityWeight < GravityService.GetMaxPriorityWeight() || !IsPlayerInGravity)
                 return Vector3.zero;
 
             position =
@@ -160,6 +184,21 @@ namespace Hedronoid
             }
             return coordinate > 0f ? -g : g;
         }
+        protected override void ResizeColliderBounds(bool shouldResize)
+        {
+            base.ResizeColliderBounds(shouldResize);
+
+            if (shouldResize)
+            {
+                boundsCollider.size = 2 * resizedBounds;
+                boundsCollider.center = Vector3.zero;
+            }
+            else
+            {
+                boundsCollider.size = originalBounds;
+                boundsCollider.center = Vector3.zero;
+            }
+        }
 
 #if UNITY_EDITOR
         void OnDrawGizmosSelected()
@@ -195,6 +234,12 @@ namespace Hedronoid
             {
                 Gizmos.color = Color.cyan;
                 DrawGizmosOuterCube(outerFalloffDistance);
+            }
+
+            if (ResizeColliderOnEnter)
+            {
+                Gizmos.color = Color.black;
+                Gizmos.DrawWireCube(Vector3.zero, 2f * resizedBounds);
             }
         }
 

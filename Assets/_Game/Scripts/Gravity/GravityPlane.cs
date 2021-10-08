@@ -44,7 +44,7 @@ namespace Hedronoid
         }
         public override Vector3 GetGravity(Vector3 position)
         {
-            if (CurrentPriorityWeight < GravityService.GetMaxPriorityWeight())
+            if (CurrentPriorityWeight < GravityService.GetMaxPriorityWeight() || !IsPlayerInGravity)
                 return Vector3.zero;
 
             position =
@@ -98,6 +98,22 @@ namespace Hedronoid
 
             return transform.TransformDirection(g * vector);
         }
+        //protected override void ResizeColliderBounds(bool shouldResize)
+        //{
+        //    base.ResizeColliderBounds(shouldResize);
+
+        //    if (shouldResize)
+        //    {
+        //        boundsCollider.size =
+        //            2 * new Vector3(boundaryDistance.x, outerFalloffDistance / 2f, boundaryDistance.y);
+        //        boundsCollider.center = new Vector3(0, outerFalloffDistance / 2f, 0);
+        //    }
+        //    else
+        //    {
+        //        boundsCollider.size = 2 * originalBounds;
+        //        boundsCollider.center = Vector3.zero;
+        //    }
+        //}
 
 #if UNITY_EDITOR
         void OnDrawGizmosSelected()

@@ -10,22 +10,44 @@ namespace Hedronoid
         [SerializeField]
         float gravity = 9.81f;
 
+        [Header("Boundary")]
         [SerializeField, Min(0f)]
-        float boundaryHeight = 6f, boundaryRadius = 4f;
+        [Tooltip("Boundary cylinder height. Color = Red")]
+        float boundaryHeight = 6f;
+        [SerializeField, Min(0f)]
+        [Tooltip("Boundary cylinder radius. Color = Red")]
+        float boundaryRadius = 4f;
 
+        [Header("Inner")]
         [SerializeField, Min(0f)]
+        [Tooltip("Inner falloff cylinder radius. Color = Cyan")]
         float innerFalloffRadius = 1f;
 
         [SerializeField, Min(0f)]
+        [Tooltip("Inner cylinder radius. Color = Yellow")]
         float innerRadius = 5f;
 
+        [Header("Outer")]
         [SerializeField, Min(0f)]
+        [Tooltip("Outer cylinder radius. Color = Yellow")]
         float outerRadius = 10f;
 
         [SerializeField, Min(0f)]
+        [Tooltip("Outer falloff cylinder radius. Color = Cyan")]
         float outerFalloffRadius = 15f;
 
         float innerFalloffFactor, outerFalloffFactor;
+        float originalRadius, originalBoundaryHeight;
+        public float ResizedRadius { get { return resizedRadius; } }
+        public float ResizedBoundaryHeight { get { return resizedBoundaryHeight; } }
+
+        [Header("Resized")]
+        [SerializeField, Min(0f)]
+        [Tooltip("Resized cylinder radius. Color = Black")]
+        float resizedRadius;
+        [SerializeField, Min(0f)]
+        [Tooltip("Resized cylinder height. Color = Black")]
+        float resizedBoundaryHeight;
 
         // BOUNDS
         [HideInInspector]
@@ -60,9 +82,17 @@ namespace Hedronoid
             }
         }
 
+        protected override void Awake()
+        {
+            base.Awake();
+
+            originalRadius = boundsCollider.radius;
+            originalBoundaryHeight = boundsCollider.height;
+        }
+
         public override Vector3 GetGravity(Vector3 position)
         {
-            if (CurrentPriorityWeight < GravityService.GetMaxPriorityWeight())
+            if (CurrentPriorityWeight < GravityService.GetMaxPriorityWeight() || !IsPlayerInGravity)
                 return Vector3.zero;
 
             Vector3 vector = transform.position - position;
@@ -91,6 +121,23 @@ namespace Hedronoid
                 g *= 1f - (innerRadius - distance) * innerFalloffFactor;
             }
             return transform.TransformDirection(g * vector);
+        }
+        protected override void ResizeColliderBounds(bool shouldResize)
+        {
+            base.ResizeColliderBounds(shouldResize);
+
+            if (shouldResize)
+            {
+                boundsCollider.radius = resizedRadius;
+                boundsCollider.height = resizedBoundaryHeight;
+                boundsCollider.center = Vector3.zero;
+            }
+            else
+            {
+                boundsCollider.radius = originalRadius;
+                boundsCollider.height = originalBoundaryHeight;
+                boundsCollider.center = Vector3.zero;
+            }
         }
 
 #if UNITY_EDITOR
@@ -136,6 +183,16 @@ namespace Hedronoid
                outerRadius,
                Color.yellow);
 
+            if (ResizeColliderOnEnter)
+            {
+                // Draw resized collider cylinder: BLACK
+                DrawWireCylinder(
+                   transform.position,
+                   transform.rotation,
+                   resizedBoundaryHeight,
+                   resizedRadius,
+                   Color.black);
+            }
         }
         public static void DrawWireCylinder(Vector3 _pos, Quaternion _rot, float _height, float _radius, Color _color = default(Color))
         {

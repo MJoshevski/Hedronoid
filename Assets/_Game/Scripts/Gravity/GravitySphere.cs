@@ -10,22 +10,38 @@ namespace Hedronoid
         float gravity = 9.81f;
         public float Gravity { get { return gravity; } }
 
+        [Header("Outer")]
         [SerializeField, Min(0f)]
-        float outerRadius = 10f, outerFalloffRadius = 15f;
+        [Tooltip("Radius for the outer sphere. Color = Yellow")]
+        float outerRadius = 10f;
+        [SerializeField, Min(0f)]
+        [Tooltip("Radius for the outer falloff sphere. Color = Cyan")]
+        float outerFalloffRadius = 15f;
         public float OuterRadius { get { return outerRadius; } }
         public float OuterFalloffRadius { get { return outerFalloffRadius; } }
 
+        [Header("Inner")]
         [SerializeField, Min(0f)]
-        float innerFalloffRadius = 1f, innerRadius = 5f;
+        [Tooltip("Radius for the inner falloff sphere. Color = Cyan")]
+        float innerFalloffRadius = 1f;
+        [SerializeField, Min(0f)]
+        [Tooltip("Radius for the inner sphere. Color = Yellow")]
+        float innerRadius = 5f;
         public float InnerFalloffRadius { get { return innerFalloffRadius; } }
         public float InnerRadius { get { return innerRadius; } }
 
         float innerFalloffFactor, outerFalloffFactor;
+        public float ResizedRadius { get { return resizedRadius; } }
+
+        [Header("Resize")]
+        [SerializeField, Min(0f)]
+        [Tooltip("Radius for the resize sphere. Color = Black")]
+        float resizedRadius;
+        float originalRadius;
 
         // BOUNDS
         [HideInInspector]
         public SphereCollider boundsCollider;
-
         protected override void OnValidate()
         {
             base.OnValidate();
@@ -49,9 +65,16 @@ namespace Hedronoid
                 boundsCollider.center = Vector3.zero;
             }
         }
+
+        protected override void Awake()
+        {
+            base.Awake();
+
+            originalRadius = boundsCollider.radius;
+        }
         public override Vector3 GetGravity(Vector3 position)
         {
-            if (CurrentPriorityWeight < GravityService.GetMaxPriorityWeight())
+            if (CurrentPriorityWeight < GravityService.GetMaxPriorityWeight() || !IsPlayerInGravity)
                 return Vector3.zero;
 
             Vector3 vector = transform.position - position;
@@ -71,7 +94,21 @@ namespace Hedronoid
             }
             return g * vector;
         }
+        protected override void ResizeColliderBounds(bool shouldResize)
+        {
+            base.ResizeColliderBounds(shouldResize);
 
+            if (shouldResize)
+            {
+                boundsCollider.radius = resizedRadius;
+                boundsCollider.center = Vector3.zero;
+            }
+            else
+            {
+                boundsCollider.radius = originalRadius;
+                boundsCollider.center = Vector3.zero;
+            }
+        }
 #if UNITY_EDITOR
         void OnDrawGizmosSelected()
         {
@@ -91,6 +128,12 @@ namespace Hedronoid
             {
                 Gizmos.color = Color.cyan;
                 Gizmos.DrawWireSphere(p, outerFalloffRadius);
+            }
+
+            if (ResizeColliderOnEnter)
+            {
+                Gizmos.color = Color.black;
+                Gizmos.DrawWireSphere(p, resizedRadius);
             }
         }
 #endif

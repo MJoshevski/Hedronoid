@@ -16,6 +16,9 @@ namespace Hedronoid
         [Header("Collisions and overlaps")]
         [Tooltip("Which layers are allowed to collide with this gravity source?")]
         public LayerMask triggerLayers;
+        [Tooltip("Should the collider resize once the player enters the gravity?")]
+        [SerializeField]
+        protected bool ResizeColliderOnEnter = false;
         [Tooltip("Should the boundaries control the scale/position of the trigger collider?")]
         [SerializeField]
         protected bool AutomaticColliderSize = true;
@@ -27,12 +30,13 @@ namespace Hedronoid
             public List<GravitySource> sources;
         }
 
+        [HideInInspector]
         public FilteredSources[] filteredSources;
 
-        [HideInInspector]
+        //[HideInInspector]
         [Range(1,10)]
         public int CurrentPriorityWeight = 1;
-        [HideInInspector]
+        //[HideInInspector]
         public bool IsPlayerInGravity = false;
 
         public List<GravitySource> OverlappingSources { get; private set; } = new List<GravitySource>();
@@ -104,56 +108,50 @@ namespace Hedronoid
         {
             if (!IsInLayerMask(other)) return;
 
+            if ((other.gameObject.layer & (1 << HNDAI.Settings.PlayerLayer)) > 0)
+                IsPlayerInGravity = true;
+
             GravitySource grSrc = other.gameObject.GetComponent<GravitySource>();
             if (grSrc && !OverlappingSources.Contains(grSrc))
                     OverlappingSources.Add(grSrc);
 
-            if ((other.gameObject.layer & (1 << HNDAI.Settings.PlayerLayer)) > 0)
+            if (IsPlayerInCollider(other) && ResizeColliderOnEnter)
             {
-                IsPlayerInGravity = true;
+                if (AutomaticColliderSize) AutomaticColliderSize = false;
+                ResizeColliderBounds(true);
 
-                //List<GravitySource> activeGravities = GravityService.GetActiveGravitySources();
-                //if (activeGravities.Count == 1)
-                //{
-                //    //CurrentPriorityWeight = 2;
-                //    //foreach (GravitySource gs in OverlappingSources)
-                //    //    gs.CurrentPriorityWeight = 1;
-                //}
-                //GravityService.PrioritizeActiveOverlappedGravities(other.transform.position,
-                //    GameplaySceneContext.Player.movementVariables.MoveDirection,
-                //    OverlappingSources);
+                foreach (GravitySource gs in OverlappingSources)
+                    if(gs.ResizeColliderOnEnter)
+                        gs.ResizeColliderBounds(false);
             }
         }
 
         public virtual void OnTriggerStay(Collider other)
         {
             if (!IsInLayerMask(other)) return;
-
-            //if ((other.gameObject.layer & (1 << HNDAI.Settings.PlayerLayer)) > 0)
-            //{
-            //    GravityService.PrioritizeActiveOverlappedGravities(other.transform.position,
-            //        GameplaySceneContext.Player.movementVariables.MoveDirection,
-            //        OverlappingSources);
-            //}
         }
 
         public virtual void OnTriggerExit(Collider other)
         {
             if (!IsInLayerMask(other)) return;
 
+            if ((other.gameObject.layer & (1 << HNDAI.Settings.PlayerLayer)) > 0)
+                IsPlayerInGravity = false;
+
             GravitySource grSrc = other.gameObject.GetComponent<GravitySource>();
             if (grSrc && OverlappingSources.Contains(grSrc))
                 OverlappingSources.Remove(grSrc);
 
-            if ((other.gameObject.layer & (1 << HNDAI.Settings.PlayerLayer)) > 0)
+            if (IsPlayerInCollider(other) && ResizeColliderOnEnter)
             {
-                IsPlayerInGravity = false;
-                ////CurrentPriorityWeight = 1;
-                //GravityService.PrioritizeActiveOverlappedGravities(
-                //    other.transform.position,
-                //    GameplaySceneContext.Player.movementVariables.MoveDirection,
-                //    OverlappingSources);
+                if (AutomaticColliderSize) AutomaticColliderSize = false;
+                ResizeColliderBounds(false);
             }
+        }
+
+        protected virtual void ResizeColliderBounds(bool shouldResize)
+        {
+            // To be overriden in sub-classes.
         }
         protected void EnableDisableSources(List<GravitySource> sources, bool enable)
         {
@@ -166,6 +164,11 @@ namespace Hedronoid
         protected bool IsInLayerMask(Collider other)
         {
             return ((triggerLayers.value & (1 << other.gameObject.layer)) > 0);
+        }
+
+        protected bool IsPlayerInCollider(Collider other)
+        {
+            return ((HNDAI.Settings.PlayerLayer.value & (1 << other.gameObject.layer)) > 0);
         }
     }
 }
