@@ -141,6 +141,7 @@ namespace Hedronoid.Player
         [HideInInspector]
         public RaycastHit RayHit;
         private System.Action onDespawnAction;
+        private BulletPoolManager.BulletConfig bulletConf;
 
         // CONTROLS/BINDINGS
         private PlayerActionSet PlayerActions;
@@ -200,6 +201,7 @@ namespace Hedronoid.Player
             Animator = GetComponentInChildren<Animator>();
             animHashes = new AnimatorHashes();
             animData = new AnimatorData(Animator);
+            bulletConf = new BulletPoolManager.BulletConfig();
             secondaryGravityMultiplier = 1f;
 
             PlayerActions = InputManager.Instance.PlayerActions;
@@ -836,21 +838,29 @@ namespace Hedronoid.Player
 
             // Apply jump force after zeroing out local y-velocity
             velocity += jumpDirection * jumpSpeed;
-        }
-
+        }   
         public void Shoot(bool primaryFire)
         {
-            //Gizmos.Line(bulletOrigin.position, RayHit.point, Color.yellow);
-
             Vector3 shootDirection;
+            Vector3 rayHitPos = Vector3.zero;
+            Ray ray = Camera.main.ViewportPointToRay(new Vector3 (0.5f, 0.5f, 0f));
 
-            if (RayHit.point != Vector3.zero)
-                shootDirection = RayHit.point - bulletOrigin.position;
-            else shootDirection = LookRay.direction;
+            RaycastHit hit;
+            if (Physics.Raycast(ray, out hit))
+            {
+                // Debug.LogError(hit.point);
+                rayHitPos = hit.point;
+                // Debug.LogError("SHOOT DIR: " + shootDirection);
+            }
+            else rayHitPos = ray.GetPoint(10000f);
+
+            shootDirection = (rayHitPos - bulletOrigin.position).normalized;
+
+
+            Popcron.Gizmos.Line(bulletOrigin.position, rayHitPos, Color.black);
 
             if (primaryFire && Time.realtimeSinceStartup - lastFired_Auto > fireRatePrimary)
             {
-                BulletPoolManager.BulletConfig bulletConf = new BulletPoolManager.BulletConfig();
                 bulletConf.Prefab = bulletPrimary;
                 bulletConf.Position = bulletOrigin.position;
                 bulletConf.Rotation = Quaternion.identity;
@@ -858,16 +868,19 @@ namespace Hedronoid.Player
                 bulletConf.Duration = 5f;
 
                 GameObject auto = GameplaySceneContext.BulletPoolManager.GetBulletToFire(bulletConf);
-
+                TrailRenderer tr = auto.GetComponent<TrailRenderer>();
+                tr.enabled = false;
+                tr.enabled = true;
                 Rigidbody rb_auto = auto.GetComponent<Rigidbody>();
-                rb_auto.AddForce(shootDirection.normalized * shootForcePrimary);
+                rb_auto.transform.LookAt(shootDirection);
+                rb_auto.velocity = Vector3.zero;
+                rb_auto.AddForce(shootDirection * shootForcePrimary);
                 lastFired_Auto = Time.realtimeSinceStartup;
 
                 FMODUnity.RuntimeManager.PlayOneShot(m_playerAudioData.bulletPrimary[0], transform.position);
             }
             else if (!primaryFire && Time.realtimeSinceStartup - lastFired_Shotgun > fireRateSecondary)
             {
-                BulletPoolManager.BulletConfig bulletConf = new BulletPoolManager.BulletConfig();
                 bulletConf.Prefab = bulletSecondary;
                 bulletConf.Position = bulletOrigin.position;
                 bulletConf.Rotation = Quaternion.identity;
@@ -877,13 +890,14 @@ namespace Hedronoid.Player
                 GameObject shot = GameplaySceneContext.BulletPoolManager.GetBulletToFire(bulletConf);
 
                 Rigidbody rb_shot = shot.GetComponent<Rigidbody>();
-                rb_shot.AddForce(shootDirection.normalized * shootForceSecondary);
+                rb_shot.velocity = Vector3.zero;
+                rb_shot.transform.LookAt(shootDirection);
+                rb_shot.AddForce(shootDirection * shootForceSecondary);
                 lastFired_Shotgun = Time.realtimeSinceStartup;
 
                 FMODUnity.RuntimeManager.PlayOneShot(m_playerAudioData.bulletSecondary, transform.position);
             }
         }
-
         private System.Action onDespawnReset(GameObject bullet)
         {
             bullet.SetActive(false);
