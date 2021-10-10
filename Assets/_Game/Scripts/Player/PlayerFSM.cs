@@ -103,6 +103,8 @@ namespace Hedronoid.Player
         public float shootForcePrimary = 8000f, shootForceSecondary = 5000f, shootForceTertiary = 100000f;
         [Tooltip("Prefab of the respective weapon's bullet.")]
         public GameObject bulletPrimary, bulletSecondary, bulletTertiary;
+        [Tooltip("Bullet raycast ignore layers")]
+        public LayerMask bulletIgnoreLayers;
 
         [Header("Visual")]
         [SerializeField]
@@ -846,11 +848,11 @@ namespace Hedronoid.Player
             Ray ray = Camera.main.ViewportPointToRay(new Vector3 (0.5f, 0.5f, 0f));
 
             RaycastHit hit;
-            if (Physics.Raycast(ray, out hit))
+            if (Physics.Raycast(ray, out hit, 10000f, ~bulletIgnoreLayers))
             {
                 // Debug.LogError(hit.point);
                 rayHitPos = hit.point;
-                // Debug.LogError("SHOOT DIR: " + shootDirection);
+                Debug.LogError("HIT " + hit.transform.name);
             }
             else rayHitPos = ray.GetPoint(10000f);
 
