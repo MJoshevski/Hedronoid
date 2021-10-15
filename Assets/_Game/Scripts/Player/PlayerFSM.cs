@@ -848,7 +848,7 @@ namespace Hedronoid.Player
             Ray ray = Camera.main.ViewportPointToRay(new Vector3 (0.5f, 0.5f, 0f));
 
             RaycastHit hit;
-            if (Physics.Raycast(ray, out hit, 10000f, ~bulletIgnoreLayers))
+            if (Physics.Raycast(ray, out hit, Mathf.Infinity, ~bulletIgnoreLayers))
             {
                 // Debug.LogError(hit.point);
                 rayHitPos = hit.point;

@@ -93,6 +93,21 @@ namespace Hedronoid.AI
             ChangeState(EStates.DefaultMovement);
         }
 
+        protected override void OnCollisionEnter(Collision collision)
+        {
+            base.OnCollisionEnter(collision);
+
+            if (collision.gameObject.layer == LayerMask.NameToLayer("PlayerBullet"))
+            {
+                HNDEvents.Instance.Raise(new RecieveHealthEvent { amount = -1f, canGoAboveMax = false, GOID = gameObject.GetInstanceID() });
+                damage = new DamageInfo();
+                damage.sender = Target.gameObject;
+                damage.Damage = 1;
+
+                m_damageHandler.DoDamage(damage);
+            }
+        }
+
         protected override void OnDisable()
         {
             base.OnDisable();
@@ -384,6 +399,11 @@ namespace Hedronoid.AI
             {
                 m_Target = newTarget.transform;
             }
+
+
+
+            NNInfo info = AstarPath.active.GetNearest(transform.position);
+            transform.position = info.position;
         }
         public override void ChangeTarget()
         {
