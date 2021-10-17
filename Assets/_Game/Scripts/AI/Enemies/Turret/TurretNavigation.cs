@@ -168,7 +168,7 @@ namespace Hedronoid
         {
             if (e.GOID != gameObject.GetInstanceID()) return;
             StopAllCoroutines();
-            this.enabled = false;
+            gameObject.SetActive(false);
         }
         private System.Action onDespawnReset(GameObject bullet)
         {

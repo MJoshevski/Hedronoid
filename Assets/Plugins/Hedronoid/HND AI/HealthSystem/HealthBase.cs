@@ -102,6 +102,7 @@ namespace Hedronoid.Health
 
         private void OnDeath()
         {
+            Debug.LogError("PLAYER DEAD");
             HNDEvents.Instance.Raise(new KillEvent { sender = gameObject, GOID = gameObject.GetInstanceID() });
             if(m_shouldRagdollOnDeath)
                 SetFullRagdoll();
@@ -133,12 +134,13 @@ namespace Hedronoid.Health
             if (m_CurrentHealth <= 0f) return;
             m_CurrentHealth = 0f;
             m_LastDamageTimestamp = Time.time;
-            foreach(DamageHandler dh in m_damageHandlers)
+            OnDeath();
+            HealthChangedUpdate();
+
+            foreach (DamageHandler dh in m_damageHandlers)
             {
                 dh.Die();
             }
-            OnDeath();
-            HealthChangedUpdate();
         }
 
         public float CurrentHealth
