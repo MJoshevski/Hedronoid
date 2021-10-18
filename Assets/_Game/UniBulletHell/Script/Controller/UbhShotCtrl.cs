@@ -70,17 +70,19 @@ public sealed class UbhShotCtrl : HNDMonoBehaviour
     /// is shooting flag.
     /// </summary>
     public bool shooting { get { return m_shooting; } }
-
-    private void Start()
+    protected override void Start()
     {
+        base.Start();
+
         if (m_startOnAwake)
         {
             StartShotRoutine(m_startOnAwakeDelay);
         }
     }
-
-    private void OnEnable()
+    protected override void OnEnable()
     {
+        base.OnEnable();
+
         UbhShotManager.instance.AddShot(this);
 
         if (m_startOnEnable)
@@ -89,8 +91,10 @@ public sealed class UbhShotCtrl : HNDMonoBehaviour
         }
     }
 
-    private void OnDisable()
+    protected override void OnDisable()
     {
+        base.OnDisable();
+
         m_shooting = false;
 
         UbhShotManager shotMgr = UbhShotManager.instance;

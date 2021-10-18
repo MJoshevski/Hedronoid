@@ -76,6 +76,11 @@ public abstract class UbhBaseShot : HNDMonoBehaviour
             if (m_shotCtrl == null)
             {
                 m_shotCtrl = transform.GetComponentInParent<UbhShotCtrl>();
+
+                if (m_shotCtrl == null)
+                {
+                    m_shotCtrl = transform.parent.GetComponentInParent<UbhShotCtrl>();
+                }
             }
             return m_shotCtrl;
         }
@@ -93,6 +98,18 @@ public abstract class UbhBaseShot : HNDMonoBehaviour
 
     public virtual bool disableShooting { get { return m_disableShooting; } set { m_disableShooting = value; } }
 
+    protected override void OnEnable()
+    {
+        base.OnEnable();
+
+        UbhShotCtrl.ShotInfo si = new UbhShotCtrl.ShotInfo();
+
+        si.m_afterDelay = 2;
+        si.m_shotObj = this;
+
+        if(!shotCtrl.m_shotList.Contains(si))
+            shotCtrl.m_shotList.Add(si);
+    }
     protected override void Start()
     {
         base.Start();
@@ -113,6 +130,14 @@ public abstract class UbhBaseShot : HNDMonoBehaviour
         base.OnDisable();
 
         m_shooting = false;
+
+        UbhShotCtrl.ShotInfo si = new UbhShotCtrl.ShotInfo();
+
+        si.m_afterDelay = 2;
+        si.m_shotObj = this;
+
+        if (shotCtrl.m_shotList.Contains(si))
+            shotCtrl.m_shotList.Remove(si);
     }
 
     /// <summary>

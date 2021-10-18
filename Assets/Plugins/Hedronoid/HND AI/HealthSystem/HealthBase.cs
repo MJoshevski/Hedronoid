@@ -102,7 +102,6 @@ namespace Hedronoid.Health
 
         private void OnDeath()
         {
-            Debug.LogError("PLAYER DEAD");
             HNDEvents.Instance.Raise(new KillEvent { sender = gameObject, GOID = gameObject.GetInstanceID() });
             if(m_shouldRagdollOnDeath)
                 SetFullRagdoll();

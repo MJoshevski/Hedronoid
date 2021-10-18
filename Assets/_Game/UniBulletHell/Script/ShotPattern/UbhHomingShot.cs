@@ -23,10 +23,16 @@ public class UbhHomingShot : UbhBaseShot
     public string m_targetTagName = "Player";
     // "Flag to randomly select from GameObjects of the same tag."
     public bool m_randomSelectTagTarget;
-    // "Transform of lock on target."
-    // "It is not necessary if you want to specify target in tag."
-    [FormerlySerializedAs("_TargetTransform")]
-    public Transform m_targetTransform;
+    // "Overwrite Angle in direction of target to Transform.position."
+    // "Always aim to target."
+    [FormerlySerializedAs("_Aiming")]
+    public bool m_aiming;
+    // "Set a center angle of rows. (0 to 360)"
+    [Range(0f, 360f), FormerlySerializedAs("_VerticalAngle")]
+    public float m_verticalAngle = 180f;
+    // "Set a center angle of shot. (0 to 360)"
+    [Range(0f, 360f), FormerlySerializedAs("_HorizontalAngle")]
+    public float m_horizontalAngle = 180f;
 
     private int m_nowIndex;
     private float m_delayTimer;
@@ -51,9 +57,16 @@ public class UbhHomingShot : UbhBaseShot
 
     private void Update()
     {
+        if (!m_targetTransform) return;
+
         if (m_shooting == false)
         {
             return;
+        }
+
+        if (m_shooting && m_aiming)
+        {
+            AimTarget();
         }
 
         if (m_delayTimer >= 0f)
@@ -77,7 +90,7 @@ public class UbhHomingShot : UbhBaseShot
             m_targetTransform = UbhUtil.GetTransformFromTagName(m_targetTagName, m_randomSelectTagTarget);
         }
 
-        ShotBullet(bullet, m_bulletSpeed, 0f, 0f, true, m_targetTransform, m_homingAngleSpeed);
+        ShotBullet(bullet, m_bulletSpeed, m_horizontalAngle, m_verticalAngle, true, m_targetTransform, m_homingAngleSpeed);
 
 
         FiredShot();
@@ -97,4 +110,20 @@ public class UbhHomingShot : UbhBaseShot
             }
         }
     }
+
+    private void AimTarget()
+    {
+        if (m_targetTransform == null && m_setTargetFromTag)
+        {
+            m_targetTransform = UbhUtil.GetTransformFromTagName(m_targetTagName, m_randomSelectTagTarget);
+        }
+
+        if (m_targetTransform != null)
+        {
+            Quaternion rot = Quaternion.LookRotation((m_targetTransform.position - m_bulletOrigin.position), transform.up);
+            m_verticalAngle = rot.eulerAngles.x;
+            m_horizontalAngle = rot.eulerAngles.y;
+        }
+    }
+
 }

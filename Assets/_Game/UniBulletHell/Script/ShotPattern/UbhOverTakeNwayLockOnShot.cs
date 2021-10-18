@@ -16,11 +16,6 @@ public class UbhOverTakeNwayLockOnShot : UbhOverTakeNwayShot
     public string m_targetTagName = "Player";
     // "Flag to randomly select from GameObjects of the same tag."
     public bool m_randomSelectTagTarget;
-    // "Transform of lock on target."
-    // "It is not necessary if you want to specify target in tag."
-    // "Overwrite CenterAngle in direction of target to Transform.position."
-    [FormerlySerializedAs("_TargetTransform")]
-    public Transform m_targetTransform;
 
     /// <summary>
     /// is lock on shot flag.

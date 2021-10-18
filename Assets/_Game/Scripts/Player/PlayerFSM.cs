@@ -9,6 +9,7 @@ using Hedronoid.Weapons;
 using UnityEngine.SceneManagement;
 using Hedronoid.Health;
 using Hedronoid.Particle;
+using Hedronoid.AI;
 
 namespace Hedronoid.Player
 {
@@ -199,6 +200,7 @@ namespace Hedronoid.Player
             if (!orbitCamera) GameplaySceneContext.OrbitCamera.TryGetComponent(out orbitCamera);
             if (!Rigidbody) TryGetComponent(out Rigidbody);
             if (!m_healthBase) TryGetComponent(out m_healthBase);
+            if (!m_damageHandler) TryGetComponent(out m_damageHandler);
 
             Animator = GetComponentInChildren<Animator>();
             animHashes = new AnimatorHashes();
@@ -850,9 +852,7 @@ namespace Hedronoid.Player
             RaycastHit hit;
             if (Physics.Raycast(ray, out hit, Mathf.Infinity, ~bulletIgnoreLayers))
             {
-                // Debug.LogError(hit.point);
                 rayHitPos = hit.point;
-                Debug.LogError("HIT " + hit.transform.name);
             }
             else rayHitPos = ray.GetPoint(10000f);
 
@@ -1001,11 +1001,14 @@ namespace Hedronoid.Player
             playerModel.SetActive(false);
             GameController.Instance.LoadScene(SceneManager.GetActiveScene().buildIndex);
             StopAllCoroutines();
-            enabled = false;
+            //enabled = false;
         }
         void OnCollisionEnter(Collision collision)
         {
-            if (collision.gameObject.layer == LayerMask.NameToLayer("Enemy"))
+            // HACKITY HACKITY HACK REMOVE ME ASAP
+            if (!m_damageHandler.IsInvulnerable && 
+                HNDAI.Settings.EnemyLayer == 
+                (HNDAI.Settings.EnemyLayer | (1 << collision.gameObject.layer)))
             {
                 FMODUnity.RuntimeManager.PlayOneShot(m_playerAudioData.recieveHit, transform.position);
                 m_healthBase.InstaKill();

@@ -1,4 +1,6 @@
 ﻿using Hedronoid.AI;
+using Hedronoid.Enemies;
+using Hedronoid.Events;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
@@ -32,6 +34,42 @@ public class TurretSensor : AIBaseSensor
         get { return m_sensorTimestep; }
     }
 
+    protected override void Awake()
+    {
+        base.Awake();
+
+        HNDEvents.Instance.AddListener<LocatedPlayerEvent>(OnLocatedPlayer);
+    }
+
+    protected override void OnDestroy()
+    {
+        base.OnDestroy();
+
+        HNDEvents.Instance.RemoveListener<LocatedPlayerEvent>(OnLocatedPlayer);
+    }
+
+    protected override void OnDisable()
+    {
+        base.OnDisable();
+
+        HNDEvents.Instance.RemoveListener<LocatedPlayerEvent>(OnLocatedPlayer);
+    }
+
+    private void OnLocatedPlayer(LocatedPlayerEvent e)
+    {
+        UbhBaseShot shot = null;
+        TryGetComponent(out shot);
+
+        if (!shot) shot = GetComponentInChildren<UbhBaseShot>();
+        if (!shot)
+        {
+            D.AIError("No BaseShot pattern was found on " + gameObject.name + " !");
+            return;
+        }
+
+        shot.m_targetTransform = e.target;
+    }
+
     public virtual Transform GetTargetWithinReach(float distance)
     {
         m_targetsInRange.Clear();
@@ -41,6 +79,8 @@ public class TurretSensor : AIBaseSensor
         {
             if (players == 1)
             {
+                HNDEvents.Instance.Raise(new LocatedPlayerEvent { sender = gameObject, GOID = gameObject.GetInstanceID(), target = m_colliderBuffer[0].transform});
+
                 return m_colliderBuffer[0].transform;
             }
         }

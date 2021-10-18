@@ -17,13 +17,10 @@ public class UbhLinearLockOnShot : UbhLinearShot
     public string m_targetTagName = "Player";
     // "Flag to randomly select from GameObjects of the same tag."
     public bool m_randomSelectTagTarget;
-    // "Transform of lock on target."
-    // "It is not necessary if you want to specify target in tag."
     // "Overwrite Angle in direction of target to Transform.position."
     // "Always aim to target."
     [FormerlySerializedAs("_Aiming")]
     public bool m_aiming;
-    // "Set a angle of shot. (0 to 360)"
 
     /// <summary>
     /// is lock on shot flag.
