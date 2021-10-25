@@ -41,32 +41,32 @@ public static class UbhUtil
     /// <summary>
     /// Get Transform from tag name.
     /// </summary>
-    public static Transform GetTransformFromTagName(string tagName, bool randomSelect)
-    {
-        if (string.IsNullOrEmpty(tagName))
-        {
-            return null;
-        }
+    //public static Transform GetTransformFromTagName(string tagName, bool randomSelect)
+    //{
+    //    if (string.IsNullOrEmpty(tagName))
+    //    {
+    //        return null;
+    //    }
 
-        GameObject goTarget = null;
-        if (randomSelect)
-        {
-            GameObject[] goTargets = GameObject.FindGameObjectsWithTag(tagName);
-            if (goTargets != null && goTargets.Length > 0)
-            {
-                goTarget = goTargets[Random.Range(0, goTargets.Length)];
-            }
-        }
-        else
-        {
-            goTarget = GameObject.FindWithTag(tagName);
-        }
-        if (goTarget == null)
-        {
-            return null;
-        }
-        return goTarget.transform;
-    }
+    //    GameObject goTarget = null;
+    //    if (randomSelect)
+    //    {
+    //        GameObject[] goTargets = GameObject.FindGameObjectsWithTag(tagName);
+    //        if (goTargets != null && goTargets.Length > 0)
+    //        {
+    //            goTarget = goTargets[Random.Range(0, goTargets.Length)];
+    //        }
+    //    }
+    //    else
+    //    {
+    //        goTarget = GameObject.FindWithTag(tagName);
+    //    }
+    //    if (goTarget == null)
+    //    {
+    //        return null;
+    //    }
+    //    return goTarget.transform;
+    //}
 
     /// <summary>
     /// Get shifted angle.

@@ -85,10 +85,6 @@ public class UbhHomingShot : UbhBaseShot
             return;
         }
 
-        if (m_targetTransform == null && m_setTargetFromTag)
-        {
-            m_targetTransform = UbhUtil.GetTransformFromTagName(m_targetTagName, m_randomSelectTagTarget);
-        }
 
         ShotBullet(bullet, m_bulletSpeed, m_horizontalAngle, m_verticalAngle, true, m_targetTransform, m_homingAngleSpeed);
 
@@ -113,11 +109,6 @@ public class UbhHomingShot : UbhBaseShot
 
     private void AimTarget()
     {
-        if (m_targetTransform == null && m_setTargetFromTag)
-        {
-            m_targetTransform = UbhUtil.GetTransformFromTagName(m_targetTagName, m_randomSelectTagTarget);
-        }
-
         if (m_targetTransform != null)
         {
             Quaternion rot = Quaternion.LookRotation((m_targetTransform.position - m_bulletOrigin.position), transform.up);

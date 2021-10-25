@@ -72,6 +72,7 @@ public class UbhBullet : HNDMonoBehaviour, IGameplaySceneContextInjector
         }
 
         BulletPoolManager.ReturnObject(this.gameObject);
+        OnFinishedShot();
     }
 
     /// <summary>
@@ -163,14 +164,14 @@ public class UbhBullet : HNDMonoBehaviour, IGameplaySceneContextInjector
     /// </summary>
     public void Update()
     {
-        var deltaTime = UbhTimer.instance.deltaTime; ;
+        var deltaTime = UbhTimer.instance.deltaTime;
 
         if (m_shooting == false)
         {
             return;
         }
 
-        m_selfTimeCount += Time.fixedDeltaTime;
+        m_selfTimeCount += UbhTimer.instance.deltaTime;
 
         // auto release check
         if (m_useAutoRelease && m_autoReleaseTime > 0f)
@@ -178,6 +179,7 @@ public class UbhBullet : HNDMonoBehaviour, IGameplaySceneContextInjector
             if (m_selfTimeCount >= m_autoReleaseTime)
             {
                 // Release
+                OnFinishedShot();
                 BulletPoolManager.ReturnObject(this.gameObject);
                 return;
             }
@@ -262,4 +264,16 @@ public class UbhBullet : HNDMonoBehaviour, IGameplaySceneContextInjector
             m_tentacleBullet.UpdateRotate();
         }
     }
+
+
+#if UNITY_EDITOR
+    private void OnDrawGizmos()
+    {
+        Gizmos.color = Color.red;
+        Vector3 direction = transform.TransformDirection(Vector3.forward) * 5;
+
+        Gizmos.DrawRay(transform.position, direction);
+    }
+#endif
+
 }

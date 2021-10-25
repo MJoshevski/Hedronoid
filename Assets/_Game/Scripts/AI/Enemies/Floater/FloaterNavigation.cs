@@ -159,15 +159,21 @@ namespace UnityMovementAI
             foreach (Collider hit in colliders)
             {
                 Rigidbody rb;
-                HealthBase hb;
+                DamageHandler dh;
                 hit.TryGetComponent(out rb);
-                hit.TryGetComponent(out hb);
+                hit.TryGetComponent(out dh);
 
                 if (rb != null && rb.gameObject != gameObject)
                 {
                     rb.AddExplosionForce(detonationForce, transform.position, detonationRadius, 3.0f, detonationForceMode);
 
-                    if (hb) hb.InstaKill();
+                    if (dh) 
+                    {
+                        damage = new DamageInfo();
+                        damage.sender = gameObject;
+                        damage.Damage = 100;
+                        dh.DoDamage(damage);
+                    }
                 }
             }
 

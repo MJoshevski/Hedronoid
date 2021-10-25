@@ -886,9 +886,6 @@ MonoBehaviour:
   m_betweenAngle: 5
   m_betweenRowAngle: 10
   m_nextLineDelay: 0.1
-  m_setTargetFromTag: 1
-  m_targetTagName: Player
-  m_randomSelectTagTarget: 0
   m_aiming: 1
 --- !u!1 &2085195738333534318
 GameObject:
@@ -1669,9 +1666,6 @@ MonoBehaviour:
   m_randomDelayMin: 0.01
   m_randomDelayMax: 0.1
   m_evenlyDistribute: 1
-  m_setTargetFromTag: 1
-  m_targetTagName: Player
-  m_randomSelectTagTarget: 0
   m_aiming: 1
 --- !u!1 &2891012517595217236
 GameObject:
@@ -1845,9 +1839,6 @@ MonoBehaviour:
   m_betweenDelay: 0.1
   m_verticalAngle: 180
   m_horizontalAngle: 180
-  m_setTargetFromTag: 0
-  m_targetTagName: Player
-  m_randomSelectTagTarget: 0
   m_aiming: 0
 --- !u!1 &3321330669550849379
 GameObject:
@@ -2016,7 +2007,7 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 3397402698598950787}
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
-  m_LocalPosition: {x: -0, y: 1.1199951, z: 4.02}
+  m_LocalPosition: {x: -0, y: 1.12, z: 4.625}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children: []
   m_Father: {fileID: 1515448701940730754}
@@ -2171,10 +2162,6 @@ MonoBehaviour:
   m_betweenAngle: 20
   m_betweenRowAngle: 10
   m_nextLineDelay: 0.075
-  m_setTargetFromTag: 1
-  m_targetTagName: Player
-  m_randomSelectTagTarget: 0
-  m_targetTransform: {fileID: 0}
   m_aiming: 0
 --- !u!1 &4089254096812339543
 GameObject:
@@ -2391,10 +2378,6 @@ MonoBehaviour:
   m_betweenRowAngle: 10
   m_betweenAngle: 10
   m_nextLineDelay: 0.2
-  m_setTargetFromTag: 1
-  m_targetTagName: Player
-  m_randomSelectTagTarget: 0
-  m_targetTransform: {fileID: 0}
   m_aiming: 1
 --- !u!1 &4529785765106564519
 GameObject:
@@ -2466,9 +2449,6 @@ MonoBehaviour:
   m_verticalAngle: 180
   m_horizontalAngle: 180
   m_betweenRowAngle: 10
-  m_setTargetFromTag: 1
-  m_targetTagName: Player
-  m_randomSelectTagTarget: 0
 --- !u!1 &4810092695864548886
 GameObject:
   m_ObjectHideFlags: 0
@@ -3066,9 +3046,6 @@ MonoBehaviour:
   m_betweenAngle: 3
   m_betweenRowAngle: 3
   m_nextLineDelay: 0.075
-  m_setTargetFromTag: 1
-  m_targetTagName: Player
-  m_randomSelectTagTarget: 0
 --- !u!1 &6172713066255209697
 GameObject:
   m_ObjectHideFlags: 0
@@ -4272,10 +4249,6 @@ MonoBehaviour:
   m_horizontalAngle: 180
   m_betweenRowAngle: 10
   m_nextLineDelay: 0.1
-  m_setTargetFromTag: 1
-  m_targetTagName: Player
-  m_randomSelectTagTarget: 0
-  m_targetTransform: {fileID: 0}
 --- !u!1 &8335576710091947119
 GameObject:
   m_ObjectHideFlags: 0
@@ -4348,9 +4321,6 @@ MonoBehaviour:
   m_betweenAngle: 10
   m_betweenRowAngle: 10
   m_diffSpeed: 0.3
-  m_setTargetFromTag: 1
-  m_targetTagName: Player
-  m_randomSelectTagTarget: 0
 --- !u!1 &8350802795782889618
 GameObject:
   m_ObjectHideFlags: 0
@@ -4792,9 +4762,6 @@ MonoBehaviour:
   m_betweenDelay: 0.1
   m_verticalAngle: 180
   m_horizontalAngle: 180
-  m_setTargetFromTag: 1
-  m_targetTagName: Player
-  m_randomSelectTagTarget: 0
   m_aiming: 1
 --- !u!1 &8831923621487526411
 GameObject:

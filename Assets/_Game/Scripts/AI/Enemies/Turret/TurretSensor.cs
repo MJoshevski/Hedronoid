@@ -3,6 +3,7 @@ using Hedronoid.Enemies;
 using Hedronoid.Events;
 using System.Collections;
 using System.Collections.Generic;
+using System.Linq;
 using UnityEngine;
 
 public class TurretSensor : AIBaseSensor
@@ -57,17 +58,14 @@ public class TurretSensor : AIBaseSensor
 
     private void OnLocatedPlayer(LocatedPlayerEvent e)
     {
-        UbhBaseShot shot = null;
-        TryGetComponent(out shot);
+        List<UbhBaseShot> shotList = new List<UbhBaseShot>();
 
-        if (!shot) shot = GetComponentInChildren<UbhBaseShot>();
-        if (!shot)
+        if (shotList.Count == 0) shotList = GetComponentsInChildren<UbhBaseShot>().ToList();
+        if (shotList.Count == 0)
         {
             D.AIError("No BaseShot pattern was found on " + gameObject.name + " !");
             return;
         }
-
-        shot.m_targetTransform = e.target;
     }
 
     public virtual Transform GetTargetWithinReach(float distance)
