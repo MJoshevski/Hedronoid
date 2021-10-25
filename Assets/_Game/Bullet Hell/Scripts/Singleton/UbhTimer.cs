@@ -121,7 +121,6 @@ public sealed class UbhTimer : UbhSingletonMonoBehavior<UbhTimer>
     private void Update()
     {
         UpdateTimes();
-        UbhBulletManager.instance.UpdateBullets(deltaTime);
         UbhShotManager.instance.UpdateShots(deltaTime);
     }
 

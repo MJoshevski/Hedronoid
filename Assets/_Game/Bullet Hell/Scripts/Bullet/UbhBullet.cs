@@ -161,10 +161,9 @@ public class UbhBullet : HNDMonoBehaviour, IGameplaySceneContextInjector
     /// <summary>
     /// Update Move
     /// </summary>
-    //public void UpdateMove(float deltaTime)
-    public void FixedUpdate()
+    public void Update()
     {
-        var deltaTime = Time.fixedDeltaTime;
+        var deltaTime = UbhTimer.instance.deltaTime; ;
 
         if (m_shooting == false)
         {
