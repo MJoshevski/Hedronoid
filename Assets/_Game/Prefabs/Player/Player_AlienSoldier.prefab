@@ -112,7 +112,7 @@ MonoBehaviour:
   bulletTertiary: {fileID: 0}
   bulletIgnoreLayers:
     serializedVersion: 2
-    m_Bits: 8998
+    m_Bits: 2147483647
   playerModel: {fileID: 3714747430276692630}
   DeathParticle: 719155896
   DashStartParticle: 1328606610
@@ -176,7 +176,7 @@ MonoBehaviour:
   m_DamageTypeMultipliers: []
   m_LODGroup: {fileID: 0}
   m_Static: 0
-  m_Invulnernable: 0
+  m_Invulnernable: 1
   m_InvulnerableTime: 0.4
   m_damagePushForce: 0
   m_damageRecoverSpeed: 1

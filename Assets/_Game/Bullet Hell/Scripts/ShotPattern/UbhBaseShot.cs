@@ -200,7 +200,7 @@ public abstract class UbhBaseShot : HNDMonoBehaviour, IGameplaySceneContextInjec
         m_bulletConfig.Position = m_bulletOrigin.position;
         m_bulletConfig.Rotation = Quaternion.identity;
         m_bulletConfig.Parent = null;
-        m_bulletConfig.Duration = 5f;
+        m_bulletConfig.Duration = m_autoReleaseTime;
 
         UbhBullet bullet = BulletPoolManager.GetBulletToFire(m_bulletConfig).GetComponent<UbhBullet>();
 

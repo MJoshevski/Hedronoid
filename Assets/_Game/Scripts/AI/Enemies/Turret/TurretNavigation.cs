@@ -136,8 +136,12 @@ namespace Hedronoid
         {
             Vector3 dir = m_Target.position - transform.position;
             Quaternion lookRotation = Quaternion.LookRotation(dir);
-            Vector3 rotation = Quaternion.Lerp(partToRotate.rotation, lookRotation, Time.deltaTime * turnSpeed).eulerAngles;
-            partToRotate.rotation = Quaternion.Euler(0f, rotation.y, 0f);
+
+            if (partToRotate)
+            {
+                Vector3 rotation = Quaternion.Lerp(partToRotate.rotation, lookRotation, Time.deltaTime * turnSpeed).eulerAngles;
+                partToRotate.rotation = Quaternion.Euler(0f, rotation.y, 0f);
+            }
         }
 
         void Laser()
