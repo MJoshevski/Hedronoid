@@ -849,12 +849,19 @@ namespace Hedronoid.Player
             Vector3 rayHitPos = Vector3.zero;
             Ray ray = Camera.main.ViewportPointToRay(new Vector3 (0.5f, 0.5f, 0f));
 
-            RaycastHit hit;
-            if (Physics.Raycast(ray, out hit, Mathf.Infinity, ~bulletIgnoreLayers))
+            RaycastHit[] hits = Physics.RaycastAll(ray, Mathf.Infinity, ~bulletIgnoreLayers);
+
+            for (int i = 0; i < hits.Length; i++)
             {
-                rayHitPos = hit.point;
+                if (hits[i].point.z > transform.position.z)
+                {
+                    rayHitPos = hits[i].point;
+                    break;
+                }
             }
-            else rayHitPos = ray.GetPoint(10000f);
+
+            if (rayHitPos == Vector3.zero)
+                rayHitPos = ray.GetPoint(10000f);
 
             shootDirection = (rayHitPos - bulletOrigin.position).normalized;
 
