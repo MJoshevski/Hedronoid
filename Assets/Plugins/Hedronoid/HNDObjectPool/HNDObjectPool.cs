@@ -12,7 +12,7 @@ namespace Hedronoid.ObjectPool
         [SerializeField]
         private int m_InitialObjectCount = 1;
         [SerializeField]
-        private int m_MaxInstanceAmount = 500;
+        private int m_MaxInstanceAmount = 50000;
         private int m_InstanceAmount = 0;
 
         [SerializeField]
