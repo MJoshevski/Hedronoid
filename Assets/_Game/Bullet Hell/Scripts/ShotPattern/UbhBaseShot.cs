@@ -213,6 +213,34 @@ public abstract class UbhBaseShot : HNDMonoBehaviour, IGameplaySceneContextInjec
     }
 
     /// <summary>
+    /// Get GameObject bullet from object pool.
+    /// </summary>
+    protected GameObject GetBulletGO(Vector3 position, bool forceInstantiate = false)
+    {
+        if (m_bulletPrefab == null)
+        {
+            Debug.LogWarning("Cannot generate a bullet because BulletPrefab is not set.");
+            return null;
+        }
+
+        // get UbhBullet from ObjectPool
+        m_bulletConfig.Prefab = m_bulletPrefab;
+        m_bulletConfig.Position = m_bulletOrigin.position;
+        m_bulletConfig.Rotation = Quaternion.identity;
+        m_bulletConfig.Parent = null;
+        m_bulletConfig.Duration = m_autoReleaseTime;
+
+        GameObject bullet = BulletPoolManager.GetBulletToFire(m_bulletConfig);
+
+        if (bullet == null)
+        {
+            return null;
+        }
+
+        return bullet;
+    }
+
+    /// <summary>
     /// Shot UbhBullet object.
     /// </summary>
     protected void ShotBullet(UbhBullet bullet, float speed, float angleH, float angleV,
