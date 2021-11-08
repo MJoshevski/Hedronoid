@@ -13,6 +13,9 @@ public class UbhSplineShot : UbhBaseShot
     // "Set a delay time between bullet and next bullet. (sec)"
     [FormerlySerializedAs("_BetweenDelay")]
     public float m_betweenDelay = 0.1f;
+    // "Always aim to target."
+    [FormerlySerializedAs("_Aiming")]
+    public bool m_aiming;
 
     private int m_nowIndex;
     private float m_delayTimer;
@@ -23,7 +26,6 @@ public class UbhSplineShot : UbhBaseShot
 
         m_splineComputer = GetComponentInChildren<SplineComputer>();
     }
-
     public override void Shot()
     {
         if (m_bulletNum <= 0 || m_bulletSpeed <= 0f)
@@ -75,9 +77,36 @@ public class UbhSplineShot : UbhBaseShot
 
         rb.AddForce(forceDirection * m_bulletSpeed, ForceMode.Impulse);
     }
+    private void AimTarget()
+    {
+        if (!m_targetTransform) return;
 
+        SplinePoint[] points = m_splineComputer.GetPoints();
+        for (int i = 0; i < points.Length; i++)
+        {
+            Vector3 pointDir = (points[points.Length - 1].position - points[0].position).normalized;
+            Vector3 bulletOriginDir = (points[points.Length - 1].position - m_bulletOrigin.position).normalized;
+
+            Quaternion rot = Quaternion.FromToRotation(bulletOriginDir, pointDir);
+
+            Vector3 parentPosModified = transform.parent.position;
+            parentPosModified.y = points[i].position.y;
+
+            points[i].position = points[i].position.Rotated(rot, parentPosModified);
+        }
+
+        points[points.Length - 1].position = m_targetTransform.position;
+        m_splineComputer.SetPoints(points);
+    }
     protected virtual void Update()
     {
+        if (m_aiming && !m_targetTransform) return;
+
+        if (m_shooting && m_aiming)
+        {
+            AimTarget();
+        }
+
         if (m_shooting == false)
         {
             return;
