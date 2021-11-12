@@ -20,11 +20,17 @@ public class UbhSplineShot : UbhBaseShot
     private int m_nowIndex;
     private float m_delayTimer;
     private SplineComputer m_splineComputer;
+    private SplinePoint[] m_splinePoints;
+    private float m_originalSqrMagnitude;
     protected override void Awake()
     {
         base.Awake();
 
         m_splineComputer = GetComponentInChildren<SplineComputer>();
+        m_splinePoints = m_splineComputer.GetPoints();
+
+        m_originalSqrMagnitude =
+            (m_splinePoints[m_splinePoints.Length - 1].position - m_splinePoints[0].position).sqrMagnitude;
     }
     public override void Shot()
     {
@@ -81,28 +87,36 @@ public class UbhSplineShot : UbhBaseShot
     {
         if (!m_targetTransform) return;
 
-        SplinePoint[] points = m_splineComputer.GetPoints();
-        for (int i = 0; i < points.Length; i++)
+        Vector3 pointDir = (m_splinePoints[m_splinePoints.Length - 1].position - m_splinePoints[0].position).normalized;
+        Vector3 bulletOriginDir = (m_splinePoints[m_splinePoints.Length - 1].position - m_bulletOrigin.position).normalized;
+
+        Quaternion rot = Quaternion.FromToRotation(bulletOriginDir, pointDir);
+        Vector3 parentPosModified = transform.parent.position;
+
+        for (int i = 1; i < m_splinePoints.Length - 1; i++)
         {
-            Vector3 pointDir = (points[points.Length - 1].position - points[0].position).normalized;
-            Vector3 bulletOriginDir = (points[points.Length - 1].position - m_bulletOrigin.position).normalized;
-
-            Quaternion rot = Quaternion.FromToRotation(bulletOriginDir, pointDir);
-
-            Vector3 parentPosModified = transform.parent.position;
-            parentPosModified.y = points[i].position.y;
-
-            points[i].position = points[i].position.Rotated(rot, parentPosModified);
+            parentPosModified.y = m_splinePoints[i].position.y;
+ 
+            Vector3 rotatedPos = m_splinePoints[i].position.Rotated(rot, parentPosModified);
+            m_splinePoints[i].position = rotatedPos;
         }
 
-        points[points.Length - 1].position = m_targetTransform.position;
-        m_splineComputer.SetPoints(points);
+        float aimedSqrMagnitude = (m_splinePoints[m_splinePoints.Length - 1].position - m_splinePoints[0].position).sqrMagnitude;
+        float difference = aimedSqrMagnitude - m_originalSqrMagnitude;
+
+        //for (int i = 1; i < m_splinePoints.Length - 1; i++)
+        //    m_splinePoints[i].position.z += difference / m_splinePoints.Length;
+
+        m_splinePoints[0].position = m_bulletOrigin.position;
+        m_splinePoints[m_splinePoints.Length - 1].position = m_targetTransform.position;
+
+        m_splineComputer.SetPoints(m_splinePoints);
     }
     protected virtual void Update()
     {
         if (m_aiming && !m_targetTransform) return;
 
-        if (m_shooting && m_aiming)
+        if (/*m_shooting &&*/ m_aiming)
         {
             AimTarget();
         }
