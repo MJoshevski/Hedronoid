@@ -91,13 +91,14 @@ public class UbhSplineShot : UbhBaseShot
         Vector3 bulletOriginDir = (m_splinePoints[m_splinePoints.Length - 1].position - m_bulletOrigin.position).normalized;
 
         Quaternion rot = Quaternion.FromToRotation(bulletOriginDir, pointDir);
-        Vector3 parentPosModified = transform.parent.position;
+        Vector3 parentPosModified = transform.parent.parent.position;
 
-        for (int i = 1; i < m_splinePoints.Length - 1; i++)
+        for (int i = 0; i < m_splinePoints.Length; i++)
         {
             parentPosModified.y = m_splinePoints[i].position.y;
  
             Vector3 rotatedPos = m_splinePoints[i].position.Rotated(rot, parentPosModified);
+            rotatedPos.y = m_splinePoints[i].position.y;
             m_splinePoints[i].position = rotatedPos;
         }
 
@@ -107,16 +108,13 @@ public class UbhSplineShot : UbhBaseShot
         //for (int i = 1; i < m_splinePoints.Length - 1; i++)
         //    m_splinePoints[i].position.z += difference / m_splinePoints.Length;
 
-        m_splinePoints[0].position = m_bulletOrigin.position;
-        m_splinePoints[m_splinePoints.Length - 1].position = m_targetTransform.position;
-
         m_splineComputer.SetPoints(m_splinePoints);
     }
     protected virtual void Update()
     {
         if (m_aiming && !m_targetTransform) return;
 
-        if (/*m_shooting &&*/ m_aiming)
+        if (m_shooting && m_aiming)
         {
             AimTarget();
         }
