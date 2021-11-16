@@ -105,6 +105,8 @@ public class UbhSplineShot : UbhBaseShot
         float aimedSqrMagnitude = (m_splinePoints[m_splinePoints.Length - 1].position - m_splinePoints[0].position).sqrMagnitude;
         float difference = aimedSqrMagnitude - m_originalSqrMagnitude;
 
+        m_splinePoints[m_splinePoints.Length - 1].position = m_targetTransform.position;
+
         //for (int i = 1; i < m_splinePoints.Length - 1; i++)
         //    m_splinePoints[i].position.z += difference / m_splinePoints.Length;
 

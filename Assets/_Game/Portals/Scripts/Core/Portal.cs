@@ -2,7 +2,6 @@
 using System.Collections.Generic;
 using UnityEngine;
 using Hedronoid;
-using UnityEngine.Rendering.Universal;
 using UnityEngine.Rendering;
 
 public class Portal : HNDMonoBehaviour {
@@ -119,8 +118,8 @@ public class Portal : HNDMonoBehaviour {
 
             // URP doesn't support directly rendering to camera, rather requires calling this
             // RenderSingleCamera event
-            //portalCam.Render ();
-            UniversalRenderPipeline.RenderSingleCamera(context, portalCam);
+            portalCam.Render ();
+            //UniversalRenderPipeline.RenderSingleCamera(context, portalCam);
 
             if (i == startIndex) {
                 linkedPortal.screen.material.SetInt ("displayMask", 1);
