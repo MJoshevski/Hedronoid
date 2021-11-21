@@ -110,9 +110,9 @@ namespace Hedronoid.Player
         [Header("Visual")]
         [SerializeField]
         private GameObject playerModel;
-        public ParticleList.ParticleSystems DeathParticle = ParticleList.ParticleSystems.ENERGYEXPLOSION_HNDPFX;
-        public ParticleList.ParticleSystems DashStartParticle = ParticleList.ParticleSystems.PLAYERDASHSTART_HNDPFX;
-        public ParticleList.ParticleSystems DashTrailParticle = ParticleList.ParticleSystems.PLAYERDASHTRAIL_HNDPFX;
+        public ParticleList.ParticleSystems DeathParticle = ParticleList.ParticleSystems.NONE;
+        public ParticleList.ParticleSystems DashStartParticle = ParticleList.ParticleSystems.NONE;
+        public ParticleList.ParticleSystems DashTrailParticle = ParticleList.ParticleSystems.NONE;
 
         [Header("FMOD Audio Data")]
         public PlayerAudioData m_playerAudioData;
