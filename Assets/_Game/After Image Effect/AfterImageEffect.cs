@@ -3,13 +3,13 @@ using System.Collections;
 using System.Collections.Generic;
 
 //Afterimage effects, support Mesh and SkinedMesh and their combination
-public class GhostEffect : MonoBehaviour
+public class AfterImageEffect : MonoBehaviour
 {
     //If you want Mesh to have afterimages, please ensure that the Read/Write of Mesh is turned on
     public bool IncludeMeshFilter = true;
 
     //Afterimage
-    public class GhostImange
+    public class AfterImage
     {
         public Mesh mesh;
         public Material material;
@@ -30,11 +30,13 @@ public class GhostEffect : MonoBehaviour
     //The afterimage fades out time
     public float FadeoutTime = 1;
 
-    private float mTime = 5;
-    private List<GhostImange> mImageList = new List<GhostImange>();
-
+   
+    private float mTime;
+    private List<AfterImage> mImageList = new List<AfterImage>();
+    private Camera cameraMain;
     void Start()
     {
+        cameraMain = Camera.main;
     }
 
     [ContextMenu("Play")]
@@ -72,46 +74,56 @@ public class GhostEffect : MonoBehaviour
             return;
         }
 
-        CombineInstance[] combineInstances = new CombineInstance[skinRenderers.Length + filtersCount];
+        List<CombineInstance> combineInstances = new List<CombineInstance>();
 
         int idx = 0;
         for (int i = 0; i < skinRenderers.Length; i++)
         {
-            var render = skinRenderers[i];
+            SkinnedMeshRenderer render = skinRenderers[i];
 
-            var mesh = new Mesh();
+            Mesh mesh = new Mesh();
             render.BakeMesh(mesh);
 
-            combineInstances[idx] = new CombineInstance
+            for (int j = 0; j < render.sharedMesh.subMeshCount; j++)
             {
-                mesh = mesh,
-                transform = render.gameObject.transform.localToWorldMatrix,
-                subMeshIndex = 0
-            };
+                CombineInstance ci = new CombineInstance
+                {
+                    mesh = mesh,
+                    transform = render.gameObject.transform.localToWorldMatrix,
+                    subMeshIndex = j
+                };
 
-            idx++;
+                combineInstances.Add(ci);
+
+                idx++;
+            }
         }
 
         for (int i = 0; i < filtersCount; i++)
         {
             var render = filters[i];
+            Mesh temp = (null != render.sharedMesh) ? render.sharedMesh : render.mesh;
+            Mesh mesh = (Mesh)Object.Instantiate(temp);
 
-            var temp = (null != render.sharedMesh) ? render.sharedMesh : render.mesh;
-            var mesh = (Mesh)Object.Instantiate(temp);
-            combineInstances[idx] = new CombineInstance
+            for (int j = 0; j < render.sharedMesh.subMeshCount; j++)
             {
-                mesh = mesh,
-                transform = render.gameObject.transform.localToWorldMatrix,
-                subMeshIndex = 0
-            };
+                CombineInstance ci = new CombineInstance
+                {
+                    mesh = mesh,
+                    transform = render.gameObject.transform.localToWorldMatrix,
+                    subMeshIndex = j
+                };
 
-            idx++;
+                combineInstances.Add(ci);
+
+                idx++;
+            }
         }
 
         Mesh combinedMesh = new Mesh();
-        combinedMesh.CombineMeshes(combineInstances, true, true);
+        combinedMesh.CombineMeshes(combineInstances.ToArray(), true, true);
 
-        mImageList.Add(new GhostImange
+        mImageList.Add(new AfterImage
         {
             mesh = combinedMesh,
             material = new Material(EffectMaterial),
@@ -122,11 +134,9 @@ public class GhostEffect : MonoBehaviour
 
     void LateUpdate()
     {
-        Play();
         bool needRemove = false;
 
-
-        foreach (var image in mImageList)
+        foreach (AfterImage image in mImageList)
         {
             image.time -= Time.deltaTime;
             if (image.material.HasProperty("_Color"))
@@ -137,6 +147,7 @@ public class GhostEffect : MonoBehaviour
             }
 
             Graphics.DrawMesh(image.mesh, Matrix4x4.identity, image.material, gameObject.layer);
+
             if (image.time <= 0)
             {
                 needRemove = true;
