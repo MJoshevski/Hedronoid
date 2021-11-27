@@ -85,6 +85,7 @@ public class ParticleList
 		PROJECTILE25 = 991939874,
 		PROJECTILE26 = 1162062203,
 		PROJECTILE27 = 929357721,
+		TRAIL_FOLLOWSMOKE = 1935865311,
 	}
 
 	public static string Get(ParticleSystems ps){
@@ -320,6 +321,9 @@ public class ParticleList
 			break;
 		case ParticleSystems.PROJECTILE27:
 			particleId = "Projectile27";
+			break;
+		case ParticleSystems.TRAIL_FOLLOWSMOKE:
+			particleId = "TRAIL_FollowSmoke";
 			break;
 	}
 	return particleId;

@@ -146,6 +146,9 @@ namespace Hedronoid.Player
         private System.Action onDespawnAction;
         private BulletPoolManager.BulletConfig bulletConf;
 
+        // EFFECTS
+        private AfterImageEffect m_afterImageEffect;
+
         // CONTROLS/BINDINGS
         private PlayerActionSet PlayerActions;
         private float MouseHorizontalSensitivity { get; set; }
@@ -201,6 +204,7 @@ namespace Hedronoid.Player
             if (!Rigidbody) TryGetComponent(out Rigidbody);
             if (!m_healthBase) TryGetComponent(out m_healthBase);
             if (!m_damageHandler) TryGetComponent(out m_damageHandler);
+            if (!m_afterImageEffect) TryGetComponent(out m_afterImageEffect);
 
             Animator = GetComponentInChildren<Animator>();
             animHashes = new AnimatorHashes();
@@ -471,10 +475,13 @@ namespace Hedronoid.Player
             StopAllCoroutines();
             StartCoroutine(LerpCameraFov(100, 120));
 
+            // SFX
             FMODUnity.RuntimeManager.PlayOneShotAttached(m_playerAudioData.dash, gameObject);
 
-            ParticleHelper.PlayParticleSystem(DashStartParticle, cachedTransform.position, -transform.forward, 3f);
-            ParticleHelper.PlayParticleSystem(DashTrailParticle, cachedTransform.position, -transform.forward, 2f);
+            // VFX
+            m_afterImageEffect.Play();
+            ParticleHelper.PlayParticleSystem(DashStartParticle, cachedTransform.position, -cachedTransform.forward, 3f);
+            ParticleHelper.PlayParticleSystem(DashTrailParticle, cachedTransform.position, -cachedTransform.forward, 2f, false, cachedTransform);
 
             secondaryGravityMultiplier = 1f; ;
             Rigidbody.ApplyForce(forceDirection * dashVariables.PhysicalForce.Multiplier, dashVariables.PhysicalForce.ForceMode);

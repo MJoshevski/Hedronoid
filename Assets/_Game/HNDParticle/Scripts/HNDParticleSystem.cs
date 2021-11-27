@@ -61,7 +61,7 @@ namespace Hedronoid.Particle
 
             if (m_FollowTransform != null)
             {
-                cachedTransform.position = m_FollowTransform.position + (m_FollowRotation * m_FollowOffset);
+                cachedTransform.position = m_FollowTransform.position /*+ (m_FollowRotation * m_FollowOffset)*/;
                 if (!m_IgnoreFollowRotation)
                 {
                     cachedTransform.rotation = m_FollowTransform.rotation * m_FollowRotation;

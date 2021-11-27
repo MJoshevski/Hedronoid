@@ -146,6 +146,11 @@ public class AfterImageEffect : MonoBehaviour
                 image.material.SetColor("_Color", color);
             }
 
+            if (image.material.HasProperty("alpha"))
+            {
+                float alphaFactor = Mathf.Max(0, image.time / image.duration);
+                image.material.SetFloat("alpha", alphaFactor);
+            }
             Graphics.DrawMesh(image.mesh, Matrix4x4.identity, image.material, gameObject.layer);
 
             if (image.time <= 0)
