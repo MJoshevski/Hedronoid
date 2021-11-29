@@ -113,11 +113,14 @@ namespace Hedronoid.Player
         public ParticleList.ParticleSystems DeathParticle = ParticleList.ParticleSystems.NONE;
         public ParticleList.ParticleSystems DashStartParticle = ParticleList.ParticleSystems.NONE;
         public ParticleList.ParticleSystems DashTrailParticle = ParticleList.ParticleSystems.NONE;
+        public List<ParticleList.ParticleSystems> JumpParticles = new List<ParticleList.ParticleSystems>();
+        public List<ParticleList.ParticleSystems> DoubleJumpParticles = new List<ParticleList.ParticleSystems>();
+        public List<ParticleList.ParticleSystems> LandParticles = new List<ParticleList.ParticleSystems>();
 
         [Header("FMOD Audio Data")]
         public PlayerAudioData m_playerAudioData;
 
-        //[HideInInspector]
+        [HideInInspector]
         public bool desiredJump, desiredDash;
         #endregion
 
@@ -378,9 +381,16 @@ namespace Hedronoid.Player
         {
             Jump(GravityService.CurrentGravity);
             desiredJump = false;
+
+            if (JumpParticles != null && JumpParticles.Count > 0)
+            {
+                int index = Random.Range(0, JumpParticles.Count);
+                ParticleHelper.PlayParticleSystem(JumpParticles[index], cachedTransform.position, -cachedTransform.up);
+            }
+
             FMODUnity.RuntimeManager.PlayOneShot(m_playerAudioData.jump, transform.position);
             secondaryGravityMultiplier = 1f;
-            contactNormal = upAxis;
+            //contactNormal = upAxis;
 
             // JUMPS ANIMATION
             if (movementVariables.MoveAmount > 0.1f)
@@ -422,8 +432,14 @@ namespace Hedronoid.Player
             desiredJump = false;
             secondaryGravityMultiplier = 1f;
 
+            if (JumpParticles != null && DoubleJumpParticles.Count > 0)
+            {
+                int index = Random.Range(0, DoubleJumpParticles.Count);
+                ParticleHelper.PlayParticleSystem(DoubleJumpParticles[index], cachedTransform.position, -cachedTransform.up);
+            }
+
             FMODUnity.RuntimeManager.PlayOneShot(m_playerAudioData.doubleJump, transform.position);
-            contactNormal = upAxis;
+            //contactNormal = upAxis;
 
             Animator.CrossFade(animHashes.DoubleJump, 0.2f);
         }
@@ -481,7 +497,7 @@ namespace Hedronoid.Player
             // VFX
             m_afterImageEffect.Play();
             ParticleHelper.PlayParticleSystem(DashStartParticle, cachedTransform.position, -cachedTransform.forward, 3f);
-            ParticleHelper.PlayParticleSystem(DashTrailParticle, cachedTransform.position, -cachedTransform.forward, 2f, false, cachedTransform);
+            ParticleHelper.PlayParticleSystem(DashTrailParticle, cachedTransform.position, -cachedTransform.up, 2f, false, cachedTransform);
 
             secondaryGravityMultiplier = 1f; ;
             Rigidbody.ApplyForce(forceDirection * dashVariables.PhysicalForce.Multiplier, dashVariables.PhysicalForce.ForceMode);
@@ -591,6 +607,12 @@ namespace Hedronoid.Player
                 Animator.CrossFade(animHashes.LandFast, 0.2f);
             }
 
+            if (LandParticles != null && LandParticles.Count > 0)
+            {
+                int index = Random.Range(0, LandParticles.Count);
+                ParticleHelper.PlayParticleSystem(LandParticles[index], cachedTransform.position, -cachedTransform.up);
+            }
+
             FMODUnity.RuntimeManager.PlayOneShot(m_playerAudioData.land, transform.position);
 
             Animator.SetBool(animHashes.IsGrounded, OnGround);
@@ -655,7 +677,6 @@ namespace Hedronoid.Player
             Run = FMODUnity.RuntimeManager.CreateInstance(m_playerAudioData.footsteps);
             FMODUnity.RuntimeManager.AttachInstanceToGameObject(Run, transform, GetComponent<Rigidbody>());
         }
-
         private void CreateFSMStates()
         {
             m_GroundMovementState = CreateState(EPlayerStates.GROUND_MOVEMENT, OnUpdateGroundMovement, OnEnterGroundMovement, OnExitGroundMovement);

@@ -86,6 +86,26 @@ public class ParticleList
 		PROJECTILE26 = 1162062203,
 		PROJECTILE27 = 929357721,
 		TRAIL_FOLLOWSMOKE = 1935865311,
+		PF_VFX_ULT_DEMO_PSYS_ONESHOT_REALISTICSMOKE = 1315711518,
+		PF_VFX_ULT_DEMO_PSYS_ONESHOT_REALISTICSMOKEBURST = 1727588569,
+		PF_VFX_ULT_DEMO_PSYS_ONESHOT_SMOKE = 1474758692,
+		PF_VFX_ULT_DEMO_PSYS_ONESHOT_SMOKE_ANIM = 226449762,
+		PF_VFX_ULT_DEMO_PSYS_ONESHOT_SMOKE_ANIM_X2 = 585930282,
+		PF_VFX_ULT_DEMO_PSYS_ONESHOT_SMOKE_ANIM_X4 = 66262155,
+		PF_VFX_ULT_DEMO_PSYS_ONESHOT_SMOKE_X2 = 1824174808,
+		PF_VFX_ULT_DEMO_PSYS_ONESHOT_SMOKE_X4 = 469322355,
+		PF_VFX_ULT_DEMO_PSYS_ONESHOT_SMOKE2 = 1566751367,
+		PF_VFX_ULT_DEMO_PSYS_ONESHOT_SMOKE2_ANIM = 1185854183,
+		PF_VFX_ULT_DEMO_PSYS_ONESHOT_SMOKE2_ANIM_X2 = 2142997757,
+		PF_VFX_ULT_DEMO_PSYS_ONESHOT_SMOKE2_ANIM_X4 = 784397222,
+		PF_VFX_ULT_DEMO_PSYS_ONESHOT_SMOKE2_X2 = 1723779686,
+		PF_VFX_ULT_DEMO_PSYS_ONESHOT_SMOKE2_X4 = 1437892055,
+		PF_VFX_ULT_DEMO_PSYS_ONESHOT_SMOKE3 = 1993066483,
+		PF_VFX_ULT_DEMO_PSYS_ONESHOT_SMOKE3_ANIM = 1597992802,
+		PF_VFX_ULT_DEMO_PSYS_ONESHOT_SMOKE3_ANIM_X2 = 1329752836,
+		PF_VFX_ULT_DEMO_PSYS_ONESHOT_SMOKE3_ANIMPF_VFX_ULT_DEMO_PSYS_ONESHOT_SMOKE3_X4X4 = 971957747,
+		PF_VFX_ULT_DEMO_PSYS_ONESHOT_SMOKE3_X3 = 296898939,
+		PF_VFX_ULT_DEMO_PSYS_ONESHOT_SMOKE3_X4 = 894591049,
 	}
 
 	public static string Get(ParticleSystems ps){
@@ -324,6 +344,66 @@ public class ParticleList
 			break;
 		case ParticleSystems.TRAIL_FOLLOWSMOKE:
 			particleId = "TRAIL_FollowSmoke";
+			break;
+		case ParticleSystems.PF_VFX_ULT_DEMO_PSYS_ONESHOT_REALISTICSMOKE:
+			particleId = "pf_vfx_ult_demo_psys_oneshot_realisticSmoke";
+			break;
+		case ParticleSystems.PF_VFX_ULT_DEMO_PSYS_ONESHOT_REALISTICSMOKEBURST:
+			particleId = "pf_vfx_ult_demo_psys_oneshot_realisticSmokeBurst";
+			break;
+		case ParticleSystems.PF_VFX_ULT_DEMO_PSYS_ONESHOT_SMOKE:
+			particleId = "pf_vfx_ult_demo_psys_oneshot_smoke";
+			break;
+		case ParticleSystems.PF_VFX_ULT_DEMO_PSYS_ONESHOT_SMOKE_ANIM:
+			particleId = "pf_vfx_ult_demo_psys_oneshot_smoke_anim";
+			break;
+		case ParticleSystems.PF_VFX_ULT_DEMO_PSYS_ONESHOT_SMOKE_ANIM_X2:
+			particleId = "pf_vfx_ult_demo_psys_oneshot_smoke_anim_x2";
+			break;
+		case ParticleSystems.PF_VFX_ULT_DEMO_PSYS_ONESHOT_SMOKE_ANIM_X4:
+			particleId = "pf_vfx_ult_demo_psys_oneshot_smoke_anim_x4";
+			break;
+		case ParticleSystems.PF_VFX_ULT_DEMO_PSYS_ONESHOT_SMOKE_X2:
+			particleId = "pf_vfx_ult_demo_psys_oneshot_smoke_x2";
+			break;
+		case ParticleSystems.PF_VFX_ULT_DEMO_PSYS_ONESHOT_SMOKE_X4:
+			particleId = "pf_vfx_ult_demo_psys_oneshot_smoke_x4";
+			break;
+		case ParticleSystems.PF_VFX_ULT_DEMO_PSYS_ONESHOT_SMOKE2:
+			particleId = "pf_vfx_ult_demo_psys_oneshot_smoke2";
+			break;
+		case ParticleSystems.PF_VFX_ULT_DEMO_PSYS_ONESHOT_SMOKE2_ANIM:
+			particleId = "pf_vfx_ult_demo_psys_oneshot_smoke2_anim";
+			break;
+		case ParticleSystems.PF_VFX_ULT_DEMO_PSYS_ONESHOT_SMOKE2_ANIM_X2:
+			particleId = "pf_vfx_ult_demo_psys_oneshot_smoke2_anim_x2";
+			break;
+		case ParticleSystems.PF_VFX_ULT_DEMO_PSYS_ONESHOT_SMOKE2_ANIM_X4:
+			particleId = "pf_vfx_ult_demo_psys_oneshot_smoke2_anim_x4";
+			break;
+		case ParticleSystems.PF_VFX_ULT_DEMO_PSYS_ONESHOT_SMOKE2_X2:
+			particleId = "pf_vfx_ult_demo_psys_oneshot_smoke2_x2";
+			break;
+		case ParticleSystems.PF_VFX_ULT_DEMO_PSYS_ONESHOT_SMOKE2_X4:
+			particleId = "pf_vfx_ult_demo_psys_oneshot_smoke2_x4";
+			break;
+		case ParticleSystems.PF_VFX_ULT_DEMO_PSYS_ONESHOT_SMOKE3:
+			particleId = "pf_vfx_ult_demo_psys_oneshot_smoke3";
+			break;
+		case ParticleSystems.PF_VFX_ULT_DEMO_PSYS_ONESHOT_SMOKE3_ANIM:
+			particleId = "pf_vfx_ult_demo_psys_oneshot_smoke3_anim";
+			break;
+		case ParticleSystems.PF_VFX_ULT_DEMO_PSYS_ONESHOT_SMOKE3_ANIM_X2:
+			particleId = "pf_vfx_ult_demo_psys_oneshot_smoke3_anim_x2";
+			break;
+		case ParticleSystems.PF_VFX_ULT_DEMO_PSYS_ONESHOT_SMOKE3_ANIMPF_VFX_ULT_DEMO_PSYS_ONESHOT_SMOKE3_X4X4:
+			particleId = "pf_vfx_ult_demo_psys_oneshot_smoke3_animpf_vfx_ult_demo_psys_oneshot_smoke3_x4x4";
+			break;
+		case ParticleSystems.PF_VFX_ULT_DEMO_PSYS_ONESHOT_SMOKE3_X3:
+			particleId = "pf_vfx_ult_demo_psys_oneshot_smoke3_x3";
+			break;
+		case ParticleSystems.PF_VFX_ULT_DEMO_PSYS_ONESHOT_SMOKE3_X4:
+			particleId = "pf_vfx_ult_demo_psys_oneshot_smoke3_x4";
 			break;
 	}
 	return particleId;
