@@ -113,6 +113,8 @@ namespace Hedronoid.Player
         public ParticleList.ParticleSystems DeathParticle = ParticleList.ParticleSystems.NONE;
         public ParticleList.ParticleSystems DashStartParticle = ParticleList.ParticleSystems.NONE;
         public ParticleList.ParticleSystems DashTrailParticle = ParticleList.ParticleSystems.NONE;
+        public List<ParticleList.ParticleSystems> MuzzleFlashParticles = new List<ParticleList.ParticleSystems>();
+
         public List<ParticleList.ParticleSystems> JumpParticles = new List<ParticleList.ParticleSystems>();
         public List<ParticleList.ParticleSystems> DoubleJumpParticles = new List<ParticleList.ParticleSystems>();
         public List<ParticleList.ParticleSystems> LandParticles = new List<ParticleList.ParticleSystems>();
@@ -905,15 +907,14 @@ namespace Hedronoid.Player
                 bulletConf.Duration = 5f;
 
                 GameObject auto = GameplaySceneContext.BulletPoolManager.GetBulletToFire(bulletConf);
-                TrailRenderer tr = auto.GetComponent<TrailRenderer>();
-                tr.enabled = false;
-                tr.enabled = true;
                 Rigidbody rb_auto = auto.GetComponent<Rigidbody>();
                 rb_auto.transform.LookAt(shootDirection);
                 rb_auto.velocity = Vector3.zero;
                 rb_auto.AddForce(shootDirection * shootForcePrimary);
                 lastFired_Auto = Time.realtimeSinceStartup;
 
+                for (int i = 0; i < MuzzleFlashParticles.Count; i++)
+                    ParticleHelper.PlayParticleSystem(MuzzleFlashParticles[i], bulletOrigin.transform.position, shootDirection);
                 FMODUnity.RuntimeManager.PlayOneShot(m_playerAudioData.bulletPrimary[0], transform.position);
             }
             else if (!primaryFire && Time.realtimeSinceStartup - lastFired_Shotgun > fireRateSecondary)
