@@ -908,10 +908,10 @@ namespace Hedronoid.Player
 
                 GameObject auto = GameplaySceneContext.BulletPoolManager.GetBulletToFire(bulletConf);
                 Rigidbody rb_auto = auto.GetComponent<Rigidbody>();
-                rb_auto.transform.LookAt(shootDirection);
                 rb_auto.velocity = Vector3.zero;
                 rb_auto.AddForce(shootDirection * shootForcePrimary);
                 lastFired_Auto = Time.realtimeSinceStartup;
+                rb_auto.transform.forward = shootDirection;
 
                 for (int i = 0; i < MuzzleFlashParticles.Count; i++)
                     ParticleHelper.PlayParticleSystem(MuzzleFlashParticles[i], bulletOrigin.transform.position, shootDirection);

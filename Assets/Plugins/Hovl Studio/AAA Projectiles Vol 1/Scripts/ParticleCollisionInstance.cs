@@ -16,14 +16,20 @@ public class ParticleCollisionInstance : MonoBehaviour
     private ParticleSystem part;
     private List<ParticleCollisionEvent> collisionEvents = new List<ParticleCollisionEvent>();
     private ParticleSystem ps;
-
+    private Rigidbody rb;
     void Start()
     {
-        part = GetComponent<ParticleSystem>();
+        part = GetComponentInChildren<ParticleSystem>();
+        rb = GetComponent<Rigidbody>();
     }
-    void OnParticleCollision(GameObject other)
-    {      
-        int numCollisionEvents = part.GetCollisionEvents(other, collisionEvents);     
+
+    private void FixedUpdate()
+    {
+        rb.transform.forward = rb.velocity.normalized;
+    }
+    private void OnCollisionEnter(Collision collision)
+    {
+        int numCollisionEvents = part.GetCollisionEvents(collision.gameObject, collisionEvents);
         for (int i = 0; i < numCollisionEvents; i++)
         {
             foreach (var effect in EffectsOnCollision)

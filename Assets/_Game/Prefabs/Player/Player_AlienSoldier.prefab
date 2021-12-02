@@ -117,7 +117,7 @@ MonoBehaviour:
   DeathParticle: 1253416725
   DashStartParticle: 1097037110
   DashTrailParticle: 1935865311
-  MuzzleFlashParticles: 8ed14258d744f52a
+  MuzzleFlashParticles: d88ac3587cc18102
   JumpParticles: 1e2a6c4ed9e8f8662408e75762597f0d2a96ec228b14f303d8b2ba6c734af91b87ba625de7b2ae46fd8cbb7fa6f3c02e66cabe66d77db455f3c7cb76626f3f5f046b424ff3e5ee397b51b21149605235
   DoubleJumpParticles: 1e2a6c4ed9e8f8662408e75762597f0d2a96ec228b14f303d8b2ba6c734af91b87ba625de7b2ae46fd8cbb7fa6f3c02e66cabe66d77db455f3c7cb76626f3f5f046b424ff3e5ee397b51b21149605235
   LandParticles: 1e2a6c4ed9e8f8662408e75762597f0d2a96ec228b14f303d8b2ba6c734af91b87ba625de7b2ae46fd8cbb7fa6f3c02e66cabe66d77db455f3c7cb76626f3f5f046b424ff3e5ee397b51b21149605235
@@ -264,7 +264,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 0
+  m_IsActive: 1
 --- !u!4 &8363099692491141536
 Transform:
   m_ObjectHideFlags: 0
@@ -272,14 +272,14 @@ Transform:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 6301777810175361003}
-  m_LocalRotation: {x: 0.7071068, y: 0, z: 0, w: 0.7071068}
-  m_LocalPosition: {x: 0, y: 7, z: 0}
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 1.321, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
   m_Father: {fileID: 1290528325904422512}
   m_RootOrder: 1
-  m_LocalEulerAnglesHint: {x: 90, y: 0, z: 0}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!108 &3831360316424586206
 Light:
   m_ObjectHideFlags: 0
@@ -289,16 +289,16 @@ Light:
   m_GameObject: {fileID: 6301777810175361003}
   m_Enabled: 1
   serializedVersion: 10
-  m_Type: 1
+  m_Type: 2
   m_Shape: 0
-  m_Color: {r: 0.9433962, g: 0.84565276, b: 0.6719473, a: 1}
-  m_Intensity: 0.2
-  m_Range: 11.99
+  m_Color: {r: 0.7783019, g: 0.98868966, b: 1, a: 1}
+  m_Intensity: 3
+  m_Range: 10
   m_SpotAngle: 19
   m_InnerSpotAngle: 19
   m_CookieSize: 10
   m_Shadows:
-    m_Type: 1
+    m_Type: 2
     m_Resolution: -1
     m_CustomResolution: -1
     m_Strength: 1
@@ -329,7 +329,7 @@ Light:
   m_RenderMode: 0
   m_CullingMask:
     serializedVersion: 2
-    m_Bits: 4294967295
+    m_Bits: 2147483647
   m_RenderingLayerMask: 1
   m_Lightmapping: 4
   m_LightShadowCasterMode: 0
@@ -356,7 +356,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   m_Version: 1
   m_UsePipelineSettings: 1
-  m_AdditionalLightsShadowResolutionTier: 2
+  m_AdditionalLightsShadowResolutionTier: 1
   m_LightLayerMask: 1
   m_CustomShadowLayers: 0
   m_ShadowLayerMask: 1
