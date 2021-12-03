@@ -5,8 +5,12 @@ using UnityEngine;
 
 public class Projectile : HNDMonoBehaviour
 {
-    private Rigidbody m_rigidBody;
+    [Header("Collisions and overlaps")]
+    [Tooltip("Which layers are allowed to collide with this gravity source?")]
+    public LayerMask triggerLayers;
     public List<ParticleList.ParticleSystems> CollisionParticles = new List<ParticleList.ParticleSystems>();
+
+    private Rigidbody m_rigidBody;
     private List<GameObject> m_collidedObjects = new List<GameObject>();
     protected override void Start()
     {
@@ -17,23 +21,23 @@ public class Projectile : HNDMonoBehaviour
 
     private void OnCollisionEnter(Collision collision)
     {
-        if (collision.gameObject == this.gameObject || collision.gameObject.layer == this.gameObject.layer) return;
-        
+        if (!IsInLayerMask(collision)) return;
+
         if (!m_collidedObjects.Contains(collision.gameObject))
         {
-            Debug.LogError("COLLIDED: " + gameObject.name);
             m_collidedObjects.Add(collision.gameObject);
 
             for (int i = 0; i < CollisionParticles.Count; i++)
             {
-                ParticleHelper.PlayParticleSystem(CollisionParticles[i], collision.transform.position, collision.contacts[0].normal);
+                Debug.LogError("PLAYING HITS");
+                ParticleHelper.PlayParticleSystem(CollisionParticles[i], transform.position, -collision.contacts[0].normal);
             }
         }
     }
 
     private void OnCollisionExit(Collision collision)
     {
-        if (collision.gameObject == this.gameObject || collision.gameObject.layer == this.gameObject.layer) return;
+        if (!IsInLayerMask(collision)) return;
 
         if (m_collidedObjects.Contains(collision.gameObject))
         {
@@ -44,5 +48,10 @@ public class Projectile : HNDMonoBehaviour
     void FixedUpdate()
     {
         m_rigidBody.transform.forward = m_rigidBody.velocity.normalized;
+    }
+
+    protected bool IsInLayerMask(Collision other)
+    {
+        return ((triggerLayers.value & (1 << other.gameObject.layer)) > 0);
     }
 }

@@ -188,6 +188,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: c27e29aa094d7424ba799a36914bf240, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  triggerLayers:
+    serializedVersion: 2
+    m_Bits: 252929
   CollisionParticles: 6a700247dbf5fd12
 --- !u!1001 &9152371879272510177
 PrefabInstance:
@@ -263,6 +266,21 @@ PrefabInstance:
         type: 3}
       propertyPath: m_BoundingSphereOverride.z
       value: 1.1252048e+24
+      objectReference: {fileID: 0}
+    - target: {fileID: 198163848131447852, guid: 64665cf4e8e583742a3fa9772781d147,
+        type: 3}
+      propertyPath: CollisionModule.enabled
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 198410589948394436, guid: 64665cf4e8e583742a3fa9772781d147,
+        type: 3}
+      propertyPath: CollisionModule.enabled
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 198655005314859470, guid: 64665cf4e8e583742a3fa9772781d147,
+        type: 3}
+      propertyPath: CollisionModule.enabled
+      value: 0
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 64665cf4e8e583742a3fa9772781d147, type: 3}
