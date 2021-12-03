@@ -86242,6 +86242,12 @@ PrefabInstance:
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: f7d7eaf8e703cba4cab91f5892f24eaf, type: 3}
+--- !u!4 &195228991103387408 stripped
+Transform:
+  m_CorrespondingSourceObject: {fileID: 9094412511255585823, guid: f7d7eaf8e703cba4cab91f5892f24eaf,
+    type: 3}
+  m_PrefabInstance: {fileID: 8971241123067634447}
+  m_PrefabAsset: {fileID: 0}
 --- !u!114 &3613854293986725867 stripped
 MonoBehaviour:
   m_CorrespondingSourceObject: {fileID: 5667425059016010980, guid: f7d7eaf8e703cba4cab91f5892f24eaf,
@@ -86254,12 +86260,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 267b9cb756974164cb13fd396fe4b9ac, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
---- !u!4 &195228991103387408 stripped
-Transform:
-  m_CorrespondingSourceObject: {fileID: 9094412511255585823, guid: f7d7eaf8e703cba4cab91f5892f24eaf,
-    type: 3}
-  m_PrefabInstance: {fileID: 8971241123067634447}
-  m_PrefabAsset: {fileID: 0}
 --- !u!1001 &8971241123299088389
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -86744,14 +86744,13 @@ PrefabInstance:
       propertyPath: m_Name
       value: Turret_circle (1)
       objectReference: {fileID: 0}
+    - target: {fileID: 5604741559960502592, guid: 51e63e8cce9501642806f94900e1dbc4,
+        type: 3}
+      propertyPath: m_IsActive
+      value: 1
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 51e63e8cce9501642806f94900e1dbc4, type: 3}
---- !u!4 &5732152958985931228 stripped
-Transform:
-  m_CorrespondingSourceObject: {fileID: 3678582159150090396, guid: 51e63e8cce9501642806f94900e1dbc4,
-    type: 3}
-  m_PrefabInstance: {fileID: 8971241123619307840}
-  m_PrefabAsset: {fileID: 0}
 --- !u!114 &736294165557119890 stripped
 MonoBehaviour:
   m_CorrespondingSourceObject: {fileID: 8554473011238734546, guid: 51e63e8cce9501642806f94900e1dbc4,
@@ -86764,6 +86763,12 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 78e50f91ef29dcf45a6d866be09fbb49, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+--- !u!4 &5732152958985931228 stripped
+Transform:
+  m_CorrespondingSourceObject: {fileID: 3678582159150090396, guid: 51e63e8cce9501642806f94900e1dbc4,
+    type: 3}
+  m_PrefabInstance: {fileID: 8971241123619307840}
+  m_PrefabAsset: {fileID: 0}
 --- !u!1001 &8971241123892901206
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -87508,14 +87513,13 @@ PrefabInstance:
       propertyPath: m_Name
       value: Turret_circle
       objectReference: {fileID: 0}
+    - target: {fileID: 5604741559960502592, guid: 51e63e8cce9501642806f94900e1dbc4,
+        type: 3}
+      propertyPath: m_IsActive
+      value: 1
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 51e63e8cce9501642806f94900e1dbc4, type: 3}
---- !u!4 &5732152958069086864 stripped
-Transform:
-  m_CorrespondingSourceObject: {fileID: 3678582159150090396, guid: 51e63e8cce9501642806f94900e1dbc4,
-    type: 3}
-  m_PrefabInstance: {fileID: 8971241124544025100}
-  m_PrefabAsset: {fileID: 0}
 --- !u!114 &736294164368431326 stripped
 MonoBehaviour:
   m_CorrespondingSourceObject: {fileID: 8554473011238734546, guid: 51e63e8cce9501642806f94900e1dbc4,
@@ -87528,6 +87532,12 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 78e50f91ef29dcf45a6d866be09fbb49, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+--- !u!4 &5732152958069086864 stripped
+Transform:
+  m_CorrespondingSourceObject: {fileID: 3678582159150090396, guid: 51e63e8cce9501642806f94900e1dbc4,
+    type: 3}
+  m_PrefabInstance: {fileID: 8971241124544025100}
+  m_PrefabAsset: {fileID: 0}
 --- !u!1001 &8971241124579546504
 PrefabInstance:
   m_ObjectHideFlags: 0

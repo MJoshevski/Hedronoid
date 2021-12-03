@@ -77,6 +77,31 @@ PrefabInstance:
       propertyPath: m_IsActive
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: 4778170892174489231, guid: f190b840144ecf24f86d126cecc5d06b,
+        type: 3}
+      propertyPath: m_bulletNum
+      value: 60
+      objectReference: {fileID: 0}
+    - target: {fileID: 4778170892174489231, guid: f190b840144ecf24f86d126cecc5d06b,
+        type: 3}
+      propertyPath: m_bulletSpeed
+      value: 10
+      objectReference: {fileID: 0}
+    - target: {fileID: 4778170892174489231, guid: f190b840144ecf24f86d126cecc5d06b,
+        type: 3}
+      propertyPath: m_useAutoRelease
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 4778170892174489231, guid: f190b840144ecf24f86d126cecc5d06b,
+        type: 3}
+      propertyPath: m_autoReleaseTime
+      value: 3
+      objectReference: {fileID: 0}
+    - target: {fileID: 4778170892174489231, guid: f190b840144ecf24f86d126cecc5d06b,
+        type: 3}
+      propertyPath: m_betweenRowAngle
+      value: 10
+      objectReference: {fileID: 0}
     - target: {fileID: 4778170892180489071, guid: f190b840144ecf24f86d126cecc5d06b,
         type: 3}
       propertyPath: m_IsActive
@@ -90,7 +115,7 @@ PrefabInstance:
     - target: {fileID: 8732730632023997725, guid: f190b840144ecf24f86d126cecc5d06b,
         type: 3}
       propertyPath: m_IsActive
-      value: 0
+      value: 1
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: f190b840144ecf24f86d126cecc5d06b, type: 3}

@@ -29,7 +29,6 @@ public class Projectile : HNDMonoBehaviour
 
             for (int i = 0; i < CollisionParticles.Count; i++)
             {
-                Debug.LogError("PLAYING HITS");
                 ParticleHelper.PlayParticleSystem(CollisionParticles[i], transform.position, -collision.contacts[0].normal);
             }
         }
