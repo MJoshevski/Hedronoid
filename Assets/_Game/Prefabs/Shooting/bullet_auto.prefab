@@ -113,8 +113,8 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 7264386719725267083}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: -34.098618, y: 48.065075, z: -11.249}
-  m_LocalScale: {x: 0.35, y: 0.35, z: 0.35}
+  m_LocalPosition: {x: -34.098618, y: 48.065075, z: -3.25}
+  m_LocalScale: {x: 0.4, y: 0.4, z: 0.4}
   m_ConstrainProportionsScale: 0
   m_Children:
   - {fileID: 8024737495123395687}
@@ -214,7 +214,7 @@ TrailRenderer:
   m_RenderingLayerMask: 1
   m_RendererPriority: 0
   m_Materials:
-  - {fileID: 2100000, guid: 06f224c3412f04f4fb70a880b1bc9cb5, type: 2}
+  - {fileID: 2100000, guid: 9d9c6bcecd2f6c84489fe558c59ecfae, type: 2}
   m_StaticBatchInfo:
     firstSubMesh: 0
     subMeshCount: 0
@@ -243,8 +243,8 @@ TrailRenderer:
       serializedVersion: 2
       m_Curve:
       - serializedVersion: 3
-        time: 0.03768158
-        value: 0.17763138
+        time: 0.00579834
+        value: 0.5131569
         inSlope: 0
         outSlope: 0
         tangentMode: 0
@@ -266,22 +266,22 @@ TrailRenderer:
     colorGradient:
       serializedVersion: 2
       key0: {r: 1, g: 1, b: 1, a: 1}
-      key1: {r: 1, g: 0.9371229, b: 0, a: 0.6392157}
-      key2: {r: 0, g: 0, b: 0, a: 0}
-      key3: {r: 0, g: 0, b: 0, a: 0}
+      key1: {r: 1, g: 0.9526416, b: 0.2468099, a: 0.6392157}
+      key2: {r: 1, g: 0.47854912, b: 0.18823528, a: 0}
+      key3: {r: 0.8113208, g: 0, b: 0.20801345, a: 0}
       key4: {r: 0, g: 0, b: 0, a: 0}
       key5: {r: 0, g: 0, b: 0, a: 0}
       key6: {r: 0, g: 0, b: 0, a: 0}
       key7: {r: 0, g: 0, b: 0, a: 0}
-      ctime0: 20239
-      ctime1: 65535
-      ctime2: 0
-      ctime3: 0
+      ctime0: 9252
+      ctime1: 15998
+      ctime2: 27371
+      ctime3: 65535
       ctime4: 0
       ctime5: 0
       ctime6: 0
       ctime7: 0
-      atime0: 18119
+      atime0: 40670
       atime1: 53392
       atime2: 0
       atime3: 0
@@ -290,7 +290,7 @@ TrailRenderer:
       atime6: 0
       atime7: 0
       m_Mode: 0
-      m_NumColorKeys: 2
+      m_NumColorKeys: 4
       m_NumAlphaKeys: 2
     numCornerVertices: 0
     numCapVertices: 0
@@ -364,17 +364,17 @@ PrefabInstance:
     - target: {fileID: 108967227166258852, guid: 64665cf4e8e583742a3fa9772781d147,
         type: 3}
       propertyPath: m_BoundingSphereOverride.x
-      value: 0
+      value: -1.8070343e-38
       objectReference: {fileID: 0}
     - target: {fileID: 108967227166258852, guid: 64665cf4e8e583742a3fa9772781d147,
         type: 3}
       propertyPath: m_BoundingSphereOverride.y
-      value: -8.764429e-23
+      value: NaN
       objectReference: {fileID: 0}
     - target: {fileID: 108967227166258852, guid: 64665cf4e8e583742a3fa9772781d147,
         type: 3}
       propertyPath: m_BoundingSphereOverride.z
-      value: 8.88e-43
+      value: 12
       objectReference: {fileID: 0}
     - target: {fileID: 198163848131447852, guid: 64665cf4e8e583742a3fa9772781d147,
         type: 3}
