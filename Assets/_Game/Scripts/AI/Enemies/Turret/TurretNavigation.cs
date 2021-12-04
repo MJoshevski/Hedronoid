@@ -134,13 +134,13 @@ namespace Hedronoid
         }
         void LockOnTarget()
         {
-            Vector3 dir = m_Target.position - transform.position;
-            Quaternion lookRotation = Quaternion.LookRotation(dir);
-
             if (partToRotate)
             {
-                Vector3 rotation = Quaternion.Lerp(partToRotate.rotation, lookRotation, Time.deltaTime * turnSpeed).eulerAngles;
-                partToRotate.rotation = Quaternion.Euler(0f, rotation.y, 0f);
+                var relativePosition = partToRotate.InverseTransformDirection(m_Target.position);
+                relativePosition.y = 0;
+                var targetPosition = partToRotate.TransformPoint(relativePosition);
+
+                partToRotate.LookAt(targetPosition, partToRotate.up);
             }
         }
 
