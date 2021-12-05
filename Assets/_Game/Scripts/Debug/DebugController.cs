@@ -34,6 +34,8 @@ namespace Hedronoid
         public KeyCode m_toggleHUDKey = KeyCode.RightBracket;
         [Tooltip("Toggles the audio On or Off.")]
         public KeyCode m_toggleAudioKey = KeyCode.M;
+        [Tooltip("Toggles the in-game Gizmos on or Off.")]
+        public KeyCode m_toggleGizmos = KeyCode.F3;
 
         public enum EShortcuts
         {
@@ -45,7 +47,8 @@ namespace Hedronoid
             TIMESCALE_DECREASE,
             RESET_SCENE,
             TOGGLE_DEBUG_HUD,
-            TOGGLE_AUDIO
+            TOGGLE_AUDIO,
+            TOGGLE_GIZMOS
         }
 
         public struct EShortcutsComparer : IEqualityComparer<EShortcuts>
@@ -119,6 +122,7 @@ namespace Hedronoid
             m_ShortcutPressedDict[EShortcuts.DEBUG_MENU] = Input.GetKeyDown(m_debugMenuKey);
             m_ShortcutPressedDict[EShortcuts.TOGGLE_DEBUG_HUD] = Input.GetKeyDown(m_toggleHUDKey);
             m_ShortcutPressedDict[EShortcuts.TOGGLE_AUDIO] = Input.GetKeyDown(m_toggleAudioKey);
+            m_ShortcutPressedDict[EShortcuts.TOGGLE_GIZMOS] = Input.GetKeyDown(m_toggleGizmos);
 
             if (!m_EnabledHUD)
             {
@@ -222,6 +226,11 @@ namespace Hedronoid
                 if (volume > 0.5f)
                     masterBus.setVolume(0);
                 else masterBus.setVolume(1);
+            }
+
+            if (IsShortcutPressed(EShortcuts.TOGGLE_GIZMOS))
+            {
+                Popcron.Gizmos.Enabled = !Popcron.Gizmos.Enabled;
             }
         }
 
