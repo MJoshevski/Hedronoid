@@ -10,6 +10,7 @@ using UnityEngine.SceneManagement;
 using Hedronoid.Health;
 using Hedronoid.Particle;
 using Hedronoid.AI;
+using CameraShake;
 
 namespace Hedronoid.Player
 {
@@ -130,7 +131,8 @@ namespace Hedronoid.Player
         // GENERAL REFS
         [HideInInspector]
         public Rigidbody Rigidbody, connectedRb, prevConnectedRb;
-        private Camera orbitCamera;
+        private Camera orbitCameraObject;
+        private OrbitCamera orbitCamera;
         private Animator Animator;
         private DamageHandler m_damageHandler;
         private HealthBase m_healthBase;
@@ -205,7 +207,8 @@ namespace Hedronoid.Player
             base.Awake();
             this.Inject(gameObject);
 
-            if (!orbitCamera) GameplaySceneContext.OrbitCamera.TryGetComponent(out orbitCamera);
+            if (!orbitCameraObject) GameplaySceneContext.OrbitCamera.TryGetComponent(out orbitCameraObject);
+            if (!orbitCamera) orbitCamera = GameplaySceneContext.OrbitCamera;
             if (!Rigidbody) TryGetComponent(out Rigidbody);
             if (!m_healthBase) TryGetComponent(out m_healthBase);
             if (!m_damageHandler) TryGetComponent(out m_damageHandler);
@@ -260,16 +263,16 @@ namespace Hedronoid.Player
             PlayerFSM player = GameplaySceneContext.Player;
 
             LookRay =
-                orbitCamera.ScreenPointToRay(
+                orbitCameraObject.ScreenPointToRay(
                 new Vector3(Screen.width / 2, Screen.height / 2, 0));
             Physics.Raycast(LookRay, out RayHit, 10000f);
 
-            if (orbitCamera.transform)
+            if (orbitCameraObject.transform)
             {
                 rightAxis =
-                    VectorExtensions.ProjectDirectionOnPlane(orbitCamera.transform.right, upAxis);
+                    VectorExtensions.ProjectDirectionOnPlane(orbitCameraObject.transform.right, upAxis);
                 forwardAxis =
-                    VectorExtensions.ProjectDirectionOnPlane(orbitCamera.transform.forward, upAxis);
+                    VectorExtensions.ProjectDirectionOnPlane(orbitCameraObject.transform.forward, upAxis);
             }
             else
             {
@@ -497,6 +500,7 @@ namespace Hedronoid.Player
             FMODUnity.RuntimeManager.PlayOneShotAttached(m_playerAudioData.dash, gameObject);
 
             // VFX
+            orbitCamera.camerShakeCollection.PlayCameraShake(CameraShakeType.BounceShake2);
             m_afterImageEffect.Play();
             ParticleHelper.PlayParticleSystem(DashStartParticle, cachedTransform.position, -cachedTransform.forward, 3f);
             ParticleHelper.PlayParticleSystem(DashTrailParticle, cachedTransform.position, -cachedTransform.up, 2f, false, cachedTransform);
@@ -637,7 +641,7 @@ namespace Hedronoid.Player
         #region STATE: FLYING
         private void OnEnterFlying(FSMState fromState)
         {
-            upAxis = orbitCamera.transform.up;
+            upAxis = orbitCameraObject.transform.up;
             // FLYING ANIM
             Animator.CrossFade(animHashes.Flying, 0.2f);
         }
@@ -736,8 +740,8 @@ namespace Hedronoid.Player
 
             //DIRECTION GIZMO
             Vector3 moveDirection =
-                movementVariables.Vertical * orbitCamera.transform.forward +
-                movementVariables.Horizontal * orbitCamera.transform.right;
+                movementVariables.Vertical * orbitCameraObject.transform.forward +
+                movementVariables.Horizontal * orbitCameraObject.transform.right;
             moveDirection = Vector3.ProjectOnPlane(moveDirection, upAxis);
             moveDirection.Normalize();
             Debug.DrawRay(transform.position, moveDirection, Color.yellow);
@@ -913,6 +917,8 @@ namespace Hedronoid.Player
                 lastFired_Auto = Time.realtimeSinceStartup;
                 rb_auto.transform.forward = shootDirection;
 
+                //FX
+                orbitCamera.camerShakeCollection.PlayCameraShake(CameraShakeType.KickShake);
                 for (int i = 0; i < MuzzleFlashParticles.Count; i++)
                     ParticleHelper.PlayParticleSystem(MuzzleFlashParticles[i], bulletOrigin.transform.position, shootDirection);
                 FMODUnity.RuntimeManager.PlayOneShot(m_playerAudioData.bulletPrimary[0], transform.position);
@@ -933,6 +939,7 @@ namespace Hedronoid.Player
                 rb_shot.AddForce(shootDirection * shootForceSecondary);
                 lastFired_Shotgun = Time.realtimeSinceStartup;
 
+                orbitCamera.camerShakeCollection.PlayCameraShake(CameraShakeType.BounceShake);
                 FMODUnity.RuntimeManager.PlayOneShot(m_playerAudioData.bulletSecondary, transform.position);
             }
         }

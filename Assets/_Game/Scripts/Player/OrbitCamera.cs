@@ -5,6 +5,7 @@ using Gizmos = Popcron.Gizmos;
 using Hedronoid.Core;
 using Hedronoid.Player;
 using Hedronoid.Events;
+using CameraShake;
 
 namespace Hedronoid
 {
@@ -95,6 +96,10 @@ namespace Hedronoid
             get { return manualPositionOffset; }
             private set { manualPositionOffset = value; }
         }
+
+        [Header("Camera Shake Presets")]
+        public CameraShakeCollection camerShakeCollection;
+        public CameraShaker cameraShaker;
         #endregion
 
         #region PRIVATE/HIDDEN VARS
@@ -109,7 +114,10 @@ namespace Hedronoid
         private Quaternion gravityAlignment = Quaternion.identity;
         private Quaternion orbitRotation;
         private Quaternion lookRotation;
+        public Quaternion LookRotation { get { return lookRotation; } }
+
         private Vector3 lookPosition;
+        public Vector3 LookPosition {  get { return lookPosition; } }
         private Vector3 lookDirection;
         private float minVerticalAnglePrev;
         private float maxVerticalAnglePrev;
@@ -159,6 +167,7 @@ namespace Hedronoid
             minVerticalAnglePrev = minVerticalAngle;
             maxVerticalAnglePrev = maxVerticalAngle;
 
+            if (!cameraShaker) TryGetComponent(out cameraShaker);
             Cursor.lockState = LockCursor ? CursorLockMode.Locked : CursorLockMode.None;
         }
 
@@ -216,6 +225,8 @@ namespace Hedronoid
             //
 
             orbitCamera.transform.SetPositionAndRotation(lookPosition, lookRotation);
+
+            cameraShaker.ProcessActiveShakes();
         }
         #endregion
 

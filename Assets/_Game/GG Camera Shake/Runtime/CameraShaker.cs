@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using Hedronoid;
+using System.Collections.Generic;
 using UnityEngine;
 
 namespace CameraShake
@@ -16,6 +17,8 @@ namespace CameraShake
         [Tooltip("Transform which will be affected by the shakes.\n\nCameraShaker will set this transform's local position and rotation.")]
         [SerializeField]
         Transform cameraTransform;
+        [SerializeField]
+        OrbitCamera orbitCamera;
         
 
         [Tooltip("Scales the strength of all shakes.")]
@@ -59,12 +62,13 @@ namespace CameraShake
         {
             Instance = this;
             ShakePresets = new CameraShakePresets(this);
+            if (!orbitCamera) TryGetComponent(out orbitCamera);
             Presets = ShakePresets;
             if (cameraTransform == null)
                 cameraTransform = transform;
         }
 
-        private void Update()
+        public void ProcessActiveShakes()
         {
             if (cameraTransform == null) return;
 
@@ -75,14 +79,19 @@ namespace CameraShake
                 {
                     activeShakes.RemoveAt(i);
                 }
-                else
+                else 
                 {
+                    Debug.LogError("SHAKING: " + activeShakes[i].ToString());
                     activeShakes[i].Update(Time.deltaTime, cameraTransform.position, cameraTransform.rotation);
                     cameraDisplacement += activeShakes[i].CurrentDisplacement;
                 }
             }
-            cameraTransform.localPosition = StrengthMultiplier * cameraDisplacement.position;
-            cameraTransform.localRotation = Quaternion.Euler(StrengthMultiplier * cameraDisplacement.eulerAngles);
+
+            Vector3 lookPosition = StrengthMultiplier * cameraDisplacement.position;
+            Quaternion lookRotation = Quaternion.Euler(StrengthMultiplier * cameraDisplacement.eulerAngles);
+            lookPosition = orbitCamera.LookPosition + lookPosition;
+            lookRotation = orbitCamera.LookRotation * lookRotation;
+            orbitCamera.transform.SetPositionAndRotation(lookPosition, lookRotation);
         }
 
         private static bool IsInstanceNull()
