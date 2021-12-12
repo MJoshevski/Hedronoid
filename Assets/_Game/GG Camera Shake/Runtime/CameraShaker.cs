@@ -81,7 +81,6 @@ namespace CameraShake
                 }
                 else 
                 {
-                    Debug.LogError("SHAKING: " + activeShakes[i].ToString());
                     activeShakes[i].Update(Time.deltaTime, cameraTransform.position, cameraTransform.rotation);
                     cameraDisplacement += activeShakes[i].CurrentDisplacement;
                 }

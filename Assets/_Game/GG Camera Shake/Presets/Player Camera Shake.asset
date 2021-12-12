@@ -14,8 +14,8 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   DefaultCamerShake: 2
   BounceShakeParams:
-    positionStrength: 0.05
-    rotationStrength: 0.1
+    positionStrength: 0.5
+    rotationStrength: 0.2
     axesMultiplier:
       position: {x: 1, y: 1, z: 0}
       eulerAngles: {x: 0, y: 0, z: 1}
@@ -101,8 +101,8 @@ MonoBehaviour:
       falloffDegree: 1
       axesMultiplier: {x: 1, y: 1, z: 1}
   KickShakeDisplacementType:
-    position: {x: 1, y: 1, z: 1}
-    eulerAngles: {x: 1, y: 1, z: 1}
+    position: {x: 0, y: 0, z: 0}
+    eulerAngles: {x: -1, y: 0, z: 0}
   PerlinShakeParams:
     strength:
       position: {x: 0, y: 0, z: 0}

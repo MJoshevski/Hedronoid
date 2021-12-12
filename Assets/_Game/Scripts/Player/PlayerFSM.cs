@@ -90,6 +90,9 @@ namespace Hedronoid.Player
         [Tooltip("Maximum allowed angle for walking on stairs.")]
         [Range(0, 90)]
         public float maxStairsAngle = 50f;
+        public bool IsMoving { get { return isMoving; } }
+        private bool isMoving = false;
+
 
         [Header("Custom Variables")]
         public MovementVariables movementVariables;
@@ -107,6 +110,8 @@ namespace Hedronoid.Player
         public GameObject bulletPrimary, bulletSecondary, bulletTertiary;
         [Tooltip("Bullet raycast ignore layers")]
         public LayerMask bulletIgnoreLayers;
+        public bool IsShooting { get { return isShooting; } }
+        private bool isShooting = false;
 
         [Header("Visual")]
         [SerializeField]
@@ -242,10 +247,19 @@ namespace Hedronoid.Player
             base.Update();
 
             if (Input.GetButton("Fire1"))
+            {
                 Shoot(true);
+            }
 
             if (Input.GetButton("Fire2"))
+            {
                 Shoot(false);
+            }
+
+            if (Input.GetButton("Fire1") || Input.GetButton("Fire2"))
+                isShooting = true;
+            else isShooting = false;
+
 
             desiredDash |= Input.GetButtonDown("Dash");
 
@@ -330,6 +344,10 @@ namespace Hedronoid.Player
                 Time.fixedDeltaTime * gravityVariables.GravityRotationMultiplier);
 
             transform.rotation = targetRotation;
+
+            if (Rigidbody.velocity.sqrMagnitude > 1)
+                isMoving = true;
+            else isMoving = false;
 
             ClearState();
         }
