@@ -39,7 +39,7 @@ public class HUDManager : HNDMonoBehaviour, IGameplaySceneContextInjector
         if (!player) player = GameplaySceneContext.Player;
         if (!player) return;
 
-        if (player.IsMoving || player.IsShooting)
+        if (player.IsShooting)
         {
             currentSize = Mathf.Lerp(currentSize, maxSize, Time.deltaTime * speed);
         }
