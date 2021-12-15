@@ -46,5 +46,33 @@ namespace UnityMovementAI
 
             return steeringBasics.Seek(explicitTarget);
         }
+
+        public Vector3 GetSteering(GameObject target)
+        {
+            /* Calculate the distance to the target */
+            Vector3 displacement = target.transform.position - transform.position;
+            float distance = displacement.magnitude;
+
+            /* Get the character's speed */
+            float speed = rb.Velocity.magnitude;
+
+            /* Calculate the prediction time */
+            float prediction;
+            if (speed <= distance / maxPrediction)
+            {
+                prediction = maxPrediction;
+            }
+            else
+            {
+                prediction = distance / speed;
+            }
+
+            /* Put the target together based on where we think the target will be */
+            Vector3 explicitTarget = target.transform.position + target.transform.forward * prediction;
+
+            //Debug.DrawLine(transform.position, explicitTarget);
+
+            return steeringBasics.Seek(explicitTarget);
+        }
     }
 }

@@ -81,7 +81,7 @@ namespace Hedronoid.AI
             m_BullSensor = GetComponent<BullSensor>();
             m_BullRb = GetComponent<Rigidbody>();
 
-            m_sharedMaterial = m_BullNavigation.GetComponentInChildren<SkinnedMeshRenderer>().materials[0];
+            //m_sharedMaterial = m_BullNavigation.GetComponentInChildren<SkinnedMeshRenderer>().materials[0];
             
             if (m_DamageHandler)
                 m_DamageHandler.IsInvulnerable = false;
@@ -200,7 +200,7 @@ namespace Hedronoid.AI
                 {
                     // if end color not reached yet...
                     t += Time.deltaTime / m_windupTime; // advance timer at the right speed
-                    m_sharedMaterial.color = Color.Lerp(Color.white, Color.red, t);
+                    //m_sharedMaterial.color = Color.Lerp(Color.white, Color.red, t);
                 }
 
                 TurnTowardsTarget(target);
@@ -295,7 +295,7 @@ namespace Hedronoid.AI
                 }
             }
 
-            m_sharedMaterial.color = Color.white;
+            //m_sharedMaterial.color = Color.white;
 
             SetAnimatorTrigger("TurnInvulnerable");
             yield return new WaitForSeconds(1f); // giving animation one second to stand up without turning when no cooldown is used... or whatever.

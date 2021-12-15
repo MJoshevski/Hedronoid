@@ -11,7 +11,7 @@ namespace Hedronoid.Core
     public class ScenePlayerManager : HNDGameObject, IGameplaySceneContextInjector
     {
         public GameObject Player;
-        public HNDGameObject PlayerPrefab;
+        public GameObject PlayerPrefab;
 
         public GameplaySceneContext GameplaySceneContext { get; set; }
 
@@ -68,11 +68,11 @@ namespace Hedronoid.Core
 
         private void CreatePlayer()
         {
-            HNDGameObject p = Instantiate(PlayerPrefab, GameplaySceneContext.cachedTransform);
+            GameObject p = Instantiate(PlayerPrefab, GameplaySceneContext.cachedTransform);
             p.name = "Player";
-            p.cachedTransform.position = GameplaySceneContext.PlayerSpawner.GetSpawnPoint(0).position;
-            p.cachedTransform.rotation = GameplaySceneContext.PlayerSpawner.GetSpawnPoint(0).rotation;
-            Player = p.cachedGameObject;
+            p.transform.position = GameplaySceneContext.PlayerSpawner.GetSpawnPoint(0).position;
+            p.transform.rotation = GameplaySceneContext.PlayerSpawner.GetSpawnPoint(0).rotation;
+            Player = p.gameObject;
         }
 
         private void RespawnPlayerAtCheckpoint()
