@@ -881,7 +881,7 @@ namespace Hedronoid.Player
             stepsSinceLastJump = 0;
             jumpPhase += 1;
             float jumpSpeed = Mathf.Sqrt(2f * gravity.magnitude * jumpHeight);
-            jumpDirection = (jumpDirection + upAxis).normalized;
+            jumpDirection = (jumpDirection + upAxis + forwardAxis).normalized;
             float alignedSpeed = Vector3.Dot(velocity, jumpDirection);
 
             if (alignedSpeed > 0f)

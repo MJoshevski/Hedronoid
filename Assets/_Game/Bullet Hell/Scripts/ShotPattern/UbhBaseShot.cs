@@ -22,6 +22,8 @@ public abstract class UbhBaseShot : HNDMonoBehaviour, IGameplaySceneContextInjec
     // "Set a bullet prefab for the shot. (ex. sprite or model)"
     [FormerlySerializedAs("_BulletPrefab")]
     public GameObject m_bulletPrefab;
+    [FormerlySerializedAs("_BulletPrefabAlt")]
+    public GameObject m_bulletPrefabAlt;
     // "Set a bullet origin for the shot."
     [FormerlySerializedAs("_BulletOrigin")]
     public Transform m_bulletOrigin;
@@ -209,32 +211,42 @@ public abstract class UbhBaseShot : HNDMonoBehaviour, IGameplaySceneContextInjec
     /// </summary>
     protected UbhBullet GetBullet(Vector3 position, bool forceInstantiate = false)
     {
+        UbhBullet bullet = null;
+
         if (TurretNavigation.Target == null) 
         {
-            Debug.LogError("GetBullet: " + TurretNavigation.Target.gameObject.name);
-            return null;
+            //Debug.LogError("No target found!");
+            return bullet;
         }
 
-        Debug.LogError("TARGET NO TNULL: " + TurretNavigation.Target.gameObject.name);
         if (m_bulletPrefab == null)
         {
             Debug.LogWarning("Cannot generate a bullet because BulletPrefab is not set.");
-            return null;
+            return bullet;
+        }
+        GameObject chosenBullet = m_bulletPrefab;
+
+        if(m_bulletPrefabAlt != null)
+        {
+            float rand = Random.Range(0f, 1f);
+
+            if (rand > 0.5f)
+                chosenBullet = m_bulletPrefabAlt;
         }
 
         // get UbhBullet from ObjectPool
-        m_bulletConfig.Prefab = m_bulletPrefab;
+        m_bulletConfig.Prefab = chosenBullet;
         m_bulletConfig.Position = m_bulletOrigin.position;
         m_bulletConfig.Rotation = Quaternion.identity;
         m_bulletConfig.Parent = null;
-        m_bulletConfig.Duration = m_autoReleaseTime;
+        m_bulletConfig.Duration = -1;
 
-        UbhBullet bullet = BulletPoolManager.GetBulletToFire(m_bulletConfig).GetComponent<UbhBullet>();
+        BulletPoolManager.GetBulletToFire(m_bulletConfig).TryGetComponent(out bullet);
 
-        if (bullet == null)
-        {
-            return null;
-        }
+        //if (bullet == null)
+        //{
+        //    return null;
+        //}
 
         return bullet;
     }
@@ -246,7 +258,7 @@ public abstract class UbhBaseShot : HNDMonoBehaviour, IGameplaySceneContextInjec
     {
         if (TurretNavigation.Target == null) 
         {
-            Debug.LogError("GetBulletGO: " + TurretNavigation.Target.gameObject.name);
+            //Debug.LogError("GetBulletGO: " + TurretNavigation.Target.gameObject.name);
             return null;
         }
         Debug.LogError("TARGET NO TNULL: " + TurretNavigation.Target.gameObject.name);
@@ -283,10 +295,8 @@ public abstract class UbhBaseShot : HNDMonoBehaviour, IGameplaySceneContextInjec
     {
         if (TurretNavigation.Target == null) 
         {
-            Debug.LogError("SHOT BULLET: " + TurretNavigation.Target.gameObject.name);
             return;
         }
-        Debug.LogError("TARGET NO TNULL: " + TurretNavigation.Target.gameObject.name);
 
         if (bullet == null || m_disableShooting)
         {

@@ -138,7 +138,7 @@ namespace UnityMovementAI
 
         protected override void Start()
         {
-            StartCoroutine(DebugDraw());
+            //StartCoroutine(DebugDraw());
 
             /* Call fixed update for 3D grounded characters to make sure they get proper 
              * ground / movement normals before their velocity is set */

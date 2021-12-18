@@ -14,48 +14,63 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 573113868346062017, guid: f190b840144ecf24f86d126cecc5d06b,
         type: 3}
+      propertyPath: m_LocalScale.x
+      value: 1.7301627
+      objectReference: {fileID: 0}
+    - target: {fileID: 573113868346062017, guid: f190b840144ecf24f86d126cecc5d06b,
+        type: 3}
+      propertyPath: m_LocalScale.y
+      value: 1.7301627
+      objectReference: {fileID: 0}
+    - target: {fileID: 573113868346062017, guid: f190b840144ecf24f86d126cecc5d06b,
+        type: 3}
+      propertyPath: m_LocalScale.z
+      value: 1.7301627
+      objectReference: {fileID: 0}
+    - target: {fileID: 573113868346062017, guid: f190b840144ecf24f86d126cecc5d06b,
+        type: 3}
       propertyPath: m_LocalPosition.x
-      value: 0
+      value: 138.9
       objectReference: {fileID: 0}
     - target: {fileID: 573113868346062017, guid: f190b840144ecf24f86d126cecc5d06b,
         type: 3}
       propertyPath: m_LocalPosition.y
-      value: -38.1
+      value: -24.02
       objectReference: {fileID: 0}
     - target: {fileID: 573113868346062017, guid: f190b840144ecf24f86d126cecc5d06b,
         type: 3}
       propertyPath: m_LocalPosition.z
-      value: 9.88
+      value: 40.714
       objectReference: {fileID: 0}
     - target: {fileID: 573113868346062017, guid: f190b840144ecf24f86d126cecc5d06b,
         type: 3}
       propertyPath: m_LocalRotation.w
-      value: 1
+      value: 0.6333775
       objectReference: {fileID: 0}
     - target: {fileID: 573113868346062017, guid: f190b840144ecf24f86d126cecc5d06b,
         type: 3}
       propertyPath: m_LocalRotation.x
-      value: 0
+      value: 0.08097941
       objectReference: {fileID: 0}
     - target: {fileID: 573113868346062017, guid: f190b840144ecf24f86d126cecc5d06b,
         type: 3}
       propertyPath: m_LocalRotation.y
-      value: 0
+      value: -0.7633803
       objectReference: {fileID: 0}
     - target: {fileID: 573113868346062017, guid: f190b840144ecf24f86d126cecc5d06b,
         type: 3}
       propertyPath: m_LocalRotation.z
-      value: 0
+      value: 0.0976007
       objectReference: {fileID: 0}
     - target: {fileID: 573113868346062017, guid: f190b840144ecf24f86d126cecc5d06b,
         type: 3}
       propertyPath: m_LocalEulerAnglesHint.x
-      value: 0
+      value: 14.572
       objectReference: {fileID: 0}
     - target: {fileID: 573113868346062017, guid: f190b840144ecf24f86d126cecc5d06b,
         type: 3}
       propertyPath: m_LocalEulerAnglesHint.y
-      value: 0
+      value: -100.635
       objectReference: {fileID: 0}
     - target: {fileID: 573113868346062017, guid: f190b840144ecf24f86d126cecc5d06b,
         type: 3}
@@ -67,12 +82,52 @@ PrefabInstance:
       propertyPath: m_Name
       value: Turret_circle
       objectReference: {fileID: 0}
+    - target: {fileID: 1344802669579394031, guid: f190b840144ecf24f86d126cecc5d06b,
+        type: 3}
+      propertyPath: m_Materials.Array.data[0]
+      value: 
+      objectReference: {fileID: 2100000, guid: fc93553535356ac41b65cbd2fc10645d, type: 2}
+    - target: {fileID: 1344802671014947750, guid: f190b840144ecf24f86d126cecc5d06b,
+        type: 3}
+      propertyPath: m_Materials.Array.data[0]
+      value: 
+      objectReference: {fileID: 2100000, guid: 9b54dc63f1a54ef48afa72039172105a, type: 2}
     - target: {fileID: 2065068607680485762, guid: f190b840144ecf24f86d126cecc5d06b,
         type: 3}
       propertyPath: m_shotList.Array.data[0].m_shotObj
       value: 
       objectReference: {fileID: 8554473011238734546}
+    - target: {fileID: 2432387971576699241, guid: f190b840144ecf24f86d126cecc5d06b,
+        type: 3}
+      propertyPath: m_Range
+      value: 76.8
+      objectReference: {fileID: 0}
+    - target: {fileID: 2432387971576699241, guid: f190b840144ecf24f86d126cecc5d06b,
+        type: 3}
+      propertyPath: m_Intensity
+      value: 600
+      objectReference: {fileID: 0}
+    - target: {fileID: 2432387971576699241, guid: f190b840144ecf24f86d126cecc5d06b,
+        type: 3}
+      propertyPath: m_Shadows.m_Type
+      value: 2
+      objectReference: {fileID: 0}
+    - target: {fileID: 2432387971576699241, guid: f190b840144ecf24f86d126cecc5d06b,
+        type: 3}
+      propertyPath: m_BounceIntensity
+      value: 0
+      objectReference: {fileID: 0}
     - target: {fileID: 2778771338951326458, guid: f190b840144ecf24f86d126cecc5d06b,
+        type: 3}
+      propertyPath: m_IsActive
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 2856604624285526229, guid: f190b840144ecf24f86d126cecc5d06b,
+        type: 3}
+      propertyPath: m_DamageBlinkTexture
+      value: 
+      objectReference: {fileID: 0}
+    - target: {fileID: 4446184112930389016, guid: f190b840144ecf24f86d126cecc5d06b,
         type: 3}
       propertyPath: m_IsActive
       value: 0
@@ -102,6 +157,11 @@ PrefabInstance:
       propertyPath: m_betweenRowAngle
       value: 10
       objectReference: {fileID: 0}
+    - target: {fileID: 4778170892174489231, guid: f190b840144ecf24f86d126cecc5d06b,
+        type: 3}
+      propertyPath: m_bulletPrefabAlt
+      value: 
+      objectReference: {fileID: 100000, guid: 1077869ab57439a4f8816b3f555d7629, type: 3}
     - target: {fileID: 4778170892180489071, guid: f190b840144ecf24f86d126cecc5d06b,
         type: 3}
       propertyPath: m_IsActive
@@ -112,6 +172,31 @@ PrefabInstance:
       propertyPath: m_Materials.Array.data[0]
       value: 
       objectReference: {fileID: 2100000, guid: 8128d9239921c174588516df1ceabbe7, type: 2}
+    - target: {fileID: 6341165038620838327, guid: f190b840144ecf24f86d126cecc5d06b,
+        type: 3}
+      propertyPath: m_Shadows.m_Type
+      value: 2
+      objectReference: {fileID: 0}
+    - target: {fileID: 6785396965426614418, guid: f190b840144ecf24f86d126cecc5d06b,
+        type: 3}
+      propertyPath: m_IsActive
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 6825341793373342509, guid: f190b840144ecf24f86d126cecc5d06b,
+        type: 3}
+      propertyPath: m_Shadows.m_Type
+      value: 2
+      objectReference: {fileID: 0}
+    - target: {fileID: 6825341793373342509, guid: f190b840144ecf24f86d126cecc5d06b,
+        type: 3}
+      propertyPath: m_BounceIntensity
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 8005466400787543202, guid: f190b840144ecf24f86d126cecc5d06b,
+        type: 3}
+      propertyPath: m_IsActive
+      value: 0
+      objectReference: {fileID: 0}
     - target: {fileID: 8732730632023997725, guid: f190b840144ecf24f86d126cecc5d06b,
         type: 3}
       propertyPath: m_IsActive

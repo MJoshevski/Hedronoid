@@ -77,7 +77,13 @@ public class AfterImageEffect : MonoBehaviour
         List<CombineInstance> combineInstances = new List<CombineInstance>();
 
         int idx = 0;
-        for (int i = 0; i < skinRenderers.Length; i++)
+        int skinIterations, filterIterations = 0;
+
+        if (skinRenderers.Length > 10)
+            skinIterations = 10;
+        else skinIterations = skinRenderers.Length;
+
+        for (int i = 0; i < skinIterations; i++)
         {
             SkinnedMeshRenderer render = skinRenderers[i];
 
@@ -99,7 +105,11 @@ public class AfterImageEffect : MonoBehaviour
             }
         }
 
-        for (int i = 0; i < filtersCount; i++)
+        if (filtersCount > 10)
+            filterIterations = 10;
+        else filterIterations = filtersCount;
+
+        for (int i = 0; i < filterIterations; i++)
         {
             var render = filters[i];
             Mesh temp = (null != render.sharedMesh) ? render.sharedMesh : render.mesh;

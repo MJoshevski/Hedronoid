@@ -46,7 +46,8 @@ public class Projectile : HNDMonoBehaviour
     }
     void FixedUpdate()
     {
-        m_rigidBody.transform.forward = m_rigidBody.velocity.normalized;
+        if (m_rigidBody.velocity.normalized != Vector3.zero)
+            m_rigidBody.transform.forward = m_rigidBody.velocity.normalized;
     }
 
     protected bool IsInLayerMask(Collision other)
