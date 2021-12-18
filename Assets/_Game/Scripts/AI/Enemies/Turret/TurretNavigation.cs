@@ -136,7 +136,8 @@ namespace Hedronoid
         {
             if (partToRotate)
             {
-                var relativePosition = partToRotate.InverseTransformDirection(m_Target.position);
+                Vector3 dir = (m_Target.position - partToRotate.position).normalized;
+                var relativePosition = partToRotate.InverseTransformDirection(dir);
                 relativePosition.y = 0;
                 var targetPosition = partToRotate.TransformPoint(relativePosition);
 
