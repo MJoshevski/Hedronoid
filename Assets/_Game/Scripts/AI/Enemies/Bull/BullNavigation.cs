@@ -8,6 +8,7 @@ using static Hedronoid.Health.HealthBase;
 using Hedronoid.Weapons;
 using Pathfinding.RVO;
 using Pathfinding;
+using Hedronoid.HNDFSM;
 
 /// <summary>
 /// 
@@ -30,6 +31,9 @@ namespace Hedronoid.AI
         {
             get { return m_dashDistance; }
         }
+
+        [SerializeField]
+        protected AIPath m_agent;
 
         protected int nextWaypoint;
 
@@ -72,8 +76,9 @@ namespace Hedronoid.AI
 
             m_BullSensor = (BullSensor) m_Sensor;
             if (!m_BullDash) TryGetComponent(out m_BullDash);
+            if (!m_agent) TryGetComponent(out m_agent);
 
-            CreateState(EBullStates.DashToTarget, OnDashUpdate, null, null);
+            CreateState(EBullStates.DashToTarget, OnDashUpdate, OnDashEnter, OnDashExit);
 
             enemyEmojis = GetComponent<EnemyEmojis>();
             HNDEvents.Instance.AddListener<KillEvent>(OnKilled);
@@ -252,9 +257,19 @@ namespace Hedronoid.AI
             dashed = false;
             StartCoroutine(WaitImpactDashDone());
         }
+
+        public void OnDashEnter(FSMState fromState)
+        {
+            m_agent.canMove = false;
+            m_agent.FinalizeMovement(transform.position, transform.rotation);
+        }
         public void OnDashUpdate()
         {
-            // We are not doing anything here. It got started when we changed state.
+        }
+
+        public void OnDashExit(FSMState toState)
+        {
+            m_agent.canMove = true;
         }
         public override void OnFleeFromTargetUpdate()
         {
