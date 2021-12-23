@@ -64,6 +64,9 @@ public abstract class UbhBaseShot : HNDMonoBehaviour, IGameplaySceneContextInjec
     // "Set a time to automatically release after the shot at using UseAutoRelease. (sec)"
     [FormerlySerializedAs("_AutoReleaseTime"), UbhConditionalHide("m_useAutoRelease")]
     public float m_autoReleaseTime = 10f;
+    [FormerlySerializedAs("_ShootParticles")]
+    public ParticleList.ParticleSystems ShootParticles = new ParticleList.ParticleSystems();
+
 
     [Space(10)]
 
