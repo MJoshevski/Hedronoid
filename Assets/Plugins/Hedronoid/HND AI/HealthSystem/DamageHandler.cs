@@ -73,7 +73,7 @@ namespace Hedronoid.Health
 
         public delegate void DamagedEvent(DamageHandler damagedHandler, DamageInfo damagedInfo, HealthBase health, HealthInfo healthInfo);
         public DamagedEvent damagedEvent;
-        
+
         //public HitReaction hitReaction;
 
         protected override void Awake()
@@ -445,12 +445,19 @@ namespace Hedronoid.Health
             {
                 for (int i = 0; i < m_OnDeathSpawnObjects.Count; i++)
                 {
-                    GameObject.Instantiate(m_OnDeathSpawnObjects[i], cachedTransform.position, Quaternion.identity);
+                    // HACK : Rework this to use ParticleList properly
+
+                    Vector3 spawnPosOffset = new Vector3(cachedTransform.position.x, cachedTransform.position.y + 2f, cachedTransform.position.z);
+
+                    GameObject spawnObject = Instantiate(m_OnDeathSpawnObjects[i], spawnPosOffset, Quaternion.identity);
+                    spawnObject.transform.localScale *= 2;
                 }
 
                 // HACK : to destory object on explosion, etc..
                 Destroy(cachedGameObject, 0.15f);
             }
+
+
         }
     }
 

@@ -1,4 +1,5 @@
-﻿using Unity.Properties;
+﻿using System.Collections.Generic;
+using Unity.Properties;
 using UnityEngine;
 using UnityEngine.Serialization;
 
@@ -20,6 +21,7 @@ public class UbhCircleShot : UbhBaseShot
     // "Set a center angle for the row alignment. (0 to 360)"
     [Range(0f, 360f), FormerlySerializedAs("_StartAngle")]
     public float m_centerRowAngle = 180f;
+
 
     public override void Shot()
     {
@@ -43,6 +45,8 @@ public class UbhCircleShot : UbhBaseShot
         {
             return;
         }
+
+        ParticleHelper.PlayParticleSystem(ShootParticles, m_bulletOrigin.position, -m_bulletOrigin.up);
 
         for (int j = 0; j < m_rowNum; j++)
         {

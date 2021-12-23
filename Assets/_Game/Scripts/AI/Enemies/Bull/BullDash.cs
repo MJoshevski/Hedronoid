@@ -182,12 +182,12 @@ namespace Hedronoid.AI
             if (dashInProgress)
                 yield break;
             dashInProgress = true;
-
+            
             // SoundRouter.CutsceneAudioFilter("Blockhead_Prepare");
 
-            SetAnimatorTrigger("DashAttackWarning");
+            SetAnimatorTrigger("DoDash");
 
-            yield return new WaitForSeconds(.5f);
+            yield return new WaitForSeconds(1.2f);
 
             // Turn towards the target direction while winding up, and then go, remove y so we don't look up or down.
             var remainingTime = m_windupTime;
