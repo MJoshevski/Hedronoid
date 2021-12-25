@@ -245,7 +245,6 @@ namespace Hedronoid.AI
             }
             remainingTime = m_dashTime;
             var targetDir = TurnTowardsTarget(target);
-            targetDir.y = 0f;
 
             var lookRot = Quaternion.LookRotation(targetDir);
             while ((remainingTime -= Time.fixedDeltaTime) > 0 && dashInProgress)
@@ -335,7 +334,7 @@ namespace Hedronoid.AI
         protected virtual Vector3 TurnTowardsTarget(Transform target)
         {
             var targetPos = target.position;
-            targetPos.y = transform.position.y;
+
             var lookDir = (targetPos - transform.position).normalized;
             var lookRot = Quaternion.LookRotation(lookDir);
             cachedRigidbody.rotation = Quaternion.RotateTowards(transform.rotation, lookRot, m_turnRate * Time.deltaTime);
