@@ -18,6 +18,9 @@ public class AfterImageEffect : MonoBehaviour
         public float time;
     }
 
+    //Meshes
+    public List<SkinnedMeshRenderer> MeshRenderersToProcess = new List<SkinnedMeshRenderer>();
+
     //Material
     public Material EffectMaterial;
 
@@ -58,7 +61,7 @@ public class AfterImageEffect : MonoBehaviour
 
     void CreateImage()
     {
-        SkinnedMeshRenderer[] skinRenderers = GetComponentsInChildren<SkinnedMeshRenderer>();
+        SkinnedMeshRenderer[] skinRenderers = MeshRenderersToProcess.ToArray();
         MeshFilter[] filters = null;
 
         int filtersCount = 0;
