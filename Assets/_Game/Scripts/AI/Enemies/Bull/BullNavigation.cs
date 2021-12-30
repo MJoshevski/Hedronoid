@@ -179,9 +179,9 @@ namespace Hedronoid.AI
 
         public void RecalculatePath()
         {
-            canSearchAgain = false;
-            nextRepath = Time.time + repathRate * (Random.value + 0.5f);
-            m_Seeker.StartPath(transform.position, m_TargetV3, OnPathComplete);
+            //canSearchAgain = false;
+            //nextRepath = Time.time + repathRate * (Random.value + 0.5f);
+            //m_Seeker.StartPath(transform.position, m_TargetV3, OnPathComplete);
         }
         public override Vector3 GetDirection()
         {
@@ -418,8 +418,8 @@ namespace Hedronoid.AI
 
 
 
-            NNInfo info = AstarPath.active.GetNearest(transform.position);
-            transform.position = info.position;
+            //NNInfo info = AstarPath.active.GetNearest(transform.position);
+            //transform.position = info.position;
         }
         public override void ChangeTarget()
         {
