@@ -3,7 +3,6 @@ using Hedronoid.AI;
 using Hedronoid.Core;
 using Hedronoid.Events;
 using Hedronoid.Health;
-using Hedronoid.HNDFSM;
 using System;
 using System.Collections;
 using System.Collections.Generic;
@@ -166,9 +165,9 @@ namespace UnityMovementAI
 
                 if (rb != null && rb.gameObject != gameObject)
                 {
-                    rb.AddExplosionForce(detonationForce, transform.position, detonationRadius, 3.0f, detonationForceMode);
+                    //rb.AddExplosionForce(detonationForce, transform.position, detonationRadius, 3.0f, detonationForceMode);
 
-                    if (dh) 
+                    if (dh)
                     {
                         damage = new DamageInfo();
                         damage.sender = gameObject;
