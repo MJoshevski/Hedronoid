@@ -1,4 +1,5 @@
-﻿using UnityEngine;
+﻿using Hedronoid.AI;
+using UnityEngine;
 
 /// <summary>
 /// Ubh bullet for sprite2d and rigidbody2d prefabs.
@@ -11,6 +12,8 @@ public class UbhBulletSimpleModel3d : UbhBullet
     private Collider[] m_collider3ds;
     [SerializeField]
     private MeshRenderer[] m_meshRenderers;
+    [SerializeField]
+    private LayerMask playerBulletLayer;
 
     private bool m_isActive;
 
@@ -43,6 +46,14 @@ public class UbhBulletSimpleModel3d : UbhBullet
             {
                 m_meshRenderers[i].enabled = isActive;
             }
+        }
+    }
+
+    private void OnCollisionEnter(Collision collision)
+    {
+        if (collision.gameObject.layer == LayerMask.NameToLayer("PlayerBullet"))
+        {
+            this.enabled = false;
         }
     }
 }
