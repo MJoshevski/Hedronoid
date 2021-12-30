@@ -302,8 +302,8 @@ namespace Hedronoid.Player
             GravityService.CurrentGravity = 
                 GravityService.GetGravity(Rigidbody.position, out upAxis);
 
-            if (GravityService.CurrentGravity == Vector3.zero)
-                ChangeState(EPlayerStates.FLYING);
+            //if (GravityService.CurrentGravity == Vector3.zero)
+            //    ChangeState(EPlayerStates.FLYING);
 
             if (desiredDash &&
                 (Time.realtimeSinceStartup - timeOnDashEnter) >= dashVariables.DashCooldown &&
@@ -606,10 +606,10 @@ namespace Hedronoid.Player
             {
                 ChangeState(EPlayerStates.LANDING);
             }
-            else if (GravityService.CurrentGravity == Vector3.zero)
-            {
-                ChangeState(EPlayerStates.FLYING);
-            }
+            //else if (GravityService.CurrentGravity == Vector3.zero)
+            //{
+            //    ChangeState(EPlayerStates.FLYING);
+            //}
 
         }
 
