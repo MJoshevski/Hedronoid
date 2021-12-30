@@ -10,6 +10,8 @@ public class CheckpointTrigger : HNDMonoBehaviour
     private PlayerSpawner playerSpawner;
     public GameObject checkpointRespawnPosition;
     public GameObject physicalCheckpointObj;
+    public List<ParticleList.ParticleSystems> OnCheckpointActivatePFX = new List<ParticleList.ParticleSystems>();
+
     protected override void Start()
     {
         base.Start();
@@ -36,6 +38,10 @@ public class CheckpointTrigger : HNDMonoBehaviour
 
                     playerSpawner.m_SpawnPoints[0] = tmp.transform;
                     playerSpawner.m_SpawnPoints[i] = tmp2.transform;
+
+                    for (int i = 0; i < OnCheckpointActivatePFX.Count; i++)
+                        ParticleHelper.PlayParticleSystem(OnCheckpointActivatePFX[i], transform.position, transform.up);
+
 
                     physicalCheckpointObj.SetActive(false);
                     break;
