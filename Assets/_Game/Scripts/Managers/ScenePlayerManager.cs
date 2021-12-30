@@ -38,17 +38,17 @@ namespace Hedronoid.Core
 
         void Update()
         {
-            for (int i = 0; i <= 9; i++)
-            {
-                if (Input.GetKeyDown(KeyCode.Alpha0 + i))
-                {
-                    GameplaySceneContext.PlayerSpawner.ActiveSpawnPoint = 
-                        GameplaySceneContext.PlayerSpawner.GetSpawnPoint(i);
+            //for (int i = 0; i <= 9; i++)
+            //{
+            //    if (Input.GetKeyDown(KeyCode.Alpha0 + i))
+            //    {
+            //        GameplaySceneContext.PlayerSpawner.ActiveSpawnPoint = 
+            //            GameplaySceneContext.PlayerSpawner.GetSpawnPoint(i);
 
-                    RespawnPlayerAtCheckpoint();
-                    return;
-                }
-            }
+            //        RespawnPlayerAtCheckpoint();
+            //        return;
+            //    }
+            //}
         }
 
         protected override void OnDestroy()
