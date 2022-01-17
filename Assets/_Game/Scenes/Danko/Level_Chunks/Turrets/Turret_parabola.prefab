@@ -130,7 +130,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 0
+  m_IsActive: 1
 --- !u!4 &432770829764570659
 Transform:
   m_ObjectHideFlags: 0
@@ -242,11 +242,6 @@ PrefabInstance:
       propertyPath: m_sensorCutoffRange
       value: 50
       objectReference: {fileID: 0}
-    - target: {fileID: 3395069820867095257, guid: 4b4514ee5636cfd4aa64d202b1e601b1,
-        type: 3}
-      propertyPath: m_IsActive
-      value: 0
-      objectReference: {fileID: 0}
     - target: {fileID: 3763213958319123515, guid: 4b4514ee5636cfd4aa64d202b1e601b1,
         type: 3}
       propertyPath: m_IsActive
@@ -276,11 +271,6 @@ PrefabInstance:
         type: 3}
       propertyPath: m_IsActive
       value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 8435277887984028839, guid: 4b4514ee5636cfd4aa64d202b1e601b1,
-        type: 3}
-      propertyPath: m_RootOrder
-      value: 5
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 4b4514ee5636cfd4aa64d202b1e601b1, type: 3}

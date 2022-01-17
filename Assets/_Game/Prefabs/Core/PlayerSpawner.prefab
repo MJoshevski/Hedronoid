@@ -9,7 +9,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 505761510948496589}
-  - component: {fileID: 1798973718976525606}
+  - component: {fileID: 505761510948496590}
   m_Layer: 0
   m_Name: PlayerSpawner
   m_TagString: PlayerSpawner
@@ -42,7 +42,7 @@ Transform:
   m_Father: {fileID: 0}
   m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!114 &1798973718976525606
+--- !u!114 &505761510948496590
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -56,6 +56,15 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   m_SpawnPoints:
   - {fileID: 475698529828001757}
+  - {fileID: 5831141306561489376}
+  - {fileID: 108362005659547666}
+  - {fileID: 7174435666242695090}
+  - {fileID: 4307170131088996572}
+  - {fileID: 5046442289536990467}
+  - {fileID: 7345843822670734289}
+  - {fileID: 7869825060637380014}
+  - {fileID: 1188380811771849425}
+  - {fileID: 6055690427266711977}
   ActiveSpawnPoint: {fileID: 0}
 --- !u!1 &1202828180354906146
 GameObject:
@@ -81,7 +90,7 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1202828180354906146}
   m_LocalRotation: {x: -0, y: 0.13052347, z: -0, w: -0.99144524}
-  m_LocalPosition: {x: -1477.36, y: -258.33, z: 8.14}
+  m_LocalPosition: {x: -768.16, y: -323.4, z: -10.34}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
