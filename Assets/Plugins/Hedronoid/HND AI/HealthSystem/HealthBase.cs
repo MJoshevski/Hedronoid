@@ -14,8 +14,6 @@ namespace Hedronoid.Health
     public class HealthBase : HNDGameObject
     {
         [SerializeField]
-        protected bool m_HasGlobalUI = false;
-        [SerializeField]
         protected float m_MaxHealth = 10f;
         public float MaxHealth { get { return m_MaxHealth; } }
         [SerializeField]
@@ -68,13 +66,6 @@ namespace Hedronoid.Health
             if(m_damageHandlers != null || m_damageHandlers.Length == 0)
                 m_damageHandlers = GetComponentsInChildren<DamageHandler>();
 
-            if (m_HasGlobalUI)
-            {
-                m_healthBarSlider = GameObject.FindWithTag("HealthBar").GetComponent<Slider>();
-                m_healthBar = m_healthBarSlider.GetComponent<RectTransform>();
-                m_healthBarSlider.maxValue = MaxHealth;
-            }
-
             m_stunSources = new List<IStunSource>();
             m_rootSources = new List<IRootSource>();
             InitHealthBar();
@@ -87,9 +78,9 @@ namespace Hedronoid.Health
 
         private void Update()
         {
-            //UpdateRooted();
-            //UpdateStunned();
-            //UpdateHealthBarOrientation();
+            UpdateRooted();
+            UpdateStunned();
+            UpdateHealthBarOrientation();
         }
 
         public void HealthInfoReciever(HealthInfo e)
@@ -251,17 +242,13 @@ namespace Hedronoid.Health
         
         private void InitHealthBar()
         {
-            if (!m_HasGlobalUI)
-            {
-                if (!HealthBarPrefab) return;
-                m_healthBar = Instantiate(HealthBarPrefab).GetComponent<RectTransform>();
-                m_healthBar.transform.SetParent(transform);
-                if (!m_rootTransform) m_rootTransform = transform;
-                m_healthBarSlider = m_healthBar.GetComponentInChildren<Slider>();
-                m_healthBarSlider.minValue = 0f;
-                m_healthBarSlider.maxValue = MaxHealth;
-            }
-
+            if(!HealthBarPrefab) return;
+            m_healthBar = Instantiate(HealthBarPrefab).GetComponent<RectTransform>();
+            m_healthBar.transform.SetParent(transform);
+            if(!m_rootTransform) m_rootTransform = transform;
+            m_healthBarSlider = m_healthBar.GetComponentInChildren<Slider>();
+            m_healthBarSlider.minValue = 0f;
+            m_healthBarSlider.maxValue = MaxHealth;
             UpdateHealthBar();
         }
 

@@ -46,17 +46,6 @@ namespace Hedronoid.Core
                 if (m_PlayerSpawner == null)
                 {
                     m_PlayerSpawner = cachedGameObject.GetComponentInChildren<PlayerSpawner>(true);
-                    
-                    if (m_PlayerSpawner == null)
-                    {
-                        var persistents = GameObject.FindGameObjectsWithTag("Persistent");
-
-                        // Matej: DELETE ME PLX HACK
-                        foreach (GameObject go in persistents)
-                            if (go.GetComponent<PlayerSpawner>() != null)
-                                m_PlayerSpawner = go.GetComponent<PlayerSpawner>();
-
-                    }
                 }
 
                 return m_PlayerSpawner;

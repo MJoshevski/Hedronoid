@@ -70,9 +70,8 @@ namespace Hedronoid.Core
         {
             GameObject p = Instantiate(PlayerPrefab, GameplaySceneContext.cachedTransform);
             p.name = "Player";
-            PlayerFSM playerFSM = p.GetComponentInChildren<PlayerFSM>();
-            playerFSM.transform.position = GameplaySceneContext.PlayerSpawner.GetSpawnPoint(0).position;
-            playerFSM.transform.rotation = GameplaySceneContext.PlayerSpawner.GetSpawnPoint(0).rotation;
+            p.transform.position = GameplaySceneContext.PlayerSpawner.GetSpawnPoint(0).position;
+            p.transform.rotation = GameplaySceneContext.PlayerSpawner.GetSpawnPoint(0).rotation;
             Player = p.gameObject;
         }
 
@@ -84,9 +83,8 @@ namespace Hedronoid.Core
             float prevFollowSpeed = GameplaySceneContext.OrbitCamera.followSpeed;
             GameplaySceneContext.OrbitCamera.followSpeed = 900f;
 
-            PlayerFSM playerFSM = Player.GetComponentInChildren<PlayerFSM>();
-            playerFSM.transform.position = activeSpawnPoint.position;
-            playerFSM.transform.rotation = activeSpawnPoint.rotation;
+            Player.transform.position = activeSpawnPoint.position;
+            Player.transform.rotation = activeSpawnPoint.rotation;
 
             GameplaySceneContext.OrbitCamera.followSpeed = prevFollowSpeed;
 

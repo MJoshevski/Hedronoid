@@ -8,13 +8,14 @@ namespace Hedronoid.Core
     public class PlayerSpawner : HNDGameObject
     {
         [SerializeField]
-        public List<Transform> m_SpawnPoints = new List<Transform>();
+        private Transform[] m_SpawnPoints;
 
         [HideInInspector]
         public Transform ActiveSpawnPoint;
+
         public Transform GetSpawnPoint(int id)
         {
-            if (m_SpawnPoints == null || id < 0 || id >= m_SpawnPoints.Count)
+            if (m_SpawnPoints == null || id < 0 || id >= m_SpawnPoints.Length)
             {
                 D.CoreError("There's no Spawn Point allocated to field no. " + id);
                 return null;

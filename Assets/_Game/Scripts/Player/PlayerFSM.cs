@@ -1072,14 +1072,7 @@ namespace Hedronoid.Player
                 (HNDAI.Settings.EnemyLayer | (1 << collision.gameObject.layer)))
             {
                 FMODUnity.RuntimeManager.PlayOneShot(m_playerAudioData.recieveHit, transform.position);
-                if (m_healthBase.CurrentHealth > 1)
-                {
-                    HealthInfo healthInfo = new HealthInfo { amount = -1 };
-
-                    m_healthBase.HealthInfoReciever(healthInfo);
-
-                }
-                else m_healthBase.InstaKill();
+                m_healthBase.InstaKill();
             }
 
             EvaluateCollision(collision);
