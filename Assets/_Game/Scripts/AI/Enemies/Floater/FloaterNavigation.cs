@@ -130,11 +130,6 @@ namespace UnityMovementAI
         {
             if (e.GOID != gameObject.GetInstanceID()) return;
             StopAllCoroutines();
-
-            for (int i = 0; i < OnDeathPFX.Count; i++)
-                ParticleHelper.PlayParticleSystem(OnDeathPFX[i], transform.position, transform.up);
-
-
             this.enabled = false;
         }
 
