@@ -103,7 +103,7 @@ namespace Hedronoid
         protected override void Awake()
         {
             base.Awake();
-            Popcron.Gizmos.Enabled = false;
+
 #if !(DEVELOPMENT_BUILD || UNITY_STANDALONE || UNITY_EDITOR)
             m_EnabledHUD = false;
 #endif
@@ -230,7 +230,7 @@ namespace Hedronoid
 
             if (IsShortcutPressed(EShortcuts.TOGGLE_GIZMOS))
             {
-                //Popcron.Gizmos.Enabled = !Popcron.Gizmos.Enabled;
+                Popcron.Gizmos.Enabled = !Popcron.Gizmos.Enabled;
             }
         }
 
