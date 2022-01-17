@@ -87,12 +87,9 @@ namespace Hedronoid.Health
 
         private void Update()
         {
-            if (!m_HasGlobalUI)
-            {
-                UpdateRooted();
-                UpdateStunned();
-                UpdateHealthBarOrientation();
-            }
+            //UpdateRooted();
+            //UpdateStunned();
+            //UpdateHealthBarOrientation();
         }
 
         public void HealthInfoReciever(HealthInfo e)

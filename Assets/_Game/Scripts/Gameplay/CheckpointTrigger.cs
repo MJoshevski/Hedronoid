@@ -11,14 +11,12 @@ public class CheckpointTrigger : HNDMonoBehaviour
     public GameObject checkpointRespawnPosition;
     public GameObject physicalCheckpointObj;
     public List<ParticleList.ParticleSystems> OnCheckpointActivatePFX = new List<ParticleList.ParticleSystems>();
-    public Transform pfxPosition;
-    private bool activated = false;
+
     protected override void Start()
     {
         base.Start();
 
         var persistents = GameObject.FindGameObjectsWithTag("Persistent");
-        activated = false;
 
         // Matej: DELETE ME PLX HACK
         foreach (GameObject go in persistents)
@@ -27,14 +25,9 @@ public class CheckpointTrigger : HNDMonoBehaviour
     }
     private void OnTriggerEnter(Collider other)
     {
-
         if (HNDAI.Settings.PlayerLayer ==
                 (HNDAI.Settings.PlayerLayer | (1 << other.gameObject.layer)))
         {
-            if (activated) return;
-
-            activated = true;
-
             for (int i = 0; i < playerSpawner.m_SpawnPoints.Count; i++)
             {
                 if (playerSpawner.m_SpawnPoints[i].transform.position == 
@@ -46,11 +39,8 @@ public class CheckpointTrigger : HNDMonoBehaviour
                     playerSpawner.m_SpawnPoints[0] = tmp.transform;
                     playerSpawner.m_SpawnPoints[i] = tmp2.transform;
 
-                    if (!pfxPosition || pfxPosition.position == Vector3.zero)
-                        pfxPosition = transform;
-
                     for (int j = 0; j < OnCheckpointActivatePFX.Count; j++)
-                        ParticleHelper.PlayParticleSystem(OnCheckpointActivatePFX[j], pfxPosition.position, pfxPosition.up);
+                        ParticleHelper.PlayParticleSystem(OnCheckpointActivatePFX[j], transform.position, transform.up);
 
 
                     physicalCheckpointObj.SetActive(false);
