@@ -39,8 +39,8 @@ public class CheckpointTrigger : HNDMonoBehaviour
                     playerSpawner.m_SpawnPoints[0] = tmp.transform;
                     playerSpawner.m_SpawnPoints[i] = tmp2.transform;
 
-                    for (int j = 0; j < OnCheckpointActivatePFX.Count; j++)
-                        ParticleHelper.PlayParticleSystem(OnCheckpointActivatePFX[j], transform.position, transform.up);
+                    for (int i = 0; i < OnCheckpointActivatePFX.Count; i++)
+                        ParticleHelper.PlayParticleSystem(OnCheckpointActivatePFX[i], transform.position, transform.up);
 
 
                     physicalCheckpointObj.SetActive(false);
