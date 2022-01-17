@@ -6,7 +6,6 @@ using Hedronoid.Health;
 using Hedronoid.HNDFSM;
 using System;
 using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
 
 namespace UnityMovementAI
@@ -26,7 +25,7 @@ namespace UnityMovementAI
         [SerializeField]
         protected GameObject blastFX;
         [SerializeField]
-        public List<ParticleList.ParticleSystems> OnDeathPFX = new List<ParticleList.ParticleSystems>();
+        protected ParticleSystem deathPfx;
 
         protected FloaterSensor m_FloaterSensor;
 
@@ -178,10 +177,10 @@ namespace UnityMovementAI
                 }
             }
 
-            for (int i = 0; i < OnDeathPFX.Count; i++)
-                ParticleHelper.PlayParticleSystem(OnDeathPFX[i], transform.position, transform.up);
-
+            if (deathPfx) deathPfx.Play();
             model.SetActive(false);
+
+            yield return new WaitForSeconds(deathPfx.main.duration);
 
             m_damageHandler.Die();
         }
