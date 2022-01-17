@@ -902,33 +902,18 @@ namespace Hedronoid.Player
             Ray ray = Camera.main.ViewportPointToRay(new Vector3 (0.5f, 0.5f, 0f));
 
             RaycastHit[] hits = Physics.RaycastAll(ray, Mathf.Infinity, ~bulletIgnoreLayers);
-            List<float> distances = new List<float>();
 
             for (int i = 0; i < hits.Length; i++)
             {
-                float distance = Vector3.Distance(hits[i].transform.position, transform.position);
-                distances.Add(distance);
-            }
-
-            float minDistance = 1000000f;
-            int minDistanceIdx = 0;
-            for (int i = 0; i < distances.Count; i++)
-            {
-                if (minDistance > distances[i])
+                if (hits[i].point.z > transform.position.z)
                 {
-                    minDistance = distances[i];
-                    minDistanceIdx = i;
+                    rayHitPos = hits[i].point;
+                    break;
                 }
             }
 
-            rayHitPos = hits[minDistanceIdx].point;
-
             if (rayHitPos == Vector3.zero)
-            {
                 rayHitPos = ray.GetPoint(10000f);
-                //Debug.LogError("HITTIN ZERO");
-                //Debug.LogError("HITS: " + hits.Length);
-            }
 
             shootDirection = (rayHitPos - bulletOrigin.position).normalized;
 

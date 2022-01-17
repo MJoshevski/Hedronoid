@@ -171,7 +171,7 @@ namespace UnityMovementAI
                     {
                         damage = new DamageInfo();
                         damage.sender = gameObject;
-                        damage.Damage = 5;
+                        damage.Damage = 100;
                         dh.DoDamage(damage);
                     }
                 }

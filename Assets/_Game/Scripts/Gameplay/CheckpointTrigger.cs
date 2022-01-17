@@ -9,7 +9,7 @@ public class CheckpointTrigger : HNDMonoBehaviour
 {
     private PlayerSpawner playerSpawner;
     public GameObject checkpointRespawnPosition;
-    public GameObject physicalCheckpointObj;
+
     protected override void Start()
     {
         base.Start();
@@ -36,8 +36,6 @@ public class CheckpointTrigger : HNDMonoBehaviour
 
                     playerSpawner.m_SpawnPoints[0] = tmp.transform;
                     playerSpawner.m_SpawnPoints[i] = tmp2.transform;
-
-                    physicalCheckpointObj.SetActive(false);
                     break;
                 }
             }            
