@@ -192,7 +192,7 @@ namespace Hedronoid
 
         public void LateUpdate()
         {
-            if (Time.realtimeSinceStartup - timeStart < 1.5f)
+            if (Time.realtimeSinceStartup - timeStart < 5f)
                 orbitAngles = new Vector2(45f, GameplaySceneContext.PlayerSpawner.m_SpawnPoints[0].rotation.eulerAngles.y);
 
             if (!m_playerCreatedAndInitialized) return;
