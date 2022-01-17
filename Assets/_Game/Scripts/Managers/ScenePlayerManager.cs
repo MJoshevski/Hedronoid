@@ -81,13 +81,14 @@ namespace Hedronoid.Core
             if (!Player) CreatePlayer();
             Transform activeSpawnPoint = GameplaySceneContext.PlayerSpawner.ActiveSpawnPoint;
 
+            float prevFollowSpeed = GameplaySceneContext.OrbitCamera.followSpeed;
+            GameplaySceneContext.OrbitCamera.followSpeed = 900f;
+
             PlayerFSM playerFSM = Player.GetComponentInChildren<PlayerFSM>();
             playerFSM.transform.position = activeSpawnPoint.position;
             playerFSM.transform.rotation = activeSpawnPoint.rotation;
 
-            GameplaySceneContext.OrbitCamera.transform.position = activeSpawnPoint.position;
-            GameplaySceneContext.OrbitCamera.transform.rotation = activeSpawnPoint.rotation;
-            GameplaySceneContext.OrbitCamera.transform.forward = activeSpawnPoint.forward;
+            GameplaySceneContext.OrbitCamera.followSpeed = prevFollowSpeed;
 
             D.GameLogFormat("{0} re-spawned at {1}.", Player.name, activeSpawnPoint.name);
         }

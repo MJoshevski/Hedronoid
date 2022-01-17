@@ -105,7 +105,7 @@ namespace Hedronoid
         #region PRIVATE/HIDDEN VARS
         private PlayerFSM Player;
         private Vector3 focusPoint, previousFocusPoint;
-        private Vector2 orbitAngles;
+        private Vector2 orbitAngles = new Vector2(45f, 0f);
         private float lastManualRotationTime;
         private float distanceThreshold;
         private bool shoulderFocused = true;
@@ -150,13 +150,12 @@ namespace Hedronoid
                 maxVerticalAngle = minVerticalAngle;
             }
         }
-        float timeStart;
+
         protected override void Awake()
         {
             base.Awake();
             this.Inject(gameObject);
 
-            timeStart = Time.realtimeSinceStartup;
             HNDEvents.Instance.AddListener<PlayerCreatedAndInitialized>(OnPlayerCreatedAndInitialized);
             HNDEvents.Instance.AddListener<DebugMenuOpened>(OnDebugMenuOpened);
             HNDEvents.Instance.AddListener<DebugMenuClosed>(OnDebugMenuClosed);
@@ -192,9 +191,6 @@ namespace Hedronoid
 
         public void LateUpdate()
         {
-            if (Time.realtimeSinceStartup - timeStart < 5f)
-                orbitAngles = new Vector2(45f, GameplaySceneContext.PlayerSpawner.m_SpawnPoints[0].rotation.eulerAngles.y);
-
             if (!m_playerCreatedAndInitialized) return;
             OnValidate();
             UpdateGravityAlignment();
