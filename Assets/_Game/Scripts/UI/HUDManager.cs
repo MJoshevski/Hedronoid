@@ -1,5 +1,6 @@
 using Hedronoid;
 using Hedronoid.Core;
+using Hedronoid.Events;
 using Hedronoid.Player;
 using System.Collections;
 using System.Collections.Generic;
@@ -16,15 +17,33 @@ public class HUDManager : HNDMonoBehaviour, IGameplaySceneContextInjector
     public float restingSize, maxSize, speed;
     private float currentSize;
     private PlayerFSM player;
+
+    private bool playerIntialized = false;
     protected override void Awake()
     {
         base.Awake();
         this.Inject(gameObject);
+
+        HNDEvents.Instance.AddListener<PlayerCreatedAndInitialized>(OnPlayerCreatedAndInitialized);
     }
 
+    protected override void OnDisable()
+    {
+        base.OnDisable();
+
+        HNDEvents.Instance.RemoveListener<PlayerCreatedAndInitialized>(OnPlayerCreatedAndInitialized);
+    }
+    protected override void OnDestroy()
+    {
+        base.OnDestroy();
+
+        HNDEvents.Instance.RemoveListener<PlayerCreatedAndInitialized>(OnPlayerCreatedAndInitialized);
+    }
     protected override void Start()
     {
         base.Start();
+
+        if (!playerIntialized) return;
 
         if (!canvas) TryGetComponent(out canvas);
         if (!orbitCamera) orbitCamera = GameplaySceneContext.OrbitCamera.orbitCamera;
@@ -36,6 +55,8 @@ public class HUDManager : HNDMonoBehaviour, IGameplaySceneContextInjector
 
     private void LateUpdate()
     {
+        if (!playerIntialized) return;
+
         if (!player) player = GameplaySceneContext.Player;
         if (!player) return;
 
@@ -49,5 +70,11 @@ public class HUDManager : HNDMonoBehaviour, IGameplaySceneContextInjector
         }
 
         dynamicCrosshair.sizeDelta = new Vector2(currentSize, currentSize);
+    }
+
+    private void OnPlayerCreatedAndInitialized(PlayerCreatedAndInitialized e)
+    {
+        Start();
+        playerIntialized = true;
     }
 }

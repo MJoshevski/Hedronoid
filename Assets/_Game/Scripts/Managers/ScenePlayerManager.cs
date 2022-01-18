@@ -1,4 +1,4 @@
-﻿using System.Collections;
+﻿ using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
 using UnityEngine;
@@ -10,8 +10,19 @@ namespace Hedronoid.Core
 {
     public class ScenePlayerManager : HNDGameObject, IGameplaySceneContextInjector
     {
-        public GameObject Player;
-        public GameObject PlayerPrefab;
+        public GameObject Player { get { return m_Player; } }
+        private GameObject m_Player = null;
+
+        public GameObject PlayerPrefab { get { return m_PlayerPrefab; } }
+        [SerializeField]
+        private GameObject m_PlayerPrefab;
+
+        public GameObject OrbitCamera { get { return m_OrbitCamera; } }
+        private GameObject m_OrbitCamera = null;
+
+        public GameObject OrbitCameraPrefab { get { return m_OrbitCameraPrefab; } }
+        [SerializeField]
+        private GameObject m_OrbitCameraPrefab;
 
         public GameplaySceneContext GameplaySceneContext { get; set; }
 
@@ -30,7 +41,9 @@ namespace Hedronoid.Core
 
         private IEnumerator InitializePlayerCoroutine()
         {
-            if (!Player) CreatePlayer();
+            if (!m_Player) CreatePlayer();
+            if (!m_OrbitCamera) CreateCamera();
+
 
             yield return new WaitForEndOfFrame();
             HNDEvents.Instance.Raise(new PlayerCreatedAndInitialized());            
@@ -38,6 +51,7 @@ namespace Hedronoid.Core
 
         void Update()
         {
+            //Matej: DEBUG PURPOSES ONLY!!!
             for (int i = 0; i <= 9; i++)
             {
                 if (Input.GetKeyDown(KeyCode.Alpha0 + i))
@@ -45,10 +59,11 @@ namespace Hedronoid.Core
                     GameplaySceneContext.PlayerSpawner.ActiveSpawnPoint = 
                         GameplaySceneContext.PlayerSpawner.GetSpawnPoint(i);
 
-                    RespawnPlayerAtCheckpoint();
+                    RespawnAtCheckpoint();
                     return;
                 }
             }
+            //
         }
 
         protected override void OnDestroy()
@@ -68,27 +83,67 @@ namespace Hedronoid.Core
 
         private void CreatePlayer()
         {
-            GameObject p = Instantiate(PlayerPrefab, GameplaySceneContext.cachedTransform);
+            GameObject p = Instantiate(m_PlayerPrefab, GameplaySceneContext.cachedTransform);
             p.name = "Player";
             p.transform.position = GameplaySceneContext.PlayerSpawner.GetSpawnPoint(0).position;
             p.transform.rotation = GameplaySceneContext.PlayerSpawner.GetSpawnPoint(0).rotation;
-            Player = p.gameObject;
+            m_Player = p.gameObject;
         }
 
-        private void RespawnPlayerAtCheckpoint()
+        private void CreateCamera()
         {
-            if (!Player) CreatePlayer();
+            GameObject c = Instantiate(m_OrbitCameraPrefab, GameplaySceneContext.cachedTransform);
+            c.name = "OrbitCamera";
+            c.transform.position = GameplaySceneContext.PlayerSpawner.GetSpawnPoint(0).position;
+            c.transform.rotation = GameplaySceneContext.PlayerSpawner.GetSpawnPoint(0).rotation;
+            m_OrbitCamera = c.gameObject;
+        }
+
+        public void RespawnAtCheckpoint()
+        {
+            RespawnCameraAtCheckpoint();
+            RespawnPlayerAtCheckpoint();
+        }
+
+        private void RespawnCameraAtCheckpoint()
+        {
+            if (!m_OrbitCamera) CreateCamera();
             Transform activeSpawnPoint = GameplaySceneContext.PlayerSpawner.ActiveSpawnPoint;
 
-            float prevFollowSpeed = GameplaySceneContext.OrbitCamera.followSpeed;
-            GameplaySceneContext.OrbitCamera.followSpeed = 900f;
+            OrbitCamera orbitCamera;
 
-            Player.transform.position = activeSpawnPoint.position;
-            Player.transform.rotation = activeSpawnPoint.rotation;
+            m_OrbitCamera.TryGetComponent(out orbitCamera);
+            if (!orbitCamera) orbitCamera = GetComponentInChildren<OrbitCamera>();
+            if (!orbitCamera)
+            {
+                D.GameError("ScenePlayerManager doesn't have an orbit camera prefab referenced or can't locate 'OrbitCamera.cs' on referenced prefab. Returning...");
+                return;
+            }
 
-            GameplaySceneContext.OrbitCamera.followSpeed = prevFollowSpeed;
+            m_OrbitCamera.transform.position = activeSpawnPoint.position;
+            m_OrbitCamera.transform.rotation = activeSpawnPoint.rotation;
 
-            D.GameLogFormat("{0} re-spawned at {1}.", Player.name, activeSpawnPoint.name);
+            D.GameLogFormat("{0} re-spawned at {1}.", m_OrbitCamera.name, activeSpawnPoint.name);
+        }
+        private void RespawnPlayerAtCheckpoint()
+        {
+            if (!m_Player) CreatePlayer();
+            Transform activeSpawnPoint = GameplaySceneContext.PlayerSpawner.ActiveSpawnPoint;
+
+            PlayerFSM playerFSM;
+
+            m_Player.TryGetComponent(out playerFSM);
+            if (!playerFSM) playerFSM = GetComponentInChildren<PlayerFSM>();
+            if (!playerFSM)
+            {
+                D.GameError("ScenePlayerManager doesn't have a player prefab referenced or can't locate 'PlayerFSM.cs' on referenced prefab. Returning...");
+                return;
+            }
+
+            m_Player.transform.position = activeSpawnPoint.position;
+            m_Player.transform.rotation = activeSpawnPoint.rotation;
+
+            D.GameLogFormat("{0} re-spawned at {1}.", m_Player.name, activeSpawnPoint.name);
         }
     }
 }

@@ -212,8 +212,6 @@ namespace Hedronoid.Player
             base.Awake();
             this.Inject(gameObject);
 
-            if (!orbitCameraObject) GameplaySceneContext.OrbitCamera.TryGetComponent(out orbitCameraObject);
-            if (!orbitCamera) orbitCamera = GameplaySceneContext.OrbitCamera;
             if (!Rigidbody) TryGetComponent(out Rigidbody);
             if (!m_healthBase) TryGetComponent(out m_healthBase);
             if (!m_damageHandler) TryGetComponent(out m_damageHandler);
@@ -239,6 +237,10 @@ namespace Hedronoid.Player
         protected override void Start()
         {
             base.Start();
+
+            if (!orbitCameraObject) GameplaySceneContext.OrbitCamera.TryGetComponent(out orbitCameraObject);
+            if (!orbitCamera) orbitCamera = GameplaySceneContext.OrbitCamera;
+
             ChangeState(EPlayerStates.GROUND_MOVEMENT);
         }
 

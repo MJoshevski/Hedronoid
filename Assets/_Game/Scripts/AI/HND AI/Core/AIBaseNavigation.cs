@@ -7,6 +7,7 @@ using Hedronoid.Health;
 using Hedronoid.HNDFSM;
 using Pathfinding;
 using Pathfinding.RVO;
+using Hedronoid.Events;
 
 /// <summary>
 /// 
@@ -94,6 +95,8 @@ namespace Hedronoid.AI
         protected HealthBase m_HealthBase;
 
         protected IAstarAI ai;
+
+        protected bool playerInitialized = false;
         protected override void Awake()
         {
             base.Awake();
@@ -113,6 +116,9 @@ namespace Hedronoid.AI
             if (!m_damageHandler) TryGetComponent(out m_damageHandler);
             if (!m_RVOController) TryGetComponent(out m_RVOController);
             if (!m_Seeker) TryGetComponent(out m_Seeker);
+
+            HNDEvents.Instance.AddListener<PlayerCreatedAndInitialized>(OnPlayerCreatedAndInitialized);
+            gameObject.SetActive(false);
         }
         protected override void OnEnable()
         {
@@ -125,6 +131,15 @@ namespace Hedronoid.AI
         protected override void OnDisable()
         {
             if (ai != null) ai.onSearchPath -= Update;
+            //HNDEvents.Instance.RemoveListener<PlayerCreatedAndInitialized>(OnPlayerCreatedAndInitialized);
+        }
+
+        protected override void OnDestroy()
+        {
+            base.OnDestroy();
+
+            if (ai != null) ai.onSearchPath -= Update;
+            HNDEvents.Instance.AddListener<PlayerCreatedAndInitialized>(OnPlayerCreatedAndInitialized);
         }
         protected override void Start()
         {
@@ -144,11 +159,10 @@ namespace Hedronoid.AI
                         waypoints[i] = DefaultTarget.GetChild(i);
                     }
                 }
-            } 
+            }
 
             ChangeState(EStates.DefaultMovement);
         }
-
         public virtual void RecieveImpact(float RecoverTime = 0f, bool spin = true)
         {
             OnImpact = true;
@@ -228,6 +242,12 @@ namespace Hedronoid.AI
         public virtual void OnDefaultMovementUpdate()
         {
             throw new NotImplementedException();
+        }
+
+        public virtual void OnPlayerCreatedAndInitialized(PlayerCreatedAndInitialized e)
+        {
+            gameObject.SetActive(true);
+            playerInitialized = true;
         }
 
         /// <summary>
