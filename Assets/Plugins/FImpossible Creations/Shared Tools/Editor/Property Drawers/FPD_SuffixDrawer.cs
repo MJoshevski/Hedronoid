@@ -37,10 +37,6 @@ namespace FIMSpace.FEditor
             sliderVal = GUI.HorizontalSlider(position, property.floatValue, Attribute.Min, Attribute.Max);
 
             float pre, value;
-            int indent;
-
-            indent = EditorGUI.indentLevel;
-            EditorGUI.indentLevel = 0;
 
             switch (Attribute.Mode)
             {
@@ -88,7 +84,7 @@ namespace FIMSpace.FEditor
                 case FPD_SuffixAttribute.SuffixMode.FromMinToMaxRounded:
 
                     pre = Mathf.Round(sliderVal);
-                    value = EditorGUI.FloatField(floatField, Mathf.Round(sliderVal));
+                    value = EditorGUI.FloatField(floatField, Mathf.Round(sliderVal) );
                     if (value != pre) sliderVal = value;
 
                     EditorGUI.LabelField(percField, Attribute.Suffix);
@@ -97,7 +93,6 @@ namespace FIMSpace.FEditor
             }
 
             property.floatValue = sliderVal;
-            EditorGUI.indentLevel = indent;
 
             EditorGUI.EndProperty();
 
