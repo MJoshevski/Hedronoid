@@ -44,6 +44,8 @@ namespace Hedronoid
         [Tooltip("How fast does the camera center to the shoulder focus when moving?")]
         [Range(0f, 1f)]
 	    public float shoulderCentering = 0.5f;
+        [SerializeField, Min(0f)]
+        float shoulderFocusRadius = 5f;
         [Tooltip("How fast do we center on the newly switched shoulder?")]
         [Min(0f), Range(1f, 360f)]
         public float shoulderCenteringSpeed = 90f;
@@ -280,11 +282,13 @@ namespace Hedronoid
                     focusPoint = targetPoint;
                     break;
                 case OrbitCameraTypes.ManualShoulderSwitch:
+                    prevHitPoint = Player.RayHit;
+                    distanceThreshold = 0.01f;
+
+                    shoulderFocused = false;
+
                     if (Input.GetButtonDown("Fire3"))
                     {
-                        distanceThreshold = 0.01f;
-                        prevHitPoint = Player.RayHit;
-                        shoulderFocused = false;
                         manualPositionOffset.x *= -1;
                     }
 
@@ -310,22 +314,32 @@ namespace Hedronoid
             if (distanceOffset > Mathf.Abs(distanceThreshold) && 
                 shoulderCentering > 0f)
             {
-                float movMag = Player.Rigidbody.velocity.sqrMagnitude;
+                if (shoulderFocusRadius > 0f)
+                {
+                    float distance = Vector3.Distance(targetPoint, focusPoint);
+                    float t = 1f;
+                    if (distance > 0.01f && shoulderCentering > 0f)
+                    {
+                        t = Mathf.Pow(1f - shoulderCentering, Time.unscaledDeltaTime);
+                    }
+                    if (distance > shoulderFocusRadius)
+                    {
+                        t = Mathf.Min(t, shoulderFocusRadius / distance);
+                    }
 
-                float factor = 1;
-                if (movMag > catchupVeloThreshold)
-                    factor = movMag * catchupFactor / 10f;
-                 
-                focusPoint = Vector3.Lerp(
-                        targetPointOffset, focusPoint,
-                        Mathf.Pow(1f - shoulderCentering,
-                        Time.unscaledDeltaTime) / factor
-                        );
+                    focusPoint = Vector3.Lerp(targetPointOffset, focusPoint, t);
 
-                if (prevHitPoint.point != Vector3.zero)
-                    AutomaticCentering();
+                    float movMag = Player.Rigidbody.velocity.sqrMagnitude;
 
-                orbitRotation = Quaternion.Euler(orbitAngles);
+                    float factor = 1;
+                    if (movMag > catchupVeloThreshold)
+                        factor = movMag * catchupFactor / 10f;
+
+                    if (prevHitPoint.point != Vector3.zero)
+                        AutomaticCentering();
+
+                    //orbitRotation = Quaternion.Euler(orbitAngles);
+                }
             }
             else
             {

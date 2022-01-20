@@ -56,8 +56,8 @@ namespace Hedronoid.Core
             {
                 if (Input.GetKeyDown(KeyCode.Alpha0 + i))
                 {
-                    GameplaySceneContext.PlayerSpawner.ActiveSpawnPoint = 
-                        GameplaySceneContext.PlayerSpawner.GetSpawnPoint(i);
+                    GameplaySceneContext.PlayerSpawner.SetActiveCheckpoint(
+                        GameplaySceneContext.PlayerSpawner.GetSpawnPoint(i).gameObject);
 
                     RespawnAtCheckpoint();
                     return;

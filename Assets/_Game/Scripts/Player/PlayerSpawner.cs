@@ -7,12 +7,20 @@ namespace Hedronoid.Core
 {
     public class PlayerSpawner : HNDGameObject
     {
+        public Transform[] SpawnPoints {  get { return m_SpawnPoints; } }
         [SerializeField]
         private Transform[] m_SpawnPoints;
 
-        [HideInInspector]
-        public Transform ActiveSpawnPoint;
+        public Transform ActiveSpawnPoint { get { return m_ActiveSpawnPoint; } }
+        [SerializeField]
+        private Transform m_ActiveSpawnPoint;
 
+        protected override void Awake()
+        {
+            base.Awake();
+
+            DontDestroyOnLoad(gameObject);
+        }
         public Transform GetSpawnPoint(int id)
         {
             if (m_SpawnPoints == null || id < 0 || id >= m_SpawnPoints.Length)
@@ -22,6 +30,11 @@ namespace Hedronoid.Core
             }
 
             return m_SpawnPoints[id];
+        }
+
+        public void SetActiveCheckpoint(GameObject checkpoint)
+        {
+            m_ActiveSpawnPoint = checkpoint.transform;
         }
     }
 }
