@@ -264,7 +264,6 @@ public abstract class UbhBaseShot : HNDMonoBehaviour, IGameplaySceneContextInjec
             //Debug.LogError("GetBulletGO: " + TurretNavigation.Target.gameObject.name);
             return null;
         }
-        Debug.LogError("TARGET NO TNULL: " + TurretNavigation.Target.gameObject.name);
 
         if (m_bulletPrefab == null)
         {
