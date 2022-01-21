@@ -26,6 +26,7 @@ public class CheckpointTrigger : HNDMonoBehaviour, IGameplaySceneContextInjector
                 (HNDAI.Settings.PlayerLayer | (1 << other.gameObject.layer)))
         {
             playerSpawner.SetActiveCheckpoint(gameObject);
+            playerSpawner.OnSave();
         }
     }
 }

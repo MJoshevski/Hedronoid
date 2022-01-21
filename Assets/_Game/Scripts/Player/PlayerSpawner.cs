@@ -2,10 +2,11 @@
 using System.Collections.Generic;
 using UnityEngine;
 using Hedronoid;
+using Lowscope.Saving;
 
 namespace Hedronoid.Core
 {
-    public class PlayerSpawner : HNDGameObject
+    public class PlayerSpawner : HNDGameObject, ISaveable
     {
         public Transform[] SpawnPoints {  get { return m_SpawnPoints; } }
         [SerializeField]
@@ -15,12 +16,7 @@ namespace Hedronoid.Core
         [SerializeField]
         private Transform m_ActiveSpawnPoint;
 
-        protected override void Awake()
-        {
-            base.Awake();
-
-            DontDestroyOnLoad(gameObject);
-        }
+        private Transform m_LastActiveSpawnPoint;
         public Transform GetSpawnPoint(int id)
         {
             if (m_SpawnPoints == null || id < 0 || id >= m_SpawnPoints.Length)
@@ -32,9 +28,31 @@ namespace Hedronoid.Core
             return m_SpawnPoints[id];
         }
 
+        [System.Serializable]
+        public struct SaveData
+        {
+            public Transform spawnPoint;
+        }
         public void SetActiveCheckpoint(GameObject checkpoint)
         {
             m_ActiveSpawnPoint = checkpoint.transform;
+        }
+
+        public void OnLoad(string data)
+        {
+            m_ActiveSpawnPoint = JsonUtility.FromJson<SaveData>(data).spawnPoint;
+            m_LastActiveSpawnPoint = m_ActiveSpawnPoint;
+        }
+
+        public string OnSave()
+        {
+            m_LastActiveSpawnPoint = m_ActiveSpawnPoint;
+            return JsonUtility.ToJson(new SaveData() { spawnPoint = m_ActiveSpawnPoint }); ;
+        }
+
+        public bool OnSaveCondition()
+        {
+            return m_LastActiveSpawnPoint != m_ActiveSpawnPoint;
         }
     }
 }
