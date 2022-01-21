@@ -13,7 +13,6 @@ GameObject:
   - component: {fileID: 2808058908603988582}
   - component: {fileID: 5604148641285767460}
   - component: {fileID: 2808058908603988585}
-  - component: {fileID: 2808058908603988584}
   - component: {fileID: 2808058908603988587}
   - component: {fileID: 2808058908603988586}
   - component: {fileID: 473331434}
@@ -139,14 +138,6 @@ MonoBehaviour:
   StrengthMultiplier: 1
 --- !u!124 &2808058908603988585
 Behaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 2808058908603988580}
-  m_Enabled: 1
---- !u!81 &2808058908603988584
-AudioListener:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
