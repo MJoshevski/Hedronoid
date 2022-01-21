@@ -131,7 +131,7 @@ namespace Hedronoid.AI
         protected override void OnDisable()
         {
             if (ai != null) ai.onSearchPath -= Update;
-            HNDEvents.Instance.RemoveListener<PlayerCreatedAndInitialized>(OnPlayerCreatedAndInitialized);
+            //HNDEvents.Instance.RemoveListener<PlayerCreatedAndInitialized>(OnPlayerCreatedAndInitialized);
         }
 
         protected override void OnDestroy()
