@@ -46,13 +46,19 @@ namespace Hedronoid.Core
 
         public string OnSave()
         {
-            m_LastActiveSpawnPoint = m_ActiveSpawnPoint;
             return JsonUtility.ToJson(new SaveData() { spawnPoint = m_ActiveSpawnPoint }); ;
         }
 
         public bool OnSaveCondition()
         {
-            return m_LastActiveSpawnPoint != m_ActiveSpawnPoint;
+            if (m_LastActiveSpawnPoint != m_ActiveSpawnPoint)
+            {
+                m_LastActiveSpawnPoint = m_ActiveSpawnPoint;
+                Debug.LogError("SAVED!!!");
+                return true;
+            }
+
+            return false;
         }
     }
 }

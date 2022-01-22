@@ -85,8 +85,18 @@ namespace Hedronoid.Core
         {
             GameObject p = Instantiate(m_PlayerPrefab, GameplaySceneContext.cachedTransform);
             p.name = "Player";
-            p.transform.position = GameplaySceneContext.PlayerSpawner.GetSpawnPoint(0).position;
-            p.transform.rotation = GameplaySceneContext.PlayerSpawner.GetSpawnPoint(0).rotation;
+
+            if (GameplaySceneContext.PlayerSpawner.ActiveSpawnPoint == null)
+            {
+                p.transform.position = GameplaySceneContext.PlayerSpawner.GetSpawnPoint(0).position;
+                p.transform.rotation = GameplaySceneContext.PlayerSpawner.GetSpawnPoint(0).rotation;
+            }
+            else
+            {
+                p.transform.position = GameplaySceneContext.PlayerSpawner.ActiveSpawnPoint.position;
+                p.transform.rotation = GameplaySceneContext.PlayerSpawner.ActiveSpawnPoint.rotation;
+            }
+
             m_Player = p.gameObject;
         }
 
@@ -94,8 +104,17 @@ namespace Hedronoid.Core
         {
             GameObject c = Instantiate(m_OrbitCameraPrefab, GameplaySceneContext.cachedTransform);
             c.name = "OrbitCamera";
-            c.transform.position = GameplaySceneContext.PlayerSpawner.GetSpawnPoint(0).position;
-            c.transform.rotation = GameplaySceneContext.PlayerSpawner.GetSpawnPoint(0).rotation;
+
+            if (GameplaySceneContext.PlayerSpawner.ActiveSpawnPoint == null)
+            {
+                c.transform.position = GameplaySceneContext.PlayerSpawner.GetSpawnPoint(0).position;
+                c.transform.rotation = GameplaySceneContext.PlayerSpawner.GetSpawnPoint(0).rotation;
+            }
+            else
+            {
+                c.transform.position = GameplaySceneContext.PlayerSpawner.ActiveSpawnPoint.position;
+                c.transform.rotation = GameplaySceneContext.PlayerSpawner.ActiveSpawnPoint.rotation;
+            }
             m_OrbitCamera = c.gameObject;
         }
 
