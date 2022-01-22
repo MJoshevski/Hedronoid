@@ -17,6 +17,7 @@ namespace Hedronoid.Core
         private Transform m_ActiveSpawnPoint;
 
         private Transform m_LastActiveSpawnPoint;
+
         public Transform GetSpawnPoint(int id)
         {
             if (m_SpawnPoints == null || id < 0 || id >= m_SpawnPoints.Length)
@@ -31,7 +32,7 @@ namespace Hedronoid.Core
         [System.Serializable]
         public struct SaveData
         {
-            public Transform spawnPoint;
+            public Vector3 spawnPointPos;
         }
         public void SetActiveCheckpoint(GameObject checkpoint)
         {
@@ -40,14 +41,14 @@ namespace Hedronoid.Core
 
         public void OnLoad(string data)
         {
-            m_ActiveSpawnPoint = JsonUtility.FromJson<SaveData>(data).spawnPoint;
-            Debug.LogError("LOADED!!! SPAWN POINT: "+ m_ActiveSpawnPoint.gameObject.name);
-            m_LastActiveSpawnPoint = m_ActiveSpawnPoint;
+            m_ActiveSpawnPoint = 
+                GetSpawnPointTransformByPosition(JsonUtility.FromJson<SaveData>(data).spawnPointPos);
+             m_LastActiveSpawnPoint = m_ActiveSpawnPoint;
         }
 
         public string OnSave()
         {
-            return JsonUtility.ToJson(new SaveData() { spawnPoint = m_ActiveSpawnPoint }); ;
+            return JsonUtility.ToJson(new SaveData() { spawnPointPos = m_ActiveSpawnPoint.position}); ;
         }
 
         public bool OnSaveCondition()
@@ -59,6 +60,15 @@ namespace Hedronoid.Core
             }
 
             return false;
+        }
+
+        private Transform GetSpawnPointTransformByPosition(Vector3 pos)
+        {
+            for (int i = 0; i < m_SpawnPoints.Length; i++)
+                 if (m_SpawnPoints[i].position == pos)
+                    return m_SpawnPoints[i];
+
+            return null;
         }
     }
 }

@@ -141,7 +141,7 @@ namespace Hedronoid.Core
             OrbitCamera orbitCamera;
 
             m_OrbitCamera.TryGetComponent(out orbitCamera);
-            if (!orbitCamera) orbitCamera = GetComponentInChildren<OrbitCamera>();
+            if (!orbitCamera) orbitCamera = m_OrbitCamera.GetComponentInChildren<OrbitCamera>();
             if (!orbitCamera)
             {
                 D.GameError("ScenePlayerManager doesn't have an orbit camera prefab referenced or can't locate 'OrbitCamera.cs' on referenced prefab. Returning...");
@@ -150,6 +150,7 @@ namespace Hedronoid.Core
 
             m_OrbitCamera.transform.position = activeSpawnPoint.position;
             m_OrbitCamera.transform.rotation = activeSpawnPoint.rotation;
+            m_OrbitCamera.transform.forward = activeSpawnPoint.forward;
 
             D.GameLogFormat("{0} re-spawned at {1}.", m_OrbitCamera.name, activeSpawnPoint.name);
         }
@@ -161,7 +162,7 @@ namespace Hedronoid.Core
             PlayerFSM playerFSM;
 
             m_Player.TryGetComponent(out playerFSM);
-            if (!playerFSM) playerFSM = GetComponentInChildren<PlayerFSM>();
+            if (!playerFSM) playerFSM = m_Player.GetComponentInChildren<PlayerFSM>();
             if (!playerFSM)
             {
                 D.GameError("ScenePlayerManager doesn't have a player prefab referenced or can't locate 'PlayerFSM.cs' on referenced prefab. Returning...");
@@ -170,6 +171,7 @@ namespace Hedronoid.Core
 
             m_Player.transform.position = activeSpawnPoint.position;
             m_Player.transform.rotation = activeSpawnPoint.rotation;
+            m_Player.transform.forward = activeSpawnPoint.forward;
 
             D.GameLogFormat("{0} re-spawned at {1}.", m_Player.name, activeSpawnPoint.name);
         }
