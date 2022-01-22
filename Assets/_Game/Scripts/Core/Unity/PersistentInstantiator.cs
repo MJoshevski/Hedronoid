@@ -15,6 +15,8 @@ namespace Hedronoid.Core
     //	make sure that there are no objects sharing the same name as this
     //	gameObject - presuming that the incoming scene also was trying to 
     //	instaniate such common functionality
+
+    [DisallowMultipleComponent, DefaultExecutionOrder(-9002)]
     public class PersistentInstantiator : MonoBehaviour
     {
         static readonly string PERSISTENT_TAG = "Persistent";

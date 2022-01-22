@@ -38,17 +38,17 @@ namespace Lowscope.Saving
         // All listeners
         private static List<Saveable> saveables = new List<Saveable>();
 
-        [RuntimeInitializeOnLoadMethod(RuntimeInitializeLoadType.BeforeSceneLoad)]
-        private static void CreateInstance()
-        {
-            GameObject saveMasterObject = new GameObject("Save Master");
-            saveMasterObject.AddComponent<SaveMaster>();
+        //[RuntimeInitializeOnLoadMethod(RuntimeInitializeLoadType.BeforeSceneLoad)]
+        //private static void CreateInstance()
+        //{
+        //    GameObject saveMasterObject = new GameObject("Save Master");
+        //    saveMasterObject.AddComponent<SaveMaster>();
 
-            SceneManager.sceneLoaded += OnSceneLoaded;
-            SceneManager.sceneUnloaded += OnSceneUnloaded;
+        //    SceneManager.sceneLoaded += OnSceneLoaded;
+        //    SceneManager.sceneUnloaded += OnSceneUnloaded;
 
-            GameObject.DontDestroyOnLoad(saveMasterObject);
-        }
+        //    GameObject.DontDestroyOnLoad(saveMasterObject);
+        //}
 
         /*  
         *  Instance managers exist to keep track of spawned objects.
@@ -875,6 +875,9 @@ namespace Lowscope.Saving
             instance = this;
 
             var settings = SaveSettings.Get();
+
+            SceneManager.sceneLoaded += OnSceneLoaded;
+            SceneManager.sceneUnloaded += OnSceneUnloaded;
 
             if (settings.loadDefaultSlotOnStart)
             {

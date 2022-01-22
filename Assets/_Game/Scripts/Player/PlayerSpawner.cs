@@ -41,6 +41,7 @@ namespace Hedronoid.Core
         public void OnLoad(string data)
         {
             m_ActiveSpawnPoint = JsonUtility.FromJson<SaveData>(data).spawnPoint;
+            Debug.LogError("LOADED!!! SPAWN POINT: "+ m_ActiveSpawnPoint.gameObject.name);
             m_LastActiveSpawnPoint = m_ActiveSpawnPoint;
         }
 
@@ -54,7 +55,6 @@ namespace Hedronoid.Core
             if (m_LastActiveSpawnPoint != m_ActiveSpawnPoint)
             {
                 m_LastActiveSpawnPoint = m_ActiveSpawnPoint;
-                Debug.LogError("SAVED!!!");
                 return true;
             }
 
