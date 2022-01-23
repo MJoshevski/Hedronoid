@@ -2,28 +2,24 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-[CreateAssetMenu(menuName = "Hedronoid/Audio/Player", fileName = "New Player Sheet")]
-public class PlayerAudioData : ScriptableObject
+[CreateAssetMenu(menuName = "Hedronoid/Audio/NPC", fileName = "New NPC Sheet")]
+public class NPCAudioData : ScriptableObject
 {
-    [Header("Movement")]
+    [Header("Default")]
     [FMODUnity.EventRef]
-    public string footsteps = null;
+    public string idle = null;
     [FMODUnity.EventRef]
-    public string jump = null;
-    [FMODUnity.EventRef]
-    public string doubleJump = null;
-    [FMODUnity.EventRef]
-    public string dash = null;
-    [FMODUnity.EventRef]
-    public string land = null;
-
-    [Header("Shooting")]
-    [FMODUnity.EventRef]
-    public string[] bulletPrimary = null;
-    [FMODUnity.EventRef]
-    public string bulletSecondary = null;
-
-    [Header("Character Sounds")]
+    public string idleMovement = null;
     [FMODUnity.EventRef]
     public string recieveHit = null;
+    [FMODUnity.EventRef]
+    public string blockHit = null;
+    [FMODUnity.EventRef]
+    public string death = null;
+
+    [Header("Attacking")]
+    [FMODUnity.EventRef]
+    public string[] primaryAttack = null;
+    [FMODUnity.EventRef]
+    public string secondaryAttack = null;
 }

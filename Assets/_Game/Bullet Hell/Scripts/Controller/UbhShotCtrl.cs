@@ -1,4 +1,5 @@
 ﻿using Hedronoid;
+using Hedronoid.AI;
 using System;
 using System.Collections;
 using System.Collections.Generic;
@@ -66,10 +67,19 @@ public sealed class UbhShotCtrl : HNDMonoBehaviour
     private float m_delayTimer;
     private List<ShotInfo> m_randomShotList = new List<ShotInfo>(32);
 
+    private AIBaseNavigation aiNavigation;
+
     /// <summary>
     /// is shooting flag.
     /// </summary>
     public bool shooting { get { return m_shooting; } }
+
+    protected override void Awake()
+    {
+        base.Awake();
+
+        aiNavigation = GetComponent<AIBaseNavigation>();
+    }
     protected override void Start()
     {
         base.Start();

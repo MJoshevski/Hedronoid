@@ -41,9 +41,6 @@ namespace Hedronoid
         public Transform partToRotate;
         public float turnSpeed = 10f;
 
-        [Header("FMOD Audio Data")]
-        public NPCAudioData m_enemyAudioData;
-
         protected HNDFiniteStateMachine playerFSM;
         protected UbhShotCtrl shotCtrl;
         protected TurretSensor m_TurretSensor;
@@ -54,7 +51,7 @@ namespace Hedronoid
             base.Awake();
             this.Inject(gameObject);
 
-            CreateState(ETurretStates.AttackTarget, OnAttackTargetUpdate, null, null);
+            CreateState(ETurretStates.AttackTarget, OnAttackTargetUpdate, OnAttackTargetEnter, null);
 
             TryGetComponent(out shotCtrl);
             m_TurretSensor = (TurretSensor) m_Sensor;
@@ -87,6 +84,10 @@ namespace Hedronoid
         {
             throw new NotImplementedException();
         }
+
+        public virtual void OnAttackTargetEnter(FSMState fromState)
+        {
+        }
         public virtual void OnAttackTargetUpdate()
         {
             if (m_Target == null)
@@ -105,7 +106,6 @@ namespace Hedronoid
             }
 
             LockOnTarget();
-            Shoot();
 
             if (useLaser)
             {
@@ -162,11 +162,6 @@ namespace Hedronoid
             impactEffect.transform.position = m_Target.position + dir.normalized;
 
             impactEffect.transform.rotation = Quaternion.LookRotation(dir);
-        }
-
-        void Shoot()
-        {
-            //FMODUnity.RuntimeManager.PlayOneShot(m_enemyAudioData.bulletPrimary[0], transform.position);
         }
 
         private void OnKilled(KillEvent e)

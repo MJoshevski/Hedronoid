@@ -34,6 +34,7 @@ public class UbhBullet : HNDMonoBehaviour, IGameplaySceneContextInjector
     private float m_maxSpeed;
     private bool m_useMinSpeed;
     private float m_minSpeed;
+    private FMOD.Studio.EventInstance m_eventInstance;
 
     private Vector2 m_baseAngles;
     private float m_selfFrameCnt;
@@ -70,8 +71,6 @@ public class UbhBullet : HNDMonoBehaviour, IGameplaySceneContextInjector
         {
             return;
         }
-
-        BulletPoolManager.ReturnObject(this.gameObject);
         OnFinishedShot();
     }
 
@@ -95,10 +94,12 @@ public class UbhBullet : HNDMonoBehaviour, IGameplaySceneContextInjector
         }
         m_shooting = false;
 
+        m_eventInstance.stop(FMOD.Studio.STOP_MODE.ALLOWFADEOUT);
         m_parentBaseShot = null;
         m_homingTarget = null;
         m_transformCache.ResetPosition();
         m_transformCache.ResetRotation();
+        BulletPoolManager.ReturnObject(gameObject);
     }
 
     /// <summary>
@@ -111,7 +112,7 @@ public class UbhBullet : HNDMonoBehaviour, IGameplaySceneContextInjector
                      bool pauseAndResume, float pauseTime, float resumeTime,
                      bool useAutoRelease, float autoReleaseTime,
                      bool inheritAngle, bool useMaxSpeed, 
-                     float maxSpeed, bool useMinSpeed, float minSpeed)
+                     float maxSpeed, bool useMinSpeed, float minSpeed, FMOD.Studio.EventInstance eventInstance)
     {
         if (m_shooting)
         {
@@ -142,6 +143,7 @@ public class UbhBullet : HNDMonoBehaviour, IGameplaySceneContextInjector
         m_maxSpeed = maxSpeed;
         m_useMinSpeed = useMinSpeed;
         m_minSpeed = minSpeed;
+        m_eventInstance = eventInstance;
 
         m_baseAngles = Vector2.zero;
         if (inheritAngle && m_parentBaseShot.lockOnShot == false)
@@ -180,7 +182,6 @@ public class UbhBullet : HNDMonoBehaviour, IGameplaySceneContextInjector
             {
                 // Release
                 OnFinishedShot();
-                BulletPoolManager.ReturnObject(this.gameObject);
                 return;
             }
         }

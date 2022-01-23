@@ -61,6 +61,7 @@ MonoBehaviour:
   m_resumeTime: 0
   m_useAutoRelease: 0
   m_autoReleaseTime: 10
+  ShootParticles: 0
   m_shotFiredCallbackEvents:
     m_PersistentCalls:
       m_Calls: []
@@ -135,6 +136,7 @@ MonoBehaviour:
   m_resumeTime: 0
   m_useAutoRelease: 0
   m_autoReleaseTime: 10
+  ShootParticles: 0
   m_shotFiredCallbackEvents:
     m_PersistentCalls:
       m_Calls: []
@@ -213,6 +215,7 @@ MonoBehaviour:
   m_resumeTime: 0
   m_useAutoRelease: 0
   m_autoReleaseTime: 10
+  ShootParticles: 0
   m_shotFiredCallbackEvents:
     m_PersistentCalls:
       m_Calls: []
@@ -290,6 +293,7 @@ MonoBehaviour:
   m_resumeTime: 0
   m_useAutoRelease: 0
   m_autoReleaseTime: 10
+  ShootParticles: 0
   m_shotFiredCallbackEvents:
     m_PersistentCalls:
       m_Calls: []
@@ -367,6 +371,7 @@ MonoBehaviour:
   m_resumeTime: 0
   m_useAutoRelease: 0
   m_autoReleaseTime: 10
+  ShootParticles: 0
   m_shotFiredCallbackEvents:
     m_PersistentCalls:
       m_Calls: []
@@ -441,6 +446,7 @@ MonoBehaviour:
   m_resumeTime: 0
   m_useAutoRelease: 0
   m_autoReleaseTime: 10
+  ShootParticles: 0
   m_shotFiredCallbackEvents:
     m_PersistentCalls:
       m_Calls: []
@@ -515,6 +521,7 @@ MonoBehaviour:
   m_resumeTime: 0
   m_useAutoRelease: 0
   m_autoReleaseTime: 10
+  ShootParticles: 0
   m_shotFiredCallbackEvents:
     m_PersistentCalls:
       m_Calls: []
@@ -590,6 +597,7 @@ MonoBehaviour:
   m_resumeTime: 0
   m_useAutoRelease: 0
   m_autoReleaseTime: 10
+  ShootParticles: 0
   m_shotFiredCallbackEvents:
     m_PersistentCalls:
       m_Calls: []
@@ -663,6 +671,7 @@ MonoBehaviour:
   m_resumeTime: 0
   m_useAutoRelease: 0
   m_autoReleaseTime: 10
+  ShootParticles: 0
   m_shotFiredCallbackEvents:
     m_PersistentCalls:
       m_Calls: []
@@ -739,6 +748,7 @@ MonoBehaviour:
   m_resumeTime: 0
   m_useAutoRelease: 1
   m_autoReleaseTime: 3.65
+  ShootParticles: 0
   m_shotFiredCallbackEvents:
     m_PersistentCalls:
       m_Calls: []
@@ -816,6 +826,7 @@ MonoBehaviour:
   m_resumeTime: 0
   m_useAutoRelease: 0
   m_autoReleaseTime: 10
+  ShootParticles: 0
   m_shotFiredCallbackEvents:
     m_PersistentCalls:
       m_Calls: []
@@ -894,6 +905,7 @@ MonoBehaviour:
   m_resumeTime: 0
   m_useAutoRelease: 0
   m_autoReleaseTime: 10
+  ShootParticles: 0
   m_shotFiredCallbackEvents:
     m_PersistentCalls:
       m_Calls: []
@@ -972,6 +984,7 @@ MonoBehaviour:
   m_resumeTime: 0
   m_useAutoRelease: 0
   m_autoReleaseTime: 10
+  ShootParticles: 0
   m_shotFiredCallbackEvents:
     m_PersistentCalls:
       m_Calls: []
@@ -1045,6 +1058,7 @@ MonoBehaviour:
   m_resumeTime: 0
   m_useAutoRelease: 0
   m_autoReleaseTime: 10
+  ShootParticles: 0
   m_shotFiredCallbackEvents:
     m_PersistentCalls:
       m_Calls: []
@@ -1119,6 +1133,7 @@ MonoBehaviour:
   m_resumeTime: 0
   m_useAutoRelease: 0
   m_autoReleaseTime: 10
+  ShootParticles: 0
   m_shotFiredCallbackEvents:
     m_PersistentCalls:
       m_Calls: []
@@ -1193,6 +1208,7 @@ MonoBehaviour:
   m_resumeTime: 0
   m_useAutoRelease: 0
   m_autoReleaseTime: 10
+  ShootParticles: 0
   m_shotFiredCallbackEvents:
     m_PersistentCalls:
       m_Calls: []
@@ -1267,6 +1283,7 @@ MonoBehaviour:
   m_resumeTime: 0
   m_useAutoRelease: 0
   m_autoReleaseTime: 10
+  ShootParticles: 0
   m_shotFiredCallbackEvents:
     m_PersistentCalls:
       m_Calls: []
@@ -1337,6 +1354,7 @@ MonoBehaviour:
   m_resumeTime: 0
   m_useAutoRelease: 0
   m_autoReleaseTime: 10
+  ShootParticles: 0
   m_shotFiredCallbackEvents:
     m_PersistentCalls:
       m_Calls: []
@@ -1413,6 +1431,7 @@ MonoBehaviour:
   m_resumeTime: 0
   m_useAutoRelease: 0
   m_autoReleaseTime: 10
+  ShootParticles: 0
   m_shotFiredCallbackEvents:
     m_PersistentCalls:
       m_Calls: []
@@ -1487,6 +1506,7 @@ MonoBehaviour:
   m_MaxWaypoints: 7
   m_MinWayPointDistance: 2
   m_MaxWayPointDistance: 4
+  m_EnemyAudioData: {fileID: 11400000, guid: 23d640d45b7e19f449c8f2a9be0edf45, type: 2}
   m_RadiusForGroundDetection: 0.5
   m_GroundDetectionDistance: 0.55
   m_Rb: {fileID: 0}
@@ -1498,7 +1518,6 @@ MonoBehaviour:
   impactLight: {fileID: 0}
   partToRotate: {fileID: 3350958549674326251}
   turnSpeed: 10
-  m_enemyAudioData: {fileID: 0}
 --- !u!114 &2272918633432743662
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -1691,6 +1710,7 @@ MonoBehaviour:
   m_resumeTime: 0
   m_useAutoRelease: 0
   m_autoReleaseTime: 10
+  ShootParticles: 0
   m_shotFiredCallbackEvents:
     m_PersistentCalls:
       m_Calls: []
@@ -1802,6 +1822,7 @@ MonoBehaviour:
   m_resumeTime: 0
   m_useAutoRelease: 1
   m_autoReleaseTime: 10
+  ShootParticles: 0
   m_shotFiredCallbackEvents:
     m_PersistentCalls:
       m_Calls: []
@@ -1877,6 +1898,7 @@ MonoBehaviour:
   m_resumeTime: 0
   m_useAutoRelease: 0
   m_autoReleaseTime: 10
+  ShootParticles: 0
   m_shotFiredCallbackEvents:
     m_PersistentCalls:
       m_Calls: []
@@ -1948,6 +1970,7 @@ MonoBehaviour:
   m_resumeTime: 0
   m_useAutoRelease: 0
   m_autoReleaseTime: 10
+  ShootParticles: 0
   m_shotFiredCallbackEvents:
     m_PersistentCalls:
       m_Calls: []
@@ -2021,6 +2044,7 @@ MonoBehaviour:
   m_resumeTime: 0
   m_useAutoRelease: 0
   m_autoReleaseTime: 10
+  ShootParticles: 0
   m_shotFiredCallbackEvents:
     m_PersistentCalls:
       m_Calls: []
@@ -2126,6 +2150,7 @@ MonoBehaviour:
   m_resumeTime: 0
   m_useAutoRelease: 0
   m_autoReleaseTime: 10
+  ShootParticles: 0
   m_shotFiredCallbackEvents:
     m_PersistentCalls:
       m_Calls: []
@@ -2203,6 +2228,7 @@ MonoBehaviour:
   m_resumeTime: 0
   m_useAutoRelease: 0
   m_autoReleaseTime: 10
+  ShootParticles: 0
   m_shotFiredCallbackEvents:
     m_PersistentCalls:
       m_Calls: []
@@ -2280,6 +2306,7 @@ MonoBehaviour:
   m_resumeTime: 0
   m_useAutoRelease: 0
   m_autoReleaseTime: 10
+  ShootParticles: 0
   m_shotFiredCallbackEvents:
     m_PersistentCalls:
       m_Calls: []
@@ -2350,6 +2377,7 @@ MonoBehaviour:
   m_resumeTime: 0
   m_useAutoRelease: 0
   m_autoReleaseTime: 10
+  ShootParticles: 0
   m_shotFiredCallbackEvents:
     m_PersistentCalls:
       m_Calls: []
@@ -2427,6 +2455,7 @@ MonoBehaviour:
   m_resumeTime: 0
   m_useAutoRelease: 0
   m_autoReleaseTime: 10
+  ShootParticles: 0
   m_shotFiredCallbackEvents:
     m_PersistentCalls:
       m_Calls: []
@@ -2502,6 +2531,7 @@ MonoBehaviour:
   m_resumeTime: 0
   m_useAutoRelease: 0
   m_autoReleaseTime: 10
+  ShootParticles: 0
   m_shotFiredCallbackEvents:
     m_PersistentCalls:
       m_Calls: []
@@ -2574,6 +2604,7 @@ MonoBehaviour:
   m_resumeTime: 0
   m_useAutoRelease: 0
   m_autoReleaseTime: 10
+  ShootParticles: 0
   m_shotFiredCallbackEvents:
     m_PersistentCalls:
       m_Calls: []
@@ -2648,6 +2679,7 @@ MonoBehaviour:
   m_resumeTime: 0
   m_useAutoRelease: 0
   m_autoReleaseTime: 10
+  ShootParticles: 0
   m_shotFiredCallbackEvents:
     m_PersistentCalls:
       m_Calls: []
@@ -2722,6 +2754,7 @@ MonoBehaviour:
   m_resumeTime: 0
   m_useAutoRelease: 0
   m_autoReleaseTime: 10
+  ShootParticles: 0
   m_shotFiredCallbackEvents:
     m_PersistentCalls:
       m_Calls: []
@@ -2798,6 +2831,7 @@ MonoBehaviour:
   m_resumeTime: 0
   m_useAutoRelease: 0
   m_autoReleaseTime: 10
+  ShootParticles: 0
   m_shotFiredCallbackEvents:
     m_PersistentCalls:
       m_Calls: []
@@ -2966,6 +3000,7 @@ MonoBehaviour:
   m_resumeTime: 0
   m_useAutoRelease: 0
   m_autoReleaseTime: 10
+  ShootParticles: 0
   m_shotFiredCallbackEvents:
     m_PersistentCalls:
       m_Calls: []
@@ -3040,6 +3075,7 @@ MonoBehaviour:
   m_resumeTime: 0
   m_useAutoRelease: 0
   m_autoReleaseTime: 10
+  ShootParticles: 0
   m_shotFiredCallbackEvents:
     m_PersistentCalls:
       m_Calls: []
@@ -3114,6 +3150,7 @@ MonoBehaviour:
   m_resumeTime: 0
   m_useAutoRelease: 0
   m_autoReleaseTime: 10
+  ShootParticles: 0
   m_shotFiredCallbackEvents:
     m_PersistentCalls:
       m_Calls: []
@@ -3187,6 +3224,7 @@ MonoBehaviour:
   m_resumeTime: 0
   m_useAutoRelease: 0
   m_autoReleaseTime: 10
+  ShootParticles: 0
   m_shotFiredCallbackEvents:
     m_PersistentCalls:
       m_Calls: []
@@ -3261,6 +3299,7 @@ MonoBehaviour:
   m_resumeTime: 0
   m_useAutoRelease: 0
   m_autoReleaseTime: 10
+  ShootParticles: 0
   m_shotFiredCallbackEvents:
     m_PersistentCalls:
       m_Calls: []
@@ -3334,6 +3373,7 @@ MonoBehaviour:
   m_resumeTime: 0
   m_useAutoRelease: 0
   m_autoReleaseTime: 10
+  ShootParticles: 0
   m_shotFiredCallbackEvents:
     m_PersistentCalls:
       m_Calls: []
@@ -3408,6 +3448,7 @@ MonoBehaviour:
   m_resumeTime: 0
   m_useAutoRelease: 0
   m_autoReleaseTime: 10
+  ShootParticles: 0
   m_shotFiredCallbackEvents:
     m_PersistentCalls:
       m_Calls: []
@@ -3486,6 +3527,7 @@ MonoBehaviour:
   m_resumeTime: 0
   m_useAutoRelease: 0
   m_autoReleaseTime: 10
+  ShootParticles: 0
   m_shotFiredCallbackEvents:
     m_PersistentCalls:
       m_Calls: []
@@ -3560,6 +3602,7 @@ MonoBehaviour:
   m_resumeTime: 0
   m_useAutoRelease: 0
   m_autoReleaseTime: 10
+  ShootParticles: 0
   m_shotFiredCallbackEvents:
     m_PersistentCalls:
       m_Calls: []
@@ -3634,6 +3677,7 @@ MonoBehaviour:
   m_resumeTime: 0
   m_useAutoRelease: 0
   m_autoReleaseTime: 10
+  ShootParticles: 0
   m_shotFiredCallbackEvents:
     m_PersistentCalls:
       m_Calls: []
@@ -3707,6 +3751,7 @@ MonoBehaviour:
   m_resumeTime: 0
   m_useAutoRelease: 0
   m_autoReleaseTime: 10
+  ShootParticles: 0
   m_shotFiredCallbackEvents:
     m_PersistentCalls:
       m_Calls: []
@@ -3812,6 +3857,7 @@ MonoBehaviour:
   m_resumeTime: 0
   m_useAutoRelease: 0
   m_autoReleaseTime: 10
+  ShootParticles: 0
   m_shotFiredCallbackEvents:
     m_PersistentCalls:
       m_Calls: []
@@ -3882,6 +3928,7 @@ MonoBehaviour:
   m_resumeTime: 0
   m_useAutoRelease: 0
   m_autoReleaseTime: 10
+  ShootParticles: 0
   m_shotFiredCallbackEvents:
     m_PersistentCalls:
       m_Calls: []
@@ -3956,6 +4003,7 @@ MonoBehaviour:
   m_resumeTime: 0
   m_useAutoRelease: 0
   m_autoReleaseTime: 10
+  ShootParticles: 0
   m_shotFiredCallbackEvents:
     m_PersistentCalls:
       m_Calls: []
@@ -4032,6 +4080,7 @@ MonoBehaviour:
   m_resumeTime: 0
   m_useAutoRelease: 0
   m_autoReleaseTime: 10
+  ShootParticles: 0
   m_shotFiredCallbackEvents:
     m_PersistentCalls:
       m_Calls: []
@@ -4103,6 +4152,7 @@ MonoBehaviour:
   m_resumeTime: 0
   m_useAutoRelease: 0
   m_autoReleaseTime: 10
+  ShootParticles: 0
   m_shotFiredCallbackEvents:
     m_PersistentCalls:
       m_Calls: []
@@ -4177,6 +4227,7 @@ MonoBehaviour:
   m_resumeTime: 0
   m_useAutoRelease: 0
   m_autoReleaseTime: 10
+  ShootParticles: 0
   m_shotFiredCallbackEvents:
     m_PersistentCalls:
       m_Calls: []
@@ -4253,6 +4304,7 @@ MonoBehaviour:
   m_resumeTime: 0
   m_useAutoRelease: 0
   m_autoReleaseTime: 10
+  ShootParticles: 0
   m_shotFiredCallbackEvents:
     m_PersistentCalls:
       m_Calls: []
@@ -4327,6 +4379,7 @@ MonoBehaviour:
   m_resumeTime: 0
   m_useAutoRelease: 0
   m_autoReleaseTime: 10
+  ShootParticles: 0
   m_shotFiredCallbackEvents:
     m_PersistentCalls:
       m_Calls: []
@@ -4401,6 +4454,7 @@ MonoBehaviour:
   m_resumeTime: 0
   m_useAutoRelease: 1
   m_autoReleaseTime: 3.5
+  ShootParticles: 0
   m_shotFiredCallbackEvents:
     m_PersistentCalls:
       m_Calls: []
@@ -4474,6 +4528,7 @@ MonoBehaviour:
   m_resumeTime: 0
   m_useAutoRelease: 0
   m_autoReleaseTime: 10
+  ShootParticles: 0
   m_shotFiredCallbackEvents:
     m_PersistentCalls:
       m_Calls: []
@@ -4548,6 +4603,7 @@ MonoBehaviour:
   m_resumeTime: 0
   m_useAutoRelease: 0
   m_autoReleaseTime: 10
+  ShootParticles: 0
   m_shotFiredCallbackEvents:
     m_PersistentCalls:
       m_Calls: []
@@ -4626,6 +4682,7 @@ MonoBehaviour:
   m_resumeTime: 0
   m_useAutoRelease: 0
   m_autoReleaseTime: 10
+  ShootParticles: 0
   m_shotFiredCallbackEvents:
     m_PersistentCalls:
       m_Calls: []
@@ -4697,6 +4754,7 @@ MonoBehaviour:
   m_resumeTime: 0
   m_useAutoRelease: 0
   m_autoReleaseTime: 10
+  ShootParticles: 0
   m_shotFiredCallbackEvents:
     m_PersistentCalls:
       m_Calls: []
@@ -4769,6 +4827,7 @@ MonoBehaviour:
   m_resumeTime: 0
   m_useAutoRelease: 0
   m_autoReleaseTime: 10
+  ShootParticles: 0
   m_shotFiredCallbackEvents:
     m_PersistentCalls:
       m_Calls: []
@@ -4839,6 +4898,7 @@ MonoBehaviour:
   m_resumeTime: 0
   m_useAutoRelease: 0
   m_autoReleaseTime: 10
+  ShootParticles: 0
   m_shotFiredCallbackEvents:
     m_PersistentCalls:
       m_Calls: []
@@ -4913,6 +4973,7 @@ MonoBehaviour:
   m_resumeTime: 0
   m_useAutoRelease: 0
   m_autoReleaseTime: 10
+  ShootParticles: 0
   m_shotFiredCallbackEvents:
     m_PersistentCalls:
       m_Calls: []
@@ -4987,6 +5048,7 @@ MonoBehaviour:
   m_resumeTime: 0
   m_useAutoRelease: 0
   m_autoReleaseTime: 10
+  ShootParticles: 0
   m_shotFiredCallbackEvents:
     m_PersistentCalls:
       m_Calls: []

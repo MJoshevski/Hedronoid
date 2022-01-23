@@ -79,7 +79,6 @@ namespace Hedronoid.AI
             if (!m_agent) TryGetComponent(out m_agent);
 
             CreateState(EBullStates.DashToTarget, OnDashUpdate, OnDashEnter, OnDashExit);
-
             enemyEmojis = GetComponent<EnemyEmojis>();
             HNDEvents.Instance.AddListener<KillEvent>(OnKilled);
         }
@@ -96,24 +95,10 @@ namespace Hedronoid.AI
         {
             base.Start();
 
+            FMODUnity.RuntimeManager.PlayOneShotAttached(m_EnemyAudioData.idle, gameObject);
+
             ChangeState(EStates.DefaultMovement);
         }
-
-        protected override void OnCollisionEnter(Collision collision)
-        {
-            base.OnCollisionEnter(collision);
-
-            if (collision.gameObject.layer == LayerMask.NameToLayer("PlayerBullet"))
-            {
-                HNDEvents.Instance.Raise(new RecieveHealthEvent { amount = -1f, canGoAboveMax = false, GOID = gameObject.GetInstanceID() });
-                damage = new DamageInfo();
-                damage.sender = Target.gameObject;
-                damage.Damage = 1;
-
-                m_damageHandler.DoDamage(damage);
-            }
-        }
-
         protected override void OnDisable()
         {
             base.OnDisable();

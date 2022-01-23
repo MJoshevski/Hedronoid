@@ -43,6 +43,10 @@ namespace Hedronoid.AI
         [SerializeField]
         private float m_MaxWayPointDistance = 4f;
 
+        [Header("FMOD Audio Data")]
+        public NPCAudioData m_EnemyAudioData;
+
+
         protected bool m_OnImpact = false;
         protected Coroutine m_RecoverRoutine;
 
@@ -261,16 +265,23 @@ namespace Hedronoid.AI
         {
         }
 
+
         protected virtual void OnCollisionEnter(Collision collision)
         {
             if (collision.gameObject.layer == LayerMask.NameToLayer("PlayerBullet"))
             {
+                HNDEvents.Instance.Raise(new RecieveHealthEvent { amount = -1f, canGoAboveMax = false, GOID = gameObject.GetInstanceID() });
                 damage = new DamageInfo();
-                damage.sender = collision.gameObject;
+                damage.sender = Target.gameObject;
                 damage.Damage = 1;
+
+                FMODUnity.RuntimeManager.PlayOneShot(m_EnemyAudioData.recieveHit, transform.position);
 
                 m_damageHandler.DoDamage(damage);
             }
+
+            if (m_HealthBase.CurrentHealth <= 0)
+                FMODUnity.RuntimeManager.PlayOneShot(m_EnemyAudioData.death, transform.position);
         }
 
     }

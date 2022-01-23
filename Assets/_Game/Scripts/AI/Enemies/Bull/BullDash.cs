@@ -237,6 +237,9 @@ namespace Hedronoid.AI
 
             // Do the dash!            
             // SoundRouter.CutsceneAudioFilter("Blockhead_Charge");
+            FMODUnity.RuntimeManager.PlayOneShotAttached(
+                m_BullNavigation.m_EnemyAudioData.primaryAttack[
+                    Random.Range(0, m_BullNavigation.m_EnemyAudioData.primaryAttack.Length - 1)], gameObject);
 
             SetAnimatorTrigger("DashAttack");
             if (m_DashStartParticle && gameObject.activeInHierarchy)
@@ -264,6 +267,7 @@ namespace Hedronoid.AI
                     yield return new WaitForFixedUpdate();
                 }
             }
+
             dashDamage = false;
             if (!m_Navigation.OnImpact)
             {

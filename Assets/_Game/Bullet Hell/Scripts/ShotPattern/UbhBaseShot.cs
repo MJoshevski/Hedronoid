@@ -169,7 +169,6 @@ public abstract class UbhBaseShot : HNDMonoBehaviour, IGameplaySceneContextInjec
         base.OnDisable();
 
         m_shooting = false;
-
         UbhShotCtrl.ShotInfo si = new UbhShotCtrl.ShotInfo();
 
         si.m_afterDelay = 2;
@@ -195,8 +194,19 @@ public abstract class UbhBaseShot : HNDMonoBehaviour, IGameplaySceneContextInjec
     /// <summary>
     /// Fired shot.
     /// </summary>
+    /// 
+    bool playedShotSound = false;
     protected void FiredShot()
     {
+        if (m_shooting && !playedShotSound)
+        {
+            playedShotSound = true;
+
+            FMODUnity.RuntimeManager.PlayOneShot(
+            TurretNavigation.m_EnemyAudioData.primaryAttack[
+                UnityEngine.Random.Range(0, TurretNavigation.m_EnemyAudioData.primaryAttack.Length - 1)], transform.position);
+        }
+
         m_shotFiredCallbackEvents.Invoke();
     }
 
@@ -206,6 +216,7 @@ public abstract class UbhBaseShot : HNDMonoBehaviour, IGameplaySceneContextInjec
     public void FinishedShot()
     {
         m_shooting = false;
+        playedShotSound = false;
         m_shotFinishedCallbackEvents.Invoke();
     }
 
@@ -291,6 +302,7 @@ public abstract class UbhBaseShot : HNDMonoBehaviour, IGameplaySceneContextInjec
     /// <summary>
     /// Shot UbhBullet object.
     /// </summary>
+    /// 
     protected void ShotBullet(UbhBullet bullet, float speed, float angleH, float angleV,
                                bool homing = false, Transform homingTarget = null, float homingAngleSpeed = 0f,
                                bool sinWave = false, float sinWaveSpeed = 0f, float sinWaveRangeSize = 0f, bool sinWaveInverse = false)
@@ -305,12 +317,16 @@ public abstract class UbhBaseShot : HNDMonoBehaviour, IGameplaySceneContextInjec
             return;
         }
 
+        var eventInst = FMODUnity.RuntimeManager.CreateInstance(TurretNavigation.m_EnemyAudioData.secondaryAttack);
+        FMODUnity.RuntimeManager.AttachInstanceToGameObject(eventInst, bullet.transform, bullet.GetComponent<Rigidbody>());
+        eventInst.start();
+
         bullet.Shot(this,
                     speed, angleH, angleV, m_accelerationSpeed, m_accelerationTurn,
                     homing, homingTarget, homingAngleSpeed,
                     sinWave, sinWaveSpeed, sinWaveRangeSize, sinWaveInverse,
                     m_usePauseAndResume, m_pauseTime, m_resumeTime,
                     m_useAutoRelease, m_autoReleaseTime, m_shotCtrl.m_inheritAngle,
-                    m_useMaxSpeed, m_maxSpeed, m_useMinSpeed, m_minSpeed);
+                    m_useMaxSpeed, m_maxSpeed, m_useMinSpeed, m_minSpeed, eventInst);
     }
 }
