@@ -21,6 +21,16 @@ namespace Hedronoid
         [HideInInspector]
         public BoxCollider boundsCollider;
 
+        [Header("Resized")]
+        [SerializeField]
+        [Tooltip("Resized box dimensions. Color = Black")]
+        private Vector3 resizedBounds;
+        [SerializeField]
+        [Tooltip("Resized collider center coordinates.")]
+        private Vector3 resizedCenter = Vector3.zero;
+
+        private Vector3 originalBounds;
+        private Vector3 originalCenter;
         protected override void OnValidate()
         {
             base.OnValidate();
@@ -40,7 +50,13 @@ namespace Hedronoid
                     2 * new Vector3(boundaryDistance.x, outerFalloffDistance / 2f, boundaryDistance.y);
                 boundsCollider.center = new Vector3(0, outerFalloffDistance / 2f, 0);
             }
+        }
+        protected override void Awake()
+        {
+            base.Awake();
 
+            originalBounds = boundsCollider.size;
+            originalCenter = boundsCollider.center;
         }
         public override Vector3 GetGravity(Vector3 position)
         {
@@ -98,22 +114,21 @@ namespace Hedronoid
 
             return transform.TransformDirection(g * vector);
         }
-        //protected override void ResizeColliderBounds(bool shouldResize)
-        //{
-        //    base.ResizeColliderBounds(shouldResize);
+        protected override void ResizeColliderBounds(bool shouldResize)
+        {
+            base.ResizeColliderBounds(shouldResize);
 
-        //    if (shouldResize)
-        //    {
-        //        boundsCollider.size =
-        //            2 * new Vector3(boundaryDistance.x, outerFalloffDistance / 2f, boundaryDistance.y);
-        //        boundsCollider.center = new Vector3(0, outerFalloffDistance / 2f, 0);
-        //    }
-        //    else
-        //    {
-        //        boundsCollider.size = 2 * originalBounds;
-        //        boundsCollider.center = Vector3.zero;
-        //    }
-        //}
+            if (shouldResize)
+            {
+                boundsCollider.size = 2 * resizedBounds;
+                boundsCollider.center = resizedCenter;
+            }
+            else
+            {
+                boundsCollider.size = originalBounds;
+                boundsCollider.center = originalCenter;
+            }
+        }
 
 #if UNITY_EDITOR
         void OnDrawGizmosSelected()
@@ -131,10 +146,17 @@ namespace Hedronoid
                 Gizmos.color = Color.yellow;
                 DrawGizmosOuterRect(outerDistance);
             }
+
             if (outerFalloffDistance > outerDistance)
             {
                 Gizmos.color = Color.cyan;
                 DrawGizmosOuterRect(outerFalloffDistance);
+            }
+
+            if (ResizeColliderOnEnter)
+            {
+                Gizmos.color = Color.black;
+                Gizmos.DrawWireCube(resizedCenter, 2f * resizedBounds);
             }
         }
 
