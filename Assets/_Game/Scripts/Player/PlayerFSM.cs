@@ -126,7 +126,7 @@ namespace Hedronoid.Player
         public List<ParticleList.ParticleSystems> LandParticles = new List<ParticleList.ParticleSystems>();
 
         [Header("FMOD Audio Data")]
-        public PlayerAudioData m_playerAudioData;
+        public PlayerSoundsData PlayerAudioData;
 
         [HideInInspector]
         public bool desiredJump, desiredDash;
@@ -413,7 +413,7 @@ namespace Hedronoid.Player
                 ParticleHelper.PlayParticleSystem(JumpParticles[index], cachedTransform.position, -cachedTransform.up);
             }
 
-            FMODUnity.RuntimeManager.PlayOneShot(m_playerAudioData.jump, transform.position);
+            FMODUnity.RuntimeManager.PlayOneShot(PlayerAudioData.jump, transform.position);
             secondaryGravityMultiplier = 1f;
             //contactNormal = upAxis;
 
@@ -463,7 +463,7 @@ namespace Hedronoid.Player
                 ParticleHelper.PlayParticleSystem(DoubleJumpParticles[index], cachedTransform.position, -cachedTransform.up);
             }
 
-            FMODUnity.RuntimeManager.PlayOneShot(m_playerAudioData.doubleJump, transform.position);
+            FMODUnity.RuntimeManager.PlayOneShot(PlayerAudioData.doubleJump, transform.position);
             //contactNormal = upAxis;
 
             Animator.CrossFade(animHashes.DoubleJump, 0.2f);
@@ -517,7 +517,7 @@ namespace Hedronoid.Player
             StartCoroutine(LerpCameraFov(100, 120));
 
             // SFX
-            FMODUnity.RuntimeManager.PlayOneShotAttached(m_playerAudioData.dash, gameObject);
+            FMODUnity.RuntimeManager.PlayOneShotAttached(PlayerAudioData.dash, gameObject);
 
             // VFX
             orbitCamera.camerShakeCollection.PlayCameraShake(CameraShakeType.BounceShake2);
@@ -639,7 +639,7 @@ namespace Hedronoid.Player
                 ParticleHelper.PlayParticleSystem(LandParticles[index], cachedTransform.position, -cachedTransform.up);
             }
 
-            FMODUnity.RuntimeManager.PlayOneShot(m_playerAudioData.land, transform.position);
+            FMODUnity.RuntimeManager.PlayOneShot(PlayerAudioData.land, transform.position);
 
             Animator.SetBool(animHashes.IsGrounded, OnGround);
             ChangeState(EPlayerStates.GROUND_MOVEMENT);
@@ -700,7 +700,7 @@ namespace Hedronoid.Player
         FMOD.Studio.EventInstance BulletPrimary;
         private void CreateFMODEvents()
         {
-            Run = FMODUnity.RuntimeManager.CreateInstance(m_playerAudioData.footsteps);
+            Run = FMODUnity.RuntimeManager.CreateInstance(PlayerAudioData.footsteps);
             FMODUnity.RuntimeManager.AttachInstanceToGameObject(Run, transform, GetComponent<Rigidbody>());
         }
         private void CreateFSMStates()
@@ -743,7 +743,7 @@ namespace Hedronoid.Player
             {              
                 if (timeFromLastFtstp > timeBetweenFtstp)
                 {
-                    FMODUnity.RuntimeManager.PlayOneShot(m_playerAudioData.footsteps, transform.position);
+                    FMODUnity.RuntimeManager.PlayOneShot(PlayerAudioData.footsteps, transform.position);
                     timeFromLastFtstp = 0f;
                 }
                 timeFromLastFtstp += Time.fixedDeltaTime;
@@ -956,7 +956,7 @@ namespace Hedronoid.Player
                 orbitCamera.camerShakeCollection.PlayCameraShake(CameraShakeType.KickShake);
                 for (int i = 0; i < MuzzleFlashParticles.Count; i++)
                     ParticleHelper.PlayParticleSystem(MuzzleFlashParticles[i], bulletOrigin.transform.position, shootDirection);
-                FMODUnity.RuntimeManager.PlayOneShot(m_playerAudioData.bulletPrimary[0], transform.position);
+                FMODUnity.RuntimeManager.PlayOneShot(PlayerAudioData.bulletPrimary[0], transform.position);
             }
             else if (!primaryFire && Time.realtimeSinceStartup - lastFired_Shotgun > fireRateSecondary)
             {
@@ -975,7 +975,7 @@ namespace Hedronoid.Player
                 lastFired_Shotgun = Time.realtimeSinceStartup;
 
                 orbitCamera.camerShakeCollection.PlayCameraShake(CameraShakeType.BounceShake);
-                FMODUnity.RuntimeManager.PlayOneShot(m_playerAudioData.bulletSecondary, transform.position);
+                FMODUnity.RuntimeManager.PlayOneShot(PlayerAudioData.bulletSecondary, transform.position);
             }
         }
         private System.Action onDespawnReset(GameObject bullet)
@@ -1088,7 +1088,7 @@ namespace Hedronoid.Player
                 HNDAI.Settings.EnemyLayer == 
                 (HNDAI.Settings.EnemyLayer | (1 << collision.gameObject.layer)))
             {
-                FMODUnity.RuntimeManager.PlayOneShot(m_playerAudioData.recieveHit, transform.position);
+                FMODUnity.RuntimeManager.PlayOneShot(PlayerAudioData.recieveHit, transform.position);
                 //m_healthBase.InstaKill();
             }
 
