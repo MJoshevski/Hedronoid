@@ -17,7 +17,7 @@ namespace Hedronoid
 
         float outerFalloffFactor;
 
-        // BOUNDS
+        // COLLIDER BOUNDS
         [HideInInspector]
         public BoxCollider boundsCollider;
 
