@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using UnityEngine;
 
 [CreateAssetMenu(menuName = "Hedronoid/Audio/Player", fileName = "New Player Sheet")]
-public class PlayerAudioData : ScriptableObject
+public class PlayerSoundsData : ScriptableObject
 {
     [Header("Movement")]
     [FMODUnity.EventRef]
