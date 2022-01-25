@@ -116,6 +116,12 @@ namespace CameraShake
             /// </summary>
             [Tooltip("How strength falls with distance from the shake source.")]
             public Attenuator.StrengthAttenuationParams attenuation;
+
+            /// <summary>
+            /// Which axes affect the kick shake?
+            /// </summary>
+            [Tooltip("Axis values for a kick shake.")]
+            public Displacement KickShakeDisplacementType = Displacement.Zero;
         }
     }
 }

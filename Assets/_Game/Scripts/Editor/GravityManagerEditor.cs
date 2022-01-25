@@ -41,6 +41,9 @@ namespace Hedronoid.Gravity
             while (newCount > list.Count)
                 list.Add(null);
 
+            EditorGUILayout.Vector3Field("Current Active Gravity", thisGM.CurrentActiveGravity);
+            EditorGUILayout.Space();
+
             for (int i = 0; i < list.Count; i++)
             {
                 EditorGUILayout.BeginVertical(GUI.skin.box);

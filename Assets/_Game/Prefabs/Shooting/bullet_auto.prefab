@@ -113,7 +113,7 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 7264386719725267083}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: -34.098618, y: 48.065075, z: -3.25}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
   m_LocalScale: {x: 0.4, y: 0.4, z: 0.4}
   m_ConstrainProportionsScale: 0
   m_Children:
@@ -214,7 +214,9 @@ TrailRenderer:
   m_RenderingLayerMask: 1
   m_RendererPriority: 0
   m_Materials:
-  - {fileID: 2100000, guid: 9d9c6bcecd2f6c84489fe558c59ecfae, type: 2}
+  - {fileID: 2100000, guid: 867f4d679b3630e4bb5516b09bbe5bbc, type: 2}
+  - {fileID: 2100000, guid: 2dd8a639827350048888d7fa9b67c432, type: 2}
+  - {fileID: 2100000, guid: be550ac7871705e49a994e8101b4c33f, type: 2}
   m_StaticBatchInfo:
     firstSubMesh: 0
     subMeshCount: 0
@@ -235,7 +237,7 @@ TrailRenderer:
   m_SortingLayerID: 0
   m_SortingLayer: 0
   m_SortingOrder: 0
-  m_Time: 0.1
+  m_Time: 0.2
   m_Parameters:
     serializedVersion: 3
     widthMultiplier: 1
@@ -243,8 +245,8 @@ TrailRenderer:
       serializedVersion: 2
       m_Curve:
       - serializedVersion: 3
-        time: 0.00579834
-        value: 0.5131569
+        time: 0.008972168
+        value: 1
         inSlope: 0
         outSlope: 0
         tangentMode: 0
@@ -253,7 +255,7 @@ TrailRenderer:
         outWeight: 0.33333334
       - serializedVersion: 3
         time: 1
-        value: 0
+        value: 0.31884766
         inSlope: 0
         outSlope: 0
         tangentMode: 0
@@ -298,7 +300,7 @@ TrailRenderer:
     textureMode: 0
     shadowBias: 0.5
     generateLightingData: 0
-  m_MinVertexDistance: 0.1
+  m_MinVertexDistance: 0.2
   m_Autodestruct: 0
   m_Emitting: 1
 --- !u!1 &9151324133591071039
@@ -19861,7 +19863,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!4 &9156727214121975281
 Transform:
   m_ObjectHideFlags: 0

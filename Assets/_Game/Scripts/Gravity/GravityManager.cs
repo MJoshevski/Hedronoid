@@ -14,6 +14,8 @@ namespace Hedronoid.Gravity
     {
         public GameplaySceneContext GameplaySceneContext { get; set; }
 
+        public Vector3 CurrentActiveGravity;
+
         public List<GravitySource> gravitySourcesInScene = new List<GravitySource>();
         public List<string> gravityParentNamesInScene;
         public FilteredSources[] filteredSources;
@@ -56,6 +58,7 @@ namespace Hedronoid.Gravity
             if (!player) return;
 
             activeSources = GravityService.GetActiveGravitySources();
+            CurrentActiveGravity = GravityService.CurrentGravity;
 
             if (activeSources.Count > 0)
                 GravityService.PrioritizeActiveOverlappedGravities(

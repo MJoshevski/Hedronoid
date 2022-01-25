@@ -22,9 +22,7 @@ namespace CameraShake
         [SerializeField]
         BounceShake.Params BounceShakeParams2;
         [SerializeField]
-        KickShake.Params KickShakeParams;
-        [SerializeField]
-        Displacement KickShakeDisplacementType = Displacement.Zero;
+        List<KickShake.Params> KickShakeParamsList = new List<KickShake.Params>();
         [SerializeField]
         PerlinShake.Params PerlinShakeParams;
 
@@ -41,7 +39,8 @@ namespace CameraShake
                     cameraShakeInstance = new BounceShake(BounceShakeParams2);
                     break;
                 case CameraShakeType.KickShake:
-                    cameraShakeInstance = new KickShake(KickShakeParams, KickShakeDisplacementType);
+                    int idx = Random.Range(0, KickShakeParamsList.Count - 1);
+                    cameraShakeInstance = new KickShake(KickShakeParamsList[idx], KickShakeParamsList[idx].KickShakeDisplacementType);
                     break;
                 case CameraShakeType.PerlinShake:
                     cameraShakeInstance = new PerlinShake(PerlinShakeParams);

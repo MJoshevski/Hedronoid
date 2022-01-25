@@ -62,14 +62,14 @@ Camera:
     width: 1
     height: 1
   near clip plane: 0.02
-  far clip plane: 2000000
+  far clip plane: 2000
   field of view: 100
   orthographic: 0
   orthographic size: 100
   m_Depth: -1
   m_CullingMask:
     serializedVersion: 2
-    m_Bits: 4294967295
+    m_Bits: 261911
   m_RenderingPath: 3
   m_TargetTexture: {fileID: 8400000, guid: c2a5100cc77a4384e995922c4259ae5c, type: 2}
   m_TargetDisplay: 0
@@ -100,9 +100,9 @@ MonoBehaviour:
   upAlignmentSpeed: 360
   followSpeed: 9
   rotationSpeed: 90
-  shoulderCentering: 0.8
-  shoulderFocusRadius: 1.7
-  shoulderCenteringSpeed: 400
+  shoulderCentering: 1
+  shoulderFocusRadius: 2.5
+  shoulderCenteringSpeed: 300
   shoulderAlignSmoothRange: 45
   catchupFactor: 0.2
   catchupVeloThreshold: 10
@@ -161,7 +161,7 @@ MonoBehaviour:
   m_RequiresOpaqueTextureOption: 2
   m_CameraType: 0
   m_Cameras: []
-  m_RendererIndex: -1
+  m_RendererIndex: 0
   m_VolumeLayerMask:
     serializedVersion: 2
     m_Bits: 2147483647

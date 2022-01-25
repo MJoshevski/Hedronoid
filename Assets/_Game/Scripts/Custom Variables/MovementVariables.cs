@@ -36,6 +36,8 @@ namespace Hedronoid
         public AnimationClip JumpAnimation;
         public AnimationClip DoubleJumpAnimation;
         public AnimationClip DashAnimation;
+        public AnimationClip DashEndAnimation;
+
 
         public int DefaultLayer = 0;
         public int LocomotionLayer = 1;

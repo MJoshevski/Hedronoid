@@ -370,6 +370,8 @@ namespace Hedronoid.Player
         {
             movementMixerState = m_Animancer.Layers[movementVariables.DefaultLayer].Play(
                 movementVariables.MovementMixer, 0.2f) as LinearMixerState;
+
+            movementMixerState.ApplyFootIK = true;
         }
         private void OnUpdateGroundMovement()
         {
@@ -572,7 +574,12 @@ namespace Hedronoid.Player
             StopAllCoroutines();
             StartCoroutine(LerpCameraFov(120, 100));
 
-            m_Animancer.Play(movementVariables.LandAnimation, 0.2f);
+            AnimancerState state = m_Animancer.Layers[movementVariables.LocomotionLayer].Play(
+            movementVariables.DashEndAnimation, 0.2f);
+
+            state.Events.OnEnd = () =>
+            m_Animancer.Layers[movementVariables.LocomotionLayer].
+            StartFade(0, 0.2f);
         }
 
         IEnumerator LerpCameraFov(float from, float to)
@@ -692,6 +699,9 @@ namespace Hedronoid.Player
 
         private void OnExitLanding(FSMState fromState)
         {
+            movementMixerState = m_Animancer.Layers[movementVariables.DefaultLayer].Play(
+                movementVariables.MovementMixer, 0.2f) as LinearMixerState;
+            movementMixerState.ApplyFootIK = true;
         }
         #endregion
 
@@ -960,13 +970,14 @@ namespace Hedronoid.Player
                 }
             }
 
-            rayHitPos = hits[minDistanceIdx].point;
+            if (hits.Length > 0)
+            {
+                rayHitPos = hits[minDistanceIdx].point;
+            }
 
             if (rayHitPos == Vector3.zero)
             {
                 rayHitPos = ray.GetPoint(10000f);
-                //Debug.LogError("HITTIN ZERO");
-                //Debug.LogError("HITS: " + hits.Length);
             }
 
             shootDirection = (rayHitPos - bulletOrigin.position).normalized;
