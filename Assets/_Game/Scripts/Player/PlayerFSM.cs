@@ -11,6 +11,7 @@ using Hedronoid.Health;
 using Hedronoid.Particle;
 using Hedronoid.AI;
 using CameraShake;
+using Animancer;
 
 namespace Hedronoid.Player
 {
@@ -135,14 +136,15 @@ namespace Hedronoid.Player
         #region PRIVATE/HIDDEN VARS
         // GENERAL REFS
         [HideInInspector]
-        public Rigidbody Rigidbody, connectedRb, prevConnectedRb;
+        public Rigidbody m_Rigidbody, connectedRb, prevConnectedRb;
         private Camera orbitCameraObject;
         private OrbitCamera orbitCamera;
-        private Animator Animator;
-        private DamageHandler m_damageHandler;
-        private HealthBase m_healthBase;
-        private AnimatorHashes animHashes;
-        private AnimatorData animData;
+        //private Animator m_Animator;
+        private AnimancerComponent m_Animancer;
+        private DamageHandler m_DamageHandler;
+        private HealthBase m_HealthBase;
+        //private AnimatorHashes m_AnimHashes;
+        //private AnimatorData m_AnimData;
 
         // ACTION FLAGS
         private float timeSinceJump;
@@ -156,13 +158,13 @@ namespace Hedronoid.Player
         [HideInInspector]
         public RaycastHit RayHit;
         private System.Action onDespawnAction;
-        private BulletPoolManager.BulletConfig bulletConf;
+        private BulletPoolManager.BulletConfig m_BulletConf;
 
         // EFFECTS
-        private AfterImageEffect m_afterImageEffect;
+        private AfterImageEffect m_AfterImageEffect;
 
         // CONTROLS/BINDINGS
-        private PlayerActionSet PlayerActions;
+        private PlayerActionSet m_PlayerActions;
         private float MouseHorizontalSensitivity { get; set; }
         private float MouseVerticalSensitivity { get; set; }
 
@@ -212,18 +214,10 @@ namespace Hedronoid.Player
             base.Awake();
             this.Inject(gameObject);
 
-            if (!Rigidbody) TryGetComponent(out Rigidbody);
-            if (!m_healthBase) TryGetComponent(out m_healthBase);
-            if (!m_damageHandler) TryGetComponent(out m_damageHandler);
-            if (!m_afterImageEffect) TryGetComponent(out m_afterImageEffect);
-
-            Animator = GetComponentInChildren<Animator>();
-            animHashes = new AnimatorHashes();
-            animData = new AnimatorData(Animator);
-            bulletConf = new BulletPoolManager.BulletConfig();
+            FetchReferences();
             secondaryGravityMultiplier = 1f;
 
-            PlayerActions = InputManager.Instance.PlayerActions;
+            m_PlayerActions = InputManager.Instance.PlayerActions;
 
             lastFired_Auto = lastFired_Rail = lastFired_Shotgun = 0;
 
@@ -302,7 +296,7 @@ namespace Hedronoid.Player
             AdjustVelocity();
 
             GravityService.CurrentGravity = 
-                GravityService.GetGravity(Rigidbody.position, out upAxis);
+                GravityService.GetGravity(m_Rigidbody.position, out upAxis);
 
             if (GravityService.CurrentGravity == Vector3.zero)
                 ChangeState(EPlayerStates.FLYING);
@@ -330,7 +324,7 @@ namespace Hedronoid.Player
                 gravityVariables.GravityForceMultiplier *
                 secondaryGravityMultiplier;
 
-            Rigidbody.velocity = velocity;
+            m_Rigidbody.velocity = velocity;
 
             gravityAlignedVelocity = transform.InverseTransformDirection(velocity);
 
@@ -347,7 +341,7 @@ namespace Hedronoid.Player
 
             transform.rotation = targetRotation;
 
-            if (Rigidbody.velocity.sqrMagnitude > 1)
+            if (m_Rigidbody.velocity.sqrMagnitude > 1)
                 isMoving = true;
             else isMoving = false;
 
@@ -371,14 +365,16 @@ namespace Hedronoid.Player
         #endregion
 
         #region STATE: GROUND_MOVEMENT
+        public LinearMixerState movementMixerState;
         private void OnEnterGroundMovement(FSMState fromState)
         {
+            movementMixerState = m_Animancer.Layers[movementVariables.DefaultLayer].Play(
+                movementVariables.MovementMixer, 0.2f) as LinearMixerState;
         }
-
         private void OnUpdateGroundMovement()
         {
+            movementMixerState.Parameter = movementVariables.MoveAmount;
         }
-
         private void OnFixedUpdateGroundMovement()
         {
             Move();
@@ -387,15 +383,7 @@ namespace Hedronoid.Player
             {
                 ChangeState(EPlayerStates.FALLING);
             }
-
-            // RUNNING ANIM
-            Animator.SetFloat(
-            animHashes.Vertical,
-            movementVariables.MoveAmount,
-            0.2f,
-            Time.fixedDeltaTime);
         }
-
         private void OnExitGroundMovement(FSMState toState)
         {
         }
@@ -420,18 +408,26 @@ namespace Hedronoid.Player
             // JUMPS ANIMATION
             if (movementVariables.MoveAmount > 0.1f)
             {
-                Animator.CrossFade(animHashes.JumpForward, 0.2f);
+                AnimancerState state = m_Animancer.Layers[movementVariables.LocomotionLayer].Play(
+                            movementVariables.JumpAnimation, 0.2f);
+
+                state.Events.OnEnd = () =>
+                m_Animancer.Layers[movementVariables.LocomotionLayer].
+                StartFade(0, 0.2f);
             }
             else
             {
-                Animator.CrossFade(animHashes.JumpIdle, 0.2f);
-            }               
-        }
+                AnimancerState state = m_Animancer.Layers[movementVariables.LocomotionLayer].Play(
+                            movementVariables.JumpAnimation, 0.2f);
 
+                state.Events.OnEnd = () =>
+                m_Animancer.Layers[movementVariables.LocomotionLayer].
+                StartFade(0, 0.2f);
+            }
+        }
         private void OnUpdateJumping()
         {
         }
-
         private void OnFixedUpdateJumping()
         {
             Move();
@@ -466,7 +462,12 @@ namespace Hedronoid.Player
             FMODUnity.RuntimeManager.PlayOneShot(PlayerAudioData.doubleJump, transform.position);
             //contactNormal = upAxis;
 
-            Animator.CrossFade(animHashes.DoubleJump, 0.2f);
+            AnimancerState state = m_Animancer.Layers[movementVariables.LocomotionLayer].Play(
+                        movementVariables.DoubleJumpAnimation, 0.2f);
+
+            state.Events.OnEnd = () =>
+            m_Animancer.Layers[movementVariables.LocomotionLayer].
+            StartFade(0, 0.2f);
         }
 
         private void OnUpdateAirJumping()
@@ -506,12 +507,18 @@ namespace Hedronoid.Player
             forceDirection.Normalize();
 
             // Zero out vertical velocity on dash
-            Rigidbody.velocity = Vector3.zero;
+            m_Rigidbody.velocity = Vector3.zero;
 
             dashVariables.DashesMade++;
             posBeforeDash = transform.position;
             desiredDash = false;
-            Animator.CrossFade(animHashes.Dash, 0.2f);
+
+            AnimancerState state = m_Animancer.Layers[movementVariables.LocomotionLayer].Play(
+                        movementVariables.DashAnimation, 0.2f);
+
+            state.Events.OnEnd = () =>
+            m_Animancer.Layers[movementVariables.LocomotionLayer].
+            StartFade(0, 0.2f);
 
             StopAllCoroutines();
             StartCoroutine(LerpCameraFov(100, 120));
@@ -521,12 +528,12 @@ namespace Hedronoid.Player
 
             // VFX
             orbitCamera.camerShakeCollection.PlayCameraShake(CameraShakeType.BounceShake2);
-            m_afterImageEffect.Play();
+            m_AfterImageEffect.Play();
             ParticleHelper.PlayParticleSystem(DashStartParticle, cachedTransform.position, -cachedTransform.forward, 3f);
             ParticleHelper.PlayParticleSystem(DashTrailParticle, cachedTransform.position, -cachedTransform.up, 2f, false, cachedTransform);
 
             secondaryGravityMultiplier = 1f; ;
-            Rigidbody.ApplyForce(forceDirection * dashVariables.PhysicalForce.Multiplier, dashVariables.PhysicalForce.ForceMode);
+            m_Rigidbody.ApplyForce(forceDirection * dashVariables.PhysicalForce.Multiplier, dashVariables.PhysicalForce.ForceMode);
         }
 
         private void OnUpdateDashing()
@@ -547,7 +554,7 @@ namespace Hedronoid.Player
             if (Vector3.Distance(posBeforeDash, transform.position) > dashVariables.MaxDistance ||
                 Time.realtimeSinceStartup - timeOnDashEnter >= dashVariables.MaxTime)
             {
-                Rigidbody.velocity = Vector3.zero;
+                m_Rigidbody.velocity = Vector3.zero;
 
                 if (OnGround || OnSteep)
                     ChangeState(EPlayerStates.GROUND_MOVEMENT);
@@ -560,12 +567,12 @@ namespace Hedronoid.Player
             secondaryGravityMultiplier = 1f;
 
             // Dead stop on dash-end
-            Rigidbody.velocity = Vector3.zero;
+            m_Rigidbody.velocity = Vector3.zero;
 
             StopAllCoroutines();
             StartCoroutine(LerpCameraFov(120, 100));
 
-            Animator.CrossFade(animHashes.LandRun, 0.2f);
+            m_Animancer.Play(movementVariables.LandAnimation, 0.2f);
         }
 
         IEnumerator LerpCameraFov(float from, float to)
@@ -588,7 +595,27 @@ namespace Hedronoid.Player
         #region STATE: FALLING
         private void OnEnterFalling(FSMState fromState)
         {
-            Animator.CrossFade(animHashes.Falling, 0.2f);
+            AnimancerState state;
+
+            if (movementVariables.MoveAmount > 0.3f)
+            {
+                state = m_Animancer.Layers[movementVariables.LocomotionLayer].Play(
+                                        movementVariables.FallRollAnimation, 0.2f);
+
+                state.Events.OnEnd = () =>
+                m_Animancer.Layers[movementVariables.LocomotionLayer].
+                StartFade(0, 0.2f);
+            }
+            else
+            {
+                state = m_Animancer.Layers[movementVariables.LocomotionLayer].Play(
+                                        movementVariables.FallAnimation, 0.2f);
+
+                state.Events.OnEnd = () =>
+                m_Animancer.Layers[movementVariables.LocomotionLayer].
+                StartFade(0, 0.2f);
+            }
+
             secondaryGravityMultiplier = 1f;
         }
 
@@ -608,10 +635,10 @@ namespace Hedronoid.Player
             {
                 ChangeState(EPlayerStates.LANDING);
             }
-            else if (GravityService.CurrentGravity == Vector3.zero)
-            {
-                ChangeState(EPlayerStates.FLYING);
-            }
+            //else if (GravityService.CurrentGravity == Vector3.zero)
+            //{
+            //    ChangeState(EPlayerStates.FLYING);
+            //}
 
         }
 
@@ -624,13 +651,24 @@ namespace Hedronoid.Player
         #region STATE: LANDING
         private void OnEnterLanding(FSMState fromState)
         {
+            AnimancerState state;
             if (movementVariables.MoveAmount > 0.3f)
             {
-                Animator.CrossFade(animHashes.LandRun, 0.2f);
+                state = m_Animancer.Layers[movementVariables.LocomotionLayer].Play(
+                        movementVariables.LandRollAnimation, 0.2f);
+
+                state.Events.OnEnd = () => 
+                m_Animancer.Layers[movementVariables.LocomotionLayer].
+                StartFade(0, 0.2f);
             }
             else
             {
-                Animator.CrossFade(animHashes.LandFast, 0.2f);
+                state = m_Animancer.Layers[movementVariables.LocomotionLayer].Play(
+                        movementVariables.LandAnimation, 0.2f);
+
+                state.Events.OnEnd = () =>
+                m_Animancer.Layers[movementVariables.LocomotionLayer].
+                StartFade(0, 0.2f);
             }
 
             if (LandParticles != null && LandParticles.Count > 0)
@@ -641,7 +679,6 @@ namespace Hedronoid.Player
 
             FMODUnity.RuntimeManager.PlayOneShot(PlayerAudioData.land, transform.position);
 
-            Animator.SetBool(animHashes.IsGrounded, OnGround);
             ChangeState(EPlayerStates.GROUND_MOVEMENT);
         }
 
@@ -663,7 +700,7 @@ namespace Hedronoid.Player
         {
             upAxis = orbitCameraObject.transform.up;
             // FLYING ANIM
-            Animator.CrossFade(animHashes.Flying, 0.2f);
+            m_Animancer.Play(movementVariables.FlyingAnimation, 0.2f);
         }
 
         private void OnUpdateFlying()
@@ -675,9 +712,9 @@ namespace Hedronoid.Player
         {            
             Move();      
 
-            Rigidbody.velocity =
+            m_Rigidbody.velocity =
                     Vector3.ClampMagnitude(
-                        Rigidbody.velocity, maxVelocityMagnitudeInVacuum);
+                        m_Rigidbody.velocity, maxVelocityMagnitudeInVacuum);
 
             if (OnGround || OnSteep)
                 ChangeState(EPlayerStates.LANDING);
@@ -728,8 +765,8 @@ namespace Hedronoid.Player
         private void Move()
         {
             // MOVEMENT
-            movementVariables.Horizontal = PlayerActions.Move.X;
-            movementVariables.Vertical = PlayerActions.Move.Y;
+            movementVariables.Horizontal = m_PlayerActions.Move.X;
+            movementVariables.Vertical = m_PlayerActions.Move.Y;
 
             movementVariables.desiredVelocity =
                new Vector3(movementVariables.Horizontal, 0f, movementVariables.Vertical) *
@@ -800,7 +837,7 @@ namespace Hedronoid.Player
         {
             stepsSinceLastGrounded += 1;
             stepsSinceLastJump += 1;
-            velocity = Rigidbody.velocity;
+            velocity = m_Rigidbody.velocity;
 
             if (OnGround || SnapToGround() || CheckSteepContacts())
             {
@@ -825,7 +862,7 @@ namespace Hedronoid.Player
 
             if (connectedRb)
             {
-                if (connectedRb.isKinematic || connectedRb.mass >= Rigidbody.mass)
+                if (connectedRb.isKinematic || connectedRb.mass >= m_Rigidbody.mass)
                 {
                     UpdateConnectionState();
                 }
@@ -843,7 +880,7 @@ namespace Hedronoid.Player
                 connectionVelocity = connectionMovement / Time.deltaTime;
             }
 
-            connectionWorldPosition = Rigidbody.position;
+            connectionWorldPosition = m_Rigidbody.position;
             connectionLocalPosition = connectedRb.transform.InverseTransformPoint(
                 connectionWorldPosition);
         }
@@ -939,13 +976,13 @@ namespace Hedronoid.Player
 
             if (primaryFire && Time.realtimeSinceStartup - lastFired_Auto > fireRatePrimary)
             {
-                bulletConf.Prefab = bulletPrimary;
-                bulletConf.Position = bulletOrigin.position;
-                bulletConf.Rotation = Quaternion.identity;
-                bulletConf.Parent = null;
-                bulletConf.Duration = 5f;
+                m_BulletConf.Prefab = bulletPrimary;
+                m_BulletConf.Position = bulletOrigin.position;
+                m_BulletConf.Rotation = Quaternion.identity;
+                m_BulletConf.Parent = null;
+                m_BulletConf.Duration = 5f;
 
-                GameObject auto = GameplaySceneContext.BulletPoolManager.GetBulletToFire(bulletConf);
+                GameObject auto = GameplaySceneContext.BulletPoolManager.GetBulletToFire(m_BulletConf);
                 Rigidbody rb_auto = auto.GetComponent<Rigidbody>();
                 rb_auto.velocity = Vector3.zero;
                 rb_auto.AddForce(shootDirection * shootForcePrimary);
@@ -960,13 +997,13 @@ namespace Hedronoid.Player
             }
             else if (!primaryFire && Time.realtimeSinceStartup - lastFired_Shotgun > fireRateSecondary)
             {
-                bulletConf.Prefab = bulletSecondary;
-                bulletConf.Position = bulletOrigin.position;
-                bulletConf.Rotation = Quaternion.identity;
-                bulletConf.Parent = null;
-                bulletConf.Duration = 5f;
+                m_BulletConf.Prefab = bulletSecondary;
+                m_BulletConf.Position = bulletOrigin.position;
+                m_BulletConf.Rotation = Quaternion.identity;
+                m_BulletConf.Parent = null;
+                m_BulletConf.Duration = 5f;
 
-                GameObject shot = GameplaySceneContext.BulletPoolManager.GetBulletToFire(bulletConf);
+                GameObject shot = GameplaySceneContext.BulletPoolManager.GetBulletToFire(m_BulletConf);
 
                 Rigidbody rb_shot = shot.GetComponent<Rigidbody>();
                 rb_shot.velocity = Vector3.zero;
@@ -1007,7 +1044,7 @@ namespace Hedronoid.Player
                 return false;
             }
             if (!Physics.Raycast(
-                Rigidbody.position, -upAxis, out RaycastHit hit,
+                m_Rigidbody.position, -upAxis, out RaycastHit hit,
                 probeDistance, probeMask
             ))
             {
@@ -1035,7 +1072,7 @@ namespace Hedronoid.Player
         void SnapPlayerToGround()
         {
             if (!Physics.Raycast(
-                Rigidbody.position, -upAxis, out RaycastHit hit,
+                m_Rigidbody.position, -upAxis, out RaycastHit hit,
                 dashProbeDistance, probeMask
             ))
             {
@@ -1047,7 +1084,7 @@ namespace Hedronoid.Player
             {
                 return;
             }
-            Rigidbody.position = hit.point;
+            m_Rigidbody.position = hit.point;
         }
 
         bool CheckSteepContacts()
@@ -1081,10 +1118,37 @@ namespace Hedronoid.Player
             StopAllCoroutines();
             //enabled = false;
         }
+
+        private void FetchReferences()
+        {
+            if (!m_Rigidbody) TryGetComponent(out m_Rigidbody);
+            if (!m_HealthBase) TryGetComponent(out m_HealthBase);
+            if (!m_HealthBase) m_HealthBase = GetComponentInChildren<HealthBase>();
+
+            if (!m_DamageHandler) TryGetComponent(out m_DamageHandler);
+            if (!m_DamageHandler) m_DamageHandler = GetComponentInChildren<DamageHandler>();
+
+            if (!m_AfterImageEffect) TryGetComponent(out m_AfterImageEffect);
+            if (!m_AfterImageEffect) m_AfterImageEffect = GetComponentInChildren<AfterImageEffect>();
+
+            //if (!m_Animator) TryGetComponent(out m_Animator);
+            //if (!m_Animator) m_Animator = GetComponentInChildren<Animator>();
+
+            if (!m_Animancer) TryGetComponent(out m_Animancer);
+            if (!m_Animancer) m_Animancer = GetComponentInChildren<AnimancerComponent>();
+
+            //if (m_AnimHashes == null) TryGetComponent(out m_AnimHashes);
+            //if (m_AnimHashes == null) m_AnimHashes = GetComponentInChildren<AnimatorHashes>();
+
+            //if (m_AnimData == null) TryGetComponent(out m_AnimData);
+            //if (m_AnimData == null) m_AnimData = GetComponentInChildren<AnimatorData>();
+
+            m_BulletConf = new BulletPoolManager.BulletConfig();
+        }
         void OnCollisionEnter(Collision collision)
         {
             // HACKITY HACKITY HACK REMOVE ME ASAP
-            if (!m_damageHandler.IsInvulnerable && 
+            if (!m_DamageHandler.IsInvulnerable && 
                 HNDAI.Settings.EnemyLayer == 
                 (HNDAI.Settings.EnemyLayer | (1 << collision.gameObject.layer)))
             {

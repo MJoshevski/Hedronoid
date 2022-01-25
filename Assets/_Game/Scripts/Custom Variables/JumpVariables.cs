@@ -1,5 +1,6 @@
 ﻿using System;
 using UnityEngine;
+using Animancer;
 
 namespace Hedronoid
 {
@@ -12,5 +13,6 @@ namespace Hedronoid
         public PhysicalForceSettings firstJumpForceSettings;
         public PhysicalForceSettings secondJumpForceSettings;
 
-    }
+
+	}
 }

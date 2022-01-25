@@ -876,7 +876,7 @@ MonoBehaviour:
   stairsMask:
     serializedVersion: 2
     m_Bits: 0
-  maxSnapSpeed: 20
+  maxSnapSpeed: 55.1
   probeDistance: 0.1
   dashProbeDistance: 5
   maxGroundAngle: 40
@@ -890,6 +890,49 @@ MonoBehaviour:
     TurnSpeedMultiplier: 16
     MoveAmount: 0
     MoveDirection: {x: 0, y: 0, z: 0}
+    MovementMixer:
+      _FadeDuration: 0.25
+      _Events:
+        _NormalizedTimes: []
+        _Callbacks: []
+        _Names: []
+      _Speed: 1
+      _Animations:
+      - {fileID: -3100369314251171874, guid: 1faff086f9628614ea5d2e30c57e6517, type: 3}
+      - {fileID: -203655887218126122, guid: 3de983c7d60adb847aa9f9e33d6d4b42, type: 3}
+      - {fileID: -203655887218126122, guid: 1e957f00c5327694481085a4d7e70818, type: 3}
+      - {fileID: -203655887218126122, guid: e76455cdab2799f48ae973268ab6ddbc, type: 3}
+      _Speeds: []
+      _SynchronizeChildren: 
+      _Thresholds:
+      - 0
+      - 0.3
+      - 0.6
+      - 1
+      _DefaultParameter: 0
+      _ExtrapolateSpeed: 1
+    FallAnimation: {fileID: -203655887218126122, guid: 37a2df4f4f92ba24d920a0bb0c5bca29,
+      type: 3}
+    FallRollAnimation: {fileID: -203655887218126122, guid: 40ed6219891266d41af6c999cca7c3a7,
+      type: 3}
+    LandAnimation: {fileID: -203655887218126122, guid: 41fd2f0f96a885b48a9ee840c985d564,
+      type: 3}
+    LandRollAnimation: {fileID: -203655887218126122, guid: 815aec3722c2c3040a747344bb84ff3b,
+      type: 3}
+    HangAnimation: {fileID: -203655887218126122, guid: b4d7d005233575b46aa6aa25f2cb14ac,
+      type: 3}
+    FlyingAnimation: {fileID: -203655887218126122, guid: 6c8e9afe52f0ad045b9af67ad506a386,
+      type: 3}
+    JumpAnimation: {fileID: -203655887218126122, guid: b5b07ccfcce867d46a009d1c21fa1965,
+      type: 3}
+    DoubleJumpAnimation: {fileID: -203655887218126122, guid: d8985fc60026b904bbfb6d1882dbcc48,
+      type: 3}
+    DashAnimation: {fileID: -203655887218126122, guid: 6105b1a49182a884190ad427e1278bb6,
+      type: 3}
+    DefaultLayer: 0
+    LocomotionLayer: 1
+    IKLayer: 2
+    ImportantLayer: 3
   gravityVariables:
     GravityForceMultiplier: 5
     GravityForceMultiplierWhenDashing: 100
@@ -930,7 +973,7 @@ MonoBehaviour:
   PlayerAudioData: {fileID: 11400000, guid: 5473d6ed1a69c1e43a499cdd2846f9ff, type: 2}
   desiredJump: 0
   desiredDash: 0
-  Rigidbody: {fileID: 0}
+  m_Rigidbody: {fileID: 0}
   connectedRb: {fileID: 0}
   prevConnectedRb: {fileID: 0}
   jumpPhase: 0

@@ -1,4 +1,5 @@
-﻿using System;
+﻿using Animancer;
+using System;
 using UnityEngine;
 
 namespace Hedronoid
@@ -22,6 +23,23 @@ namespace Hedronoid
 
         [Header("Monitoring")]
         public float MoveAmount;
-        public Vector3 MoveDirection;        
-	}
+        public Vector3 MoveDirection;
+
+        [Header("Animation")]
+        public LinearMixerTransition MovementMixer;
+        public AnimationClip FallAnimation;
+        public AnimationClip FallRollAnimation;
+        public AnimationClip LandAnimation;
+        public AnimationClip LandRollAnimation;
+        public AnimationClip HangAnimation;
+        public AnimationClip FlyingAnimation;
+        public AnimationClip JumpAnimation;
+        public AnimationClip DoubleJumpAnimation;
+        public AnimationClip DashAnimation;
+
+        public int DefaultLayer = 0;
+        public int LocomotionLayer = 1;
+        public int IKLayer = 2;
+        public int ImportantLayer = 3;
+    }
 }

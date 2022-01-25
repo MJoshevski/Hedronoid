@@ -329,7 +329,7 @@ namespace Hedronoid
 
                     focusPoint = Vector3.Lerp(targetPointOffset, focusPoint, t);
 
-                    float movMag = Player.Rigidbody.velocity.sqrMagnitude;
+                    float movMag = Player.m_Rigidbody.velocity.sqrMagnitude;
 
                     float factor = 1;
                     if (movMag > catchupVeloThreshold)
