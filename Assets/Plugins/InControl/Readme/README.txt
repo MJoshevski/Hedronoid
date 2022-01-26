@@ -1,4 +1,4 @@
-## InControl (version 1.7.3 build 9338)
+## InControl (version 1.8.5 build 9368)
 
 Documentation and additional information is available online at:
 http://www.gallantgames.com/incontrol

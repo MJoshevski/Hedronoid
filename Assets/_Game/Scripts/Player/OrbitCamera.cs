@@ -127,6 +127,9 @@ namespace Hedronoid
         // RAYCASTING
         private RaycastHit prevHitPoint;
 
+        private PlayerActionSet playerAction;
+
+
         Vector3 CameraHalfExtends
         {
             get
@@ -168,6 +171,8 @@ namespace Hedronoid
             orbitCamera.transform.localRotation = orbitRotation = Quaternion.Euler(orbitAngles);
             minVerticalAnglePrev = minVerticalAngle;
             maxVerticalAnglePrev = maxVerticalAngle;
+
+            playerAction = InputManager.Instance.PlayerActions;
 
             if (!cameraShaker) TryGetComponent(out cameraShaker);
             Cursor.lockState = LockCursor ? CursorLockMode.Locked : CursorLockMode.None;
@@ -287,7 +292,7 @@ namespace Hedronoid
 
                     shoulderFocused = false;
 
-                    if (Input.GetButtonDown("Fire3"))
+                    if (playerAction.SwitchShoulder.WasPressed)
                     {
                         manualPositionOffset.x *= -1;
                     }
@@ -392,8 +397,6 @@ namespace Hedronoid
         {
             if (Time.timeScale < float.Epsilon)
                 return false;
-
-            var playerAction = InputManager.Instance.PlayerActions;
 
             float x = playerAction.Look.X;
             float y = playerAction.Look.Y;

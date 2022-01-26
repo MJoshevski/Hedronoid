@@ -1,128 +1,160 @@
-namespace InControl.NativeProfile
+// ReSharper disable StringLiteralTypo
+// ReSharper disable IdentifierTypo
+// ReSharper disable InconsistentNaming
+// ReSharper disable UnusedType.Global
+namespace InControl.NativeDeviceProfiles
 {
 	// @cond nodoc
-	[AutoDiscover]
-	public class SteelseriesNimbusMacNativeProfile : NativeInputDeviceProfile
+	[Preserve, NativeInputDeviceProfile]
+	public class SteelseriesNimbusMacNativeProfile : InputDeviceProfile
 	{
 		// DPad doesn't work on Mac for whatever reason.
 		//
-		public SteelseriesNimbusMacNativeProfile()
+		public override void Define()
 		{
-			Name = "Steelseries Nimbus Controller";
-			Meta = "Steelseries Nimbus Controller on Mac";
+			base.Define();
+
+			DeviceName = "Steelseries Nimbus Controller";
+			DeviceNotes = "Steelseries Nimbus Controller on Mac";
 			// Link = "https://www.amazon.com/SteelSeries-Nimbus-Wireless-Gaming-Controller/dp/B01AZC3III";
 
-			Matchers = new[] {
-				new NativeInputDeviceMatcher {
+			IncludePlatforms = new[]
+			{
+				"OS X"
+			};
+
+			Matchers = new[]
+			{
+				new InputDeviceMatcher
+				{
+					DriverType = InputDeviceDriverType.HID,
 					VendorID = 0x111,
 					ProductID = 0x1420,
 					// VersionNumber = 0x1,
 				},
 			};
 
-			ButtonMappings = new[] {
-				new InputControlMapping {
-					Handle = "A",
+			ButtonMappings = new[]
+			{
+				new InputControlMapping
+				{
+					Name = "A",
 					Target = InputControlType.Action1,
 					Source = Button( 0 ),
 				},
-				new InputControlMapping {
-					Handle = "B",
+				new InputControlMapping
+				{
+					Name = "B",
 					Target = InputControlType.Action2,
 					Source = Button( 1 ),
 				},
-				new InputControlMapping {
-					Handle = "X",
+				new InputControlMapping
+				{
+					Name = "X",
 					Target = InputControlType.Action3,
 					Source = Button( 2 ),
 				},
-				new InputControlMapping {
-					Handle = "Y",
+				new InputControlMapping
+				{
+					Name = "Y",
 					Target = InputControlType.Action4,
 					Source = Button( 3 ),
 				},
-				new InputControlMapping {
-					Handle = "Left Bumper",
+				new InputControlMapping
+				{
+					Name = "Left Bumper",
 					Target = InputControlType.LeftBumper,
 					Source = Button( 4 ),
 				},
-				new InputControlMapping {
-					Handle = "Right Bumper",
+				new InputControlMapping
+				{
+					Name = "Right Bumper",
 					Target = InputControlType.RightBumper,
 					Source = Button( 5 ),
 				},
-				new InputControlMapping {
-					Handle = "Left Trigger",
+				new InputControlMapping
+				{
+					Name = "Left Trigger",
 					Target = InputControlType.LeftTrigger,
 					Source = Button( 6 ),
 				},
-				new InputControlMapping {
-					Handle = "Right Trigger",
+				new InputControlMapping
+				{
+					Name = "Right Trigger",
 					Target = InputControlType.RightTrigger,
 					Source = Button( 7 ),
 				},
 			};
 
-			AnalogMappings = new[] {
-				new InputControlMapping {
-					Handle = "Left Stick Left",
+			AnalogMappings = new[]
+			{
+				new InputControlMapping
+				{
+					Name = "Left Stick Left",
 					Target = InputControlType.LeftStickLeft,
 					Source = Analog( 0 ),
-					SourceRange = InputRange.ZeroToMinusOne,
-					TargetRange = InputRange.ZeroToOne,
+					SourceRange = InputRangeType.ZeroToMinusOne,
+					TargetRange = InputRangeType.ZeroToOne,
 				},
-				new InputControlMapping {
-					Handle = "Left Stick Right",
+				new InputControlMapping
+				{
+					Name = "Left Stick Right",
 					Target = InputControlType.LeftStickRight,
 					Source = Analog( 0 ),
-					SourceRange = InputRange.ZeroToOne,
-					TargetRange = InputRange.ZeroToOne,
+					SourceRange = InputRangeType.ZeroToOne,
+					TargetRange = InputRangeType.ZeroToOne,
 				},
-				new InputControlMapping {
-					Handle = "Left Stick Up",
+				new InputControlMapping
+				{
+					Name = "Left Stick Up",
 					Target = InputControlType.LeftStickUp,
 					Source = Analog( 1 ),
-					SourceRange = InputRange.ZeroToOne,
-					TargetRange = InputRange.ZeroToOne,
+					SourceRange = InputRangeType.ZeroToOne,
+					TargetRange = InputRangeType.ZeroToOne,
 				},
-				new InputControlMapping {
-					Handle = "Left Stick Down",
+				new InputControlMapping
+				{
+					Name = "Left Stick Down",
 					Target = InputControlType.LeftStickDown,
 					Source = Analog( 1 ),
-					SourceRange = InputRange.ZeroToMinusOne,
-					TargetRange = InputRange.ZeroToOne,
+					SourceRange = InputRangeType.ZeroToMinusOne,
+					TargetRange = InputRangeType.ZeroToOne,
 				},
-				new InputControlMapping {
-					Handle = "Right Stick Left",
+				new InputControlMapping
+				{
+					Name = "Right Stick Left",
 					Target = InputControlType.RightStickLeft,
 					Source = Analog( 2 ),
-					SourceRange = InputRange.ZeroToMinusOne,
-					TargetRange = InputRange.ZeroToOne,
+					SourceRange = InputRangeType.ZeroToMinusOne,
+					TargetRange = InputRangeType.ZeroToOne,
 				},
-				new InputControlMapping {
-					Handle = "Right Stick Right",
+				new InputControlMapping
+				{
+					Name = "Right Stick Right",
 					Target = InputControlType.RightStickRight,
 					Source = Analog( 2 ),
-					SourceRange = InputRange.ZeroToOne,
-					TargetRange = InputRange.ZeroToOne,
+					SourceRange = InputRangeType.ZeroToOne,
+					TargetRange = InputRangeType.ZeroToOne,
 				},
-				new InputControlMapping {
-					Handle = "Right Stick Up",
+				new InputControlMapping
+				{
+					Name = "Right Stick Up",
 					Target = InputControlType.RightStickUp,
 					Source = Analog( 3 ),
-					SourceRange = InputRange.ZeroToOne,
-					TargetRange = InputRange.ZeroToOne,
+					SourceRange = InputRangeType.ZeroToOne,
+					TargetRange = InputRangeType.ZeroToOne,
 				},
-				new InputControlMapping {
-					Handle = "Right Stick Down",
+				new InputControlMapping
+				{
+					Name = "Right Stick Down",
 					Target = InputControlType.RightStickDown,
 					Source = Analog( 3 ),
-					SourceRange = InputRange.ZeroToMinusOne,
-					TargetRange = InputRange.ZeroToOne,
+					SourceRange = InputRangeType.ZeroToMinusOne,
+					TargetRange = InputRangeType.ZeroToOne,
 				},
 			};
 		}
 	}
+
 	// @endcond
 }
-

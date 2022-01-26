@@ -1,4 +1,6 @@
-﻿namespace InControl
+﻿// ReSharper disable InconsistentNaming
+// ReSharper disable UnusedMember.Global
+namespace InControl
 {
 	// Not all of these are necessarily used or supported.
 	// Some are simply included for future use.
@@ -8,9 +10,11 @@
 		Unknown = 0,
 		Xbox360,
 		XboxOne,
+		XboxSeriesX,
 		PlayStation2,
 		PlayStation3,
 		PlayStation4,
+		PlayStation5,
 		PlayStationVita,
 		PlayStationMove,
 		Ouya,
@@ -25,7 +29,9 @@
 		NintendoWii,
 		NintendoWiiU,
 		NintendoSwitch,
+		GoogleStadia,
 		Vive,
 		Oculus,
 	}
 }
+

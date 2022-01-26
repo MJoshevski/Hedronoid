@@ -1,13 +1,19 @@
-namespace InControl.NativeProfile
+// ReSharper disable StringLiteralTypo
+// ReSharper disable IdentifierTypo
+// ReSharper disable InconsistentNaming
+// ReSharper disable UnusedType.Global
+namespace InControl.NativeDeviceProfiles
 {
 	// @cond nodoc
-	[AutoDiscover]
-	public class NintendoSwitchProWindowsNativeProfile : NativeInputDeviceProfile
+	[Preserve, NativeInputDeviceProfile]
+	public class NintendoSwitchProWindowsNativeProfile : InputDeviceProfile
 	{
-		public NintendoSwitchProWindowsNativeProfile()
+		public override void Define()
 		{
-			Name = "Nintendo Switch Pro Controller";
-			Meta = "Nintendo Switch Pro Controller on Windows";
+			base.Define();
+
+			DeviceName = "Nintendo Switch Pro Controller";
+			DeviceNotes = "Nintendo Switch Pro Controller on Windows";
 			// Link = "https://www.amazon.com/dp/B01NAWKYZ0";
 
 			DeviceClass = InputDeviceClass.Controller;
@@ -15,179 +21,210 @@ namespace InControl.NativeProfile
 
 			UpperDeadZone = 0.7f;
 
-			IncludePlatforms = new[] {
+			IncludePlatforms = new[]
+			{
 				"Windows"
 			};
 
-			Matchers = new[] {
-				new NativeInputDeviceMatcher {
+			Matchers = new[]
+			{
+				new InputDeviceMatcher
+				{
+					DriverType = InputDeviceDriverType.DirectInput,
 					VendorID = 0x57e,
 					ProductID = 0x2009,
-					// VersionNumber = 0x0,
 				},
 			};
 
-			ButtonMappings = new[] {
-				new InputControlMapping {
-					Handle = "B",
+			ButtonMappings = new[]
+			{
+				new InputControlMapping
+				{
+					Name = "B",
 					Target = InputControlType.Action1,
 					Source = Button( 0 ),
 				},
-				new InputControlMapping {
-					Handle = "A",
+				new InputControlMapping
+				{
+					Name = "A",
 					Target = InputControlType.Action2,
 					Source = Button( 1 ),
 				},
-				new InputControlMapping {
-					Handle = "Y",
+				new InputControlMapping
+				{
+					Name = "Y",
 					Target = InputControlType.Action3,
 					Source = Button( 2 ),
 				},
-				new InputControlMapping {
-					Handle = "X",
+				new InputControlMapping
+				{
+					Name = "X",
 					Target = InputControlType.Action4,
 					Source = Button( 3 ),
 				},
-				new InputControlMapping {
-					Handle = "L",
+				new InputControlMapping
+				{
+					Name = "L",
 					Target = InputControlType.LeftBumper,
 					Source = Button( 4 ),
 				},
-				new InputControlMapping {
-					Handle = "R",
+				new InputControlMapping
+				{
+					Name = "R",
 					Target = InputControlType.RightBumper,
 					Source = Button( 5 ),
 				},
-				new InputControlMapping {
-					Handle = "ZL",
+				new InputControlMapping
+				{
+					Name = "ZL",
 					Target = InputControlType.LeftTrigger,
 					Source = Button( 6 ),
 				},
-				new InputControlMapping {
-					Handle = "ZR",
+				new InputControlMapping
+				{
+					Name = "ZR",
 					Target = InputControlType.RightTrigger,
 					Source = Button( 7 ),
 				},
-				new InputControlMapping {
-					Handle = "Minus",
+				new InputControlMapping
+				{
+					Name = "Minus",
 					Target = InputControlType.Minus,
 					Source = Button( 8 ),
 				},
-				new InputControlMapping {
-					Handle = "Plus",
+				new InputControlMapping
+				{
+					Name = "Plus",
 					Target = InputControlType.Plus,
 					Source = Button( 9 ),
 				},
-				new InputControlMapping {
-					Handle = "Left Stick Button",
+				new InputControlMapping
+				{
+					Name = "Left Stick Button",
 					Target = InputControlType.LeftStickButton,
 					Source = Button( 10 ),
 				},
-				new InputControlMapping {
-					Handle = "Right Stick Button",
+				new InputControlMapping
+				{
+					Name = "Right Stick Button",
 					Target = InputControlType.RightStickButton,
 					Source = Button( 11 ),
 				},
-				new InputControlMapping {
-					Handle = "Home",
+				new InputControlMapping
+				{
+					Name = "Home",
 					Target = InputControlType.Home,
 					Source = Button( 12 ),
 				},
-				new InputControlMapping {
-					Handle = "Capture",
+				new InputControlMapping
+				{
+					Name = "Capture",
 					Target = InputControlType.Capture,
 					Source = Button( 13 ),
 				},
 			};
 
-			AnalogMappings = new[] {
-				new InputControlMapping {
-					Handle = "Right Stick Up",
+			AnalogMappings = new[]
+			{
+				new InputControlMapping
+				{
+					Name = "Right Stick Up",
 					Target = InputControlType.RightStickUp,
 					Source = Analog( 0 ),
-					SourceRange = InputRange.ZeroToMinusOne,
-					TargetRange = InputRange.ZeroToOne,
+					SourceRange = InputRangeType.ZeroToMinusOne,
+					TargetRange = InputRangeType.ZeroToOne,
 				},
-				new InputControlMapping {
-					Handle = "Right Stick Down",
+				new InputControlMapping
+				{
+					Name = "Right Stick Down",
 					Target = InputControlType.RightStickDown,
 					Source = Analog( 0 ),
-					SourceRange = InputRange.ZeroToOne,
-					TargetRange = InputRange.ZeroToOne,
+					SourceRange = InputRangeType.ZeroToOne,
+					TargetRange = InputRangeType.ZeroToOne,
 				},
-				new InputControlMapping {
-					Handle = "Right Stick Left",
+				new InputControlMapping
+				{
+					Name = "Right Stick Left",
 					Target = InputControlType.RightStickLeft,
 					Source = Analog( 1 ),
-					SourceRange = InputRange.ZeroToMinusOne,
-					TargetRange = InputRange.ZeroToOne,
+					SourceRange = InputRangeType.ZeroToMinusOne,
+					TargetRange = InputRangeType.ZeroToOne,
 				},
-				new InputControlMapping {
-					Handle = "Right Stick Right",
+				new InputControlMapping
+				{
+					Name = "Right Stick Right",
 					Target = InputControlType.RightStickRight,
 					Source = Analog( 1 ),
-					SourceRange = InputRange.ZeroToOne,
-					TargetRange = InputRange.ZeroToOne,
+					SourceRange = InputRangeType.ZeroToOne,
+					TargetRange = InputRangeType.ZeroToOne,
 				},
-				new InputControlMapping {
-					Handle = "Left Stick Up",
+				new InputControlMapping
+				{
+					Name = "Left Stick Up",
 					Target = InputControlType.LeftStickUp,
 					Source = Analog( 2 ),
-					SourceRange = InputRange.ZeroToMinusOne,
-					TargetRange = InputRange.ZeroToOne,
+					SourceRange = InputRangeType.ZeroToMinusOne,
+					TargetRange = InputRangeType.ZeroToOne,
 				},
-				new InputControlMapping {
-					Handle = "Left Stick Down",
+				new InputControlMapping
+				{
+					Name = "Left Stick Down",
 					Target = InputControlType.LeftStickDown,
 					Source = Analog( 2 ),
-					SourceRange = InputRange.ZeroToOne,
-					TargetRange = InputRange.ZeroToOne,
+					SourceRange = InputRangeType.ZeroToOne,
+					TargetRange = InputRangeType.ZeroToOne,
 				},
-				new InputControlMapping {
-					Handle = "Left Stick Left",
+				new InputControlMapping
+				{
+					Name = "Left Stick Left",
 					Target = InputControlType.LeftStickLeft,
 					Source = Analog( 3 ),
-					SourceRange = InputRange.ZeroToMinusOne,
-					TargetRange = InputRange.ZeroToOne,
+					SourceRange = InputRangeType.ZeroToMinusOne,
+					TargetRange = InputRangeType.ZeroToOne,
 				},
-				new InputControlMapping {
-					Handle = "Left Stick Right",
+				new InputControlMapping
+				{
+					Name = "Left Stick Right",
 					Target = InputControlType.LeftStickRight,
 					Source = Analog( 3 ),
-					SourceRange = InputRange.ZeroToOne,
-					TargetRange = InputRange.ZeroToOne,
+					SourceRange = InputRangeType.ZeroToOne,
+					TargetRange = InputRangeType.ZeroToOne,
 				},
-				new InputControlMapping {
-					Handle = "DPad Left",
+				new InputControlMapping
+				{
+					Name = "DPad Left",
 					Target = InputControlType.DPadLeft,
 					Source = Analog( 4 ),
-					SourceRange = InputRange.ZeroToMinusOne,
-					TargetRange = InputRange.ZeroToOne,
+					SourceRange = InputRangeType.ZeroToMinusOne,
+					TargetRange = InputRangeType.ZeroToOne,
 				},
-				new InputControlMapping {
-					Handle = "DPad Right",
+				new InputControlMapping
+				{
+					Name = "DPad Right",
 					Target = InputControlType.DPadRight,
 					Source = Analog( 4 ),
-					SourceRange = InputRange.ZeroToOne,
-					TargetRange = InputRange.ZeroToOne,
+					SourceRange = InputRangeType.ZeroToOne,
+					TargetRange = InputRangeType.ZeroToOne,
 				},
-				new InputControlMapping {
-					Handle = "DPad Up",
+				new InputControlMapping
+				{
+					Name = "DPad Up",
 					Target = InputControlType.DPadUp,
 					Source = Analog( 5 ),
-					SourceRange = InputRange.ZeroToOne,
-					TargetRange = InputRange.ZeroToOne,
+					SourceRange = InputRangeType.ZeroToOne,
+					TargetRange = InputRangeType.ZeroToOne,
 				},
-				new InputControlMapping {
-					Handle = "DPad Down",
+				new InputControlMapping
+				{
+					Name = "DPad Down",
 					Target = InputControlType.DPadDown,
 					Source = Analog( 5 ),
-					SourceRange = InputRange.ZeroToMinusOne,
-					TargetRange = InputRange.ZeroToOne,
+					SourceRange = InputRangeType.ZeroToMinusOne,
+					TargetRange = InputRangeType.ZeroToOne,
 				},
 			};
 		}
 	}
+
 	// @endcond
 }
-

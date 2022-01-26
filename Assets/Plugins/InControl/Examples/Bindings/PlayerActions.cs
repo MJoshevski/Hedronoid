@@ -6,13 +6,13 @@
 
 	public class PlayerActions : PlayerActionSet
 	{
-		public PlayerAction Fire;
-		public PlayerAction Jump;
-		public PlayerAction Left;
-		public PlayerAction Right;
-		public PlayerAction Up;
-		public PlayerAction Down;
-		public PlayerTwoAxisAction Move;
+		public readonly PlayerAction Fire;
+		public readonly PlayerAction Jump;
+		public readonly PlayerAction Left;
+		public readonly PlayerAction Right;
+		public readonly PlayerAction Up;
+		public readonly PlayerAction Down;
+		public readonly PlayerTwoAxisAction Move;
 
 
 		public PlayerActions()
@@ -37,11 +37,10 @@
 
 			playerActions.Fire.AddDefaultBinding( Key.A );
 			playerActions.Fire.AddDefaultBinding( InputControlType.Action1 );
-			playerActions.Fire.AddDefaultBinding( Mouse.LeftButton );
+			// playerActions.Fire.AddDefaultBinding( Mouse.LeftButton );
 
 			playerActions.Jump.AddDefaultBinding( Key.Space );
 			playerActions.Jump.AddDefaultBinding( InputControlType.Action3 );
-			playerActions.Jump.AddDefaultBinding( InputControlType.Back );
 
 			playerActions.Up.AddDefaultBinding( Key.UpArrow );
 			playerActions.Down.AddDefaultBinding( Key.DownArrow );
@@ -65,30 +64,36 @@
 
 			playerActions.ListenOptions.IncludeUnknownControllers = true;
 			playerActions.ListenOptions.MaxAllowedBindings = 4;
-			//playerActions.ListenOptions.MaxAllowedBindingsPerType = 1;
-			//playerActions.ListenOptions.AllowDuplicateBindingsPerSet = true;
+			// playerActions.ListenOptions.MaxAllowedBindingsPerType = 1;
+			// playerActions.ListenOptions.AllowDuplicateBindingsPerSet = true;
 			playerActions.ListenOptions.UnsetDuplicateBindingsOnSet = true;
-			//playerActions.ListenOptions.IncludeMouseButtons = true;
-			//playerActions.ListenOptions.IncludeModifiersAsFirstClassKeys = true;
-			//playerActions.ListenOptions.IncludeMouseButtons = true;
-			//playerActions.ListenOptions.IncludeMouseScrollWheel = true;
+			// playerActions.ListenOptions.IncludeMouseButtons = true;
+			// playerActions.ListenOptions.IncludeModifiersAsFirstClassKeys = true;
+			// playerActions.ListenOptions.IncludeMouseScrollWheel = true;
 
-			playerActions.ListenOptions.OnBindingFound = ( action, binding ) => {
+			playerActions.ListenOptions.OnBindingFound = ( action, binding ) =>
+			{
 				if (binding == new KeyBindingSource( Key.Escape ))
 				{
 					action.StopListeningForBinding();
 					return false;
 				}
+
 				return true;
 			};
 
-			playerActions.ListenOptions.OnBindingAdded += ( action, binding ) => {
+			playerActions.ListenOptions.OnBindingAdded += ( action, binding ) =>
+			{
 				Debug.Log( "Binding added... " + binding.DeviceName + ": " + binding.Name );
+
+				// if (binding.BindingSourceType == BindingSourceType.DeviceBindingSource)
+				// {
+				// 	var control = ((DeviceBindingSource) binding).Control;
+				// 	Debug.Log( control );
+				// }
 			};
 
-			playerActions.ListenOptions.OnBindingRejected += ( action, binding, reason ) => {
-				Debug.Log( "Binding rejected... " + reason );
-			};
+			playerActions.ListenOptions.OnBindingRejected += ( action, binding, reason ) => { Debug.Log( "Binding rejected... " + reason ); };
 
 			return playerActions;
 		}

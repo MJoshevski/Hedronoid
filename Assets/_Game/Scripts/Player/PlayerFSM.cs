@@ -200,6 +200,10 @@ namespace Hedronoid.Player
         private FSMState m_LandingState;
         private FSMState m_DashingState;
         private FSMState m_FlyingState;
+
+        // FMOD
+        private FMOD.Studio.EventInstance Run;
+        private FMOD.Studio.EventInstance BulletPrimary;
         #endregion
 
         #region UNITY LIFECYCLE
@@ -224,8 +228,6 @@ namespace Hedronoid.Player
             AddHNDEventListeners();
             CreateFSMStates();
             CreateFMODEvents();
-
-            HNDEvents.Instance.AddListener<KillEvent>(OnKilled);
         }
 
         protected override void Start()
@@ -237,29 +239,25 @@ namespace Hedronoid.Player
 
             ChangeState(EPlayerStates.GROUND_MOVEMENT);
         }
-
         protected override void Update()
         {
             base.Update();
 
-            if (Input.GetButton("Fire1"))
+            if (m_PlayerActions.Weapon1.IsPressed)
             {
                 Shoot(true);
-            }
+                isShooting = true;
 
-            if (Input.GetButton("Fire2"))
+            }
+            else if (m_PlayerActions.Weapon2.IsPressed)
             {
                 Shoot(false);
-            }
-
-            if (Input.GetButton("Fire1") || Input.GetButton("Fire2"))
                 isShooting = true;
+            }
             else isShooting = false;
 
-
-            desiredDash |= Input.GetButtonDown("Dash");
-
-            desiredJump |= Input.GetButtonDown("Jump");
+            desiredDash |= m_PlayerActions.Dash.WasPressed;
+            desiredJump |= m_PlayerActions.Jump.WasPressed;
 
             playerInput = new Vector2(movementVariables.Horizontal, movementVariables.Vertical);
             playerInput = Vector2.ClampMagnitude(playerInput, 1f);
@@ -436,7 +434,7 @@ namespace Hedronoid.Player
 
             if (gravityAlignedVelocity.y < -0.001)
                 ChangeState(EPlayerStates.FALLING);
-            else if (gravityAlignedVelocity.y > 0 && !Input.GetButton("Jump"))
+            else if (gravityAlignedVelocity.y > 0 && !m_PlayerActions.Jump.IsPressed)
             {
                 secondaryGravityMultiplier += (lowJumpMultiplier - 1f) * Time.fixedDeltaTime;
             }
@@ -482,7 +480,7 @@ namespace Hedronoid.Player
 
             if (gravityAlignedVelocity.y < -0.001)
                 ChangeState(EPlayerStates.FALLING);
-            else if (gravityAlignedVelocity.y > 0 && !Input.GetButton("Jump"))
+            else if (gravityAlignedVelocity.y > 0 && !m_PlayerActions.Jump.IsPressed)
             {
                 secondaryGravityMultiplier += (lowJumpMultiplier - 1f) * Time.fixedDeltaTime;
             }
@@ -741,10 +739,8 @@ namespace Hedronoid.Player
         #region METHODS
         private void AddHNDEventListeners()
         {
+            HNDEvents.Instance.AddListener<KillEvent>(OnKilled);
         }
-
-        FMOD.Studio.EventInstance Run;
-        FMOD.Studio.EventInstance BulletPrimary;
         private void CreateFMODEvents()
         {
             Run = FMODUnity.RuntimeManager.CreateInstance(PlayerAudioData.footsteps);
@@ -930,7 +926,7 @@ namespace Hedronoid.Player
             stepsSinceLastJump = 0;
             jumpPhase += 1;
             float jumpSpeed = Mathf.Sqrt(2f * gravity.magnitude * jumpHeight);
-            jumpDirection = (jumpDirection + upAxis + forwardAxis).normalized;
+            jumpDirection = (jumpDirection + upAxis).normalized;
             float alignedSpeed = Vector3.Dot(velocity, jumpDirection);
 
             if (alignedSpeed > 0f)

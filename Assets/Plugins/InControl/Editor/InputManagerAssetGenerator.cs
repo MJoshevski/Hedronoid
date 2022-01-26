@@ -1,6 +1,7 @@
 #if UNITY_EDITOR
 namespace InControl
 {
+	using System;
 	using System.Collections.Generic;
 	using System.Text.RegularExpressions;
 	using UnityEditor;
@@ -49,7 +50,15 @@ namespace InControl
 
 		static bool CheckAxisPresets()
 		{
-			SetupAxisPresets();
+			try
+			{
+				SetupAxisPresets();
+			}
+			catch (IndexOutOfRangeException)
+			{
+				// This can happen on first load when the Library folder is deleted.
+				return true;
+			}
 
 			var axisArray = GetInputManagerAxisArray();
 

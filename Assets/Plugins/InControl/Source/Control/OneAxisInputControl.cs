@@ -1,7 +1,8 @@
 namespace InControl
 {
 	using System;
-	using UnityEngine;
+    using System.Collections;
+    using UnityEngine;
 
 
 	public class OneAxisInputControl : IInputControl
@@ -198,7 +199,7 @@ namespace InControl
 				nextRepeatTime = 0.0f;
 			}
 			else if (thisPressed) // if is pressed...
-			{
+			{				
 				var realtimeSinceStartup = Time.realtimeSinceStartup;
 				if (!lastPressed) // if was pressed
 				{
@@ -216,14 +217,11 @@ namespace InControl
 				UpdateTick = pendingTick;
 			}
 		}
-
-
 		public void CommitWithState( bool state, ulong updateTick, float deltaTime )
 		{
 			UpdateWithState( state, updateTick, deltaTime );
 			Commit();
 		}
-
 
 		public void CommitWithValue( float value, ulong updateTick, float deltaTime )
 		{
@@ -298,8 +296,6 @@ namespace InControl
 		{
 			get { return EnabledInHierarchy && thisState.State; }
 		}
-
-
 		public bool WasPressed
 		{
 			get { return EnabledInHierarchy && thisState && !lastState; }

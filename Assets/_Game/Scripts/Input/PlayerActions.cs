@@ -20,6 +20,7 @@ namespace Hedronoid
         public PlayerTwoAxisAction Look;
         public PlayerAction Jump;
         public PlayerAction Dash;
+        public PlayerAction SwitchShoulder;
 
         public PlayerActionSet()
         {
@@ -37,6 +38,7 @@ namespace Hedronoid
             Look = CreateTwoAxisPlayerAction(LookLeft, LookRight, LookDown, LookUp);
             Jump = CreatePlayerAction("Jump");
             Dash = CreatePlayerAction("Dash");
+            SwitchShoulder = CreatePlayerAction("SwitchShoulder");
         }
 
         public static PlayerActionSet CreateWithDefaultBindings()
@@ -72,6 +74,9 @@ namespace Hedronoid
 
             playerActions.Dash.AddDefaultBinding(InputControlType.Action2);
             playerActions.Dash.AddDefaultBinding(Key.Shift);
+
+            playerActions.SwitchShoulder.AddDefaultBinding(InputControlType.RightStickButton);
+            playerActions.SwitchShoulder.AddDefaultBinding(Mouse.MiddleButton);
 
             playerActions.ListenOptions.MaxAllowedBindings = 2;
             playerActions.ListenOptions.UnsetDuplicateBindingsOnSet = true;

@@ -94,8 +94,9 @@ LightmapSettings:
     m_PVRFilteringAtrousPositionSigmaDirect: 0.5
     m_PVRFilteringAtrousPositionSigmaIndirect: 2
     m_PVRFilteringAtrousPositionSigmaAO: 1
-    m_ShowResolutionOverlay: 1
     m_ExportTrainingData: 0
+    m_TrainingDataDestination: TrainingData
+    m_LightProbeSampleCountMultiplier: 4
   m_LightingDataAsset: {fileID: 0}
   m_UseShadowmask: 0
 --- !u!196 &5
@@ -130,7 +131,6 @@ GameObject:
   m_Component:
   - component: {fileID: 39263168}
   - component: {fileID: 39263167}
-  - component: {fileID: 39263166}
   m_Layer: 0
   m_Name: Camera
   m_TagString: MainCamera
@@ -138,14 +138,6 @@ GameObject:
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
   m_IsActive: 1
---- !u!92 &39263166
-Behaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 39263163}
-  m_Enabled: 1
 --- !u!20 &39263167
 Camera:
   m_ObjectHideFlags: 0
@@ -237,6 +229,7 @@ MonoBehaviour:
   useFixedUpdate: 0
   dontDestroyOnLoad: 0
   suspendInBackground: 0
+  updateMode: 0
   enableICade: 0
   enableXInput: 0
   xInputOverrideUpdateRate: 0
@@ -245,10 +238,10 @@ MonoBehaviour:
   xInputBufferSize: 0
   enableNativeInput: 1
   nativeInputEnableXInput: 1
+  nativeInputEnableMFi: 1
   nativeInputPreventSleep: 0
   nativeInputOverrideUpdateRate: 0
   nativeInputUpdateRate: 0
-  customProfiles: []
 --- !u!4 &464489605
 Transform:
   m_ObjectHideFlags: 0
@@ -332,8 +325,9 @@ Light:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1191992247}
   m_Enabled: 1
-  serializedVersion: 9
+  serializedVersion: 10
   m_Type: 2
+  m_Shape: 0
   m_Color: {r: 1, g: 0.82058823, b: 0.5514706, a: 1}
   m_Intensity: 4
   m_Range: 8
@@ -423,8 +417,9 @@ Light:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1813342498}
   m_Enabled: 1
-  serializedVersion: 9
+  serializedVersion: 10
   m_Type: 2
+  m_Shape: 0
   m_Color: {r: 0.6102941, g: 0.8387424, b: 1, a: 1}
   m_Intensity: 2
   m_Range: 8
