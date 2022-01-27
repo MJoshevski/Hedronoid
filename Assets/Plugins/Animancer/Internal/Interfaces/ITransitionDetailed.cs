@@ -80,7 +80,7 @@ namespace Animancer
         /// <remarks>Returns false if the `motionOrTransition` is null or an unsupported type.</remarks>
         public static bool TryGetLength(object motionOrTransition, out float length)
         {
-            if (motionOrTransition is AnimationClip clip)
+            if (motionOrTransition is AnimationClip clip && motionOrTransition != null)
             {
                 length = clip.length;
                 return true;

@@ -911,6 +911,45 @@ MonoBehaviour:
       - 1
       _DefaultParameter: 0
       _ExtrapolateSpeed: 1
+    DirectionalMovementMixer:
+      _FadeDuration: 0.25
+      _Events:
+        _NormalizedTimes: []
+        _Callbacks: []
+        _Names: []
+      _Speed: 1
+      _Animations:
+      - {fileID: -3100369314251171874, guid: 1faff086f9628614ea5d2e30c57e6517, type: 3}
+      - {fileID: -203655887218126122, guid: 3de983c7d60adb847aa9f9e33d6d4b42, type: 3}
+      - {fileID: -203655887218126122, guid: 1e957f00c5327694481085a4d7e70818, type: 3}
+      - {fileID: -203655887218126122, guid: e76455cdab2799f48ae973268ab6ddbc, type: 3}
+      - {fileID: -203655887218126122, guid: 03c2b5c523cea934e9298ef01659298d, type: 3}
+      - {fileID: -203655887218126122, guid: 36fa74ce56a271b49898f738ec9348cb, type: 3}
+      - {fileID: -203655887218126122, guid: 64bb3766b632795468929dfe07e42817, type: 3}
+      - {fileID: -203655887218126122, guid: fa95f7b34b8a9ff4db2fdf89acaa6d02, type: 3}
+      - {fileID: -203655887218126122, guid: 03951701211478e4b80bb840a5f824dc, type: 3}
+      - {fileID: -203655887218126122, guid: 17ce766100518c44b8c4d5ae24d3de91, type: 3}
+      - {fileID: -203655887218126122, guid: b0630a46ff67fd7478065a5e337e0f07, type: 3}
+      - {fileID: -203655887218126122, guid: 555bffed5668a644694c2100b15d8868, type: 3}
+      - {fileID: 8391329288044812273, guid: 9a2e8575a33362147b84ac528a4197d9, type: 3}
+      _Speeds: []
+      _SynchronizeChildren: 
+      _Thresholds:
+      - {x: 0, y: 0}
+      - {x: 0, y: 0.3}
+      - {x: 0, y: 0.6}
+      - {x: 0, y: 1}
+      - {x: 0.3, y: 0}
+      - {x: 0.6, y: 0}
+      - {x: 1, y: 0}
+      - {x: 0, y: -0.3}
+      - {x: 0, y: -0.6}
+      - {x: 0, y: -1}
+      - {x: -0.3, y: 0}
+      - {x: -0.6, y: 0}
+      - {x: -1, y: 0}
+      _DefaultParameter: {x: 0, y: 0}
+      _Type: 1
     FallAnimation: {fileID: -203655887218126122, guid: 37a2df4f4f92ba24d920a0bb0c5bca29,
       type: 3}
     FallRollAnimation: {fileID: -203655887218126122, guid: 40ed6219891266d41af6c999cca7c3a7,

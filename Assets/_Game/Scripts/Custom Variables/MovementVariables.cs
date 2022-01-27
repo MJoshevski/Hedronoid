@@ -27,6 +27,7 @@ namespace Hedronoid
 
         [Header("Animation")]
         public LinearMixerTransition MovementMixer;
+        public MixerTransition2D DirectionalMovementMixer;
         public AnimationClip FallAnimation;
         public AnimationClip FallRollAnimation;
         public AnimationClip LandAnimation;
