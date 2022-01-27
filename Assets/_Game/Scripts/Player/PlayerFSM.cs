@@ -139,12 +139,9 @@ namespace Hedronoid.Player
         public Rigidbody m_Rigidbody, connectedRb, prevConnectedRb;
         private Camera orbitCameraObject;
         private OrbitCamera orbitCamera;
-        //private Animator m_Animator;
         private AnimancerComponent m_Animancer;
         private DamageHandler m_DamageHandler;
         private HealthBase m_HealthBase;
-        //private AnimatorHashes m_AnimHashes;
-        //private AnimatorData m_AnimData;
 
         // ACTION FLAGS
         private float timeSinceJump;
@@ -364,16 +361,23 @@ namespace Hedronoid.Player
 
         #region STATE: GROUND_MOVEMENT
         public LinearMixerState movementMixerState;
+        public MixerState directionalMovementMixerState;
         private void OnEnterGroundMovement(FSMState fromState)
         {
-            movementMixerState = m_Animancer.Layers[movementVariables.DefaultLayer].Play(
-                movementVariables.MovementMixer, 0.2f) as LinearMixerState;
+            //movementMixerState = m_Animancer.Layers[movementVariables.DefaultLayer].Play(
+            //    movementVariables.MovementMixer, 0.2f) as LinearMixerState;
 
-            movementMixerState.ApplyFootIK = true;
+            directionalMovementMixerState = m_Animancer.Layers[movementVariables.DefaultLayer].Play(
+                movementVariables.DirectionalMovementMixer, 0.2f) as MixerState;
+          
+            //movementMixerState.ApplyFootIK = true;
+            directionalMovementMixerState.ApplyFootIK = true;
         }
         private void OnUpdateGroundMovement()
         {
-            movementMixerState.Parameter = movementVariables.MoveAmount;
+            //movementMixerState.Parameter = movementVariables.MoveAmount;
+            Vector2 movementVector = new Vector3(movementVariables.Horizontal, movementVariables.Vertical);
+            movementVariables.DirectionalMovementMixer.State.Parameter = movementVector;
         }
         private void OnFixedUpdateGroundMovement()
         {
@@ -697,9 +701,14 @@ namespace Hedronoid.Player
 
         private void OnExitLanding(FSMState fromState)
         {
-            movementMixerState = m_Animancer.Layers[movementVariables.DefaultLayer].Play(
-                movementVariables.MovementMixer, 0.2f) as LinearMixerState;
-            movementMixerState.ApplyFootIK = true;
+            //movementMixerState = m_Animancer.Layers[movementVariables.DefaultLayer].Play(
+            //    movementVariables.MovementMixer, 0.2f) as LinearMixerState;
+
+            directionalMovementMixerState = m_Animancer.Layers[movementVariables.DefaultLayer].Play(
+                movementVariables.DirectionalMovementMixer, 0.2f) as MixerState;
+
+            //movementMixerState.ApplyFootIK = true;
+            directionalMovementMixerState.ApplyFootIK = true;
         }
         #endregion
 
@@ -1138,17 +1147,8 @@ namespace Hedronoid.Player
             if (!m_AfterImageEffect) TryGetComponent(out m_AfterImageEffect);
             if (!m_AfterImageEffect) m_AfterImageEffect = GetComponentInChildren<AfterImageEffect>();
 
-            //if (!m_Animator) TryGetComponent(out m_Animator);
-            //if (!m_Animator) m_Animator = GetComponentInChildren<Animator>();
-
             if (!m_Animancer) TryGetComponent(out m_Animancer);
             if (!m_Animancer) m_Animancer = GetComponentInChildren<AnimancerComponent>();
-
-            //if (m_AnimHashes == null) TryGetComponent(out m_AnimHashes);
-            //if (m_AnimHashes == null) m_AnimHashes = GetComponentInChildren<AnimatorHashes>();
-
-            //if (m_AnimData == null) TryGetComponent(out m_AnimData);
-            //if (m_AnimData == null) m_AnimData = GetComponentInChildren<AnimatorData>();
 
             m_BulletConf = new BulletPoolManager.BulletConfig();
         }
