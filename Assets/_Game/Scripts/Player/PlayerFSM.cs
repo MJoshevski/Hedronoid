@@ -181,6 +181,7 @@ namespace Hedronoid.Player
         private bool inVacuum;
         [SerializeField]
         private float secondaryGravityMultiplier = 1f;
+        private float initFOV;
 
         //DASH VARS
         private Vector3 posBeforeDash;
@@ -235,6 +236,8 @@ namespace Hedronoid.Player
             if (!orbitCameraObject) GameplaySceneContext.OrbitCamera.TryGetComponent(out orbitCameraObject);
             if (!orbitCamera) orbitCamera = GameplaySceneContext.OrbitCamera;
 
+            initFOV = GameplaySceneContext.OrbitCamera.orbitCamera.fieldOfView;
+
             ChangeState(EPlayerStates.GROUND_MOVEMENT);
         }
         protected override void Update()
@@ -258,14 +261,19 @@ namespace Hedronoid.Player
             desiredJump |= m_PlayerActions.Jump.WasPressed;
             aimingMode = m_PlayerActions.Aim.IsPressed;
             
+            // Matej: HACK: Change this with proper zoom in out event system
             if (m_PlayerActions.Aim.WasPressed)
             {
+                StopAllCoroutines();
+                GameplaySceneContext.OrbitCamera.orbitCamera.fieldOfView = initFOV;
                 GameplaySceneContext.OrbitCamera.orbitCamera.fieldOfView -= 10f;
             }
             else if (m_PlayerActions.Aim.WasReleased)
             {
-                GameplaySceneContext.OrbitCamera.orbitCamera.fieldOfView += 10f;
+                StopAllCoroutines();
+                GameplaySceneContext.OrbitCamera.orbitCamera.fieldOfView = initFOV;
             }
+            ///
 
             playerInput = new Vector2(movementVariables.Horizontal, movementVariables.Vertical);
             playerInput = Vector2.ClampMagnitude(playerInput, 1f);
