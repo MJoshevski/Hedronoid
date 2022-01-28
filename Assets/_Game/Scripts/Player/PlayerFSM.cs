@@ -130,7 +130,7 @@ namespace Hedronoid.Player
         public PlayerSoundsData PlayerAudioData;
 
         [HideInInspector]
-        public bool desiredJump, desiredDash;
+        public bool desiredJump, desiredDash, aimingMode;
         #endregion
 
         #region PRIVATE/HIDDEN VARS
@@ -225,6 +225,7 @@ namespace Hedronoid.Player
             AddHNDEventListeners();
             CreateFSMStates();
             CreateFMODEvents();
+            CreateAnimancerStates();
         }
 
         protected override void Start()
@@ -246,15 +247,16 @@ namespace Hedronoid.Player
                 isShooting = true;
 
             }
-            else if (m_PlayerActions.Weapon2.IsPressed)
-            {
-                Shoot(false);
-                isShooting = true;
-            }
+            //else if (m_PlayerActions.Weapon2.IsPressed)
+            //{
+            //    Shoot(false);
+            //    isShooting = true;
+            //}
             else isShooting = false;
 
             desiredDash |= m_PlayerActions.Dash.WasPressed;
             desiredJump |= m_PlayerActions.Jump.WasPressed;
+            aimingMode = m_PlayerActions.Aim.IsPressed;
 
             playerInput = new Vector2(movementVariables.Horizontal, movementVariables.Vertical);
             playerInput = Vector2.ClampMagnitude(playerInput, 1f);
@@ -326,8 +328,16 @@ namespace Hedronoid.Player
             // ROTATE TO GRAVITY
             Vector3 targetDirection = movementVariables.MoveDirection;
 
+            //if (targetDirection == Vector3.zero)
+            //    targetDirection = forwardAxis;
+
             if (targetDirection == Vector3.zero)
-                targetDirection = forwardAxis;
+            {
+                if (aimingMode)
+                    targetDirection = forwardAxis;
+                else 
+                    targetDirection = m_Rigidbody.transform.forward;
+            }
 
             Quaternion targetRotation = Quaternion.Slerp(
                 transform.rotation,
@@ -364,20 +374,38 @@ namespace Hedronoid.Player
         public MixerState directionalMovementMixerState;
         private void OnEnterGroundMovement(FSMState fromState)
         {
-            //movementMixerState = m_Animancer.Layers[movementVariables.DefaultLayer].Play(
-            //    movementVariables.MovementMixer, 0.2f) as LinearMixerState;
+            if (aimingMode)
+            {
+                m_Animancer.Layers[movementVariables.DefaultLayer].Play(
+                    movementVariables.MovementMixer, 0.2f);
 
-            directionalMovementMixerState = m_Animancer.Layers[movementVariables.DefaultLayer].Play(
-                movementVariables.DirectionalMovementMixer, 0.2f) as MixerState;
-          
-            //movementMixerState.ApplyFootIK = true;
-            directionalMovementMixerState.ApplyFootIK = true;
+                directionalMovementMixerState.Weight = 0;
+            }
+            else
+            {
+                m_Animancer.Layers[movementVariables.DefaultLayer].Play(
+                    movementVariables.DirectionalMovementMixer, 0.2f);
+
+                movementMixerState.Weight = 0;
+            }
         }
         private void OnUpdateGroundMovement()
         {
-            //movementMixerState.Parameter = movementVariables.MoveAmount;
-            Vector2 movementVector = new Vector3(movementVariables.Horizontal, movementVariables.Vertical);
-            movementVariables.DirectionalMovementMixer.State.Parameter = movementVector;
+            if (aimingMode)
+            {
+                if (!movementMixerState.IsActive)
+                    movementMixerState.Play();
+
+                movementMixerState.Parameter = movementVariables.MoveAmount;
+            }
+            else
+            {
+                if (!directionalMovementMixerState.IsActive)
+                    directionalMovementMixerState.Play();
+
+                Vector2 movementVector = new Vector3(movementVariables.Horizontal, movementVariables.Vertical);
+                movementVariables.DirectionalMovementMixer.State.Parameter = movementVector;
+            }
         }
         private void OnFixedUpdateGroundMovement()
         {
@@ -701,14 +729,20 @@ namespace Hedronoid.Player
 
         private void OnExitLanding(FSMState fromState)
         {
-            //movementMixerState = m_Animancer.Layers[movementVariables.DefaultLayer].Play(
-            //    movementVariables.MovementMixer, 0.2f) as LinearMixerState;
+            if (aimingMode)
+            {
+                m_Animancer.Layers[movementVariables.DefaultLayer].Play(
+                    movementVariables.MovementMixer, 0.2f);
 
-            directionalMovementMixerState = m_Animancer.Layers[movementVariables.DefaultLayer].Play(
-                movementVariables.DirectionalMovementMixer, 0.2f) as MixerState;
+                directionalMovementMixerState.Weight = 0;
+            }
+            else
+            {
+                m_Animancer.Layers[movementVariables.DefaultLayer].Play(
+                    movementVariables.DirectionalMovementMixer, 0.2f);
 
-            //movementMixerState.ApplyFootIK = true;
-            directionalMovementMixerState.ApplyFootIK = true;
+                movementMixerState.Weight = 0;
+            }
         }
         #endregion
 
@@ -754,6 +788,18 @@ namespace Hedronoid.Player
         {
             Run = FMODUnity.RuntimeManager.CreateInstance(PlayerAudioData.footsteps);
             FMODUnity.RuntimeManager.AttachInstanceToGameObject(Run, transform, GetComponent<Rigidbody>());
+        }
+        private void CreateAnimancerStates()
+        {
+            movementMixerState = m_Animancer.Layers[movementVariables.DefaultLayer].Play(
+                movementVariables.MovementMixer, 0.2f) as LinearMixerState;
+            movementMixerState.ApplyFootIK = true;
+            movementMixerState.Weight = 0;
+
+            directionalMovementMixerState = m_Animancer.Layers[movementVariables.DefaultLayer].Play(
+                movementVariables.DirectionalMovementMixer, 0.2f) as MixerState;
+            directionalMovementMixerState.ApplyFootIK = true;
+            directionalMovementMixerState.Weight = 0;
         }
         private void CreateFSMStates()
         {

@@ -21,11 +21,12 @@ namespace Hedronoid
         public PlayerAction Jump;
         public PlayerAction Dash;
         public PlayerAction SwitchShoulder;
+        public PlayerAction Aim;
 
         public PlayerActionSet()
         {
             Weapon1 = CreatePlayerAction("Weapon1");
-            Weapon2 = CreatePlayerAction("Weapon2");
+            //Weapon2 = CreatePlayerAction("Weapon2");
             MoveLeft = CreatePlayerAction("Move Left");
             MoveRight = CreatePlayerAction("Move Right");
             MoveForward = CreatePlayerAction("Move Forward");
@@ -39,6 +40,8 @@ namespace Hedronoid
             Jump = CreatePlayerAction("Jump");
             Dash = CreatePlayerAction("Dash");
             SwitchShoulder = CreatePlayerAction("SwitchShoulder");
+            Aim = CreatePlayerAction("Aim");
+
         }
 
         public static PlayerActionSet CreateWithDefaultBindings()
@@ -48,8 +51,8 @@ namespace Hedronoid
             playerActions.Weapon1.AddDefaultBinding(InputControlType.RightBumper);
             playerActions.Weapon1.AddDefaultBinding(Mouse.LeftButton);
 
-            playerActions.Weapon2.AddDefaultBinding(InputControlType.RightTrigger);
-            playerActions.Weapon2.AddDefaultBinding(Mouse.RightButton);
+            //playerActions.Weapon2.AddDefaultBinding(InputControlType.RightTrigger);
+            //playerActions.Weapon2.AddDefaultBinding(Mouse.RightButton);
 
             playerActions.MoveLeft.AddDefaultBinding(InputControlType.LeftStickLeft);
             playerActions.MoveRight.AddDefaultBinding(InputControlType.LeftStickRight);
@@ -77,6 +80,9 @@ namespace Hedronoid
 
             playerActions.SwitchShoulder.AddDefaultBinding(InputControlType.RightStickButton);
             playerActions.SwitchShoulder.AddDefaultBinding(Mouse.MiddleButton);
+
+            playerActions.Aim.AddDefaultBinding(InputControlType.LeftTrigger);
+            playerActions.Aim.AddDefaultBinding(Mouse.RightButton);
 
             playerActions.ListenOptions.MaxAllowedBindings = 2;
             playerActions.ListenOptions.UnsetDuplicateBindingsOnSet = true;
