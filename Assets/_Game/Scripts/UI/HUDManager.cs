@@ -17,12 +17,14 @@ public class HUDManager : HNDMonoBehaviour, IGameplaySceneContextInjector
     public float restingSize, maxSize, speed;
     private float currentSize;
     private PlayerFSM player;
-
+    private PlayerActionSet m_PlayerActions;
     private bool playerIntialized = false;
     protected override void Awake()
     {
         base.Awake();
         this.Inject(gameObject);
+
+        m_PlayerActions = InputManager.Instance.PlayerActions;
 
         HNDEvents.Instance.AddListener<PlayerCreatedAndInitialized>(OnPlayerCreatedAndInitialized);
     }
@@ -48,6 +50,8 @@ public class HUDManager : HNDMonoBehaviour, IGameplaySceneContextInjector
         if (!canvas) TryGetComponent(out canvas);
         if (!orbitCamera) orbitCamera = GameplaySceneContext.OrbitCamera.orbitCamera;
 
+        dynamicCrosshair.gameObject.SetActive(false);
+
         canvas.renderMode = RenderMode.ScreenSpaceCamera;
         canvas.worldCamera = orbitCamera;
         canvas.planeDistance = 1;
@@ -59,6 +63,11 @@ public class HUDManager : HNDMonoBehaviour, IGameplaySceneContextInjector
 
         if (!player) player = GameplaySceneContext.Player;
         if (!player) return;
+
+        if (m_PlayerActions.Aim.WasPressed)
+            dynamicCrosshair.gameObject.SetActive(true);
+        else if (m_PlayerActions.Aim.WasReleased)
+            dynamicCrosshair.gameObject.SetActive(false);
 
         if (player.IsShooting)
         {

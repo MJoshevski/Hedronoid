@@ -939,15 +939,15 @@ MonoBehaviour:
       - {x: 0, y: 0.3}
       - {x: 0, y: 0.6}
       - {x: 0, y: 1}
-      - {x: 0.3, y: 0}
-      - {x: 0.6, y: 0}
-      - {x: 1, y: 0}
-      - {x: 0, y: -0.3}
-      - {x: 0, y: -0.6}
-      - {x: 0, y: -1}
       - {x: -0.3, y: 0}
       - {x: -0.6, y: 0}
       - {x: -1, y: 0}
+      - {x: 0, y: -0.3}
+      - {x: 0, y: -0.6}
+      - {x: 0, y: -1}
+      - {x: 0.3, y: 0}
+      - {x: 0.6, y: 0}
+      - {x: 1, y: 0}
       _DefaultParameter: {x: 0, y: 0}
       _Type: 1
     FallAnimation: {fileID: -203655887218126122, guid: 37a2df4f4f92ba24d920a0bb0c5bca29,
@@ -1014,6 +1014,7 @@ MonoBehaviour:
   PlayerAudioData: {fileID: 11400000, guid: 5473d6ed1a69c1e43a499cdd2846f9ff, type: 2}
   desiredJump: 0
   desiredDash: 0
+  aimingMode: 0
   m_Rigidbody: {fileID: 0}
   connectedRb: {fileID: 0}
   prevConnectedRb: {fileID: 0}

@@ -257,6 +257,15 @@ namespace Hedronoid.Player
             desiredDash |= m_PlayerActions.Dash.WasPressed;
             desiredJump |= m_PlayerActions.Jump.WasPressed;
             aimingMode = m_PlayerActions.Aim.IsPressed;
+            
+            if (m_PlayerActions.Aim.WasPressed)
+            {
+                GameplaySceneContext.OrbitCamera.orbitCamera.fieldOfView -= 10f;
+            }
+            else if (m_PlayerActions.Aim.WasReleased)
+            {
+                GameplaySceneContext.OrbitCamera.orbitCamera.fieldOfView += 10f;
+            }
 
             playerInput = new Vector2(movementVariables.Horizontal, movementVariables.Vertical);
             playerInput = Vector2.ClampMagnitude(playerInput, 1f);
@@ -326,10 +335,10 @@ namespace Hedronoid.Player
             gravityAlignedVelocity = transform.InverseTransformDirection(velocity);
 
             // ROTATE TO GRAVITY
-            Vector3 targetDirection = movementVariables.MoveDirection;
-
-            //if (targetDirection == Vector3.zero)
-            //    targetDirection = forwardAxis;
+            Vector3 targetDirection;
+            if (aimingMode)
+                targetDirection = GravityService.GetForwardAxis(cachedTransform.position);
+            else targetDirection = movementVariables.MoveDirection;
 
             if (targetDirection == Vector3.zero)
             {
@@ -374,34 +383,38 @@ namespace Hedronoid.Player
         public MixerState directionalMovementMixerState;
         private void OnEnterGroundMovement(FSMState fromState)
         {
-            if (aimingMode)
+            if (!aimingMode)
             {
+                directionalMovementMixerState.Weight = 0;
                 m_Animancer.Layers[movementVariables.DefaultLayer].Play(
                     movementVariables.MovementMixer, 0.2f);
-
-                directionalMovementMixerState.Weight = 0;
             }
             else
             {
+                movementMixerState.Weight = 0;
                 m_Animancer.Layers[movementVariables.DefaultLayer].Play(
                     movementVariables.DirectionalMovementMixer, 0.2f);
-
-                movementMixerState.Weight = 0;
             }
         }
         private void OnUpdateGroundMovement()
         {
-            if (aimingMode)
+            if (!aimingMode)
             {
                 if (!movementMixerState.IsActive)
+                {
+                    directionalMovementMixerState.Weight = 0;
                     movementMixerState.Play();
+                }
 
                 movementMixerState.Parameter = movementVariables.MoveAmount;
             }
             else
             {
                 if (!directionalMovementMixerState.IsActive)
+                {
+                    movementMixerState.Weight = 0;
                     directionalMovementMixerState.Play();
+                }
 
                 Vector2 movementVector = new Vector3(movementVariables.Horizontal, movementVariables.Vertical);
                 movementVariables.DirectionalMovementMixer.State.Parameter = movementVector;
@@ -729,19 +742,17 @@ namespace Hedronoid.Player
 
         private void OnExitLanding(FSMState fromState)
         {
-            if (aimingMode)
+            if (!aimingMode)
             {
+                directionalMovementMixerState.Weight = 0;
                 m_Animancer.Layers[movementVariables.DefaultLayer].Play(
                     movementVariables.MovementMixer, 0.2f);
-
-                directionalMovementMixerState.Weight = 0;
             }
             else
             {
+                movementMixerState.Weight = 0;
                 m_Animancer.Layers[movementVariables.DefaultLayer].Play(
                     movementVariables.DirectionalMovementMixer, 0.2f);
-
-                movementMixerState.Weight = 0;
             }
         }
         #endregion
