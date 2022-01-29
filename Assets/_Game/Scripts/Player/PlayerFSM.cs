@@ -12,6 +12,7 @@ using Hedronoid.Particle;
 using Hedronoid.AI;
 using CameraShake;
 using Animancer;
+using Animancer.Examples.InverseKinematics;
 
 namespace Hedronoid.Player
 {
@@ -240,6 +241,22 @@ namespace Hedronoid.Player
 
             ChangeState(EPlayerStates.GROUND_MOVEMENT);
         }
+
+        [SerializeField, Range(0, 1)] private float m_PositionWeight = 1;
+        [SerializeField, Range(0, 1)] private float m_RotationWeight = 0;
+
+        [SerializeField] private IKPuppetLookTarget m_LookTarget;
+        [SerializeField] private IKPuppetTarget[] m_IKTargets;
+        private void OnAnimatorIK(int layerIndex)
+        {
+            if (aimingMode)
+            {
+                for (int i = 0; i < m_IKTargets.Length; i++)
+                {
+                    m_IKTargets[i].UpdateAnimatorIK(m_Animancer.Animator);
+                }
+            }
+        }
         protected override void Update()
         {
             base.Update();
@@ -345,8 +362,15 @@ namespace Hedronoid.Player
             // ROTATE TO GRAVITY
             Vector3 targetDirection;
             if (aimingMode)
+            {
+                m_Animancer.Layers[movementVariables.DefaultLayer].ApplyAnimatorIK = true;
                 targetDirection = GravityService.GetForwardAxis(cachedTransform.position);
-            else targetDirection = movementVariables.MoveDirection;
+            }
+            else
+            {
+                m_Animancer.Layers[movementVariables.DefaultLayer].ApplyAnimatorIK = false;
+                targetDirection = movementVariables.MoveDirection;
+            }
 
             if (targetDirection == Vector3.zero)
             {
