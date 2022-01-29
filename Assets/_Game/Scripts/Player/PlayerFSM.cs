@@ -129,6 +129,17 @@ namespace Hedronoid.Player
 
         [Header("FMOD Audio Data")]
         public PlayerSoundsData PlayerAudioData;
+        [SerializeField]
+        private float timeBetweenFtstp = 0.3f;
+        private float timeFromLastFtstp;
+
+        [Header("Animation & IK")]
+        [SerializeField, Range(0, 1)] private float m_PositionWeight = 1;
+        [SerializeField, Range(0, 1)] private float m_RotationWeight = 0;
+
+        [SerializeField] private IKPuppetLookTarget m_LookTarget;
+        [SerializeField] private IKPuppetTarget[] m_IKTargets;
+
 
         [HideInInspector]
         public bool desiredJump, desiredDash, aimingMode;
@@ -241,22 +252,6 @@ namespace Hedronoid.Player
 
             ChangeState(EPlayerStates.GROUND_MOVEMENT);
         }
-
-        [SerializeField, Range(0, 1)] private float m_PositionWeight = 1;
-        [SerializeField, Range(0, 1)] private float m_RotationWeight = 0;
-
-        [SerializeField] private IKPuppetLookTarget m_LookTarget;
-        [SerializeField] private IKPuppetTarget[] m_IKTargets;
-        private void OnAnimatorIK(int layerIndex)
-        {
-            if (aimingMode)
-            {
-                for (int i = 0; i < m_IKTargets.Length; i++)
-                {
-                    m_IKTargets[i].UpdateAnimatorIK(m_Animancer.Animator);
-                }
-            }
-        }
         protected override void Update()
         {
             base.Update();
@@ -265,7 +260,6 @@ namespace Hedronoid.Player
             {
                 Shoot(true);
                 isShooting = true;
-
             }
             //else if (m_PlayerActions.Weapon2.IsPressed)
             //{
@@ -276,7 +270,7 @@ namespace Hedronoid.Player
 
             desiredDash |= m_PlayerActions.Dash.WasPressed;
             desiredJump |= m_PlayerActions.Jump.WasPressed;
-            aimingMode = m_PlayerActions.Aim.IsPressed;
+            aimingMode = m_PlayerActions.Aim.IsPressed || isShooting;
             
             // Matej: HACK: Change this with proper zoom in out event system
             if (m_PlayerActions.Aim.WasPressed)
@@ -392,6 +386,35 @@ namespace Hedronoid.Player
             else isMoving = false;
 
             ClearState();
+        }
+
+        private void OnAnimatorIK(int layerIndex)
+        {
+            if (aimingMode)
+            {
+                for (int i = 0; i < m_IKTargets.Length; i++)
+                {
+                    m_IKTargets[i].UpdateAnimatorIK(m_Animancer.Animator);
+                }
+            }
+        }
+        void OnCollisionEnter(Collision collision)
+        {
+            // HACKITY HACKITY HACK REMOVE ME ASAP
+            if (!m_DamageHandler.IsInvulnerable &&
+                HNDAI.Settings.EnemyLayer ==
+                (HNDAI.Settings.EnemyLayer | (1 << collision.gameObject.layer)))
+            {
+                FMODUnity.RuntimeManager.PlayOneShot(PlayerAudioData.recieveHit, transform.position);
+                //m_healthBase.InstaKill();
+            }
+
+            EvaluateCollision(collision);
+        }
+
+        void OnCollisionStay(Collision collision)
+        {
+            EvaluateCollision(collision);
         }
 
         protected override void OnDisable()
@@ -657,21 +680,6 @@ namespace Hedronoid.Player
             StartFade(0, 0.2f);
         }
 
-        IEnumerator LerpCameraFov(float from, float to)
-        {
-            float t = 0;
-
-            while (from != to)
-            {
-                GameplaySceneContext.OrbitCamera.orbitCamera.fieldOfView =
-                    Mathf.Lerp(from, to, t);
-
-                t += Time.fixedDeltaTime * 4f;
-                yield return null;
-            }
-
-            yield return null;
-        }
         #endregion
 
         #region STATE: FALLING
@@ -799,9 +807,7 @@ namespace Hedronoid.Player
 
         private void OnUpdateFlying()
         {
-
         }
-
         private void OnFixedUpdateFlying()
         {            
             Move();      
@@ -861,11 +867,6 @@ namespace Hedronoid.Player
             m_DashingState = CreateState(EPlayerStates.DASHING, OnUpdateDashing, OnEnterDashing, OnExitDashing);
             m_DashingState.onFixedUpdateState = OnFixedUpdateDashing;
         }
-
-        [SerializeField]
-        float timeBetweenFtstp = 0.3f;
-        float timeFromLastFtstp;
-
         private void Move()
         {
             // MOVEMENT
@@ -1213,6 +1214,21 @@ namespace Hedronoid.Player
         {
             yield return new WaitForSeconds(duration);
         }
+        IEnumerator LerpCameraFov(float from, float to)
+        {
+            float t = 0;
+
+            while (from != to)
+            {
+                GameplaySceneContext.OrbitCamera.orbitCamera.fieldOfView =
+                    Mathf.Lerp(from, to, t);
+
+                t += Time.fixedDeltaTime * 4f;
+                yield return null;
+            }
+
+            yield return null;
+        }
         private void OnKilled(KillEvent e)
         {
             if (e.GOID != gameObject.GetInstanceID()) return;
@@ -1241,25 +1257,6 @@ namespace Hedronoid.Player
 
             m_BulletConf = new BulletPoolManager.BulletConfig();
         }
-        void OnCollisionEnter(Collision collision)
-        {
-            // HACKITY HACKITY HACK REMOVE ME ASAP
-            if (!m_DamageHandler.IsInvulnerable && 
-                HNDAI.Settings.EnemyLayer == 
-                (HNDAI.Settings.EnemyLayer | (1 << collision.gameObject.layer)))
-            {
-                FMODUnity.RuntimeManager.PlayOneShot(PlayerAudioData.recieveHit, transform.position);
-                //m_healthBase.InstaKill();
-            }
-
-            EvaluateCollision(collision);
-        }
-
-        void OnCollisionStay(Collision collision)
-        {
-            EvaluateCollision(collision);
-        }
-
         void EvaluateCollision(Collision collision)
         {
             float minDot = GetMinDot(collision.gameObject.layer);
@@ -1293,4 +1290,3 @@ namespace Hedronoid.Player
         #endregion
     }
 }
-

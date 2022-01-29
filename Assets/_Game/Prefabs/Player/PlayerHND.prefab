@@ -987,7 +987,7 @@ MonoBehaviour:
     DashCooldown: 1
     DashesMade: 0
     PhysicalForce: {fileID: 11400000, guid: c55d33c596c554fa3926ae3d481dfef0, type: 2}
-  bulletOrigin: {fileID: 7378592729354335572}
+  bulletOrigin: {fileID: 7309450073589436932}
   fireRatePrimary: 0.2
   fireRateSecondary: 2
   fireRateTertiary: 5
@@ -1011,6 +1011,12 @@ MonoBehaviour:
   DoubleJumpParticles: 1e2a6c4ed9e8f8662408e75762597f0d2a96ec228b14f303d8b2ba6c734af91b87ba625de7b2ae46fd8cbb7fa6f3c02e66cabe66d77db455f3c7cb76626f3f5f046b424ff3e5ee397b51b21149605235
   LandParticles: 1e2a6c4ed9e8f8662408e75762597f0d2a96ec228b14f303d8b2ba6c734af91b87ba625de7b2ae46fd8cbb7fa6f3c02e66cabe66d77db455f3c7cb76626f3f5f046b424ff3e5ee397b51b21149605235
   PlayerAudioData: {fileID: 11400000, guid: 5473d6ed1a69c1e43a499cdd2846f9ff, type: 2}
+  timeBetweenFtstp: 0.275
+  m_PositionWeight: 1
+  m_RotationWeight: 0
+  m_LookTarget: {fileID: 2792886049811944241}
+  m_IKTargets:
+  - {fileID: 2792886049811944240}
   desiredJump: 0
   desiredDash: 0
   aimingMode: 0
@@ -1019,13 +1025,6 @@ MonoBehaviour:
   prevConnectedRb: {fileID: 0}
   jumpPhase: 0
   secondaryGravityMultiplier: 1
-  m_Type: 2
-  m_PositionWeight: 1
-  m_RotationWeight: 0
-  m_LookTarget: {fileID: 2792886049811944241}
-  m_IKTargets:
-  - {fileID: 2792886049811944240}
-  timeBetweenFtstp: 0.275
 --- !u!114 &3591742148794899721
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -1545,7 +1544,7 @@ GameObject:
   - component: {fileID: 2792886049811944240}
   - component: {fileID: 2792886049811944241}
   m_Layer: 0
-  m_Name: GunBot
+  m_Name: IK Shooting Hand Target
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -1562,8 +1561,7 @@ Transform:
   m_LocalPosition: {x: -0.144, y: 1.72, z: 1.27}
   m_LocalScale: {x: 0.25, y: 0.25, z: 0.25}
   m_ConstrainProportionsScale: 0
-  m_Children:
-  - {fileID: 7378592729354335572}
+  m_Children: []
   m_Father: {fileID: 2319510868649331525}
   m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
@@ -2728,46 +2726,6 @@ Transform:
   m_Father: {fileID: 2808462762278729743}
   m_RootOrder: 4
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!1 &8602519168143775753
-GameObject:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  serializedVersion: 6
-  m_Component:
-  - component: {fileID: 7378592729354335572}
-  - component: {fileID: 1423530164645560602}
-  m_Layer: 0
-  m_Name: Look@CameraObj
-  m_TagString: Untagged
-  m_Icon: {fileID: 0}
-  m_NavMeshLayer: 0
-  m_StaticEditorFlags: 0
-  m_IsActive: 1
---- !u!4 &7378592729354335572
-Transform:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 8602519168143775753}
-  m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
-  m_LocalPosition: {x: 0, y: 0, z: 0}
-  m_LocalScale: {x: 1, y: 1, z: 1}
-  m_ConstrainProportionsScale: 0
-  m_Children: []
-  m_Father: {fileID: 3542177190356648768}
-  m_RootOrder: 0
-  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!33 &1423530164645560602
-MeshFilter:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 8602519168143775753}
-  m_Mesh: {fileID: 10202, guid: 0000000000000000e000000000000000, type: 0}
 --- !u!1 &8672931362128557051
 GameObject:
   m_ObjectHideFlags: 0
