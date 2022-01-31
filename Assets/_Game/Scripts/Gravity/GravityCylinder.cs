@@ -54,7 +54,7 @@ namespace Hedronoid
         [HideInInspector]
         public CapsuleCollider boundsCollider;
 
-        private bool hasEntered = false, hasExited = false;
+        private bool hasEntered = false;
 
         protected override void OnValidate()
         {
