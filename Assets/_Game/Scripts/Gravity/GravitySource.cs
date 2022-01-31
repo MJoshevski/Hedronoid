@@ -18,7 +18,7 @@ namespace Hedronoid
         public LayerMask triggerLayers;
         [Tooltip("Should the collider resize once the player enters the gravity?")]
         [SerializeField]
-        protected bool ResizeColliderOnEnter = false;
+        public bool ResizeColliderOnEnter = false;
         [Tooltip("Should the boundaries control the scale/position of the trigger collider?")]
         [SerializeField]
         protected bool AutomaticColliderSize = true;
@@ -149,7 +149,7 @@ namespace Hedronoid
             }
         }
 
-        protected virtual void ResizeColliderBounds(bool shouldResize)
+        public virtual void ResizeColliderBounds(bool shouldResize)
         {
             // To be overriden in sub-classes.
         }

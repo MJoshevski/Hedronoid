@@ -94,7 +94,7 @@ namespace Hedronoid
             }
             return g * vector;
         }
-        protected override void ResizeColliderBounds(bool shouldResize)
+        public override void ResizeColliderBounds(bool shouldResize)
         {
             base.ResizeColliderBounds(shouldResize);
 

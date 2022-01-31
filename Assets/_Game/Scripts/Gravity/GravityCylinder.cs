@@ -1,7 +1,8 @@
-﻿using System.Collections.Generic;
+﻿using Hedronoid.AI;
+using System.Collections.Generic;
 using UnityEditor;
 using UnityEngine;
-using Gizmos = Popcron.Gizmos;
+//using Gizmos = Popcron.Gizmos;
 namespace Hedronoid
 {
     public class GravityCylinder : GravitySource
@@ -53,6 +54,8 @@ namespace Hedronoid
         [HideInInspector]
         public CapsuleCollider boundsCollider;
 
+        private bool hasEntered = false, hasExited = false;
+
         protected override void OnValidate()
         {
             base.OnValidate(); 
@@ -90,6 +93,65 @@ namespace Hedronoid
             originalBoundaryHeight = boundsCollider.height;
         }
 
+        public override void OnTriggerEnter(Collider other)
+        {
+        }
+        public override void OnTriggerStay(Collider other)
+        {
+            if (!IsInLayerMask(other)) return;
+
+            if ((other.gameObject.layer & (1 << HNDAI.Settings.PlayerLayer)) > 0)
+            {
+                //Debug.LogErrorFormat("HEIGHT: {0}, BELOW: {1}, PLAYER POS Y: {2}",
+                //    transform.position.y + (boundaryHeight / 2f), transform.position.y - (boundaryHeight / 2f),
+                //    other.gameObject.transform.position.y);
+
+                if ((transform.position.y + (boundaryHeight / 2f) >= other.gameObject.transform.position.y &&
+                transform.position.y - (boundaryHeight / 2f) <= other.gameObject.transform.position.y) &&
+                !hasEntered)
+                {
+                    hasEntered = true;
+                    IsPlayerInGravity = true;
+
+                    GravitySource grSrc = other.gameObject.GetComponent<GravitySource>();
+                    if (grSrc && !OverlappingSources.Contains(grSrc))
+                        OverlappingSources.Add(grSrc);
+
+                    if (ResizeColliderOnEnter)
+                    {
+                        if (AutomaticColliderSize) AutomaticColliderSize = false;
+                        ResizeColliderBounds(true);
+
+                        foreach (GravitySource gs in OverlappingSources)
+                            if (gs.ResizeColliderOnEnter)
+                                gs.ResizeColliderBounds(false);
+                    }
+
+                }
+                else if ((transform.position.y + (boundaryHeight / 2f) < other.gameObject.transform.position.y ||
+                transform.position.y - (boundaryHeight / 2f) > other.gameObject.transform.position.y) &&
+                hasEntered)       
+                {
+                    hasEntered = false;
+                    IsPlayerInGravity = false;
+
+                    GravitySource grSrc = other.gameObject.GetComponent<GravitySource>();
+                    if (grSrc && OverlappingSources.Contains(grSrc))
+                        OverlappingSources.Remove(grSrc);
+
+                    if (ResizeColliderOnEnter)
+                    {
+                        if (AutomaticColliderSize) 
+                            AutomaticColliderSize = false;
+
+                        ResizeColliderBounds(false);
+                    }
+                }
+            }
+        }
+        public override void OnTriggerExit(Collider other)
+        {
+        }
         public override Vector3 GetGravity(Vector3 position)
         {
             if (CurrentPriorityWeight < GravityService.GetMaxPriorityWeight() || !IsPlayerInGravity)
@@ -122,7 +184,7 @@ namespace Hedronoid
             }
             return transform.TransformDirection(g * vector);
         }
-        protected override void ResizeColliderBounds(bool shouldResize)
+        public override void ResizeColliderBounds(bool shouldResize)
         {
             base.ResizeColliderBounds(shouldResize);
 

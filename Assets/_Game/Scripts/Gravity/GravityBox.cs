@@ -184,7 +184,7 @@ namespace Hedronoid
             }
             return coordinate > 0f ? -g : g;
         }
-        protected override void ResizeColliderBounds(bool shouldResize)
+        public override void ResizeColliderBounds(bool shouldResize)
         {
             base.ResizeColliderBounds(shouldResize);
 
