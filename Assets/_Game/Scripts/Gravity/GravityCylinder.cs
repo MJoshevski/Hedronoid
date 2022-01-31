@@ -95,6 +95,7 @@ namespace Hedronoid
 
         public override void OnTriggerEnter(Collider other)
         {
+            // Cylinder specific: Unimplemented as we handle OnTriggerEnter in OnTriggerStay
         }
         public override void OnTriggerStay(Collider other)
         {
@@ -106,6 +107,7 @@ namespace Hedronoid
                 //    transform.position.y + (boundaryHeight / 2f), transform.position.y - (boundaryHeight / 2f),
                 //    other.gameObject.transform.position.y);
 
+                // OnTriggerEnter
                 if ((transform.position.y + (boundaryHeight / 2f) >= other.gameObject.transform.position.y &&
                 transform.position.y - (boundaryHeight / 2f) <= other.gameObject.transform.position.y) &&
                 !hasEntered)
@@ -126,8 +128,9 @@ namespace Hedronoid
                             if (gs.ResizeColliderOnEnter)
                                 gs.ResizeColliderBounds(false);
                     }
-
                 }
+
+                // OnTriggerExit
                 else if ((transform.position.y + (boundaryHeight / 2f) < other.gameObject.transform.position.y ||
                 transform.position.y - (boundaryHeight / 2f) > other.gameObject.transform.position.y) &&
                 hasEntered)       
@@ -151,6 +154,7 @@ namespace Hedronoid
         }
         public override void OnTriggerExit(Collider other)
         {
+            // Cylinder specific: Unimplemented as we handle OnTriggerExit in OnTriggerStay
         }
         public override Vector3 GetGravity(Vector3 position)
         {
