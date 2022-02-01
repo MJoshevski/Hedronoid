@@ -154,7 +154,25 @@ namespace Hedronoid
         }
         public override void OnTriggerExit(Collider other)
         {
-            // Cylinder specific: Unimplemented as we handle OnTriggerExit in OnTriggerStay
+            if (!IsInLayerMask(other)) return;
+
+            if ((other.gameObject.layer & (1 << HNDAI.Settings.PlayerLayer)) > 0)
+            {
+                hasEntered = false;
+                IsPlayerInGravity = false;
+            }
+
+            GravitySource grSrc = other.gameObject.GetComponent<GravitySource>();
+            if (grSrc && OverlappingSources.Contains(grSrc))
+                OverlappingSources.Remove(grSrc);
+
+            if (ResizeColliderOnEnter)
+            {
+                if (AutomaticColliderSize)
+                    AutomaticColliderSize = false;
+
+                ResizeColliderBounds(false);
+            }
         }
         public override Vector3 GetGravity(Vector3 position)
         {
@@ -195,7 +213,7 @@ namespace Hedronoid
             if (shouldResize)
             {
                 boundsCollider.radius = resizedRadius;
-                boundsCollider.height = resizedBoundaryHeight;
+                boundsCollider.height = resizedBoundaryHeight + (2f * resizedRadius);
                 boundsCollider.center = Vector3.zero;
             }
             else
