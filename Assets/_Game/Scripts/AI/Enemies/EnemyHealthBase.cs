@@ -12,7 +12,7 @@ public class EnemyHealthBase : HealthBase
     protected virtual void FixedUpdate()
     {
         upAxis = GravityService.GetUpAxis(transform.position);
-        rightAxis = GravityService.GetRightAxis(transform.position);
+        rightAxis = GravityService.GetRightAxis(transform);
     }
 
     protected override void UpdateHealthBarOrientation()

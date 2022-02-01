@@ -63,25 +63,25 @@ namespace Hedronoid
             }
             return -g.normalized;
         }
-
-        public static Vector3 GetForwardAxis(Vector3 position)
+        public static Vector3 GetForwardAxis(Transform transform)
         {
-            Vector3 g = Vector3.zero;
-            for (int i = 0; i < sources.Count; i++)
-            {
-                g += sources[i].GetGravity(position);
-            }
-            return new Vector3(0, 0, g.normalized.z);
+            Vector3 fromUp = transform.up;
+            Vector3 toUp = GetUpAxis(transform.position);
+
+            Quaternion upAlignment =
+                Quaternion.FromToRotation(fromUp, toUp);
+
+            return upAlignment * transform.forward;
         }
-
-        public static Vector3 GetRightAxis(Vector3 position)
+        public static Vector3 GetRightAxis(Transform transform)
         {
-            Vector3 g = Vector3.zero;
-            for (int i = 0; i < sources.Count; i++)
-            {
-                g += sources[i].GetGravity(position);
-            }
-            return new Vector3(g.normalized.x, 0, 0);
+            Vector3 fromUp = transform.up;
+            Vector3 toUp = GetUpAxis(transform.position);
+
+            Quaternion upAlignment =
+                Quaternion.FromToRotation(fromUp, toUp);
+
+            return upAlignment * transform.right;
         }
 
         public static void PrioritizeActiveOverlappedGravities(Vector3 position, Vector3 moveDir)

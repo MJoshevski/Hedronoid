@@ -121,8 +121,6 @@ namespace Hedronoid
         private Vector3 lookPosition;
         public Vector3 LookPosition {  get { return lookPosition; } }
         private Vector3 lookDirection;
-        private float minVerticalAnglePrev;
-        private float maxVerticalAnglePrev;
 
         // RAYCASTING
         private RaycastHit prevHitPoint;
@@ -169,8 +167,6 @@ namespace Hedronoid
             gravityAlignment = Quaternion.identity;
             orbitCamera = GetComponent<Camera>();
             orbitCamera.transform.localRotation = orbitRotation = Quaternion.Euler(orbitAngles);
-            minVerticalAnglePrev = minVerticalAngle;
-            maxVerticalAnglePrev = maxVerticalAngle;
 
             playerAction = InputManager.Instance.PlayerActions;
 
@@ -243,8 +239,8 @@ namespace Hedronoid
             Vector3 fromUp = gravityAlignment * Vector3.up;
             Vector3 toUp = GravityService.GetUpAxis(focus.position);
 
-            Vector3 fromForward = gravityAlignment * Vector3.forward;
-            Vector3 toForward = GravityService.GetForwardAxis(focus.position);
+            //Vector3 fromForward = gravityAlignment * Vector3.forward;
+            //Vector3 toForward = GravityService.GetForwardAxis(focus.position);
 
             float dot = Mathf.Clamp(Vector3.Dot(fromUp, toUp), -1f, 1f);
             float angle = Mathf.Acos(dot) * Mathf.Rad2Deg;
@@ -253,8 +249,8 @@ namespace Hedronoid
             Quaternion upAlignment =
                 Quaternion.FromToRotation(fromUp, toUp) * gravityAlignment;
 
-            Quaternion forwardAlignment =
-                Quaternion.FromToRotation(fromForward, toForward) * gravityAlignment;
+            //Quaternion forwardAlignment =
+            //    Quaternion.FromToRotation(fromForward, toForward) * gravityAlignment;
 
             if (angle <= maxAngle)
             {

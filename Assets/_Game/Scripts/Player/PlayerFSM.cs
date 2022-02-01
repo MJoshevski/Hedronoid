@@ -353,25 +353,24 @@ namespace Hedronoid.Player
 
             gravityAlignedVelocity = transform.InverseTransformDirection(velocity);
 
+            //Debug.DrawRay(transform.position, rot, Color.green);
+            //Debug.DrawRay(transform.position, GravityService.GetUpAxis(cachedTransform.position), Color.blue);
+            //Debug.DrawRay(transform.position, GravityService.GetRightAxis(cachedTransform), Color.magenta);
+
             // ROTATE TO GRAVITY
             Vector3 targetDirection;
             if (aimingMode)
             {
                 m_Animancer.Layers[movementVariables.DefaultLayer].ApplyAnimatorIK = true;
-                targetDirection = GravityService.GetForwardAxis(cachedTransform.position);
+                targetDirection = GravityService.GetForwardAxis(orbitCamera.cachedTransform);
             }
             else
             {
                 m_Animancer.Layers[movementVariables.DefaultLayer].ApplyAnimatorIK = false;
-                targetDirection = movementVariables.MoveDirection;
-            }
-
-            if (targetDirection == Vector3.zero)
-            {
-                if (aimingMode)
-                    targetDirection = forwardAxis;
-                else 
-                    targetDirection = m_Rigidbody.transform.forward;
+                
+                if (movementVariables.MoveDirection != Vector3.zero)
+                    targetDirection = movementVariables.MoveDirection;
+                else targetDirection = m_Rigidbody.transform.forward;
             }
 
             Quaternion targetRotation = Quaternion.Slerp(
