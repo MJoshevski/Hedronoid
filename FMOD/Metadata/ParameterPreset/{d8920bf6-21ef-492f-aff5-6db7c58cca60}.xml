@@ -1,22 +1,22 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <objects serializationModel="Studio.02.01.00">
-	<object class="ParameterPreset" id="{9d3ed954-ec21-48de-8083-b91a4ba58e53}">
+	<object class="ParameterPreset" id="{d8920bf6-21ef-492f-aff5-6db7c58cca60}">
 		<property name="name">
-			<value>NPC_Distance</value>
+			<value>Distance</value>
 		</property>
 		<relationship name="folder">
 			<destination>{8218d524-6cfe-4ee0-b672-8773e01a29d7}</destination>
 		</relationship>
 		<relationship name="parameter">
-			<destination>{8bd9fdbc-f304-4fdf-ac8c-6fc1a7768ad3}</destination>
+			<destination>{3ddd718d-236a-43de-be8e-b764b3403b46}</destination>
 		</relationship>
 	</object>
-	<object class="GameParameter" id="{8bd9fdbc-f304-4fdf-ac8c-6fc1a7768ad3}">
+	<object class="GameParameter" id="{3ddd718d-236a-43de-be8e-b764b3403b46}">
 		<property name="parameterType">
 			<value>3</value>
 		</property>
 		<property name="maximum">
-			<value>50</value>
+			<value>200</value>
 		</property>
 		<property name="initialValue">
 			<value>0</value>

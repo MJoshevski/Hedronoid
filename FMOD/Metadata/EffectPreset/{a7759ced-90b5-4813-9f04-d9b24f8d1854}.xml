@@ -1,0 +1,55 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<objects serializationModel="Studio.02.01.00">
+	<object class="EffectPreset" id="{a7759ced-90b5-4813-9f04-d9b24f8d1854}">
+		<property name="name">
+			<value>NPC_Space</value>
+		</property>
+		<relationship name="folder">
+			<destination>{d05afddf-a8fa-48d5-97d1-e474393938ac}</destination>
+		</relationship>
+		<relationship name="effect">
+			<destination>{7998c9ef-ce23-4ed6-8a85-8e0ff11df894}</destination>
+		</relationship>
+	</object>
+	<object class="SpatialiserEffect" id="{7998c9ef-ce23-4ed6-8a85-8e0ff11df894}">
+		<property name="maximumDistance">
+			<value>50</value>
+		</property>
+		<relationship name="automators">
+			<destination>{496a0d2b-f04f-49d4-998c-6073307d38c8}</destination>
+		</relationship>
+	</object>
+	<object class="Automator" id="{496a0d2b-f04f-49d4-998c-6073307d38c8}">
+		<property name="nameOfPropertyBeingAutomated">
+			<value>panBlend</value>
+		</property>
+		<relationship name="automationCurves">
+			<destination>{117a9be4-dee8-4a85-bbf6-3d7d55a329c3}</destination>
+		</relationship>
+	</object>
+	<object class="AutomationCurve" id="{117a9be4-dee8-4a85-bbf6-3d7d55a329c3}">
+		<relationship name="parameter">
+			<destination>{8bd9fdbc-f304-4fdf-ac8c-6fc1a7768ad3}</destination>
+		</relationship>
+		<relationship name="automationPoints">
+			<destination>{0f27038e-bb37-470b-90bc-e6df7945c162}</destination>
+			<destination>{c1aa53cd-6870-4b12-a571-321fd0b1e0bf}</destination>
+		</relationship>
+	</object>
+	<object class="AutomationPoint" id="{0f27038e-bb37-470b-90bc-e6df7945c162}">
+		<property name="position">
+			<value>0</value>
+		</property>
+		<property name="value">
+			<value>0</value>
+		</property>
+	</object>
+	<object class="AutomationPoint" id="{c1aa53cd-6870-4b12-a571-321fd0b1e0bf}">
+		<property name="position">
+			<value>49.712643678160916</value>
+		</property>
+		<property name="value">
+			<value>1</value>
+		</property>
+	</object>
+</objects>
