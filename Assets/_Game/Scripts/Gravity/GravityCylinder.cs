@@ -1,4 +1,5 @@
 ﻿using Hedronoid.AI;
+using System.Collections;
 using System.Collections.Generic;
 using UnityEditor;
 using UnityEngine;
@@ -38,21 +39,27 @@ namespace Hedronoid
         float outerFalloffRadius = 15f;
 
         float innerFalloffFactor, outerFalloffFactor;
-        float originalRadius, originalBoundaryHeight;
         public float ResizedRadius { get { return resizedRadius; } }
         public float ResizedBoundaryHeight { get { return resizedBoundaryHeight; } }
 
-        [Header("Resized")]
-        [SerializeField, Min(0f)]
-        [Tooltip("Resized cylinder radius. Color = Black")]
-        float resizedRadius;
-        [SerializeField, Min(0f)]
-        [Tooltip("Resized cylinder height. Color = Black")]
-        float resizedBoundaryHeight;
+        [Header("Mesh Colliders")]
+        [SerializeField, Min(1)]
+        [Tooltip("Height of the mesh collider with no player in it.")]
+        private int originalHeight = 2;
+        [SerializeField, Min(1)]
+        [Tooltip("Radius of the mesh collider with no player in it.")]
+        private int originalRadius = 1;
+        [SerializeField, Min(1)]
+        [Tooltip("Height of the resized cylinder once the player enters.")]
+        private int resizedBoundaryHeight = 2;
+        [SerializeField, Min(1)]
+        [Tooltip("Radius of the resized cylinder once the player enters.")]
+        private int resizedRadius = 2;
 
         // BOUNDS
-        [HideInInspector]
-        public CapsuleCollider boundsCollider;
+        public MeshCollider originalCollider;
+        public MeshCollider resizedCollider;
+        public bool scanForColliders = false;
 
         private bool hasEntered = false;
 
@@ -72,16 +79,27 @@ namespace Hedronoid
             innerFalloffFactor = 1f / (innerRadius - innerFalloffRadius);
             outerFalloffFactor = 1f / (outerFalloffRadius - outerRadius);
 
-            if (!boundsCollider)
-                boundsCollider = GetComponent<CapsuleCollider>();
-
-            boundsCollider.isTrigger = true;
-
-            if (AutomaticColliderSize)
+            if (scanForColliders)
             {
-                boundsCollider.radius = outerFalloffRadius;
-                boundsCollider.height = boundaryHeight + (2f * outerFalloffRadius);
-                boundsCollider.center = Vector3.zero;
+                Collider[] colliders = GetComponents<Collider>();
+
+                for (int i = 0; i < colliders.Length; i++)
+                {
+                    Collider toBeDestroyed = colliders[i];
+
+                    if (toBeDestroyed != null)
+                    {
+                        EditorApplication.delayCall += () =>
+                        {
+                            Undo.DestroyObjectImmediate(toBeDestroyed);
+                        };
+                    }
+                }
+
+                originalCollider = ProceduralPrimitives.GenerateCylinder(transform, originalRadius, 10, originalHeight, 0.5f);
+                resizedCollider = ProceduralPrimitives.GenerateCylinder(transform, resizedRadius, 10, resizedBoundaryHeight, 0.5f);
+
+                scanForColliders = false;
             }
         }
 
@@ -89,90 +107,7 @@ namespace Hedronoid
         {
             base.Awake();
 
-            originalRadius = boundsCollider.radius;
-            originalBoundaryHeight = boundsCollider.height;
-        }
-
-        public override void OnTriggerEnter(Collider other)
-        {
-            // Cylinder specific: Unimplemented as we handle OnTriggerEnter in OnTriggerStay
-        }
-        public override void OnTriggerStay(Collider other)
-        {
-            if (!IsInLayerMask(other)) return;
-
-            if ((other.gameObject.layer & (1 << HNDAI.Settings.PlayerLayer)) > 0)
-            {
-                //Debug.LogErrorFormat("HEIGHT: {0}, BELOW: {1}, PLAYER POS Y: {2}",
-                //    transform.position.y + (boundaryHeight / 2f), transform.position.y - (boundaryHeight / 2f),
-                //    other.gameObject.transform.position.y);
-
-                // OnTriggerEnter
-                if ((transform.position.y + (boundaryHeight / 2f) >= other.gameObject.transform.position.y &&
-                transform.position.y - (boundaryHeight / 2f) <= other.gameObject.transform.position.y) &&
-                !hasEntered)
-                {
-                    hasEntered = true;
-                    IsPlayerInGravity = true;
-
-                    GravitySource grSrc = other.gameObject.GetComponent<GravitySource>();
-                    if (grSrc && !OverlappingSources.Contains(grSrc))
-                        OverlappingSources.Add(grSrc);
-
-                    if (ResizeColliderOnEnter)
-                    {
-                        if (AutomaticColliderSize) AutomaticColliderSize = false;
-                        ResizeColliderBounds(true);
-
-                        foreach (GravitySource gs in OverlappingSources)
-                            if (gs.ResizeColliderOnEnter)
-                                gs.ResizeColliderBounds(false);
-                    }
-                }
-
-                // OnTriggerExit
-                else if ((transform.position.y + (boundaryHeight / 2f) < other.gameObject.transform.position.y ||
-                transform.position.y - (boundaryHeight / 2f) > other.gameObject.transform.position.y) &&
-                hasEntered)       
-                {
-                    hasEntered = false;
-                    IsPlayerInGravity = false;
-
-                    GravitySource grSrc = other.gameObject.GetComponent<GravitySource>();
-                    if (grSrc && OverlappingSources.Contains(grSrc))
-                        OverlappingSources.Remove(grSrc);
-
-                    if (ResizeColliderOnEnter)
-                    {
-                        if (AutomaticColliderSize) 
-                            AutomaticColliderSize = false;
-
-                        ResizeColliderBounds(false);
-                    }
-                }
-            }
-        }
-        public override void OnTriggerExit(Collider other)
-        {
-            if (!IsInLayerMask(other)) return;
-
-            if ((other.gameObject.layer & (1 << HNDAI.Settings.PlayerLayer)) > 0)
-            {
-                hasEntered = false;
-                IsPlayerInGravity = false;
-            }
-
-            GravitySource grSrc = other.gameObject.GetComponent<GravitySource>();
-            if (grSrc && OverlappingSources.Contains(grSrc))
-                OverlappingSources.Remove(grSrc);
-
-            if (ResizeColliderOnEnter)
-            {
-                if (AutomaticColliderSize)
-                    AutomaticColliderSize = false;
-
-                ResizeColliderBounds(false);
-            }
+            ResizeColliderBounds(false);
         }
         public override Vector3 GetGravity(Vector3 position)
         {
@@ -208,20 +143,8 @@ namespace Hedronoid
         }
         public override void ResizeColliderBounds(bool shouldResize)
         {
-            base.ResizeColliderBounds(shouldResize);
-
-            if (shouldResize)
-            {
-                boundsCollider.radius = resizedRadius;
-                boundsCollider.height = resizedBoundaryHeight + (2f * resizedRadius);
-                boundsCollider.center = Vector3.zero;
-            }
-            else
-            {
-                boundsCollider.radius = originalRadius;
-                boundsCollider.height = originalBoundaryHeight;
-                boundsCollider.center = Vector3.zero;
-            }
+            resizedCollider.enabled = shouldResize;
+            originalCollider.enabled = !shouldResize;
         }
 
 #if UNITY_EDITOR

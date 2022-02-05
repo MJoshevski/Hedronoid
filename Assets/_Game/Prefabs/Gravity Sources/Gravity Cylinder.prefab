@@ -30,6 +30,7 @@ Transform:
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
   m_LocalPosition: {x: 0, y: 0, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
   m_Children: []
   m_Father: {fileID: 6710967019150540383}
   m_RootOrder: 0
@@ -53,6 +54,7 @@ MeshRenderer:
   m_CastShadows: 1
   m_ReceiveShadows: 1
   m_DynamicOccludee: 1
+  m_StaticShadowCaster: 0
   m_MotionVectors: 1
   m_LightProbeUsage: 1
   m_ReflectionProbeUsage: 1
@@ -61,7 +63,7 @@ MeshRenderer:
   m_RenderingLayerMask: 1
   m_RendererPriority: 0
   m_Materials:
-  - {fileID: 3888142945460007962, guid: 777d901d91a6b7b478b4bd71b326e093, type: 3}
+  - {fileID: 2100000, guid: 04652004be933ba41b4ac32ddd7f5eeb, type: 2}
   m_StaticBatchInfo:
     firstSubMesh: 0
     subMeshCount: 0
@@ -95,7 +97,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 8233d90336aea43098adf6dbabd606a2, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  m_MeshFormatVersion: 1
+  m_MeshFormatVersion: 2
   m_Faces:
   - m_Indexes: 000000000100000002000000010000000300000002000000
     m_SmoothingGroup: 1
@@ -4098,6 +4100,8 @@ MonoBehaviour:
     m_AreaError: 15
   m_PreserveMeshAssetOnDestroy: 0
   assetGuid: 
+  m_Mesh: {fileID: 0}
+  m_VersionIndex: 0
   m_IsSelectable: 1
   m_SelectedFaces: 
   m_SelectedEdges: []
@@ -4126,7 +4130,7 @@ GameObject:
   m_Component:
   - component: {fileID: 5988103631460879465}
   - component: {fileID: 5930821673586969830}
-  - component: {fileID: 8855947875092366790}
+  - component: {fileID: 1514965927850098386}
   - component: {fileID: 1874534438846850020}
   m_Layer: 0
   m_Name: Gravity
@@ -4145,6 +4149,7 @@ Transform:
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
   m_LocalPosition: {x: 0, y: 1, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
   m_Children: []
   m_Father: {fileID: 6710967019150540383}
   m_RootOrder: 1
@@ -4164,8 +4169,9 @@ MonoBehaviour:
   triggerLayers:
     serializedVersion: 2
     m_Bits: 512
+  ResizeColliderOnEnter: 0
   AutomaticColliderSize: 1
-  ParentToEmbededSource: 0
+  filteredSources: []
   CurrentPriorityWeight: 1
   IsPlayerInGravity: 0
   gravity: 9.81
@@ -4175,21 +4181,27 @@ MonoBehaviour:
   innerRadius: 9.14
   outerRadius: 14.8
   outerFalloffRadius: 19.16
-  boundsCollider: {fileID: 8855947875092366790}
---- !u!136 &8855947875092366790
-CapsuleCollider:
+  originalHeight: 6
+  originalRadius: 4
+  resizedBoundaryHeight: 0
+  resizedRadius: 0
+  originalCollider: {fileID: 0}
+  resizedCollider: {fileID: 0}
+  scanForColliders: 0
+--- !u!64 &1514965927850098386
+MeshCollider:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 5006111759912873125}
   m_Material: {fileID: 0}
-  m_IsTrigger: 1
+  m_IsTrigger: 0
   m_Enabled: 1
-  m_Radius: 19.16
-  m_Height: 70.520004
-  m_Direction: 1
-  m_Center: {x: 0, y: 0, z: 0}
+  serializedVersion: 4
+  m_Convex: 0
+  m_CookingOptions: 30
+  m_Mesh: {fileID: 0}
 --- !u!54 &1874534438846850020
 Rigidbody:
   m_ObjectHideFlags: 0
@@ -4229,12 +4241,13 @@ Transform:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 6710967019150540378}
-  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalRotation: {x: 0.7071068, y: 0, z: 0, w: 0.7071068}
   m_LocalPosition: {x: 0, y: 22.37, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
   m_Children:
   - {fileID: 7159598181771531453}
   - {fileID: 5988103631460879465}
   m_Father: {fileID: 0}
   m_RootOrder: 0
-  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+  m_LocalEulerAnglesHint: {x: 90, y: 0, z: 0}

@@ -1,18 +1,10 @@
 using System.Collections;
 using System.Collections.Generic;
+using UnityEditor;
 using UnityEngine;
 
-public static class CylinderGenerate
+public static class ProceduralPrimitives
 {
-    [Range(10, 20)]
-    public static int Iterations = 10;
-    [Min(0)]
-    public static int Height;
-    [Min(0)]
-    public static int Radius;
-    [Min(0)]
-    public static float Gap = 0.5f;
-
     private static Mesh m_Mesh;
     private static MeshRenderer m_MeshRenderer;
     private static MeshFilter m_MeshFilter;
@@ -22,19 +14,18 @@ public static class CylinderGenerate
     private static int[] m_Tris;
     private static int[] m_FinalTris;
     private static int[] m_FirstPlane;
-    public static void CreateCylinder(Transform parent, int radius, int iterations, int height, int gap)
+    public static MeshCollider GenerateCylinder(Transform parent, int radius, int iterations, int height, float gap)
     {
         m_Primitive = GameObject.CreatePrimitive(PrimitiveType.Cube);
-        m_Primitive.transform.position = parent.position;
 
         m_Mesh = new Mesh();
         m_MeshFilter = m_Primitive.GetComponent<MeshFilter>();
         m_MeshRenderer = m_Primitive.GetComponent<MeshRenderer>();
 
-        MakingVertices(Radius, Iterations, Height, Gap);
+        return GenerateCylinderVertices(parent, radius, iterations, height, gap);
     }
 
-    static void MakingVertices(int radius, int iterations, int height, float gap)
+    static MeshCollider GenerateCylinderVertices(Transform parentObject, int radius, int iterations, int height, float gap)
     {
         float x;
         float y;
@@ -68,9 +59,9 @@ public static class CylinderGenerate
         m_Vertices[m_Vertices.Length - 1] = new Vector3(0, 0, m_Vertices[m_Vertices.Length - 3].z);
         Debug.Log("Vertices: " + m_Num);
         m_Mesh.vertices = m_Vertices;
-        MakeNormals();
+        return GenerateCylinderNormals(parentObject, radius, iterations, height, gap);
     }
-    static void MakeNormals()
+    static MeshCollider GenerateCylinderNormals(Transform parentObject, int radius, int iterations, int height, float gap)
     {
         int i = 0;
         Vector3[] normals = new Vector3[m_Num + 2];
@@ -81,24 +72,28 @@ public static class CylinderGenerate
         }
         m_Mesh.normals = normals;
 
-        MakeTriangles();
+        return GenerateCylinderTriangles(parentObject, radius, iterations, height, gap);
     }
-    static void MakeTriangles()
+    static MeshCollider GenerateCylinderTriangles(Transform parentObject, int radius, int iterations, int height, float gap)
     {
         int i = 0;
-        m_Tris = new int[((3 * ((int)Height - 1) * Iterations) * 2) + 3];
-        while (i < (Height - 1) * Iterations)
+        int arraySize = ((3 * (height - 1) *
+            iterations) * 2) +3;
+
+        m_Tris = new int[arraySize];
+
+        while (i < (height - 1) * iterations)
         {
             m_Tris[i * 3] = i;
-            if ((i + 1) % Iterations == 0)
+            if ((i + 1) % iterations == 0)
             {
-                m_Tris[i * 3 + 1] = 1 + i - Iterations;
+                m_Tris[i * 3 + 1] = 1 + i - iterations;
             }
             else
             {
                 m_Tris[i * 3 + 1] = 1 + i;
             }
-            m_Tris[i * 3 + 2] = Iterations + i;
+            m_Tris[i * 3 + 2] = iterations + i;
             i++;
         }
         int newTrisIdx = -1;
@@ -106,29 +101,29 @@ public static class CylinderGenerate
         for (int u = (m_Tris.Length - 3) / 2; u < m_Tris.Length - 6; u += 3)
         {
             //mesh.RecalculateTangents();
-            if ((newTrisIdx + 2) % Iterations == 0)
+            if ((newTrisIdx + 2) % iterations == 0)
             {
-                m_Tris[u] = newTrisIdx + Iterations * 2 + 1;
+                m_Tris[u] = newTrisIdx + iterations * 2 + 1;
             }
             else
-                m_Tris[u] = newTrisIdx + Iterations + 1;
+                m_Tris[u] = newTrisIdx + iterations + 1;
 
             m_Tris[u + 1] = newTrisIdx + 2;
-            m_Tris[u + 2] = newTrisIdx + Iterations + 2;
+            m_Tris[u + 2] = newTrisIdx + iterations + 2;
             newTrisIdx += 1;
         }
         m_Tris[m_Tris.Length - 3] = 0;
-        m_Tris[m_Tris.Length - 2] = (Iterations * 2) - 1;
-        m_Tris[m_Tris.Length - 1] = Iterations;
+        m_Tris[m_Tris.Length - 2] = (iterations * 2) - 1;
+        m_Tris[m_Tris.Length - 1] = iterations;
 
-        m_FirstPlane = new int[(Iterations * 3) * 2];
+        m_FirstPlane = new int[(iterations * 3) * 2];
         int felmnt = 0;
         for (int h = 0; h < m_FirstPlane.Length / 2; h += 3)
         {
 
             m_FirstPlane[h] = felmnt;
 
-            if (felmnt + 1 != Iterations)
+            if (felmnt + 1 != iterations)
                 m_FirstPlane[h + 1] = felmnt + 1;
             else
                 m_FirstPlane[h + 1] = 0;
@@ -136,21 +131,21 @@ public static class CylinderGenerate
             felmnt += 1;
         }
 
-        felmnt = Iterations * (Height - 1);
+        felmnt = iterations * (height - 1);
         for (int h = m_FirstPlane.Length / 2; h < m_FirstPlane.Length; h += 3)
         {
 
             m_FirstPlane[h] = felmnt;
 
-            if (felmnt + 1 != Iterations * (Height - 1))
+            if (felmnt + 1 != iterations * (height - 1))
                 m_FirstPlane[h + 1] = felmnt + 1;
             else
-                m_FirstPlane[h + 1] = Iterations * (Height - 1);
+                m_FirstPlane[h + 1] = iterations * (height - 1);
             m_FirstPlane[h + 2] = m_Vertices.Length - 1;
             felmnt += 1;
         }
 
-        m_FirstPlane[m_FirstPlane.Length - 3] = Iterations * (Height - 1);
+        m_FirstPlane[m_FirstPlane.Length - 3] = iterations * (height - 1);
         m_FirstPlane[m_FirstPlane.Length - 2] = m_Vertices.Length - 3;
         m_FirstPlane[m_FirstPlane.Length - 1] = m_Vertices.Length - 1;
 
@@ -172,9 +167,19 @@ public static class CylinderGenerate
         m_MeshFilter.mesh = m_Mesh;
         m_MeshRenderer.enabled = false;
 
-        MeshCollider m_MeshCollider = m_Primitive.AddComponent<MeshCollider>();
+        MeshCollider m_MeshCollider = parentObject.gameObject.AddComponent<MeshCollider>();
         m_MeshCollider.sharedMesh = m_Mesh;
         m_MeshCollider.convex = true;
         m_MeshCollider.isTrigger = true;
+
+        if (m_Primitive != null)
+        {
+            EditorApplication.delayCall += () =>
+            {
+                Undo.DestroyObjectImmediate(m_Primitive);
+            };
+        }
+
+        return m_MeshCollider;
     }
 }
