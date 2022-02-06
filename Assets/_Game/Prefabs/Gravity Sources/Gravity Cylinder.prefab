@@ -4101,7 +4101,7 @@ MonoBehaviour:
   m_PreserveMeshAssetOnDestroy: 0
   assetGuid: 
   m_Mesh: {fileID: 0}
-  m_VersionIndex: 0
+  m_VersionIndex: 24
   m_IsSelectable: 1
   m_SelectedFaces: 
   m_SelectedEdges: []
@@ -4130,9 +4130,10 @@ GameObject:
   m_Component:
   - component: {fileID: 5988103631460879465}
   - component: {fileID: 5930821673586969830}
-  - component: {fileID: 1514965927850098386}
   - component: {fileID: 1874534438846850020}
-  m_Layer: 0
+  - component: {fileID: 6978507746591903307}
+  - component: {fileID: 888665581592348147}
+  m_Layer: 16
   m_Name: Gravity
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -4181,27 +4182,15 @@ MonoBehaviour:
   innerRadius: 9.14
   outerRadius: 14.8
   outerFalloffRadius: 19.16
-  originalHeight: 6
-  originalRadius: 4
-  resizedBoundaryHeight: 0
-  resizedRadius: 0
-  originalCollider: {fileID: 0}
-  resizedCollider: {fileID: 0}
+  originalHeight: 33
+  originalRadius: 20
+  originalZCorrection: 16
+  resizedHeight: 33
+  resizedRadius: 12
+  resizedZCorrection: 16
+  originalCollider: {fileID: 6978507746591903307}
+  resizedCollider: {fileID: 888665581592348147}
   scanForColliders: 0
---- !u!64 &1514965927850098386
-MeshCollider:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 5006111759912873125}
-  m_Material: {fileID: 0}
-  m_IsTrigger: 0
-  m_Enabled: 1
-  serializedVersion: 4
-  m_Convex: 0
-  m_CookingOptions: 30
-  m_Mesh: {fileID: 0}
 --- !u!54 &1874534438846850020
 Rigidbody:
   m_ObjectHideFlags: 0
@@ -4218,6 +4207,34 @@ Rigidbody:
   m_Interpolate: 0
   m_Constraints: 0
   m_CollisionDetection: 0
+--- !u!64 &6978507746591903307
+MeshCollider:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 5006111759912873125}
+  m_Material: {fileID: 0}
+  m_IsTrigger: 1
+  m_Enabled: 1
+  serializedVersion: 4
+  m_Convex: 1
+  m_CookingOptions: 30
+  m_Mesh: {fileID: 0}
+--- !u!64 &888665581592348147
+MeshCollider:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 5006111759912873125}
+  m_Material: {fileID: 0}
+  m_IsTrigger: 1
+  m_Enabled: 1
+  serializedVersion: 4
+  m_Convex: 1
+  m_CookingOptions: 30
+  m_Mesh: {fileID: 0}
 --- !u!1 &6710967019150540378
 GameObject:
   m_ObjectHideFlags: 0

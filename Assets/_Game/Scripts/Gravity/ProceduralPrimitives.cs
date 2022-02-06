@@ -46,18 +46,18 @@ public static class ProceduralPrimitives
                 angle = (i * 1.0f) / iterations * Mathf.PI * 2;
                 x = Mathf.Sin(angle) * radius;
                 y = Mathf.Cos(angle) * radius;
-                m_Vertices[tempo] = new Vector3(x, y, z);
+                m_Vertices[tempo] = new Vector3(x, z - gap, y);
                 i++;
                 m_Num++;
                 tempo += 1;
             }
-            z += gap;
+            z += 1f;
             p++;
         }
 
 
         m_Vertices[m_Vertices.Length - 1] = new Vector3(0, 0, m_Vertices[m_Vertices.Length - 3].z);
-        Debug.Log("Vertices: " + m_Num);
+        //Debug.Log("Vertices: " + m_Num);
         m_Mesh.vertices = m_Vertices;
         return GenerateCylinderNormals(parentObject, radius, iterations, height, gap);
     }
@@ -174,12 +174,19 @@ public static class ProceduralPrimitives
 
         if (m_Primitive != null)
         {
-            EditorApplication.delayCall += () =>
-            {
-                Undo.DestroyObjectImmediate(m_Primitive);
-            };
+            MonoBehaviour mono = parentObject.gameObject.GetComponent<MonoBehaviour>(); 
+            mono.StartCoroutine(DestroyObject(m_Primitive));
         }
 
         return m_MeshCollider;
+    }
+
+    static IEnumerator DestroyObject(GameObject go)
+    {
+        EditorApplication.delayCall += () =>
+        {
+            Undo.DestroyObjectImmediate(go);
+        };
+        yield return null;
     }
 }

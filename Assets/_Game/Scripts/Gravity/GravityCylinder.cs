@@ -39,8 +39,6 @@ namespace Hedronoid
         float outerFalloffRadius = 15f;
 
         float innerFalloffFactor, outerFalloffFactor;
-        public float ResizedRadius { get { return resizedRadius; } }
-        public float ResizedBoundaryHeight { get { return resizedBoundaryHeight; } }
 
         [Header("Mesh Colliders")]
         [SerializeField, Min(1)]
@@ -49,12 +47,19 @@ namespace Hedronoid
         [SerializeField, Min(1)]
         [Tooltip("Radius of the mesh collider with no player in it.")]
         private int originalRadius = 1;
+        [SerializeField, Min(0)]
+        [Tooltip("Amount of Z-positioning correction on the original collider.")]
+        private float originalZCorrection = 0;
         [SerializeField, Min(1)]
         [Tooltip("Height of the resized cylinder once the player enters.")]
-        private int resizedBoundaryHeight = 2;
+        private int resizedHeight = 2;
         [SerializeField, Min(1)]
         [Tooltip("Radius of the resized cylinder once the player enters.")]
         private int resizedRadius = 2;
+        [SerializeField, Min(0)]
+        [Tooltip("Amount of Z-positioning correction on the resized collider.")]
+        private float resizedZCorrection = 0;
+
 
         // BOUNDS
         public MeshCollider originalCollider;
@@ -96,8 +101,8 @@ namespace Hedronoid
                     }
                 }
 
-                originalCollider = ProceduralPrimitives.GenerateCylinder(transform, originalRadius, 10, originalHeight, 0.5f);
-                resizedCollider = ProceduralPrimitives.GenerateCylinder(transform, resizedRadius, 10, resizedBoundaryHeight, 0.5f);
+                originalCollider = ProceduralPrimitives.GenerateCylinder(transform, originalRadius, 20, originalHeight, originalZCorrection);
+                resizedCollider = ProceduralPrimitives.GenerateCylinder(transform, resizedRadius, 20, resizedHeight, resizedZCorrection);
 
                 scanForColliders = false;
             }
@@ -196,7 +201,7 @@ namespace Hedronoid
                 DrawWireCylinder(
                    transform.position,
                    transform.rotation,
-                   resizedBoundaryHeight,
+                   resizedHeight,
                    resizedRadius,
                    Color.black);
             }
