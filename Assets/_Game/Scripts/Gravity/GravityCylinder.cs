@@ -47,7 +47,7 @@ namespace Hedronoid
         [SerializeField, Min(1)]
         [Tooltip("Radius of the mesh collider with no player in it.")]
         private int originalRadius = 1;
-        [SerializeField, Min(0)]
+        [SerializeField]
         [Tooltip("Amount of Z-positioning correction on the original collider.")]
         private float originalZCorrection = 0;
         [SerializeField, Min(1)]
@@ -56,7 +56,7 @@ namespace Hedronoid
         [SerializeField, Min(1)]
         [Tooltip("Radius of the resized cylinder once the player enters.")]
         private int resizedRadius = 2;
-        [SerializeField, Min(0)]
+        [SerializeField]
         [Tooltip("Amount of Z-positioning correction on the resized collider.")]
         private float resizedZCorrection = 0;
 
