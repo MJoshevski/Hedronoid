@@ -5,7 +5,7 @@ using UnityEngine;
 // ReSharper disable once InconsistentNaming
 [AddComponentMenu("DOTS Samples/SpawnAndRemove/Rotation Speed")]
 [ConverterVersion("joe", 1)]
-public class RotationSpeedAuthoring_SpawnAndRemove : MonoBehaviour, IConvertGameObjectToEntity
+public class RotationSpeedAuthoring : MonoBehaviour, IConvertGameObjectToEntity
 {
     public float DegreesPerSecond = 360;
 
@@ -14,7 +14,7 @@ public class RotationSpeedAuthoring_SpawnAndRemove : MonoBehaviour, IConvertGame
     // To a good runtime representation (Represented in radians)
     public void Convert(Entity entity, EntityManager dstManager, GameObjectConversionSystem conversionSystem)
     {
-        dstManager.AddComponentData(entity, new RotationSpeed_SpawnAndRemove { RadiansPerSecond = math.radians(DegreesPerSecond) });
+        dstManager.AddComponentData(entity, new RotationData { RadiansPerSecond = math.radians(DegreesPerSecond) });
         dstManager.AddComponentData(entity, new LifeTime { Value = 0.0F });
     }
 }

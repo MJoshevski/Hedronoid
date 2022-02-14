@@ -9,9 +9,26 @@ using Random = Unity.Mathematics.Random;
 // ReSharper disable once InconsistentNaming
 public struct SpawnerComponentData : IComponentData
 {
-    public int CountX;
-    public int CountY;
     public Entity Prefab;
+    public float Lifetime;
+    public float3 Direction;
+    public float3 SpawnPos;
+    public float Speed;
+    public float AngleHorizontal;
+    public float AngleVertical;
+    public float AccelSpeed;
+    public float AccelTurn;
+    public bool Homing;
+    public float3 HomingTarget;
+    public float HomingAngleSpeed;
+    public bool SinWave;
+    public float SinWaveSpeed;
+    public float SinWaveRangeSize;
+    public float SinWaveInverse;
+    public bool UseMaxSpeed;
+    public float MaxSpeed;
+    public bool UseMinSpeed;
+    public float MinSpeed;
 }
 
 
@@ -39,7 +56,6 @@ public partial class SpawnerSystem : SystemBase
         // Cache the BeginInitializationEntityCommandBufferSystem in a field, so we don't have to create it every frame
         m_EntityCommandBufferSystem = World.GetOrCreateSystem<BeginInitializationEntityCommandBufferSystem>();
     }
-
     protected override void OnUpdate()
     {
         // Instead of performing structural changes directly, a Job can add a command to an EntityCommandBuffer to
@@ -51,26 +67,19 @@ public partial class SpawnerSystem : SystemBase
         // Schedule the job that will add Instantiate commands to the EntityCommandBuffer.
         // Since this job only runs on the first frame, we want to ensure Burst compiles it before running to get the best performance (3rd parameter of WithBurst)
         // The actual job will be cached once it is compiled (it will only get Burst compiled once).
+
         Entities
-            .WithName("SpawnerSystem_SpawnAndRemove")
+            .WithName("SpawnerSystem")
             .WithBurst(FloatMode.Default, FloatPrecision.Standard, true)
             .ForEach((Entity entity, int entityInQueryIndex, in SpawnerComponentData spawner, in LocalToWorld location) =>
             {
-                var random = new Random(1);
+                var instance = commandBuffer.Instantiate(entityInQueryIndex, spawner.Prefab);
 
-                for (var x = 0; x < spawner.CountX; x++)
-                {
-                    for (var y = 0; y < spawner.CountY; y++)
-                    {
-                        var instance = commandBuffer.Instantiate(entityInQueryIndex, spawner.Prefab);
+                commandBuffer.SetComponent(entityInQueryIndex, instance, new Translation { Value = spawner.SpawnPos });
+                commandBuffer.SetComponent(entityInQueryIndex, instance, new MoveData { Direction = spawner.Direction, Speed = spawner.Speed, MaxSpeed = spawner.MaxSpeed, MinSpeed = spawner.MinSpeed, AccelSpeed = spawner.AccelSpeed, UseMaxSpeed = spawner.UseMaxSpeed, UseMinSpeed = spawner.UseMinSpeed });
+                commandBuffer.SetComponent(entityInQueryIndex, instance, new LifeTime { Value = spawner.Lifetime });
+                //commandBuffer.SetComponent(entityInQueryIndex, instance, new RotationSpeed { RadiansPerSecond = math.radians(random.NextFloat(25.0F, 90.0F)) });
 
-                        // Place the instantiated in a grid with some noise
-                        var position = math.transform(location.Value, new float3(x * 1.3F, noise.cnoise(new float2(x, y) * 0.21F) * 2, y * 1.3F));
-                        commandBuffer.SetComponent(entityInQueryIndex, instance, new Translation { Value = position });
-                        commandBuffer.SetComponent(entityInQueryIndex, instance, new LifeTime { Value = random.NextFloat(10.0F, 100.0F) });
-                        commandBuffer.SetComponent(entityInQueryIndex, instance, new RotationSpeed_SpawnAndRemove { RadiansPerSecond = math.radians(random.NextFloat(25.0F, 90.0F)) });
-                    }
-                }
 
                 commandBuffer.DestroyEntity(entityInQueryIndex, entity);
             }).ScheduleParallel();

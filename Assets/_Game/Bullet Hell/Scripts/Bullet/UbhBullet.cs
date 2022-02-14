@@ -1,6 +1,8 @@
 ﻿using Hedronoid;
 using Hedronoid.Core;
 using Hedronoid.Weapons;
+using Unity.Entities;
+using Unity.Transforms;
 using UnityEngine;
 
 /// <summary>
@@ -13,6 +15,7 @@ public class UbhBullet : HNDMonoBehaviour, IGameplaySceneContextInjector
 
     private Transform m_transformCache;
     private UbhBaseShot m_parentBaseShot;
+    private GameObject m_prefab;
     private float m_speed;
     private float m_angleHorizontal;
     private float m_angleVertical;
@@ -52,7 +55,7 @@ public class UbhBullet : HNDMonoBehaviour, IGameplaySceneContextInjector
     /// Override this property when you want to change the behavior at Active / Inactive.
     /// </summary>
     public virtual bool isActive { get { return gameObject.activeSelf; } }
-
+    private EntityManager m_EntityManager;
     protected override void Awake()
     {
         base.Awake();
@@ -63,7 +66,13 @@ public class UbhBullet : HNDMonoBehaviour, IGameplaySceneContextInjector
         m_tentacleBullet = GetComponent<UbhTentacleBullet>();
     }
 
-    protected override void OnDisable()
+    protected override void Start()
+    {
+        base.Start();
+        m_EntityManager = World.DefaultGameObjectInjectionWorld.EntityManager;
+
+    }
+protected override void OnDisable()
     {
         base.OnDisable();
 
