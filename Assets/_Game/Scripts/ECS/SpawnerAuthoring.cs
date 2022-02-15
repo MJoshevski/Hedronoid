@@ -8,8 +8,8 @@ using UnityEngine;
 public class SpawnerAuthoring : MonoBehaviour, IDeclareReferencedPrefabs, IConvertGameObjectToEntity
 {
     public GameObject Prefab;
-    public int CountX;
-    public int CountY;
+    //public int CountX;
+    //public int CountY;
 
     // Referenced prefabs have to be declared so that the conversion system knows about them ahead of time
     public void DeclareReferencedPrefabs(List<GameObject> referencedPrefabs)
@@ -26,8 +26,8 @@ public class SpawnerAuthoring : MonoBehaviour, IDeclareReferencedPrefabs, IConve
             // The referenced prefab will be converted due to DeclareReferencedPrefabs.
             // So here we simply map the game object to an entity reference to that prefab.
             Prefab = conversionSystem.GetPrimaryEntity(Prefab),
-            CountX = CountX,
-            CountY = CountY,
+            //CountX = CountX,
+            //CountY = CountY,
         };
         dstManager.AddComponentData(entity, spawnerData);
     }
