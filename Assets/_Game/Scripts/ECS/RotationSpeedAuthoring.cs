@@ -15,6 +15,6 @@ public class RotationSpeedAuthoring : MonoBehaviour, IConvertGameObjectToEntity
     public void Convert(Entity entity, EntityManager dstManager, GameObjectConversionSystem conversionSystem)
     {
         //dstManager.AddComponentData(entity, new RotationData { RadiansPerSecond = math.radians(DegreesPerSecond) });
-        dstManager.AddComponentData(entity, new LifeTime { Value = 0.0F });
+        dstManager.AddComponentData(entity, new LifeTime { timeRemainingInSeconds = 0.0F });
     }
 }
