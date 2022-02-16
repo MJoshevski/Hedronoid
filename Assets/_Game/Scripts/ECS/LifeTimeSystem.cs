@@ -17,25 +17,25 @@ public partial class LifeTimeSystem : SystemBase
     PlayerFSM player;
     protected override void OnCreate()
     {
-        m_Barrier = World.GetOrCreateSystem<EndSimulationEntityCommandBufferSystem>();
+        //m_Barrier = World.GetOrCreateSystem<EndSimulationEntityCommandBufferSystem>();
     }
 
     // OnUpdate runs on the main thread.
     protected override void OnUpdate()
     {
-        var commandBuffer = m_Barrier.CreateCommandBuffer().AsParallelWriter();
+        //var commandBuffer = m_Barrier.CreateCommandBuffer().AsParallelWriter();
 
-        var deltaTime = Time.DeltaTime;
-        Entities.ForEach((Entity entity, int nativeThreadIndex, ref LifeTime lifetime) =>
-        {
-            lifetime.Value -= deltaTime;
+        //var deltaTime = Time.DeltaTime;
+        //Entities.ForEach((Entity entity, int nativeThreadIndex, ref LifeTime lifetime) =>
+        //{
+        //    lifetime.Value -= deltaTime;
 
-            if (lifetime.Value < 0.0f)
-            {
-                commandBuffer.DestroyEntity(nativeThreadIndex, entity);
-            }
-        }).ScheduleParallel();
+        //    if (lifetime.Value < 0.0f)
+        //    {
+        //        commandBuffer.DestroyEntity(nativeThreadIndex, entity);
+        //    }
+        //}).ScheduleParallel();
 
-        m_Barrier.AddJobHandleForProducer(Dependency);
+        //m_Barrier.AddJobHandleForProducer(Dependency);
     }
 }
