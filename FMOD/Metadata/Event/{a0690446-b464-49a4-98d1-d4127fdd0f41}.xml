@@ -5,7 +5,7 @@
 			<value>NPC_Deflect</value>
 		</property>
 		<property name="outputFormat">
-			<value>0</value>
+			<value>2</value>
 		</property>
 		<relationship name="folder">
 			<destination>{20db109e-b05c-49f3-80b5-5e391b7af7b4}</destination>
@@ -120,6 +120,7 @@
 	<object class="MixerBusEffectChain" id="{3f80af00-51c4-4806-86cc-56502ec91c5c}">
 		<relationship name="effects">
 			<destination>{92185945-559d-432f-9a0a-598808a155fa}</destination>
+			<destination>{293330b6-45cb-486c-8d8d-9ce093d27c87}</destination>
 		</relationship>
 	</object>
 	<object class="MixerBusPanner" id="{7a455d15-1282-4633-9717-572b0b30178d}" />
@@ -156,5 +157,13 @@
 	</object>
 	<object class="MixerBusPanner" id="{af949b6f-45e2-4e57-8c65-3bc97f50253a}" />
 	<object class="MixerBusFader" id="{92185945-559d-432f-9a0a-598808a155fa}" />
+	<object class="SpatialiserEffect" id="{293330b6-45cb-486c-8d8d-9ce093d27c87}">
+		<property name="distanceRolloffType">
+			<value>4</value>
+		</property>
+		<property name="maximumDistance">
+			<value>50</value>
+		</property>
+	</object>
 	<object class="MixerBusFader" id="{02f53d99-f39e-429a-869b-39e65a93ab69}" />
 </objects>

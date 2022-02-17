@@ -5,7 +5,7 @@
 			<value>NPC_Hit_Confirm</value>
 		</property>
 		<property name="outputFormat">
-			<value>0</value>
+			<value>2</value>
 		</property>
 		<relationship name="folder">
 			<destination>{20db109e-b05c-49f3-80b5-5e391b7af7b4}</destination>
@@ -124,6 +124,7 @@
 	<object class="MixerBusEffectChain" id="{d1a88cc7-081a-4c7d-988f-ef7939bcdecf}">
 		<relationship name="effects">
 			<destination>{2633b32c-7771-4f16-884a-15600b12ff10}</destination>
+			<destination>{755cf6db-1305-40fe-851d-a61c2393e40d}</destination>
 			<destination>{3fcfc2e8-dda9-4de1-9dba-ecbce8fbaa9d}</destination>
 		</relationship>
 	</object>
@@ -167,6 +168,14 @@
 	</object>
 	<object class="MixerBusPanner" id="{ecf9b4bf-fe40-4f8d-a278-0b4afafeaa18}" />
 	<object class="MixerBusFader" id="{2633b32c-7771-4f16-884a-15600b12ff10}" />
+	<object class="SpatialiserEffect" id="{755cf6db-1305-40fe-851d-a61c2393e40d}">
+		<property name="distanceRolloffType">
+			<value>4</value>
+		</property>
+		<property name="maximumDistance">
+			<value>50</value>
+		</property>
+	</object>
 	<object class="GainEffect" id="{3fcfc2e8-dda9-4de1-9dba-ecbce8fbaa9d}">
 		<property name="gain">
 			<value>8</value>
