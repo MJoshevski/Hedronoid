@@ -2025,8 +2025,8 @@ Transform:
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children:
   - {fileID: 4948770192563909706}
-  - {fileID: 2787262238934069025}
   - {fileID: 1710741891}
+  - {fileID: 2787262238934069025}
   m_Father: {fileID: 2041395329}
   m_RootOrder: 1
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
@@ -3249,7 +3249,7 @@ Transform:
   - {fileID: 1960251801}
   - {fileID: 558637888}
   m_Father: {fileID: 1094284898}
-  m_RootOrder: 2
+  m_RootOrder: 1
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &1757178455
 GameObject:
@@ -3260,6 +3260,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 1757178457}
+  - component: {fileID: 1757178458}
   - component: {fileID: 1757178456}
   m_Layer: 0
   m_Name: Spawner
@@ -3317,6 +3318,19 @@ Transform:
   m_Father: {fileID: 0}
   m_RootOrder: 3
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &1757178458
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1757178455}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: ea7d7495833204790ba1d3a8755397f8, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  ConversionMode: 0
 --- !u!1001 &1787549772
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -8940,17 +8954,17 @@ PrefabInstance:
     - target: {fileID: 407470740538020742, guid: db81852832fcc784e8550c1e5d1890ed,
         type: 3}
       propertyPath: m_Size.x
-      value: 124
+      value: 35
       objectReference: {fileID: 0}
     - target: {fileID: 407470740538020742, guid: db81852832fcc784e8550c1e5d1890ed,
         type: 3}
       propertyPath: m_Size.y
-      value: 124
+      value: 26
       objectReference: {fileID: 0}
     - target: {fileID: 407470740538020742, guid: db81852832fcc784e8550c1e5d1890ed,
         type: 3}
       propertyPath: m_Size.z
-      value: 124
+      value: 30
       objectReference: {fileID: 0}
     - target: {fileID: 409357639372274959, guid: db81852832fcc784e8550c1e5d1890ed,
         type: 3}

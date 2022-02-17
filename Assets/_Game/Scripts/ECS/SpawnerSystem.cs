@@ -32,6 +32,8 @@ public struct SpawnerComponentData : IComponentData
     public float MaxSpeed;
     public bool UseMinSpeed;
     public float MinSpeed;
+    //testing
+    public float TimeToNextSpawnInSeconds;
 }
 
 
@@ -76,26 +78,29 @@ public partial class SpawnerSystem : SystemBase
             .WithBurst(FloatMode.Default, FloatPrecision.Standard, true)
             .ForEach((Entity entity, int entityInQueryIndex, in SpawnerComponentData spawner, in LocalToWorld location) =>
             {
+
                 var instance = commandBuffer.Instantiate(entityInQueryIndex, spawner.Prefab);
 
-                commandBuffer.SetComponent(entityInQueryIndex, instance, new Translation { Value = spawner.SpawnPos });
-                
-                commandBuffer.SetComponent(entityInQueryIndex, instance, new MoveData { 
-                    Direction = spawner.Direction, 
-                    Speed = spawner.Speed, 
-                    MaxSpeed = spawner.MaxSpeed, 
-                    MinSpeed = spawner.MinSpeed, 
-                    AccelSpeed = spawner.AccelSpeed, 
-                    UseMaxSpeed = spawner.UseMaxSpeed, 
-                    UseMinSpeed = spawner.UseMinSpeed 
+                commandBuffer.AddComponent(entityInQueryIndex, instance, new Translation { Value = spawner.SpawnPos });
+
+                commandBuffer.AddComponent(entityInQueryIndex, instance, new MoveData
+                {
+                    Direction = spawner.Direction,
+                    Speed = spawner.Speed,
+                    MaxSpeed = spawner.MaxSpeed,
+                    MinSpeed = spawner.MinSpeed,
+                    AccelSpeed = spawner.AccelSpeed,
+                    UseMaxSpeed = spawner.UseMaxSpeed,
+                    UseMinSpeed = spawner.UseMinSpeed
                 });
 
-                commandBuffer.SetComponent(entityInQueryIndex, instance, new LifeTime { timeRemainingInSeconds = spawner.Lifetime });
-                
-                commandBuffer.SetComponent(entityInQueryIndex, instance, new RotationData { 
-                    AccelTurn = spawner.AccelTurn, 
-                    AngleHorizontal = spawner.AngleHorizontal, 
-                    AngleVertical = spawner.AngleVertical, 
+                commandBuffer.AddComponent(entityInQueryIndex, instance, new LifeTime { timeRemainingInSeconds = spawner.Lifetime });
+
+                commandBuffer.AddComponent(entityInQueryIndex, instance, new RotationData
+                {
+                    AccelTurn = spawner.AccelTurn,
+                    AngleHorizontal = spawner.AngleHorizontal,
+                    AngleVertical = spawner.AngleVertical,
                     Homing = spawner.Homing,
                     HomingAngleSpeed = spawner.HomingAngleSpeed,
                     HomingTarget = spawner.HomingTarget,
