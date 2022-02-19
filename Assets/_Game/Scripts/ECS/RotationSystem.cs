@@ -99,9 +99,7 @@ public partial class RotationSystem : SystemBase
                         myAngles.x, myAngles.y - addAngle, myAngles.z + addAngle);
                 }
 
-
-                // Rotate something about its up vector at the speed given by RotationSpeed_SpawnAndRemove.
-                //rotation.Value = math.mul(math.normalize(rotation.Value), quaternion.AxisAngle(math.up(), rotSpeedSpawnAndRemove.RadiansPerSecond * deltaTime));
+                rotation.Value = newRotation;
             }).
             ScheduleParallel();
     }

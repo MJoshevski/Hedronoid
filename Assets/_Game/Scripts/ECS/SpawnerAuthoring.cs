@@ -12,7 +12,6 @@ public class SpawnerAuthoring : MonoBehaviour, IDeclareReferencedPrefabs, IConve
     public Quaternion InitRotation_Quaternion;
     public Vector3 InitPosition;
     public float Lifetime;
-    public Vector3 Direction;
     public Vector3 SpawnPos;
     public float Speed;
     public float AngleHorizontal;
@@ -59,7 +58,6 @@ public class SpawnerAuthoring : MonoBehaviour, IDeclareReferencedPrefabs, IConve
             AccelTurn = AccelTurn,
             AngleHorizontal = AngleHorizontal,
             AngleVertical = AngleVertical,
-            Direction = Direction,
             Homing = Homing,
             Lifetime = Lifetime,
             MaxSpeed = MaxSpeed,

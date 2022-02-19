@@ -14,7 +14,6 @@ public struct SpawnerComponentData : IComponentData
     public quaternion InitRotation_Quaternion;
     public float3 InitPosition;
     public float Lifetime;
-    public float3 Direction;
     public float3 SpawnPos;
     public float Speed;
     public float AngleHorizontal;
@@ -78,41 +77,41 @@ public partial class SpawnerSystem : SystemBase
             .WithBurst(FloatMode.Default, FloatPrecision.Standard, true)
             .ForEach((Entity entity, int entityInQueryIndex, in SpawnerComponentData spawner, in LocalToWorld location) =>
             {
-
-                var instance = commandBuffer.Instantiate(entityInQueryIndex, spawner.Prefab);
-
-                commandBuffer.AddComponent(entityInQueryIndex, instance, new Translation { Value = spawner.SpawnPos });
-
-                commandBuffer.AddComponent(entityInQueryIndex, instance, new MoveData
+                for (var y = 0; y < 10000; y++)
                 {
-                    Direction = spawner.Direction,
-                    Speed = spawner.Speed,
-                    MaxSpeed = spawner.MaxSpeed,
-                    MinSpeed = spawner.MinSpeed,
-                    AccelSpeed = spawner.AccelSpeed,
-                    UseMaxSpeed = spawner.UseMaxSpeed,
-                    UseMinSpeed = spawner.UseMinSpeed
-                });
+                    Entity instance = commandBuffer.Instantiate(entityInQueryIndex, spawner.Prefab);
 
-                commandBuffer.AddComponent(entityInQueryIndex, instance, new LifeTime { timeRemainingInSeconds = spawner.Lifetime });
+                    commandBuffer.AddComponent(entityInQueryIndex, instance, new Translation { Value = spawner.SpawnPos });
 
-                commandBuffer.AddComponent(entityInQueryIndex, instance, new RotationData
-                {
-                    AccelTurn = spawner.AccelTurn,
-                    AngleHorizontal = spawner.AngleHorizontal,
-                    AngleVertical = spawner.AngleVertical,
-                    Homing = spawner.Homing,
-                    HomingAngleSpeed = spawner.HomingAngleSpeed,
-                    HomingTarget = spawner.HomingTarget,
-                    InitPosition = spawner.InitPosition,
-                    InitRotation_Euler = spawner.InitRotation_Euler,
-                    InitRotation_Quaternion = spawner.InitRotation_Quaternion,
-                    SinWave = spawner.SinWave,
-                    SinWaveInverse = spawner.SinWaveInverse,
-                    SinWaveRangeSize = spawner.SinWaveRangeSize,
-                    SinWaveSpeed = spawner.SinWaveSpeed
-                });
+                    commandBuffer.AddComponent(entityInQueryIndex, instance, new RotationData
+                    {
+                        AccelTurn = spawner.AccelTurn,
+                        AngleHorizontal = spawner.AngleHorizontal,
+                        AngleVertical = spawner.AngleVertical,
+                        Homing = spawner.Homing,
+                        HomingAngleSpeed = spawner.HomingAngleSpeed,
+                        HomingTarget = spawner.HomingTarget,
+                        InitPosition = spawner.InitPosition,
+                        InitRotation_Euler = spawner.InitRotation_Euler,
+                        InitRotation_Quaternion = spawner.InitRotation_Quaternion,
+                        SinWave = spawner.SinWave,
+                        SinWaveInverse = spawner.SinWaveInverse,
+                        SinWaveRangeSize = spawner.SinWaveRangeSize,
+                        SinWaveSpeed = spawner.SinWaveSpeed
+                    });
 
+                    commandBuffer.AddComponent(entityInQueryIndex, instance, new MoveData
+                    {
+                        Speed = spawner.Speed,
+                        MaxSpeed = spawner.MaxSpeed,
+                        MinSpeed = spawner.MinSpeed,
+                        AccelSpeed = spawner.AccelSpeed,
+                        UseMaxSpeed = spawner.UseMaxSpeed,
+                        UseMinSpeed = spawner.UseMinSpeed
+                    });
+
+                    commandBuffer.AddComponent(entityInQueryIndex, instance, new LifeTime { timeRemainingInSeconds = spawner.Lifetime });
+                }
 
                 commandBuffer.DestroyEntity(entityInQueryIndex, entity);
             }).ScheduleParallel();

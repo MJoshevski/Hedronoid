@@ -2134,7 +2134,7 @@ MeshRenderer:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1150777955}
-  m_Enabled: 1
+  m_Enabled: 0
   m_CastShadows: 1
   m_ReceiveShadows: 1
   m_DynamicOccludee: 1
@@ -3281,24 +3281,23 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 72bd4e8ff9ab9d349afc83a8de0206b1, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  Prefab: {fileID: 100000, guid: 1109e62242928964fa089052e6107caf, type: 3}
+  Prefab: {fileID: 100000, guid: 45602157295b8564092f3374d228c924, type: 3}
   InitRotation_Euler: {x: 1, y: 1, z: 1}
   InitRotation_Quaternion: {x: 0, y: 0, z: 0, w: 0}
   InitPosition: {x: 0, y: 0, z: 0}
-  Lifetime: 3
-  Direction: {x: 0, y: 1, z: 0}
+  Lifetime: 20
   SpawnPos: {x: 0, y: 0, z: 0}
-  Speed: 4
+  Speed: 6
   AngleHorizontal: 0
   AngleVertical: 0
-  AccelSpeed: 0
+  AccelSpeed: 5
   AccelTurn: 0
   Homing: 0
   HomingTarget: {x: 0, y: 0, z: 0}
   HomingAngleSpeed: 0
-  SinWave: 0
-  SinWaveSpeed: 0
-  SinWaveRangeSize: 0
+  SinWave: 1
+  SinWaveSpeed: 5
+  SinWaveRangeSize: 15
   SinWaveInverse: 0
   UseMaxSpeed: 0
   MaxSpeed: 0
@@ -8954,17 +8953,17 @@ PrefabInstance:
     - target: {fileID: 407470740538020742, guid: db81852832fcc784e8550c1e5d1890ed,
         type: 3}
       propertyPath: m_Size.x
-      value: 35
+      value: 124
       objectReference: {fileID: 0}
     - target: {fileID: 407470740538020742, guid: db81852832fcc784e8550c1e5d1890ed,
         type: 3}
       propertyPath: m_Size.y
-      value: 26
+      value: 124
       objectReference: {fileID: 0}
     - target: {fileID: 407470740538020742, guid: db81852832fcc784e8550c1e5d1890ed,
         type: 3}
       propertyPath: m_Size.z
-      value: 30
+      value: 124
       objectReference: {fileID: 0}
     - target: {fileID: 409357639372274959, guid: db81852832fcc784e8550c1e5d1890ed,
         type: 3}

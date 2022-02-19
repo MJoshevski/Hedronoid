@@ -9,7 +9,6 @@ using System;
 [Serializable]
 public struct MoveData : IComponentData
 {
-    public float3 Direction;
     public float Speed;
     public float MaxSpeed;
     public float MinSpeed;
@@ -23,7 +22,7 @@ public partial class MoveSystem : SystemBase
     protected override void OnUpdate()
     {
         float dt = Time.DeltaTime;
-        Entities.WithAll<MoveData>().ForEach((ref Translation translation, ref MoveData move) =>
+        Entities.WithAll<MoveData>().ForEach((ref Translation translation, ref MoveData move, ref Rotation rotation) =>
         {
             float m_speed = move.Speed + (move.AccelSpeed * dt);
 
@@ -37,8 +36,9 @@ public partial class MoveSystem : SystemBase
                 m_speed = move.MinSpeed;
             }
 
+            float3 forward = math.mul(rotation.Value, new float3(0f, 0f, 1f));
 
-            translation.Value += (move.Direction * (m_speed * dt));
+            translation.Value += (forward * (m_speed * dt));
         }).ScheduleParallel();
     }
 }
