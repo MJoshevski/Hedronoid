@@ -10,8 +10,10 @@ using Random = Unity.Mathematics.Random;
 public struct SpawnerComponentData : IComponentData
 {
     public Entity Prefab;
+    public float3 InitRotation_Euler;
+    public quaternion InitRotation_Quaternion;
+    public float3 InitPosition;
     public float Lifetime;
-    public float3 Direction;
     public float3 SpawnPos;
     public float Speed;
     public float AngleHorizontal;
@@ -24,11 +26,13 @@ public struct SpawnerComponentData : IComponentData
     public bool SinWave;
     public float SinWaveSpeed;
     public float SinWaveRangeSize;
-    public float SinWaveInverse;
+    public bool SinWaveInverse;
     public bool UseMaxSpeed;
     public float MaxSpeed;
     public bool UseMinSpeed;
     public float MinSpeed;
+    //testing
+    public float TimeToNextSpawnInSeconds;
 }
 
 
@@ -73,13 +77,41 @@ public partial class SpawnerSystem : SystemBase
             .WithBurst(FloatMode.Default, FloatPrecision.Standard, true)
             .ForEach((Entity entity, int entityInQueryIndex, in SpawnerComponentData spawner, in LocalToWorld location) =>
             {
-                var instance = commandBuffer.Instantiate(entityInQueryIndex, spawner.Prefab);
+                for (var y = 0; y < 100000; y++)
+                {
+                    Entity instance = commandBuffer.Instantiate(entityInQueryIndex, spawner.Prefab);
 
-                commandBuffer.SetComponent(entityInQueryIndex, instance, new Translation { Value = spawner.SpawnPos });
-                commandBuffer.SetComponent(entityInQueryIndex, instance, new MoveData { Direction = spawner.Direction, Speed = spawner.Speed, MaxSpeed = spawner.MaxSpeed, MinSpeed = spawner.MinSpeed, AccelSpeed = spawner.AccelSpeed, UseMaxSpeed = spawner.UseMaxSpeed, UseMinSpeed = spawner.UseMinSpeed });
-                commandBuffer.SetComponent(entityInQueryIndex, instance, new LifeTime { Value = spawner.Lifetime });
-                //commandBuffer.SetComponent(entityInQueryIndex, instance, new RotationSpeed { RadiansPerSecond = math.radians(random.NextFloat(25.0F, 90.0F)) });
+                    commandBuffer.AddComponent(entityInQueryIndex, instance, new Translation { Value = spawner.SpawnPos });
 
+                    commandBuffer.AddComponent(entityInQueryIndex, instance, new RotationData
+                    {
+                        AccelTurn = spawner.AccelTurn,
+                        AngleHorizontal = spawner.AngleHorizontal + y,
+                        AngleVertical = spawner.AngleVertical - y,
+                        Homing = spawner.Homing,
+                        HomingAngleSpeed = spawner.HomingAngleSpeed,
+                        HomingTarget = spawner.HomingTarget,
+                        InitPosition = new float3(spawner.InitPosition.x, spawner.InitPosition.y + y, spawner.InitPosition.z),
+                        InitRotation_Euler = spawner.InitRotation_Euler,
+                        InitRotation_Quaternion = spawner.InitRotation_Quaternion,
+                        SinWave = spawner.SinWave,
+                        SinWaveInverse = spawner.SinWaveInverse,
+                        SinWaveRangeSize = spawner.SinWaveRangeSize,
+                        SinWaveSpeed = spawner.SinWaveSpeed
+                    });
+
+                    commandBuffer.AddComponent(entityInQueryIndex, instance, new MoveData
+                    {
+                        Speed = spawner.Speed,
+                        MaxSpeed = spawner.MaxSpeed,
+                        MinSpeed = spawner.MinSpeed,
+                        AccelSpeed = spawner.AccelSpeed,
+                        UseMaxSpeed = spawner.UseMaxSpeed,
+                        UseMinSpeed = spawner.UseMinSpeed
+                    });
+
+                    commandBuffer.AddComponent(entityInQueryIndex, instance, new LifeTime { timeRemainingInSeconds = spawner.Lifetime });
+                }
 
                 commandBuffer.DestroyEntity(entityInQueryIndex, entity);
             }).ScheduleParallel();
