@@ -77,7 +77,7 @@ public partial class SpawnerSystem : SystemBase
             .WithBurst(FloatMode.Default, FloatPrecision.Standard, true)
             .ForEach((Entity entity, int entityInQueryIndex, in SpawnerComponentData spawner, in LocalToWorld location) =>
             {
-                for (var y = 0; y < 10000; y++)
+                for (var y = 0; y < 100000; y++)
                 {
                     Entity instance = commandBuffer.Instantiate(entityInQueryIndex, spawner.Prefab);
 
@@ -86,12 +86,12 @@ public partial class SpawnerSystem : SystemBase
                     commandBuffer.AddComponent(entityInQueryIndex, instance, new RotationData
                     {
                         AccelTurn = spawner.AccelTurn,
-                        AngleHorizontal = spawner.AngleHorizontal,
-                        AngleVertical = spawner.AngleVertical,
+                        AngleHorizontal = spawner.AngleHorizontal + y,
+                        AngleVertical = spawner.AngleVertical - y,
                         Homing = spawner.Homing,
                         HomingAngleSpeed = spawner.HomingAngleSpeed,
                         HomingTarget = spawner.HomingTarget,
-                        InitPosition = spawner.InitPosition,
+                        InitPosition = new float3(spawner.InitPosition.x, spawner.InitPosition.y + y, spawner.InitPosition.z),
                         InitRotation_Euler = spawner.InitRotation_Euler,
                         InitRotation_Quaternion = spawner.InitRotation_Quaternion,
                         SinWave = spawner.SinWave,
