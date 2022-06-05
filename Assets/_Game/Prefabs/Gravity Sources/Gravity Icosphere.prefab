@@ -124,7 +124,7 @@ MeshRenderer:
   m_RenderingLayerMask: 1
   m_RendererPriority: 0
   m_Materials:
-  - {fileID: 9055990036018917727, guid: f4f3e312ad2d2b640ab8ddea3ee67b7e, type: 3}
+  - {fileID: 2100000, guid: 9447935ca27fed54c9c28112b77d5908, type: 2}
   m_StaticBatchInfo:
     firstSubMesh: 0
     subMeshCount: 0
@@ -158,7 +158,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 8233d90336aea43098adf6dbabd606a2, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  m_MeshFormatVersion: 1
+  m_MeshFormatVersion: 2
   m_Faces:
   - m_Indexes: 000000000100000002000000
     m_SmoothingGroup: 0
@@ -135857,6 +135857,8 @@ MonoBehaviour:
     m_AreaError: 15
   m_PreserveMeshAssetOnDestroy: 0
   assetGuid: 
+  m_Mesh: {fileID: 0}
+  m_VersionIndex: 0
   m_IsSelectable: 1
   m_SelectedFaces: 
   m_SelectedEdges: []
@@ -135923,8 +135925,9 @@ MonoBehaviour:
   triggerLayers:
     serializedVersion: 2
     m_Bits: 512
+  ResizeColliderOnEnter: 0
   AutomaticColliderSize: 1
-  ParentToEmbededSource: 0
+  filteredSources: []
   CurrentPriorityWeight: 1
   IsPlayerInGravity: 0
   gravity: 9.81
@@ -135932,6 +135935,7 @@ MonoBehaviour:
   outerFalloffRadius: 15
   innerFalloffRadius: 1
   innerRadius: 5
+  resizedRadius: 0
   boundsCollider: {fileID: 4064177536999503506}
 --- !u!135 &4064177536999503506
 SphereCollider:

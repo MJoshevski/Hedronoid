@@ -3,9 +3,10 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEditor;
 using UnityEngine;
-//using Gizmos = Popcron.Gizmos;
+
 namespace Hedronoid
 {
+    [RequireComponent(typeof(MeshCollider))]
     public class GravityCylinder : GravitySource
     {
         [Header("Gravity Variables")]
@@ -84,6 +85,12 @@ namespace Hedronoid
             innerFalloffFactor = 1f / (innerRadius - innerFalloffRadius);
             outerFalloffFactor = 1f / (outerFalloffRadius - outerRadius);
 
+            if (AutomaticColliderSize)
+            {
+                originalHeight = (int) boundaryHeight;
+                originalRadius = (int) outerFalloffRadius;
+            }
+
             if (scanForColliders)
             {
                 Collider[] colliders = GetComponents<Collider>();
@@ -101,8 +108,8 @@ namespace Hedronoid
                     }
                 }
 
-                originalCollider = ProceduralPrimitives.GenerateCylinder(transform, originalRadius, 20, originalHeight, originalZCorrection);
-                resizedCollider = ProceduralPrimitives.GenerateCylinder(transform, resizedRadius, 20, resizedHeight, resizedZCorrection);
+                originalCollider = ProceduralPrimitives.GenerateCylinder(transform, originalRadius, 20, originalHeight, originalHeight / 2 + originalZCorrection);
+                resizedCollider = ProceduralPrimitives.GenerateCylinder(transform, resizedRadius, 20, resizedHeight, resizedHeight /2 + resizedZCorrection);
 
                 scanForColliders = false;
             }

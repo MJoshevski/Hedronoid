@@ -13,7 +13,7 @@ GameObject:
   - component: {fileID: 5048944546470159512}
   - component: {fileID: 8179234397441059171}
   - component: {fileID: 4163008668901977190}
-  m_Layer: 10
+  m_Layer: 0
   m_Name: Cube
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -27,9 +27,8 @@ Transform:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1177123327646669546}
-  m_LocalRotation: {x: -0.000000059604638, y: -0.0000000074505797, z: 0.000000016763805,
-    w: 1}
-  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
+  m_LocalPosition: {x: -34.48522, y: -97.31445, z: 67.929504}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children: []
   m_Father: {fileID: 1210787383525199770}
@@ -62,7 +61,7 @@ MeshRenderer:
   m_RenderingLayerMask: 1
   m_RendererPriority: 0
   m_Materials:
-  - {fileID: 3888142945460007962, guid: 7244ad1445a17e749a878afeb697a53e, type: 3}
+  - {fileID: 2100000, guid: 31321ba15b8f8eb4c954353edc038b1d, type: 2}
   m_StaticBatchInfo:
     firstSubMesh: 0
     subMeshCount: 0
@@ -75,7 +74,7 @@ MeshRenderer:
   m_IgnoreNormalsForChartDetection: 0
   m_ImportantGI: 0
   m_StitchLightmapSeams: 1
-  m_SelectedEditorRenderState: 2
+  m_SelectedEditorRenderState: 3
   m_MinimumChartSize: 4
   m_AutoUVMaxDistance: 0.5
   m_AutoUVMaxAngle: 89
@@ -96,7 +95,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 8233d90336aea43098adf6dbabd606a2, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  m_MeshFormatVersion: 1
+  m_MeshFormatVersion: 2
   m_Faces:
   - m_Indexes: 000000000100000002000000010000000300000002000000
     m_SmoothingGroup: 0
@@ -112,7 +111,7 @@ MonoBehaviour:
       m_Anchor: 9
     m_Material: {fileID: 0}
     m_SubmeshIndex: 0
-    m_ManualUV: 1
+    m_ManualUV: 0
     elementGroup: -1
     m_TextureGroup: -1
   - m_Indexes: 040000000500000006000000050000000700000006000000
@@ -129,7 +128,7 @@ MonoBehaviour:
       m_Anchor: 9
     m_Material: {fileID: 0}
     m_SubmeshIndex: 0
-    m_ManualUV: 1
+    m_ManualUV: 0
     elementGroup: -1
     m_TextureGroup: -1
   - m_Indexes: 08000000090000000a000000090000000b0000000a000000
@@ -146,7 +145,7 @@ MonoBehaviour:
       m_Anchor: 9
     m_Material: {fileID: 0}
     m_SubmeshIndex: 0
-    m_ManualUV: 1
+    m_ManualUV: 0
     elementGroup: -1
     m_TextureGroup: -1
   - m_Indexes: 0c0000000d0000000e0000000d0000000f0000000e000000
@@ -163,7 +162,7 @@ MonoBehaviour:
       m_Anchor: 9
     m_Material: {fileID: 0}
     m_SubmeshIndex: 0
-    m_ManualUV: 1
+    m_ManualUV: 0
     elementGroup: -1
     m_TextureGroup: -1
   - m_Indexes: 100000001100000012000000110000001300000012000000
@@ -180,7 +179,7 @@ MonoBehaviour:
       m_Anchor: 9
     m_Material: {fileID: 0}
     m_SubmeshIndex: 0
-    m_ManualUV: 1
+    m_ManualUV: 0
     elementGroup: -1
     m_TextureGroup: -1
   - m_Indexes: 140000001500000016000000150000001700000016000000
@@ -197,7 +196,7 @@ MonoBehaviour:
       m_Anchor: 9
     m_Material: {fileID: 0}
     m_SubmeshIndex: 0
-    m_ManualUV: 1
+    m_ManualUV: 0
     elementGroup: -1
     m_TextureGroup: -1
   m_SharedVertices:
@@ -211,55 +210,55 @@ MonoBehaviour:
   - m_Vertices: 0b0000000e00000012000000
   m_SharedTextures: []
   m_Positions:
-  - {x: -7.5, y: -3, z: 5}
-  - {x: 7.5, y: -3, z: 5}
-  - {x: -7.5, y: 3, z: 5}
-  - {x: 7.5, y: 3, z: 5}
-  - {x: 7.5, y: -3, z: 5}
-  - {x: 7.5, y: -3, z: -5}
-  - {x: 7.5, y: 3, z: 5}
-  - {x: 7.5, y: 3, z: -5}
-  - {x: 7.5, y: -3, z: -5}
-  - {x: -7.5, y: -3, z: -5}
-  - {x: 7.5, y: 3, z: -5}
-  - {x: -7.5, y: 3, z: -5}
-  - {x: -7.5, y: -3, z: -5}
-  - {x: -7.5, y: -3, z: 5}
-  - {x: -7.5, y: 3, z: -5}
-  - {x: -7.5, y: 3, z: 5}
-  - {x: -7.5, y: 3, z: 5}
-  - {x: 7.5, y: 3, z: 5}
-  - {x: -7.5, y: 3, z: -5}
-  - {x: 7.5, y: 3, z: -5}
-  - {x: -7.5, y: -3, z: -5}
-  - {x: 7.5, y: -3, z: -5}
-  - {x: -7.5, y: -3, z: 5}
-  - {x: 7.5, y: -3, z: 5}
+  - {x: 0, y: 0, z: 0}
+  - {x: 100, y: 0, z: 0}
+  - {x: 0, y: 100, z: 0}
+  - {x: 100, y: 100, z: 0}
+  - {x: 100, y: 0, z: 0}
+  - {x: 100, y: 0, z: -100}
+  - {x: 100, y: 100, z: 0}
+  - {x: 100, y: 100, z: -100}
+  - {x: 100, y: 0, z: -100}
+  - {x: 0, y: 0, z: -100}
+  - {x: 100, y: 100, z: -100}
+  - {x: 0, y: 100, z: -100}
+  - {x: 0, y: 0, z: -100}
+  - {x: 0, y: 0, z: 0}
+  - {x: 0, y: 100, z: -100}
+  - {x: 0, y: 100, z: 0}
+  - {x: 0, y: 100, z: 0}
+  - {x: 100, y: 100, z: 0}
+  - {x: 0, y: 100, z: -100}
+  - {x: 100, y: 100, z: -100}
+  - {x: 0, y: 0, z: -100}
+  - {x: 100, y: 0, z: -100}
+  - {x: 0, y: 0, z: 0}
+  - {x: 100, y: 0, z: 0}
   m_Textures0:
   - {x: 0, y: 0}
-  - {x: -15, y: 0}
-  - {x: 0, y: 6}
-  - {x: -15, y: 6}
+  - {x: -100, y: 0}
+  - {x: 0, y: 100}
+  - {x: -100, y: 100}
   - {x: 0, y: 0}
-  - {x: -10, y: 0}
-  - {x: 0, y: 6}
-  - {x: -10, y: 6}
-  - {x: 15, y: 0}
+  - {x: -100, y: 0}
+  - {x: 0, y: 100}
+  - {x: -100, y: 100}
+  - {x: 100, y: 0}
   - {x: 0, y: 0}
-  - {x: 15, y: 6}
-  - {x: 0, y: 6}
-  - {x: 10, y: 0}
+  - {x: 100, y: 100}
+  - {x: 0, y: 100}
+  - {x: 100, y: 0}
   - {x: 0, y: 0}
-  - {x: 10, y: 6}
-  - {x: 0, y: 6}
+  - {x: 100, y: 100}
+  - {x: 0, y: 100}
   - {x: 0, y: 0}
-  - {x: 15, y: 0}
-  - {x: 0, y: -10}
-  - {x: 15, y: -10}
-  - {x: 0, y: -10}
-  - {x: -15, y: -10}
+  - {x: 100, y: 0}
+  - {x: 0, y: -100}
+  - {x: 100, y: -100}
+  - {x: 0, y: -100}
+  - {x: -100, y: -100}
   - {x: 0, y: 0}
-  - {x: -15, y: 0}
+  - {x: -100, y: 0}
   m_Textures2: []
   m_Textures3: []
   m_Tangents:
@@ -295,6 +294,8 @@ MonoBehaviour:
     m_AreaError: 15
   m_PreserveMeshAssetOnDestroy: 0
   assetGuid: 
+  m_Mesh: {fileID: 0}
+  m_VersionIndex: 0
   m_IsSelectable: 1
   m_SelectedFaces: 
   m_SelectedEdges: []
@@ -336,14 +337,13 @@ Transform:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1419273478557199439}
-  m_LocalRotation: {x: 0.000000059604638, y: 0.0000000074505797, z: -0.000000016763805,
-    w: 1}
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
   m_LocalPosition: {x: 0, y: 0, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children:
   - {fileID: 7098099351500572204}
   m_Father: {fileID: 3974225535120393660}
-  m_RootOrder: 0
+  m_RootOrder: 1
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &3974225535120393659
 GameObject:
@@ -354,7 +354,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 3974225535120393660}
-  m_Layer: 10
+  m_Layer: 0
   m_Name: Gravity Cube
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -368,12 +368,12 @@ Transform:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 3974225535120393659}
-  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
+  m_LocalPosition: {x: 6, y: 5.8004713, z: 46}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children:
-  - {fileID: 1210787383525199770}
   - {fileID: 2254759302090285455}
+  - {fileID: 1210787383525199770}
   m_Father: {fileID: 0}
   m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
@@ -389,7 +389,7 @@ GameObject:
   - component: {fileID: 4617328165730639544}
   - component: {fileID: 407470740538020742}
   - component: {fileID: 8493375408933362922}
-  m_Layer: 10
+  m_Layer: 0
   m_Name: Gravity
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -403,12 +403,12 @@ Transform:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 7280065050020041802}
-  m_LocalRotation: {x: -0, y: -0, z: -4.440891e-16, w: 1}
-  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 14.5, y: -47.8, z: 17.5}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children: []
   m_Father: {fileID: 3974225535120393660}
-  m_RootOrder: 1
+  m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!114 &4617328165730639544
 MonoBehaviour:
@@ -425,16 +425,18 @@ MonoBehaviour:
   triggerLayers:
     serializedVersion: 2
     m_Bits: 512
+  ResizeColliderOnEnter: 0
   AutomaticColliderSize: 1
-  ParentToEmbededSource: 0
+  filteredSources: []
   CurrentPriorityWeight: 1
   IsPlayerInGravity: 0
   gravity: 9.81
-  boundaryDistance: {x: 5.5, y: 1, z: 3}
+  boundaryDistance: {x: 50, y: 50, z: 50}
   innerDistance: 0
   innerFalloffDistance: 0
   outerDistance: 8
   outerFalloffDistance: 12
+  resizedBounds: {x: 0, y: 0, z: 0}
   boundsCollider: {fileID: 407470740538020742}
 --- !u!65 &407470740538020742
 BoxCollider:
@@ -447,7 +449,7 @@ BoxCollider:
   m_IsTrigger: 1
   m_Enabled: 1
   serializedVersion: 2
-  m_Size: {x: 35, y: 26, z: 30}
+  m_Size: {x: 124, y: 124, z: 124}
   m_Center: {x: 0, y: 0, z: 0}
 --- !u!54 &8493375408933362922
 Rigidbody:

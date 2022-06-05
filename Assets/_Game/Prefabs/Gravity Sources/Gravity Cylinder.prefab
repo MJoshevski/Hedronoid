@@ -29,8 +29,7 @@ Transform:
   m_GameObject: {fileID: 75166876262177481}
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
   m_LocalPosition: {x: 0, y: 0, z: 0}
-  m_LocalScale: {x: 1, y: 1, z: 1}
-  m_ConstrainProportionsScale: 0
+  m_LocalScale: {x: 2.24, y: 2.24, z: 2.24}
   m_Children: []
   m_Father: {fileID: 6710967019150540383}
   m_RootOrder: 0
@@ -54,7 +53,6 @@ MeshRenderer:
   m_CastShadows: 1
   m_ReceiveShadows: 1
   m_DynamicOccludee: 1
-  m_StaticShadowCaster: 0
   m_MotionVectors: 1
   m_LightProbeUsage: 1
   m_ReflectionProbeUsage: 1
@@ -4101,7 +4099,7 @@ MonoBehaviour:
   m_PreserveMeshAssetOnDestroy: 0
   assetGuid: 
   m_Mesh: {fileID: 0}
-  m_VersionIndex: 24
+  m_VersionIndex: 30
   m_IsSelectable: 1
   m_SelectedFaces: 
   m_SelectedEdges: []
@@ -4131,9 +4129,8 @@ GameObject:
   - component: {fileID: 5988103631460879465}
   - component: {fileID: 5930821673586969830}
   - component: {fileID: 1874534438846850020}
-  - component: {fileID: 6978507746591903307}
-  - component: {fileID: 888665581592348147}
-  m_Layer: 16
+  - component: {fileID: 7034984029901231049}
+  m_Layer: 0
   m_Name: Gravity
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -4147,10 +4144,9 @@ Transform:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 5006111759912873125}
-  m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
-  m_LocalPosition: {x: 0, y: 1, z: 0}
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
-  m_ConstrainProportionsScale: 0
   m_Children: []
   m_Father: {fileID: 6710967019150540383}
   m_RootOrder: 1
@@ -4176,20 +4172,20 @@ MonoBehaviour:
   CurrentPriorityWeight: 1
   IsPlayerInGravity: 0
   gravity: 9.81
-  boundaryHeight: 32.2
-  boundaryRadius: 11.2
-  innerFalloffRadius: 5.64
-  innerRadius: 9.14
-  outerRadius: 14.8
-  outerFalloffRadius: 19.16
-  originalHeight: 33
+  boundaryHeight: 69
+  boundaryRadius: 24.5
+  innerFalloffRadius: 0
+  innerRadius: 0
+  outerRadius: 34.7
+  outerFalloffRadius: 45
+  originalHeight: 66
   originalRadius: 20
   originalZCorrection: 16
-  resizedHeight: 33
+  resizedHeight: 66
   resizedRadius: 12
   resizedZCorrection: 16
-  originalCollider: {fileID: 6978507746591903307}
-  resizedCollider: {fileID: 888665581592348147}
+  originalCollider: {fileID: 0}
+  resizedCollider: {fileID: 0}
   scanForColliders: 0
 --- !u!54 &1874534438846850020
 Rigidbody:
@@ -4207,7 +4203,7 @@ Rigidbody:
   m_Interpolate: 0
   m_Constraints: 0
   m_CollisionDetection: 0
---- !u!64 &6978507746591903307
+--- !u!64 &7034984029901231049
 MeshCollider:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -4215,24 +4211,10 @@ MeshCollider:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 5006111759912873125}
   m_Material: {fileID: 0}
-  m_IsTrigger: 1
+  m_IsTrigger: 0
   m_Enabled: 1
   serializedVersion: 4
-  m_Convex: 1
-  m_CookingOptions: 30
-  m_Mesh: {fileID: 0}
---- !u!64 &888665581592348147
-MeshCollider:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 5006111759912873125}
-  m_Material: {fileID: 0}
-  m_IsTrigger: 1
-  m_Enabled: 1
-  serializedVersion: 4
-  m_Convex: 1
+  m_Convex: 0
   m_CookingOptions: 30
   m_Mesh: {fileID: 0}
 --- !u!1 &6710967019150540378
@@ -4258,10 +4240,9 @@ Transform:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 6710967019150540378}
-  m_LocalRotation: {x: 0.7071068, y: 0, z: 0, w: 0.7071068}
-  m_LocalPosition: {x: 0, y: 22.37, z: 0}
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 168, y: 0, z: -240}
   m_LocalScale: {x: 1, y: 1, z: 1}
-  m_ConstrainProportionsScale: 0
   m_Children:
   - {fileID: 7159598181771531453}
   - {fileID: 5988103631460879465}
