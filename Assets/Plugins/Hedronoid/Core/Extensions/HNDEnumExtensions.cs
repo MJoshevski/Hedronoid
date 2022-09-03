@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using System;
 
-public static class NNEnumExtensions
+public static class HNDEnumExtensions
 {
     public static string ToNumberString(this Enum enVal)
     {

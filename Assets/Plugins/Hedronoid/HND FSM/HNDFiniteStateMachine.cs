@@ -19,7 +19,7 @@ namespace Hedronoid.HNDFSM
         public event OnStateChanged StateChangedEvent;
 
         [SerializeField]
-        [NNReadOnly]
+        [HNDReadOnly]
         private string _currentState;
 
         protected Dictionary<int, FSMState> stateList = new Dictionary<int, FSMState>();

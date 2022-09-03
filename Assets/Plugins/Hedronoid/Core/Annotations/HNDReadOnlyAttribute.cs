@@ -8,11 +8,11 @@ using UnityEditor;
 
 namespace Hedronoid 
 {
-    public class NNReadOnlyAttribute : PropertyAttribute { }
+    public class HNDReadOnlyAttribute : PropertyAttribute { }
 
 #if UNITY_EDITOR
-    [CustomPropertyDrawer(typeof(NNReadOnlyAttribute))]
-    public class NNReadOnlyPropertyDrawer : PropertyDrawer
+    [CustomPropertyDrawer(typeof(HNDReadOnlyAttribute))]
+    public class HNDReadOnlyPropertyDrawer : PropertyDrawer
     {
         public override float GetPropertyHeight(SerializedProperty property, GUIContent label)
         {
