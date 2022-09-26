@@ -560,33 +560,6 @@ public sealed class UbhShotCtrl_Burst : HNDMonoBehaviour, IGameplaySceneContextI
         {
             var deltaTime = timeNorm;
 
-            //if (shooting == false)
-            //{
-            //    return;
-            //}
-
-            selfTimeCount += deltaTime;
-
-            //// auto release check
-            //if (useAutoRelease && autoReleaseTime > 0f)
-            //{
-            //    if (selfTimeCount >= autoReleaseTime)
-            //    {
-            //        // Release
-            //        //OnFinishedShot();
-            //        return;
-            //    }
-            //}
-
-            //// pause and resume.
-            //if (pauseAndResume && pauseTime >= 0f && resumeTime > pauseTime)
-            //{
-            //    if (pauseTime <= selfTimeCount && selfTimeCount < resumeTime)
-            //    {
-            //        return;
-            //    }
-            //}
-
             Vector3 myAngles = targetRotation.EulerAngles();
             float3 zero = float3(0);
             Quaternion newRotation = targetRotation;
@@ -643,12 +616,10 @@ public sealed class UbhShotCtrl_Burst : HNDMonoBehaviour, IGameplaySceneContextI
             }
 
             // move.
-            bulletPositions[index] = targetPosition +
+            bulletPositions[index] = float3(bulletPositions[index].x, bulletPositions[index].y, bulletPositions[index].z) +
                 (math.mul(targetRotation, float3(0,0,1)) * (speed * deltaTime));
 
             bulletRotations[index] = newRotation;
-
-            Debug.LogErrorFormat("IDX: {0}, BULLET POSITIONS: {1}", index, bulletPositions[index]);
         }
     }
 

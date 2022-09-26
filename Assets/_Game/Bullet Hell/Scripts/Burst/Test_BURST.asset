@@ -17,7 +17,7 @@ MonoBehaviour:
   m_parentBaseShot: {fileID: 0}
   m_prefab: {fileID: 100000, guid: 1109e62242928964fa089052e6107caf, type: 3}
   m_bulletNum: 500
-  m_speed: 5
+  m_speed: 1
   m_angleHorizontal: 10
   m_angleVertical: 12
   m_accelSpeed: 5
@@ -30,15 +30,15 @@ MonoBehaviour:
   m_sinWaveRangeSize: 0
   m_sinWaveInverse: 0
   m_pauseAndResume: 0
-  m_pauseTime: 0
-  m_resumeTime: 0
+  m_pauseTime: 1
+  m_resumeTime: 1
   m_useAutoRelease: 0
   m_autoReleaseTime: 0
   m_useMaxSpeed: 0
   m_maxSpeed: 0
   m_useMinSpeed: 0
   m_minSpeed: 0
-  m_baseAngles: {x: 0, y: 0}
+  m_baseAngles: {x: 12.75, y: 31.36}
   m_selfFrameCnt: 0
   m_selfTimeCount: 0
   m_tentacleBullet: {fileID: 0}
