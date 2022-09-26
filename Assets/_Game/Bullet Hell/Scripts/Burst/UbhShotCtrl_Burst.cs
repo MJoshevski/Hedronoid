@@ -12,13 +12,17 @@ using UnityEngine;
 using UnityEngine.Events;
 using UnityEngine.Jobs;
 using UnityEngine.Serialization;
+using Hedronoid.Weapons;
+using Hedronoid.Core;
 
 /// <summary>
 /// Ubh shot ctrl.
 /// </summary>
 [AddComponentMenu("UniBulletHell/Controller/Shot Controller_Burst")]
-public sealed class UbhShotCtrl_Burst : HNDMonoBehaviour
+public sealed class UbhShotCtrl_Burst : HNDMonoBehaviour, IGameplaySceneContextInjector
 {
+    public GameplaySceneContext GameplaySceneContext { get; set; }
+
     private enum UpdateStep
     {
         StartDelay,
@@ -31,9 +35,6 @@ public sealed class UbhShotCtrl_Burst : HNDMonoBehaviour
     [Serializable]
     public class ShotInfo
     {
-        // "Set a shot pattern component (inherits UbhBaseShot)."
-        [FormerlySerializedAs("_ShotObj")]
-        public UbhBaseShot_Burst m_shotObj;
         // "Set a delay time to starting next shot pattern. (sec)"
         [FormerlySerializedAs("_AfterDelay")]
         public float m_afterDelay;
@@ -75,7 +76,8 @@ public sealed class UbhShotCtrl_Burst : HNDMonoBehaviour
     private List<ShotInfo> m_randomShotList = new List<ShotInfo>(32);
 
     private AIBaseNavigation aiNavigation;
-
+    private BulletPoolManager m_bulletPoolManager;
+    private BulletPoolManager.BulletConfig m_bulletConfig;
 
     // BURST
     public TransformAccessArray m_BulletTransformsAccessArray;
@@ -101,43 +103,56 @@ public sealed class UbhShotCtrl_Burst : HNDMonoBehaviour
     /// is shooting flag.
     /// </summary>
     public bool shooting { get { return m_shooting; } }
-
+    public static GameObject[] bullets;
     protected override void Awake()
     {
         base.Awake();
+        this.Inject(gameObject);
 
         aiNavigation = GetComponent<AIBaseNavigation>();
+        m_bulletPoolManager = GameplaySceneContext.BulletPoolManager;
+
+        // HACK: Take bullet quantities sequentially or randomly from the shot list.
+        m_bulletNum = m_shotList[0].m_ShotPattern.m_bulletNum;
+
+        m_bulletConfig = new BulletPoolManager.BulletConfig();
+        bullets = new GameObject[m_bulletNum];
+
+        for (int k = 0; k < m_bulletNum; k++)
+        {
+            bullets[k] = GetBulletGO(Vector3.zero);
+        }
     }
     protected override void Start()
     {
         base.Start();
 
-        // HACK: Take bullet quantities sequentially or randomly from the shot list.
-        m_bulletNum = m_shotList[0].m_shotObj.m_bulletNum;
-
         Transform[] bulletTransforms = new Transform[m_bulletNum];
+
+        for (int k = 0; k < m_bulletNum; k++)
+            bulletTransforms[k] = bullets[k].transform;
+
         m_BulletTransformsAccessArray = new TransformAccessArray(bulletTransforms);
 
         m_BulletPositionsNativeArray = new NativeArray<Vector3>(m_bulletNum, Allocator.Persistent);
         m_BulletHeadingsNativeArray = new NativeArray<Vector3>(m_bulletNum, Allocator.Persistent);
         m_BulletRotationsNativeArray = new NativeArray<quaternion>(m_bulletNum, Allocator.Persistent);
 
-
-        if (m_startOnAwake)
-        {
-            StartShotRoutine(m_startOnAwakeDelay);
-        }
+        m_BulletRaycasts = new NativeArray<RaycastCommand>(m_bulletNum, Allocator.Persistent);
+        m_BulletRayhits = new NativeArray<RaycastHit>(m_bulletNum, Allocator.Persistent);
+        //if (m_startOnAwake)
+        //{
+        //    StartShotRoutine(m_startOnAwakeDelay);
+        //}
     }
     protected override void OnEnable()
     {
         base.OnEnable();
 
-        //UbhShotManager.instance.AddShot(this);
-
-        if (m_startOnEnable)
-        {
-            StartShotRoutine(m_startOnEnableDelay);
-        }
+        //if (m_startOnEnable)
+        //{
+        //    StartShotRoutine(m_startOnEnableDelay);
+        //}
     }
 
     protected override void OnDisable()
@@ -176,6 +191,9 @@ public sealed class UbhShotCtrl_Burst : HNDMonoBehaviour
 
     private void Update()
     {
+        updateBulletsJobHandle.Complete();
+        updateBulletsTransformsJobHandle.Complete();
+
         UpdateBulletPositionsArrayJob updateBulletPositionsArrayJob = new UpdateBulletPositionsArrayJob()
         {
             bulletPositions = m_BulletPositionsNativeArray,
@@ -197,7 +215,7 @@ public sealed class UbhShotCtrl_Burst : HNDMonoBehaviour
         buildRaycastCommandsJobHandle = buildSensorRaycastCommandsJob.Schedule(m_bulletNum, 64, updateBulletsPositionsArrayJobHandle);
         sensoryRaycastsJobHandle = RaycastCommand.ScheduleBatch(m_BulletRaycasts, m_BulletRayhits, 32, buildRaycastCommandsJobHandle);
 
-        UpdateBulletsJob updateAgentsJob = new UpdateBulletsJob()
+        UpdateBulletsJob updateBulletsJob = new UpdateBulletsJob()
         {
             bulletHeadings = m_BulletHeadingsNativeArray,
 
@@ -208,14 +226,16 @@ public sealed class UbhShotCtrl_Burst : HNDMonoBehaviour
 
             rayHits = m_BulletRayhits,
 
-            transformCache = m_shotList[0].m_ShotPattern.m_transformCache,
+            targetPosition = new Vector3 (10, 10, 10),
+            targetRotation = Quaternion.identity,
             speed = m_shotList[0].m_ShotPattern.m_speed,
             angleHorizontal = m_shotList[0].m_ShotPattern.m_angleHorizontal,
             angleVertical = m_shotList[0].m_ShotPattern.m_angleVertical,
             accelSpeed = m_shotList[0].m_ShotPattern.m_accelSpeed,
             accelTurn = m_shotList[0].m_ShotPattern.m_accelTurn,
             homing = m_shotList[0].m_ShotPattern.m_homing,
-            homingTarget = m_shotList[0].m_ShotPattern.m_homingTarget,
+            homingTargetPosition = new Vector3(10, 10, 10),
+            homingTargetRotation = Quaternion.identity,
             homingAngleSpeed = m_shotList[0].m_ShotPattern.m_homingAngleSpeed,
             sinWave = m_shotList[0].m_ShotPattern.m_sinWave,
             sinWaveSpeed = m_shotList[0].m_ShotPattern.m_sinWaveSpeed,
@@ -236,23 +256,7 @@ public sealed class UbhShotCtrl_Burst : HNDMonoBehaviour
             shooting = m_shotList[0].m_ShotPattern.m_shooting
         };
 
-        updateBulletsJobHandle = updateAgentsJob.Schedule(m_bulletNum, 64, sensoryRaycastsJobHandle);
-
-
-        //UpdateBulletsJob2 updateAgentsJob2 = new UpdateBulletsJob2()
-        //{
-        //    bulletHeadings = m_BulletHeadingsNativeArray,
-
-        //    timeNorm = (Time.deltaTime > 0.016f ? 0.016f : Time.deltaTime) / 0.02f,
-
-        //    bulletRotations = m_BulletRotationsNativeArray,
-        //    bulletPositions = m_BulletPositionsNativeArray,
-
-        //    rayHits = m_BulletRayhits
-
-        //};
-
-        //updateBulletsJobHandle = updateAgentsJob2.Schedule(m_bulletNum, 64, sensoryRaycastsJobHandle);
+        updateBulletsJobHandle = updateBulletsJob.Schedule(m_bulletNum, 64, sensoryRaycastsJobHandle);
 
         JobHandle.ScheduleBatchedJobs();
 
@@ -265,193 +269,218 @@ public sealed class UbhShotCtrl_Burst : HNDMonoBehaviour
             m_BulletTransformsAccessArray, updateBulletsJobHandle);
     }
 
-    public void UpdateShot(float deltaTime)
+    private GameObject GetBulletGO(Vector3 position, bool forceInstantiate = false)
     {
-        if (m_shooting == false)
+        if (m_shotList[0].m_ShotPattern.m_prefab == null)
         {
-            return;
+            Debug.LogWarning("Cannot generate a bullet because BulletPrefab is not set.");
+            return null;
         }
 
-        if (m_updateStep == UpdateStep.StartDelay)
+        // get UbhBullet from ObjectPool
+        m_bulletConfig.Prefab = m_shotList[0].m_ShotPattern.m_prefab;
+        m_bulletConfig.Position = position;
+        m_bulletConfig.Rotation = Quaternion.identity;
+        m_bulletConfig.Parent = null;
+        m_bulletConfig.Duration = -1;
+
+        GameObject bullet = m_bulletPoolManager.GetBulletToFire(m_bulletConfig);
+
+        if (bullet == null)
         {
-            if (m_delayTimer > 0f)
-            {
-                m_delayTimer -= deltaTime;
-                return;
-            }
-            else
-            {
-                m_delayTimer = 0f;
-                m_updateStep = UpdateStep.StartShot;
-            }
+            return null;
         }
 
-        ShotInfo nowShotInfo = m_atRandom ? m_randomShotList[m_nowIndex] : m_shotList[m_nowIndex];
-
-        if (m_updateStep == UpdateStep.StartShot)
-        {
-            if (nowShotInfo.m_shotObj != null)
-            {
-                //nowShotInfo.m_shotObj.SetShotCtrl(this);
-                nowShotInfo.m_shotObj.Shot();
-            }
-
-            m_delayTimer = 0f;
-            m_updateStep = UpdateStep.WaitDelay;
-        }
-
-        if (m_updateStep == UpdateStep.WaitDelay)
-        {
-            if (nowShotInfo.m_afterDelay > 0 && nowShotInfo.m_afterDelay > m_delayTimer)
-            {
-                m_delayTimer += deltaTime;
-            }
-            else
-            {
-                m_delayTimer = 0f;
-                m_updateStep = UpdateStep.UpdateIndex;
-            }
-        }
-
-        if (m_updateStep == UpdateStep.UpdateIndex)
-        {
-            if (m_atRandom)
-            {
-                m_randomShotList.RemoveAt(m_nowIndex);
-
-                if (m_loop && m_randomShotList.Count <= 0)
-                {
-                    m_randomShotList.AddRange(m_shotList);
-                }
-
-                if (m_randomShotList.Count > 0)
-                {
-                    m_nowIndex = UnityEngine.Random.Range(0, m_randomShotList.Count);
-                    m_updateStep = UpdateStep.StartShot;
-                }
-                else
-                {
-                    m_updateStep = UpdateStep.FinishShot;
-                }
-            }
-            else
-            {
-                if (m_loop || m_nowIndex < m_shotList.Count - 1)
-                {
-                    m_nowIndex = (int)Mathf.Repeat(m_nowIndex + 1f, m_shotList.Count);
-                    m_updateStep = UpdateStep.StartShot;
-                }
-                else
-                {
-                    m_updateStep = UpdateStep.FinishShot;
-                }
-            }
-        }
-
-        if (m_updateStep == UpdateStep.StartShot)
-        {
-            UpdateShot(deltaTime);
-        }
-        else if (m_updateStep == UpdateStep.FinishShot)
-        {
-            m_shooting = false;
-            m_shotRoutineFinishedCallbackEvents.Invoke();
-        }
+        return bullet;
     }
+
+    //public void UpdateShot(float deltaTime)
+    //{
+    //    if (m_shooting == false)
+    //    {
+    //        return;
+    //    }
+
+    //    if (m_updateStep == UpdateStep.StartDelay)
+    //    {
+    //        if (m_delayTimer > 0f)
+    //        {
+    //            m_delayTimer -= deltaTime;
+    //            return;
+    //        }
+    //        else
+    //        {
+    //            m_delayTimer = 0f;
+    //            m_updateStep = UpdateStep.StartShot;
+    //        }
+    //    }
+
+    //    ShotInfo nowShotInfo = m_atRandom ? m_randomShotList[m_nowIndex] : m_shotList[m_nowIndex];
+
+    //    if (m_updateStep == UpdateStep.StartShot)
+    //    {
+    //        if (nowShotInfo.m_shotObj != null)
+    //        {
+    //            //nowShotInfo.m_shotObj.SetShotCtrl(this);
+    //            nowShotInfo.m_shotObj.Shot();
+    //        }
+
+    //        m_delayTimer = 0f;
+    //        m_updateStep = UpdateStep.WaitDelay;
+    //    }
+
+    //    if (m_updateStep == UpdateStep.WaitDelay)
+    //    {
+    //        if (nowShotInfo.m_afterDelay > 0 && nowShotInfo.m_afterDelay > m_delayTimer)
+    //        {
+    //            m_delayTimer += deltaTime;
+    //        }
+    //        else
+    //        {
+    //            m_delayTimer = 0f;
+    //            m_updateStep = UpdateStep.UpdateIndex;
+    //        }
+    //    }
+
+    //    if (m_updateStep == UpdateStep.UpdateIndex)
+    //    {
+    //        if (m_atRandom)
+    //        {
+    //            m_randomShotList.RemoveAt(m_nowIndex);
+
+    //            if (m_loop && m_randomShotList.Count <= 0)
+    //            {
+    //                m_randomShotList.AddRange(m_shotList);
+    //            }
+
+    //            if (m_randomShotList.Count > 0)
+    //            {
+    //                m_nowIndex = UnityEngine.Random.Range(0, m_randomShotList.Count);
+    //                m_updateStep = UpdateStep.StartShot;
+    //            }
+    //            else
+    //            {
+    //                m_updateStep = UpdateStep.FinishShot;
+    //            }
+    //        }
+    //        else
+    //        {
+    //            if (m_loop || m_nowIndex < m_shotList.Count - 1)
+    //            {
+    //                m_nowIndex = (int)Mathf.Repeat(m_nowIndex + 1f, m_shotList.Count);
+    //                m_updateStep = UpdateStep.StartShot;
+    //            }
+    //            else
+    //            {
+    //                m_updateStep = UpdateStep.FinishShot;
+    //            }
+    //        }
+    //    }
+
+    //    if (m_updateStep == UpdateStep.StartShot)
+    //    {
+    //        UpdateShot(deltaTime);
+    //    }
+    //    else if (m_updateStep == UpdateStep.FinishShot)
+    //    {
+    //        m_shooting = false;
+    //        m_shotRoutineFinishedCallbackEvents.Invoke();
+    //    }
+    //}
 
     /// <summary>
     /// Start the shot routine.
     /// </summary>
-    public void StartShotRoutine(float startDelay = 0f)
-    {
-        if (m_shotList == null || m_shotList.Count <= 0)
-        {
-            Debug.LogWarning("Cannot shot because ShotList is null or empty.");
-            return;
-        }
+    //public void StartShotRoutine(float startDelay = 0f)
+    //{
+    //    if (m_shotList == null || m_shotList.Count <= 0)
+    //    {
+    //        Debug.LogWarning("Cannot shot because ShotList is null or empty.");
+    //        return;
+    //    }
 
-        bool enableShot = false;
-        for (int i = 0; i < m_shotList.Count; i++)
-        {
-            if (m_shotList[i].m_shotObj != null)
-            {
-                enableShot = true;
-                break;
-            }
-        }
-        if (enableShot == false)
-        {
-            Debug.LogWarning("Cannot shot because all ShotObj of ShotList is not set.");
-            return;
-        }
+    //    bool enableShot = false;
+    //    for (int i = 0; i < m_shotList.Count; i++)
+    //    {
+    //        if (m_shotList[i].m_shotObj != null)
+    //        {
+    //            enableShot = true;
+    //            break;
+    //        }
+    //    }
+    //    if (enableShot == false)
+    //    {
+    //        Debug.LogWarning("Cannot shot because all ShotObj of ShotList is not set.");
+    //        return;
+    //    }
 
-        if (m_loop)
-        {
-            bool enableDelay = false;
-            for (int i = 0; i < m_shotList.Count; i++)
-            {
-                if (0f < m_shotList[i].m_afterDelay)
-                {
-                    enableDelay = true;
-                    break;
-                }
-            }
-            if (enableDelay == false)
-            {
-                Debug.LogWarning("Cannot shot because loop is true and all AfterDelay of ShotList is zero.");
-                return;
-            }
-        }
+    //    if (m_loop)
+    //    {
+    //        bool enableDelay = false;
+    //        for (int i = 0; i < m_shotList.Count; i++)
+    //        {
+    //            if (0f < m_shotList[i].m_afterDelay)
+    //            {
+    //                enableDelay = true;
+    //                break;
+    //            }
+    //        }
+    //        if (enableDelay == false)
+    //        {
+    //            Debug.LogWarning("Cannot shot because loop is true and all AfterDelay of ShotList is zero.");
+    //            return;
+    //        }
+    //    }
 
-        if (m_shooting)
-        {
-            Debug.LogWarning("Already shooting.");
-            return;
-        }
+    //    if (m_shooting)
+    //    {
+    //        Debug.LogWarning("Already shooting.");
+    //        return;
+    //    }
 
-        m_shooting = true;
-        m_delayTimer = startDelay;
-        m_updateStep = m_delayTimer > 0f ? UpdateStep.StartDelay : UpdateStep.StartShot;
-        if (m_atRandom)
-        {
-            m_randomShotList.Clear();
-            m_randomShotList.AddRange(m_shotList);
-            m_nowIndex = UnityEngine.Random.Range(0, m_randomShotList.Count);
-        }
-        else
-        {
-            m_nowIndex = 0;
-        }
-    }
+    //    m_shooting = true;
+    //    m_delayTimer = startDelay;
+    //    m_updateStep = m_delayTimer > 0f ? UpdateStep.StartDelay : UpdateStep.StartShot;
+    //    if (m_atRandom)
+    //    {
+    //        m_randomShotList.Clear();
+    //        m_randomShotList.AddRange(m_shotList);
+    //        m_nowIndex = UnityEngine.Random.Range(0, m_randomShotList.Count);
+    //    }
+    //    else
+    //    {
+    //        m_nowIndex = 0;
+    //    }
+    //}
 
     /// <summary>
     /// Stop the shot routine.
     /// </summary>
-    public void StopShotRoutine()
-    {
-        m_shooting = false;
-    }
+    //public void StopShotRoutine()
+    //{
+    //    m_shooting = false;
+    //}
 
     /// <summary>
     /// Stop the shot routine and playing shot.
     /// </summary>
-    public void StopShotRoutineAndPlayingShot()
-    {
-        m_shooting = false;
+    //public void StopShotRoutineAndPlayingShot()
+    //{
+    //    m_shooting = false;
 
-        if (m_shotList == null || m_shotList.Count <= 0)
-        {
-            return;
-        }
+    //    if (m_shotList == null || m_shotList.Count <= 0)
+    //    {
+    //        return;
+    //    }
 
-        for (int i = 0; i < m_shotList.Count; i++)
-        {
-            if (m_shotList[i].m_shotObj != null)
-            {
-                m_shotList[i].m_shotObj.FinishedShot();
-            }
-        }
-    }
+    //    for (int i = 0; i < m_shotList.Count; i++)
+    //    {
+    //        if (m_shotList[i].m_shotObj != null)
+    //        {
+    //            m_shotList[i].m_shotObj.FinishedShot();
+    //        }
+    //    }
+    //}
 
 
     [BurstCompile]
@@ -498,16 +527,16 @@ public sealed class UbhShotCtrl_Burst : HNDMonoBehaviour
         public NativeArray<quaternion> bulletRotations;
         public NativeArray<Vector3> bulletPositions;
 
-        public Transform transformCache;
-        public UbhBaseShot_Burst parentBaseShot;
-        public GameObject prefab;
+        public float3 targetPosition;
+        public quaternion targetRotation;
         public float speed;
         public float angleHorizontal;
         public float angleVertical;
         public float accelSpeed;
         public float accelTurn;
         public bool homing;
-        public Transform homingTarget;
+        public float3 homingTargetPosition;
+        public quaternion homingTargetRotation;
         public float homingAngleSpeed;
         public bool sinWave;
         public float sinWaveSpeed;
@@ -522,7 +551,7 @@ public sealed class UbhShotCtrl_Burst : HNDMonoBehaviour
         public float maxSpeed;
         public bool useMinSpeed;
         public float minSpeed; 
-        public Vector2 baseAngles;
+        public float2 baseAngles;
         public float selfFrameCount;
         public float selfTimeCount;
         public bool shooting;
@@ -531,42 +560,42 @@ public sealed class UbhShotCtrl_Burst : HNDMonoBehaviour
         {
             var deltaTime = timeNorm;
 
-            if (shooting == false)
-            {
-                return;
-            }
+            //if (shooting == false)
+            //{
+            //    return;
+            //}
 
             selfTimeCount += deltaTime;
 
-            // auto release check
-            if (useAutoRelease && autoReleaseTime > 0f)
-            {
-                if (selfTimeCount >= autoReleaseTime)
-                {
-                    // Release
-                    //OnFinishedShot();
-                    return;
-                }
-            }
+            //// auto release check
+            //if (useAutoRelease && autoReleaseTime > 0f)
+            //{
+            //    if (selfTimeCount >= autoReleaseTime)
+            //    {
+            //        // Release
+            //        //OnFinishedShot();
+            //        return;
+            //    }
+            //}
 
-            // pause and resume.
-            if (pauseAndResume && pauseTime >= 0f && resumeTime > pauseTime)
-            {
-                if (pauseTime <= selfTimeCount && selfTimeCount < resumeTime)
-                {
-                    return;
-                }
-            }
+            //// pause and resume.
+            //if (pauseAndResume && pauseTime >= 0f && resumeTime > pauseTime)
+            //{
+            //    if (pauseTime <= selfTimeCount && selfTimeCount < resumeTime)
+            //    {
+            //        return;
+            //    }
+            //}
 
-            Vector3 myAngles = transformCache.rotation.eulerAngles;
-
-            Quaternion newRotation = transformCache.rotation;
+            Vector3 myAngles = targetRotation.EulerAngles();
+            float3 zero = float3(0);
+            Quaternion newRotation = targetRotation;
             if (homing)
             {
                 // homing target.
-                if (homingTarget != null && 0f < homingAngleSpeed)
+                if (!homingTargetPosition.Equals(zero) &&  0f < homingAngleSpeed)
                 {
-                    Quaternion rotation = Quaternion.LookRotation((homingTarget.position - transformCache.position).normalized);
+                    Quaternion rotation = Quaternion.LookRotation(math.normalizesafe(homingTargetPosition - targetPosition));
 
                     Quaternion toRotation =
                         Quaternion.RotateTowards(bulletRotations[index], rotation, deltaTime * homingAngleSpeed);
@@ -589,7 +618,7 @@ public sealed class UbhShotCtrl_Burst : HNDMonoBehaviour
                         baseAngles.x + angleVertical, baseAngles.y + waveAngleXZ, myAngles.z);
 
                 }
-                selfFrameCount += UbhTimer.instance.deltaFrameCount;
+                //selfFrameCount += UbhTimer.instance.deltaFrameCount;
             }
             else
             {
@@ -614,71 +643,12 @@ public sealed class UbhShotCtrl_Burst : HNDMonoBehaviour
             }
 
             // move.
-            bulletPositions[index] = transformCache.position +
-                (transformCache.forward * (speed * deltaTime));
+            bulletPositions[index] = targetPosition +
+                (math.mul(targetRotation, float3(0,0,1)) * (speed * deltaTime));
 
             bulletRotations[index] = newRotation;
-        }
-    }
 
-    [BurstCompile]
-    struct UpdateBulletsJob2 : IJobParallelFor
-    {
-        [ReadOnly]
-        public float timeNorm;
-        [ReadOnly]
-        public NativeArray<Vector3> bulletHeadings;
-        [ReadOnly]
-        public NativeArray<RaycastHit> rayHits;
-
-
-        public NativeArray<quaternion> bulletRotations;
-        public NativeArray<Vector3> bulletPositions;
-
-
-        public void Execute(int index)
-        {
-            float3 heading = bulletHeadings[index];
-
-
-            float3 flockingVector = 0;
-
-            float rotationSpeed = 6.0f;
-            float movementSpeed = 0.08f;
-            float rotationFilter = 0.6f;
-            //float speedColMultiplier = 1.0f;
-            // bool hasCollided = false;
-            Vector3 collResponse = Vector3.zero;
-
-
-            if (rayHits[index].point != Vector3.zero)
-            {
-                flockingVector = (float3)rayHits[index].normal;
-
-                //movementSpeed = 0.04f;
-
-                //speedColMultiplier = 1.0f - 0.5f * (dot(rayHits[index].normal, heading) + 1.0f);
-                rotationSpeed = 12.0f;
-                rotationFilter = 0.5f;
-                collResponse = rayHits[index].normal * 0.01f;
-            }
-
-
-            if (length(flockingVector) < 0.00001f)
-                flockingVector = heading;
-
-
-            Quaternion steerRotation = Quaternion.LookRotation(flockingVector, mul(bulletRotations[index], float3(0, 1, 0)));
-
-            Quaternion newSteeringRot = Quaternion.RotateTowards(bulletRotations[index], steerRotation, rotationSpeed * timeNorm);
-
-            //todo: maybe double buffer rotations and positions and also interleave them
-            bulletRotations[index] = slerp(bulletRotations[index], newSteeringRot, rotationFilter * timeNorm);
-
-            Vector3 rotatedHeading = newSteeringRot * Vector3.forward;
-
-            bulletPositions[index] += rotatedHeading * movementSpeed * timeNorm + collResponse;
-
+            Debug.LogErrorFormat("IDX: {0}, BULLET POSITIONS: {1}", index, bulletPositions[index]);
         }
     }
 

@@ -5,11 +5,16 @@ using UnityEngine;
 using UnityEngine.Events;
 using UnityEngine.Serialization;
 
+
+[CreateAssetMenu(fileName = "DefaultShotPattern", menuName = "Hedronoid/ShotPatterns/DefaultPattern", order = 1)]
+
 public class ShotPattern : ScriptableObject
 {
-    public Transform m_transformCache;
+    public Transform m_bulletOriginTransform;
+    public Transform m_targetTransform;
     public UbhBaseShot_Burst m_parentBaseShot;
     public GameObject m_prefab;
+    public int m_bulletNum;
     public float m_speed;
     public float m_angleHorizontal;
     public float m_angleVertical;

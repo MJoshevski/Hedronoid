@@ -55,7 +55,7 @@ public class UbhBullet_Burst : HNDMonoBehaviour, IGameplaySceneContextInjector
     /// Override this property when you want to change the behavior at Active / Inactive.
     /// </summary>
     public virtual bool isActive { get { return gameObject.activeSelf; } }
-    private EntityManager m_EntityManager;
+
     protected override void Awake()
     {
         base.Awake();
@@ -69,8 +69,6 @@ public class UbhBullet_Burst : HNDMonoBehaviour, IGameplaySceneContextInjector
     protected override void Start()
     {
         base.Start();
-        m_EntityManager = World.DefaultGameObjectInjectionWorld.EntityManager;
-
     }
     protected override void OnDisable()
     {
@@ -173,107 +171,6 @@ public class UbhBullet_Burst : HNDMonoBehaviour, IGameplaySceneContextInjector
     /// <summary>
     /// Update Move
     /// </summary>
-    public void Update()
-    {
-        var deltaTime = UbhTimer.instance.deltaTime;
-
-        if (m_shooting == false)
-        {
-            return;
-        }
-
-        m_selfTimeCount += UbhTimer.instance.deltaTime;
-
-        // auto release check
-        if (m_useAutoRelease && m_autoReleaseTime > 0f)
-        {
-            if (m_selfTimeCount >= m_autoReleaseTime)
-            {
-                // Release
-                OnFinishedShot();
-                return;
-            }
-        }
-
-        // pause and resume.
-        if (m_pauseAndResume && m_pauseTime >= 0f && m_resumeTime > m_pauseTime)
-        {
-            if (m_pauseTime <= m_selfTimeCount && m_selfTimeCount < m_resumeTime)
-            {
-                return;
-            }
-        }
-
-        Vector3 myAngles = m_transformCache.rotation.eulerAngles;
-
-        Quaternion newRotation = m_transformCache.rotation;
-        if (m_homing)
-        {
-            // homing target.
-            if (m_homingTarget != null && 0f < m_homingAngleSpeed)
-            {
-                Quaternion rotation = Quaternion.LookRotation((m_homingTarget.position - m_transformCache.position).normalized);
-
-                Quaternion toRotation =
-                    Quaternion.RotateTowards(transform.rotation, rotation, deltaTime * m_homingAngleSpeed);
-
-                newRotation = toRotation;
-            }
-        }
-        else if (m_sinWave)
-        {
-            //// acceleration turning.
-            m_angleHorizontal += (m_accelTurn * deltaTime);
-            m_angleVertical += (m_accelTurn * deltaTime);
-
-            // sin wave.
-            if (0f < m_sinWaveSpeed && 0f < m_sinWaveRangeSize)
-            {
-                float waveAngleXZ = m_angleHorizontal + (m_sinWaveRangeSize / 2f * (Mathf.Sin(m_selfFrameCnt * m_sinWaveSpeed / 100f) * (m_sinWaveInverse ? -1f : 1f)));
-
-                newRotation = Quaternion.Euler(
-                    m_baseAngles.x + m_angleVertical, m_baseAngles.y + waveAngleXZ, myAngles.z);
-
-            }
-            m_selfFrameCnt += UbhTimer.instance.deltaFrameCount;
-        }
-        else
-        {
-            // acceleration turning.
-            float addAngle = m_accelTurn * deltaTime;
-
-            newRotation = Quaternion.Euler(
-                myAngles.x, myAngles.y - addAngle, myAngles.z + addAngle);
-        }
-
-        // acceleration speed.
-        m_speed += (m_accelSpeed * deltaTime);
-
-        if (m_useMaxSpeed && m_speed > m_maxSpeed)
-        {
-            m_speed = m_maxSpeed;
-        }
-
-        if (m_useMinSpeed && m_speed < m_minSpeed)
-        {
-            m_speed = m_minSpeed;
-        }
-
-        // move.
-        Vector3 newPosition;
-        newPosition = m_transformCache.position +
-            (m_transformCache.forward * (m_speed * deltaTime));
-
-
-        // set new position and rotation
-        m_transformCache.SetPositionAndRotation(newPosition, newRotation);
-
-        if (m_tentacleBullet != null)
-        {
-            // Update tentacles
-            m_tentacleBullet.UpdateRotate();
-        }
-    }
 
 
 #if UNITY_EDITOR

@@ -141,8 +141,8 @@ public abstract class UbhBaseShot_Burst : HNDMonoBehaviour, IGameplaySceneContex
 
         UbhShotCtrl_Burst.ShotInfo si = new UbhShotCtrl_Burst.ShotInfo();
 
-        si.m_afterDelay = 2;
-        si.m_shotObj = this;
+        //si.m_afterDelay = 2;
+        //si.m_shotObj = this;
 
         if (!shotCtrl.m_shotList.Contains(si))
             shotCtrl.m_shotList.Add(si);
@@ -169,8 +169,8 @@ public abstract class UbhBaseShot_Burst : HNDMonoBehaviour, IGameplaySceneContex
         m_shooting = false;
         UbhShotCtrl_Burst.ShotInfo si = new UbhShotCtrl_Burst.ShotInfo();
 
-        si.m_afterDelay = 2;
-        si.m_shotObj = this;
+        //si.m_afterDelay = 2;
+        //si.m_shotObj = this;
 
         if (shotCtrl.m_shotList.Contains(si))
             shotCtrl.m_shotList.Remove(si);
@@ -295,36 +295,5 @@ public abstract class UbhBaseShot_Burst : HNDMonoBehaviour, IGameplaySceneContex
         }
 
         return bullet;
-    }
-
-    /// <summary>
-    /// Shot UbhBullet object.
-    /// </summary>
-    /// 
-    protected void ShotBullet(UbhBullet_Burst bullet, float speed, float angleH, float angleV,
-                               bool homing = false, Transform homingTarget = null, float homingAngleSpeed = 0f,
-                               bool sinWave = false, float sinWaveSpeed = 0f, float sinWaveRangeSize = 0f, bool sinWaveInverse = false)
-    {
-        if (TurretNavigation.Target == null)
-        {
-            return;
-        }
-
-        if (bullet == null || m_disableShooting)
-        {
-            return;
-        }
-
-        var eventInst = FMODUnity.RuntimeManager.CreateInstance(TurretNavigation.m_EnemyAudioData.secondaryAttack);
-        FMODUnity.RuntimeManager.AttachInstanceToGameObject(eventInst, bullet.transform, bullet.GetComponent<Rigidbody>());
-        eventInst.start();
-
-        bullet.Shot(this,
-                    speed, angleH, angleV, m_accelerationSpeed, m_accelerationTurn,
-                    homing, homingTarget, homingAngleSpeed,
-                    sinWave, sinWaveSpeed, sinWaveRangeSize, sinWaveInverse,
-                    m_usePauseAndResume, m_pauseTime, m_resumeTime,
-                    m_useAutoRelease, m_autoReleaseTime, m_shotCtrl.m_inheritAngle,
-                    m_useMaxSpeed, m_maxSpeed, m_useMinSpeed, m_minSpeed, eventInst);
     }
 }
