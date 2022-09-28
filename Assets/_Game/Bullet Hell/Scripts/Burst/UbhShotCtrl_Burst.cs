@@ -32,13 +32,15 @@ public sealed class UbhShotCtrl_Burst : HNDMonoBehaviour, IGameplaySceneContextI
         FinishShot,
     }
 
+    public Transform m_bulletOrigin;
+    public Transform m_homingTarget;
     [Serializable]
     public class ShotInfo
     {
         // "Set a delay time to starting next shot pattern. (sec)"
         [FormerlySerializedAs("_AfterDelay")]
         public float m_afterDelay;
-        public ShotPattern m_ShotPattern;
+        public BaseShotPattern m_ShotPattern;
     }
 
     // "Flag that inherits angle of UbhShotCtrl."
@@ -226,16 +228,16 @@ public sealed class UbhShotCtrl_Burst : HNDMonoBehaviour, IGameplaySceneContextI
 
             rayHits = m_BulletRayhits,
 
-            targetPosition = new Vector3 (10, 10, 10),
-            targetRotation = Quaternion.identity,
+            originPosition = m_bulletOrigin != null ? m_bulletOrigin.position : transform.position,
+            originRotation = m_bulletOrigin != null ? m_bulletOrigin.rotation : transform.rotation,
             speed = m_shotList[0].m_ShotPattern.m_speed,
-            angleHorizontal = m_shotList[0].m_ShotPattern.m_angleHorizontal,
-            angleVertical = m_shotList[0].m_ShotPattern.m_angleVertical,
+            angleHorizontal = m_shotList[0].m_ShotPattern.GetHorizontalAngle(),
+            angleVertical = m_shotList[0].m_ShotPattern.GetVerticalAngle(),
             accelSpeed = m_shotList[0].m_ShotPattern.m_accelSpeed,
             accelTurn = m_shotList[0].m_ShotPattern.m_accelTurn,
             homing = m_shotList[0].m_ShotPattern.m_homing,
-            homingTargetPosition = new Vector3(10, 10, 10),
-            homingTargetRotation = Quaternion.identity,
+            homingTargetPosition = m_homingTarget != null ? m_homingTarget.position : float3(0),
+            homingTargetRotation = m_homingTarget != null ? m_homingTarget.rotation : Quaternion.identity,
             homingAngleSpeed = m_shotList[0].m_ShotPattern.m_homingAngleSpeed,
             sinWave = m_shotList[0].m_ShotPattern.m_sinWave,
             sinWaveSpeed = m_shotList[0].m_ShotPattern.m_sinWaveSpeed,
@@ -250,10 +252,7 @@ public sealed class UbhShotCtrl_Burst : HNDMonoBehaviour, IGameplaySceneContextI
             maxSpeed = m_shotList[0].m_ShotPattern.m_maxSpeed,
             useMinSpeed = m_shotList[0].m_ShotPattern.m_useMinSpeed,
             minSpeed = m_shotList[0].m_ShotPattern.m_minSpeed,
-            baseAngles = m_shotList[0].m_ShotPattern.m_baseAngles,
-            selfFrameCount = m_shotList[0].m_ShotPattern.m_selfFrameCnt,
-            selfTimeCount = m_shotList[0].m_ShotPattern.m_selfTimeCount,
-            shooting = m_shotList[0].m_ShotPattern.m_shooting
+            baseAngles = m_shotList[0].m_ShotPattern.m_baseAngles
         };
 
         updateBulletsJobHandle = updateBulletsJob.Schedule(m_bulletNum, 64, sensoryRaycastsJobHandle);
@@ -294,193 +293,193 @@ public sealed class UbhShotCtrl_Burst : HNDMonoBehaviour, IGameplaySceneContextI
         return bullet;
     }
 
-    //public void UpdateShot(float deltaTime)
-    //{
-    //    if (m_shooting == false)
-    //    {
-    //        return;
-    //    }
+    public void UpdateShot(float deltaTime)
+    {
+        if (m_shooting == false)
+        {
+            return;
+        }
 
-    //    if (m_updateStep == UpdateStep.StartDelay)
-    //    {
-    //        if (m_delayTimer > 0f)
-    //        {
-    //            m_delayTimer -= deltaTime;
-    //            return;
-    //        }
-    //        else
-    //        {
-    //            m_delayTimer = 0f;
-    //            m_updateStep = UpdateStep.StartShot;
-    //        }
-    //    }
+        if (m_updateStep == UpdateStep.StartDelay)
+        {
+            if (m_delayTimer > 0f)
+            {
+                m_delayTimer -= deltaTime;
+                return;
+            }
+            else
+            {
+                m_delayTimer = 0f;
+                m_updateStep = UpdateStep.StartShot;
+            }
+        }
 
-    //    ShotInfo nowShotInfo = m_atRandom ? m_randomShotList[m_nowIndex] : m_shotList[m_nowIndex];
+        ShotInfo nowShotInfo = m_atRandom ? m_randomShotList[m_nowIndex] : m_shotList[m_nowIndex];
 
-    //    if (m_updateStep == UpdateStep.StartShot)
-    //    {
-    //        if (nowShotInfo.m_shotObj != null)
-    //        {
-    //            //nowShotInfo.m_shotObj.SetShotCtrl(this);
-    //            nowShotInfo.m_shotObj.Shot();
-    //        }
+        if (m_updateStep == UpdateStep.StartShot)
+        {
+            //if (nowShotInfo.m_shotObj != null)
+            //{
+            //    //nowShotInfo.m_shotObj.SetShotCtrl(this);
+            //    nowShotInfo.m_shotObj.Shot();
+            //}
 
-    //        m_delayTimer = 0f;
-    //        m_updateStep = UpdateStep.WaitDelay;
-    //    }
+            m_delayTimer = 0f;
+            m_updateStep = UpdateStep.WaitDelay;
+        }
 
-    //    if (m_updateStep == UpdateStep.WaitDelay)
-    //    {
-    //        if (nowShotInfo.m_afterDelay > 0 && nowShotInfo.m_afterDelay > m_delayTimer)
-    //        {
-    //            m_delayTimer += deltaTime;
-    //        }
-    //        else
-    //        {
-    //            m_delayTimer = 0f;
-    //            m_updateStep = UpdateStep.UpdateIndex;
-    //        }
-    //    }
+        if (m_updateStep == UpdateStep.WaitDelay)
+        {
+            if (nowShotInfo.m_afterDelay > 0 && nowShotInfo.m_afterDelay > m_delayTimer)
+            {
+                m_delayTimer += deltaTime;
+            }
+            else
+            {
+                m_delayTimer = 0f;
+                m_updateStep = UpdateStep.UpdateIndex;
+            }
+        }
 
-    //    if (m_updateStep == UpdateStep.UpdateIndex)
-    //    {
-    //        if (m_atRandom)
-    //        {
-    //            m_randomShotList.RemoveAt(m_nowIndex);
+        if (m_updateStep == UpdateStep.UpdateIndex)
+        {
+            if (m_atRandom)
+            {
+                m_randomShotList.RemoveAt(m_nowIndex);
 
-    //            if (m_loop && m_randomShotList.Count <= 0)
-    //            {
-    //                m_randomShotList.AddRange(m_shotList);
-    //            }
+                if (m_loop && m_randomShotList.Count <= 0)
+                {
+                    m_randomShotList.AddRange(m_shotList);
+                }
 
-    //            if (m_randomShotList.Count > 0)
-    //            {
-    //                m_nowIndex = UnityEngine.Random.Range(0, m_randomShotList.Count);
-    //                m_updateStep = UpdateStep.StartShot;
-    //            }
-    //            else
-    //            {
-    //                m_updateStep = UpdateStep.FinishShot;
-    //            }
-    //        }
-    //        else
-    //        {
-    //            if (m_loop || m_nowIndex < m_shotList.Count - 1)
-    //            {
-    //                m_nowIndex = (int)Mathf.Repeat(m_nowIndex + 1f, m_shotList.Count);
-    //                m_updateStep = UpdateStep.StartShot;
-    //            }
-    //            else
-    //            {
-    //                m_updateStep = UpdateStep.FinishShot;
-    //            }
-    //        }
-    //    }
+                if (m_randomShotList.Count > 0)
+                {
+                    m_nowIndex = UnityEngine.Random.Range(0, m_randomShotList.Count);
+                    m_updateStep = UpdateStep.StartShot;
+                }
+                else
+                {
+                    m_updateStep = UpdateStep.FinishShot;
+                }
+            }
+            else
+            {
+                if (m_loop || m_nowIndex < m_shotList.Count - 1)
+                {
+                    m_nowIndex = (int)Mathf.Repeat(m_nowIndex + 1f, m_shotList.Count);
+                    m_updateStep = UpdateStep.StartShot;
+                }
+                else
+                {
+                    m_updateStep = UpdateStep.FinishShot;
+                }
+            }
+        }
 
-    //    if (m_updateStep == UpdateStep.StartShot)
-    //    {
-    //        UpdateShot(deltaTime);
-    //    }
-    //    else if (m_updateStep == UpdateStep.FinishShot)
-    //    {
-    //        m_shooting = false;
-    //        m_shotRoutineFinishedCallbackEvents.Invoke();
-    //    }
-    //}
+        if (m_updateStep == UpdateStep.StartShot)
+        {
+            UpdateShot(deltaTime);
+        }
+        else if (m_updateStep == UpdateStep.FinishShot)
+        {
+            m_shooting = false;
+            m_shotRoutineFinishedCallbackEvents.Invoke();
+        }
+    }
 
     /// <summary>
     /// Start the shot routine.
     /// </summary>
-    //public void StartShotRoutine(float startDelay = 0f)
-    //{
-    //    if (m_shotList == null || m_shotList.Count <= 0)
-    //    {
-    //        Debug.LogWarning("Cannot shot because ShotList is null or empty.");
-    //        return;
-    //    }
+    public void StartShotRoutine(float startDelay = 0f)
+    {
+        if (m_shotList == null || m_shotList.Count <= 0)
+        {
+            Debug.LogWarning("Cannot shot because ShotList is null or empty.");
+            return;
+        }
 
-    //    bool enableShot = false;
-    //    for (int i = 0; i < m_shotList.Count; i++)
-    //    {
-    //        if (m_shotList[i].m_shotObj != null)
-    //        {
-    //            enableShot = true;
-    //            break;
-    //        }
-    //    }
-    //    if (enableShot == false)
-    //    {
-    //        Debug.LogWarning("Cannot shot because all ShotObj of ShotList is not set.");
-    //        return;
-    //    }
+        bool enableShot = false;
+        for (int i = 0; i < m_shotList.Count; i++)
+        {
+            //if (m_shotList[i].m_shotObj != null)
+            //{
+            //    enableShot = true;
+            //    break;
+            //}
+        }
+        if (enableShot == false)
+        {
+            Debug.LogWarning("Cannot shot because all ShotObj of ShotList is not set.");
+            return;
+        }
 
-    //    if (m_loop)
-    //    {
-    //        bool enableDelay = false;
-    //        for (int i = 0; i < m_shotList.Count; i++)
-    //        {
-    //            if (0f < m_shotList[i].m_afterDelay)
-    //            {
-    //                enableDelay = true;
-    //                break;
-    //            }
-    //        }
-    //        if (enableDelay == false)
-    //        {
-    //            Debug.LogWarning("Cannot shot because loop is true and all AfterDelay of ShotList is zero.");
-    //            return;
-    //        }
-    //    }
+        if (m_loop)
+        {
+            bool enableDelay = false;
+            for (int i = 0; i < m_shotList.Count; i++)
+            {
+                if (0f < m_shotList[i].m_afterDelay)
+                {
+                    enableDelay = true;
+                    break;
+                }
+            }
+            if (enableDelay == false)
+            {
+                Debug.LogWarning("Cannot shot because loop is true and all AfterDelay of ShotList is zero.");
+                return;
+            }
+        }
 
-    //    if (m_shooting)
-    //    {
-    //        Debug.LogWarning("Already shooting.");
-    //        return;
-    //    }
+        if (m_shooting)
+        {
+            Debug.LogWarning("Already shooting.");
+            return;
+        }
 
-    //    m_shooting = true;
-    //    m_delayTimer = startDelay;
-    //    m_updateStep = m_delayTimer > 0f ? UpdateStep.StartDelay : UpdateStep.StartShot;
-    //    if (m_atRandom)
-    //    {
-    //        m_randomShotList.Clear();
-    //        m_randomShotList.AddRange(m_shotList);
-    //        m_nowIndex = UnityEngine.Random.Range(0, m_randomShotList.Count);
-    //    }
-    //    else
-    //    {
-    //        m_nowIndex = 0;
-    //    }
-    //}
+        m_shooting = true;
+        m_delayTimer = startDelay;
+        m_updateStep = m_delayTimer > 0f ? UpdateStep.StartDelay : UpdateStep.StartShot;
+        if (m_atRandom)
+        {
+            m_randomShotList.Clear();
+            m_randomShotList.AddRange(m_shotList);
+            m_nowIndex = UnityEngine.Random.Range(0, m_randomShotList.Count);
+        }
+        else
+        {
+            m_nowIndex = 0;
+        }
+    }
 
     /// <summary>
     /// Stop the shot routine.
     /// </summary>
-    //public void StopShotRoutine()
-    //{
-    //    m_shooting = false;
-    //}
+    public void StopShotRoutine()
+    {
+        m_shooting = false;
+    }
 
     /// <summary>
     /// Stop the shot routine and playing shot.
     /// </summary>
-    //public void StopShotRoutineAndPlayingShot()
-    //{
-    //    m_shooting = false;
+    public void StopShotRoutineAndPlayingShot()
+    {
+        m_shooting = false;
 
-    //    if (m_shotList == null || m_shotList.Count <= 0)
-    //    {
-    //        return;
-    //    }
+        if (m_shotList == null || m_shotList.Count <= 0)
+        {
+            return;
+        }
 
-    //    for (int i = 0; i < m_shotList.Count; i++)
-    //    {
-    //        if (m_shotList[i].m_shotObj != null)
-    //        {
-    //            m_shotList[i].m_shotObj.FinishedShot();
-    //        }
-    //    }
-    //}
+        for (int i = 0; i < m_shotList.Count; i++)
+        {
+            //if (m_shotList[i].m_shotObj != null)
+            //{
+            //    m_shotList[i].m_shotObj.FinishedShot();
+            //}
+        }
+    }
 
 
     [BurstCompile]
@@ -527,8 +526,8 @@ public sealed class UbhShotCtrl_Burst : HNDMonoBehaviour, IGameplaySceneContextI
         public NativeArray<quaternion> bulletRotations;
         public NativeArray<Vector3> bulletPositions;
 
-        public float3 targetPosition;
-        public quaternion targetRotation;
+        public float3 originPosition;
+        public quaternion originRotation;
         public float speed;
         public float angleHorizontal;
         public float angleVertical;
@@ -560,15 +559,28 @@ public sealed class UbhShotCtrl_Burst : HNDMonoBehaviour, IGameplaySceneContextI
         {
             var deltaTime = timeNorm;
 
-            Vector3 myAngles = targetRotation.EulerAngles();
+            Vector3 myAngles = originRotation.EulerAngles();
             float3 zero = float3(0);
-            Quaternion newRotation = targetRotation;
+            Quaternion newRotation = originRotation;
+
+            //m_baseAngles = Vector2.zero;
+            //if (inheritAngle && m_parentBaseShot.lockOnShot == false)
+            //{
+            //    m_baseAngles.x = m_parentBaseShot.shotCtrl.transform.eulerAngles.x;
+            //    m_baseAngles.y = m_parentBaseShot.shotCtrl.transform.eulerAngles.y;
+            //}
+
+            //m_transformCache.SetEulerAngles(
+            //    m_baseAngles.x + m_angleVertical,
+            //    m_baseAngles.y + m_angleHorizontal,
+            //    0f);
+            
             if (homing)
             {
                 // homing target.
                 if (!homingTargetPosition.Equals(zero) &&  0f < homingAngleSpeed)
                 {
-                    Quaternion rotation = Quaternion.LookRotation(math.normalizesafe(homingTargetPosition - targetPosition));
+                    Quaternion rotation = Quaternion.LookRotation(math.normalizesafe(homingTargetPosition - originPosition));
 
                     Quaternion toRotation =
                         Quaternion.RotateTowards(bulletRotations[index], rotation, deltaTime * homingAngleSpeed);
@@ -591,7 +603,6 @@ public sealed class UbhShotCtrl_Burst : HNDMonoBehaviour, IGameplaySceneContextI
                         baseAngles.x + angleVertical, baseAngles.y + waveAngleXZ, myAngles.z);
 
                 }
-                //selfFrameCount += UbhTimer.instance.deltaFrameCount;
             }
             else
             {
@@ -603,7 +614,7 @@ public sealed class UbhShotCtrl_Burst : HNDMonoBehaviour, IGameplaySceneContextI
             }
 
             // acceleration speed.
-            speed += (accelSpeed * deltaTime);
+            //speed += (accelSpeed * deltaTime);
 
             if (useMaxSpeed && speed > maxSpeed)
             {
@@ -617,7 +628,7 @@ public sealed class UbhShotCtrl_Burst : HNDMonoBehaviour, IGameplaySceneContextI
 
             // move.
             bulletPositions[index] = float3(bulletPositions[index].x, bulletPositions[index].y, bulletPositions[index].z) +
-                (math.mul(targetRotation, float3(0,0,1)) * (speed * deltaTime));
+                (math.mul(originRotation, float3(0,0,1)) * (speed * deltaTime));
 
             bulletRotations[index] = newRotation;
         }
