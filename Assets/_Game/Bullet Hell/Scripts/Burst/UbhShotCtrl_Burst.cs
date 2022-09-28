@@ -193,6 +193,8 @@ public sealed class UbhShotCtrl_Burst : HNDMonoBehaviour, IGameplaySceneContextI
 
     private void Update()
     {
+        m_shotList[0].m_ShotPattern.UpdateStatus();
+
         updateBulletsJobHandle.Complete();
         updateBulletsTransformsJobHandle.Complete();
 
