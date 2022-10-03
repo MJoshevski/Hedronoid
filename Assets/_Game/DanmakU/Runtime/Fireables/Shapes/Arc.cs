@@ -26,13 +26,13 @@ public class Arc : Fireable {
       return;
     }
     float arcLength = ArcLength.GetValue();
-    var rotation = state.Rotation.GetValue();
+    var rotation = state.Yaw.GetValue();
     var start = rotation - arcLength / 2;
     for (int i = 0; i < count; i++) {
       var angle = start + i * (arcLength / (count - 1));
       var currentState = state;
       currentState.Position = state.Position + (radius * RotationUtiliity.ToUnitVector(angle));
-      currentState.Rotation = angle;
+      currentState.Yaw = angle;
       Subfire(currentState);
     }
   }

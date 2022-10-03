@@ -15,11 +15,13 @@ namespace DanmakU
 
         static Vector4[] colorCache = new Vector4[kBatchSize];
         static Vector2[] positionCache = new Vector2[kBatchSize];
-        static float[] rotationCache = new float[kBatchSize];
+        static float[] yawRotationCache = new float[kBatchSize];
+        static float[] pitchRotationCache = new float[kBatchSize];
         static uint[] args = new uint[] { 0, 0, 0, 0, 0 };
 
         static int positionPropertyId = Shader.PropertyToID("positionBuffer");
-        static int rotationPropertyId = Shader.PropertyToID("rotationBuffer");
+        static int yawRotationPropertyId = Shader.PropertyToID("yawRotationBuffer");
+        static int pitchRotationPropertyId = Shader.PropertyToID("pitchRotationBuffer");
         static int colorPropertyId = Shader.PropertyToID("colorBuffer");
 
         public Color Color { get; set; } = Color.white;
@@ -85,7 +87,8 @@ namespace DanmakU
                 if (pool == null || pool.ActiveCount <= 0) continue;
 
                 var srcPositions = (Vector2*)pool.Positions.GetUnsafeReadOnlyPtr();
-                var srcRotations = (float*)pool.Rotations.GetUnsafeReadOnlyPtr();
+                var srcYawRotations = (float*)pool.Yaws.GetUnsafeReadOnlyPtr();
+                var srcPitchRotations = (float*)pool.Pitches.GetUnsafeReadOnlyPtr();
                 var srcColors = (Color*)pool.Colors.GetUnsafeReadOnlyPtr();
 
                 int poolIndex = 0;
@@ -96,9 +99,13 @@ namespace DanmakU
                     {
                         UnsafeUtility.MemCpy(colors + batchIndex, srcPositions + poolIndex, sizeof(Vector2) * count);
                     }
-                    fixed (float* rotations = rotationCache)
+                    fixed (float* yawRotations = yawRotationCache)
                     {
-                        UnsafeUtility.MemCpy(rotations + batchIndex, srcRotations + poolIndex, sizeof(float) * count);
+                        UnsafeUtility.MemCpy(yawRotations + batchIndex, srcYawRotations + poolIndex, sizeof(float) * count);
+                    }
+                    fixed (float* pitchRotations = pitchRotationCache)
+                    {
+                        UnsafeUtility.MemCpy(pitchRotations + batchIndex, srcPitchRotations + poolIndex, sizeof(float) * count);
                     }
                     fixed (Vector4* colors = colorCache)
                     {
@@ -125,14 +132,17 @@ namespace DanmakU
             ComputeBuffer argsBuffer = ArgBuffers.Rent(1, args.Length * sizeof(uint));
             ComputeBuffer positionBuffer = StructuredBuffers.Rent(kBatchSize, sizeof(Vector2));
             ComputeBuffer colorBuffer = StructuredBuffers.Rent(kBatchSize, sizeof(Color));
-            ComputeBuffer rotationBuffer = StructuredBuffers.Rent(kBatchSize, sizeof(float));
+            ComputeBuffer yawRotationBuffer = StructuredBuffers.Rent(kBatchSize, sizeof(float));
+            ComputeBuffer pitchRotationBuffer = StructuredBuffers.Rent(kBatchSize, sizeof(float));
 
             colorBuffer.SetData(colorCache, 0, 0, batchSize);
             positionBuffer.SetData(positionCache, 0, 0, batchSize);
-            rotationBuffer.SetData(rotationCache, 0, 0, batchSize);
+            yawRotationBuffer.SetData(yawRotationCache, 0, 0, batchSize);
+            pitchRotationBuffer.SetData(pitchRotationCache, 0, 0, batchSize);
 
             propertyBlock.SetBuffer(positionPropertyId, positionBuffer);
-            propertyBlock.SetBuffer(rotationPropertyId, rotationBuffer);
+            propertyBlock.SetBuffer(yawRotationPropertyId, yawRotationBuffer);
+            propertyBlock.SetBuffer(pitchRotationPropertyId, pitchRotationBuffer);
             propertyBlock.SetBuffer(colorPropertyId, colorBuffer);
 
             args[0] = mesh.GetIndexCount(0);
@@ -149,7 +159,5 @@ namespace DanmakU
               layer: layer,
               camera: null);
         }
-
     }
-
 }

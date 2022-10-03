@@ -9,7 +9,6 @@ using UnityEngine.Rendering;
 
 namespace DanmakU
 {
-
     /// <summary>
     /// The singleton manager of all Danmaku-related activities.
     /// </summary>
@@ -33,7 +32,7 @@ namespace DanmakU
         /// <summary>
         /// The global bounds that all bullets are bound to.
         /// </summary>
-        public Bounds2D Bounds = new Bounds2D(Vector2.zero, Vector2.one * 200);
+        public Bounds Bounds = new Bounds(Vector3.zero, Vector3.one * 200);
 
         Dictionary<DanmakuRendererConfig, RendererGroup> RendererGroups;
         List<DanmakuRendererConfig> EmptyGroups;
@@ -120,7 +119,7 @@ namespace DanmakU
         void OnDrawGizmos()
         {
             Gizmos.color = Color.cyan;
-            Gizmos.DrawWireCube(Bounds.Center, Bounds.Size);
+            Gizmos.DrawWireCube(Bounds.center, Bounds.size);
         }
 
         /// <summary>
@@ -141,12 +140,9 @@ namespace DanmakU
 
         void RenderBullets(Camera camera)
         {
-            Debug.LogError("RENDERBULL");
             UpdateHandle.Complete();
             foreach (var group in RendererGroups.Values)
             {
-                Debug.LogError("RENDERBULL2222");
-
                 group.Render(gameObject.layer);
             }
         }
@@ -238,7 +234,6 @@ namespace DanmakU
 
             public void Render(int layer)
             {
-                Debug.LogError("OOOOOOOO");
                 Renderer.FlushBuffers();
                 Renderer.Render(Sets, layer);
             }
@@ -252,9 +247,6 @@ namespace DanmakU
                     set.Dispose();
                 }
             }
-
         }
-
     }
-
 }
