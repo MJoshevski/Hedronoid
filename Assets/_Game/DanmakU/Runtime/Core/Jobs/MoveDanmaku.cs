@@ -41,16 +41,15 @@ namespace DanmakU
                 var pitchRotation = *pitchRotationPtr + *angularSpeedPtr++ * DeltaTime;
                 *yawRotationPtr = yawRotation;
                 *pitchRotationPtr = pitchRotation;
-                positionPtr->x += speed * Mathf.Cos(yawRotation) * DeltaTime;
-                positionPtr->y += speed * Mathf.Sin(yawRotation) * DeltaTime;
-                //positionPtr->x += speed * Mathf.Cos(yawRotation) * Mathf.Cos(pitchRotation) * DeltaTime;
-                //positionPtr->y += speed * Mathf.Sin(yawRotation) * Mathf.Cos(pitchRotation) * DeltaTime;
-                //positionPtr->z += speed * Mathf.Sin(pitchRotation) * DeltaTime;
+                //positionPtr->x += speed * Mathf.Cos(yawRotation) * DeltaTime;
+                //positionPtr->y += speed * Mathf.Sin(yawRotation) * DeltaTime;
+                positionPtr->x += speed * Mathf.Cos(yawRotation) * Mathf.Cos(pitchRotation) * DeltaTime;
+                positionPtr->y += speed * Mathf.Sin(yawRotation) * Mathf.Cos(pitchRotation) * DeltaTime;
+                positionPtr->z += speed * Mathf.Sin(pitchRotation) * DeltaTime;
                 yawRotationPtr++;
+                pitchRotationPtr++;
                 positionPtr++;
             }
         }
-
     }
-
 }

@@ -4,14 +4,12 @@ using UnityEngine;
 
 namespace DanmakU
 {
-
     /// <summary>
     /// A config for creating <see cref="DanmakU.DanmakuState"/>.
     /// </summary>
     [Serializable]
     public struct DanmakuConfig
     {
-
         public Vector2 Position;
         [Radians] public Range Yaw;
         [Radians] public Range Pitch;

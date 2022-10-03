@@ -140,6 +140,8 @@ namespace DanmakU
 
         void RenderBullets(Camera camera)
         {
+            if (!Instance) return;
+
             UpdateHandle.Complete();
             foreach (var group in RendererGroups.Values)
             {

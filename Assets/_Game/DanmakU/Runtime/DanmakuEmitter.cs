@@ -58,6 +58,7 @@ namespace DanmakU
                 {
                     Position = transform.position,
                     Yaw = transform.rotation.eulerAngles.z * Mathf.Deg2Rad,
+                    Pitch = transform.rotation.eulerAngles.x * Mathf.Deg2Rad,
                     Speed = Speed,
                     AngularSpeed = AngularSpeed,
                     Color = Color

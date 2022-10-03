@@ -3,33 +3,38 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-namespace DanmakU.Fireables {
+namespace DanmakU.Fireables
+{
+    [Serializable]
+    public class Circle : Fireable
+    {
+        public Range Count = 1;
+        public Range Radius;
 
-[Serializable]
-public class Circle : Fireable {
+        public Circle(Range count, Range radius)
+        {
+            Count = count;
+            Radius = radius;
+        }
 
-  public Range Count = 1;
-  public Range Radius;
+        public override void Fire(DanmakuConfig state)
+        {
+            float radius = Radius.GetValue();
+            int count = Mathf.RoundToInt(Count.GetValue());
+            var rotationYaw = state.Yaw.GetValue();
+            var rotationPitch = state.Pitch.GetValue();
 
-  public Circle(Range count, Range radius) {
-    Count = count;
-    Radius = radius;
-  }
-
-  public override void Fire(DanmakuConfig state) {
-    float radius = Radius.GetValue();
-    int count = Mathf.RoundToInt(Count.GetValue());
-    var rotation = state.Yaw.GetValue();
-    var origin = state.Position;
-    state.Yaw = rotation;
-    for (int i = 0; i < count; i++) {
-      var angle = rotation + i * (Mathf.PI * 2 / count);
-      state.Position = origin + (radius * RotationUtiliity.ToUnitVector(angle));
-      Subfire(state);
+            var origin = state.Position;
+            state.Yaw = rotationYaw;
+            state.Pitch = rotationPitch;
+            for (int i = 0; i < count; i++)
+            {
+                var angleYaw = rotationYaw + i * (Mathf.PI * 2 / count);
+                var anglePitch = rotationPitch + i * (Mathf.PI * 2 / count);
+                var angle = angleYaw + anglePitch;
+                state.Position = origin + (radius * RotationUtiliity.ToUnitVector(angle));
+                Subfire(state);
+            }
+        }
     }
-  }
-
 }
-
-}
-

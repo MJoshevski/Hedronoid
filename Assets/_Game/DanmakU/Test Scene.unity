@@ -219,8 +219,8 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   Bounds:
-    Center: {x: 0, y: 0}
-    Extents: {x: 100, y: 100}
+    m_Center: {x: 0, y: 0, z: 0}
+    m_Extent: {x: 100, y: 100, z: 100}
 --- !u!81 &872241322
 AudioListener:
   m_ObjectHideFlags: 0
@@ -423,6 +423,9 @@ MonoBehaviour:
       _min: 5
       _max: 5
     ArcLength:
+      _min: 6.2831855
+      _max: 6.2831855
+    ArcHeight:
       _min: 6.2831855
       _max: 6.2831855
     Radius:
@@ -628,6 +631,9 @@ MonoBehaviour:
     ArcLength:
       _min: 1.5707964
       _max: 1.5707964
+    ArcHeight:
+      _min: 0
+      _max: 0
     Radius:
       _min: 0
       _max: 0
