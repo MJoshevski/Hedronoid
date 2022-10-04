@@ -34,6 +34,8 @@ namespace DanmakU
             var speedPtr = (float*)Speeds.GetUnsafeReadOnlyPtr() + start;
             var angularSpeedPtr = (float*)AngularSpeeds.GetUnsafeReadOnlyPtr() + start;
             var yawRotationEnd = yawRotationPtr + (end - start);
+            var pitchRotationEnd = pitchRotationPtr + (end - start);
+
             while (yawRotationPtr < yawRotationEnd)
             {
                 var speed = *speedPtr++;
@@ -41,6 +43,7 @@ namespace DanmakU
                 var pitchRotation = *pitchRotationPtr + *angularSpeedPtr++ * DeltaTime;
                 *yawRotationPtr = yawRotation;
                 *pitchRotationPtr = pitchRotation;
+                Debug.LogErrorFormat("YAW: {0}, PITCH: {1}", yawRotation, pitchRotation);
                 //positionPtr->x += speed * Mathf.Cos(yawRotation) * DeltaTime;
                 //positionPtr->y += speed * Mathf.Sin(yawRotation) * DeltaTime;
                 positionPtr->x += speed * Mathf.Cos(yawRotation) * Mathf.Cos(pitchRotation) * DeltaTime;

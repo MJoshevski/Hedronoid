@@ -28,8 +28,7 @@ namespace DanmakU.Fireables
             {
                 var angleYaw = rotationYaw + i * (Mathf.PI * 2 / count);
                 var anglePitch = rotationPitch + i * (Mathf.PI * 2 / count);
-                var angle = angleYaw + anglePitch;
-                currentState.Position = state.Position + (radius * RotationUtiliity.ToUnitVector(angle));
+                currentState.Position = state.Position + (radius * RotationUtiliity.ToUnitVector(angleYaw, anglePitch));
                 currentState.Yaw = angleYaw;
                 currentState.Pitch = anglePitch;
                 Subfire(currentState);

@@ -7,7 +7,6 @@ namespace DanmakU
 {
     internal struct BoundsCheckDanmaku : IJobBatchedFor
     {
-
         public float DeltaTime;
         [ReadOnly] public NativeArray<Vector3> Positions;
         public NativeArray<float> Times;
@@ -35,7 +34,9 @@ namespace DanmakU
             {
                 var x = positionPtr->x;
                 var y = positionPtr->y;
-                if (x >= min.x && x <= max.x && y >= min.y && y <= max.y)
+                var z = positionPtr->z;
+
+                if (x >= min.x && x <= max.x && y >= min.y && y <= max.y && z >= min.z && z <= max.z)
                 {
                     *timePtr++ += DeltaTime;
                 }
@@ -46,6 +47,5 @@ namespace DanmakU
                 positionPtr++;
             }
         }
-
     }
 }

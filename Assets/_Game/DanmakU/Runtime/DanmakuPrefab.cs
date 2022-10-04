@@ -62,7 +62,7 @@ namespace DanmakU
         [SerializeField] internal Sprite Sprite;
         [Header("Collision")]
         [SerializeField] internal float ColliderRadius = 1f;
-        [SerializeField] internal Vector2 ColliderOffset;
+        [SerializeField] internal Vector3 ColliderOffset;
         [Header("Pooling")]
         [SerializeField] internal int DefaultPoolSize = 1000;
 

@@ -7,14 +7,16 @@ namespace DanmakU.Fireables
     [Serializable]
     public class Arc : Fireable
     {
-        public Range Count = 1;
+        public Range Coloumns = 1;
+        public Range Rows = 1;
         [Radians] public Range ArcLength;
         [Radians] public Range ArcHeight;
         public Range Radius;
 
-        public Arc(Range count, Range arcLength, Range arcHeight, Range radius)
+        public Arc(Range coloumns, Range rows, Range arcLength, Range arcHeight, Range radius)
         {
-            Count = count;
+            Coloumns = coloumns;
+            Rows = rows;
             ArcLength = arcLength;
             ArcHeight = arcHeight;
             Radius = radius;
@@ -23,9 +25,10 @@ namespace DanmakU.Fireables
         public override void Fire(DanmakuConfig state)
         {
             float radius = Radius.GetValue();
-            int count = Mathf.RoundToInt(Count.GetValue());
-            if (count == 0) return;
-            if (count == 1)
+            int coloumnCount = Mathf.RoundToInt(Coloumns.GetValue());
+            int rowCount = Mathf.RoundToInt(Rows.GetValue());
+            if (coloumnCount == 0) return;
+            if (coloumnCount == 1)
             {
                 Subfire(state);
                 return;
@@ -37,15 +40,19 @@ namespace DanmakU.Fireables
             var startLength = rotationYaw - arcLength / 2;
             var startHeight = rotationPitch - arcHeight / 2;
 
-            for (int i = 0; i < count; i++)
+            for (int j = 0; j < rowCount; j++)
             {
-                var angleYaw = startLength + i * (arcLength / (count - 1));
-                var anglePitch = startHeight + i * (arcHeight / (count - 1));
-                var currentState = state;
-                currentState.Position = state.Position + (radius * RotationUtiliity.ToUnitVector(angleYaw + anglePitch));
-                currentState.Yaw = angleYaw;
-                currentState.Pitch = anglePitch;
-                Subfire(currentState);
+                var anglePitch = startHeight + j * (arcHeight / (coloumnCount - 1));
+
+                for (int i = 0; i < coloumnCount; i++)
+                {
+                    var angleYaw = startLength + i * (arcLength / (coloumnCount - 1));
+                    var currentState = state;
+                    currentState.Position = state.Position + (radius * RotationUtiliity.ToUnitVector(angleYaw, anglePitch));
+                    currentState.Yaw = angleYaw;
+                    currentState.Pitch = anglePitch;
+                    Subfire(currentState);
+                }
             }
         }
     }

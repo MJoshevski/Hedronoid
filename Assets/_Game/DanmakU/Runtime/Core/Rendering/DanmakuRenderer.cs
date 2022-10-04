@@ -10,11 +10,10 @@ namespace DanmakU
 {
     internal class DanmakuRenderer : IDisposable
     {
-
         const int kBatchSize = 4096;
 
         static Vector4[] colorCache = new Vector4[kBatchSize];
-        static Vector2[] positionCache = new Vector2[kBatchSize];
+        static Vector3[] positionCache = new Vector3[kBatchSize];
         static float[] yawRotationCache = new float[kBatchSize];
         static float[] pitchRotationCache = new float[kBatchSize];
         static uint[] args = new uint[] { 0, 0, 0, 0, 0 };
@@ -86,7 +85,7 @@ namespace DanmakU
                 var pool = set.Pool;
                 if (pool == null || pool.ActiveCount <= 0) continue;
 
-                var srcPositions = (Vector2*)pool.Positions.GetUnsafeReadOnlyPtr();
+                var srcPositions = (Vector3*)pool.Positions.GetUnsafeReadOnlyPtr();
                 var srcYawRotations = (float*)pool.Yaws.GetUnsafeReadOnlyPtr();
                 var srcPitchRotations = (float*)pool.Pitches.GetUnsafeReadOnlyPtr();
                 var srcColors = (Color*)pool.Colors.GetUnsafeReadOnlyPtr();
@@ -95,9 +94,9 @@ namespace DanmakU
                 while (poolIndex < pool.ActiveCount)
                 {
                     var count = Math.Min(kBatchSize - batchIndex, pool.ActiveCount - poolIndex);
-                    fixed (Vector2* colors = positionCache)
+                    fixed (Vector3* positions = positionCache)
                     {
-                        UnsafeUtility.MemCpy(colors + batchIndex, srcPositions + poolIndex, sizeof(Vector2) * count);
+                        UnsafeUtility.MemCpy(positions + batchIndex, srcPositions + poolIndex, sizeof(Vector3) * count);
                     }
                     fixed (float* yawRotations = yawRotationCache)
                     {
@@ -130,7 +129,7 @@ namespace DanmakU
         unsafe void RenderBatch(Mesh mesh, int batchSize, int layer)
         {
             ComputeBuffer argsBuffer = ArgBuffers.Rent(1, args.Length * sizeof(uint));
-            ComputeBuffer positionBuffer = StructuredBuffers.Rent(kBatchSize, sizeof(Vector2));
+            ComputeBuffer positionBuffer = StructuredBuffers.Rent(kBatchSize, sizeof(Vector3));
             ComputeBuffer colorBuffer = StructuredBuffers.Rent(kBatchSize, sizeof(Color));
             ComputeBuffer yawRotationBuffer = StructuredBuffers.Rent(kBatchSize, sizeof(float));
             ComputeBuffer pitchRotationBuffer = StructuredBuffers.Rent(kBatchSize, sizeof(float));

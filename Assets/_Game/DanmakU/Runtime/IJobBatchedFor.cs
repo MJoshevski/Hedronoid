@@ -7,7 +7,6 @@ using UnityEngine;
 
 namespace DanmakU
 {
-
     internal interface IJobBatchedFor
     {
         void Execute(int start, int end);
@@ -35,7 +34,6 @@ namespace DanmakU
                 data.Execute(start, end);
             }
         }
-
     }
 
     internal unsafe static class IJobBatchedForExtensions
@@ -52,5 +50,4 @@ namespace DanmakU
             return JobsUtility.ScheduleParallelFor(ref scheduleParams, arrayLength, minIndicesPerJobCount);
         }
     }
-
 }

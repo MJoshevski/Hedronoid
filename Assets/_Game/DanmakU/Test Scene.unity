@@ -386,14 +386,14 @@ Transform:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1364750525}
-  m_LocalRotation: {x: 0, y: 0, z: 0.7071068, w: 0.7071068}
+  m_LocalRotation: {x: -0, y: -0, z: 1, w: 0.0000004768371}
   m_LocalPosition: {x: 0, y: 0, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
   m_Father: {fileID: 1164331029}
   m_RootOrder: 0
-  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 90}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 180}
 --- !u!114 &1364750527
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -419,9 +419,12 @@ MonoBehaviour:
     _max: 1
   FrameRate: 0
   Arc:
-    Count:
+    Coloumns:
       _min: 5
       _max: 5
+    Rows:
+      _min: 3
+      _max: 3
     ArcLength:
       _min: 6.2831855
       _max: 6.2831855
@@ -433,8 +436,8 @@ MonoBehaviour:
       _max: 0
   Line:
     Count:
-      _min: 50
-      _max: 50
+      _min: 1
+      _max: 1
     DeltaSpeed:
       _min: 2
       _max: 2
@@ -451,8 +454,8 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   Acceleration:
-    _min: 5
-    _max: 5
+    _min: 0
+    _max: 0
 --- !u!1 &1481724626
 GameObject:
   m_ObjectHideFlags: 0
@@ -625,9 +628,12 @@ MonoBehaviour:
     _max: 1
   FrameRate: 0
   Arc:
-    Count:
-      _min: 5
-      _max: 5
+    Coloumns:
+      _min: 0
+      _max: 0
+    Rows:
+      _min: 0
+      _max: 0
     ArcLength:
       _min: 1.5707964
       _max: 1.5707964
@@ -676,10 +682,10 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   Type: 1
   Material: {fileID: 2100000, guid: d8aebcd1c9b56cf429888cb2ab9c2c28, type: 2}
-  Mesh: {fileID: -5053925668127403250, guid: ec008e3777c561341944002dce73dd57, type: 3}
+  Mesh: {fileID: 10207, guid: 0000000000000000e000000000000000, type: 0}
   Sprite: {fileID: 0}
   ColliderRadius: 2
-  ColliderOffset: {x: 0, y: 0}
+  ColliderOffset: {x: 0, y: 0, z: 0}
   DefaultPoolSize: 128000
 --- !u!4 &2040105327
 Transform:

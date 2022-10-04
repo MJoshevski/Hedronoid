@@ -1,5 +1,4 @@
 using System;
-using Unity.Mathematics;
 using UnityEngine;
 
 namespace DanmakU
@@ -10,7 +9,7 @@ namespace DanmakU
     [Serializable]
     public struct DanmakuConfig
     {
-        public Vector2 Position;
+        public Vector3 Position;
         [Radians] public Range Yaw;
         [Radians] public Range Pitch;
         public Range Speed;
@@ -42,7 +41,7 @@ namespace DanmakU
     [Serializable]
     public struct DanmakuState
     {
-        public Vector2 Position;
+        public Vector3 Position;
         [Radians] public float Yaw;
         [Radians] public float Pitch;
         public float Speed;
