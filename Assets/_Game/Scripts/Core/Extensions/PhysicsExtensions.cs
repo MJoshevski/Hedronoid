@@ -39,7 +39,7 @@ namespace Hedronoid
             return coneCastHits;
         }
 
-        public static RaycastHit[] ConeCastNonAlloc(this Physics physics, Vector3 origin, float maxRadius, Vector3 direction, int hitBufferCount, float maxDistance, float coneAngle)
+        public static RaycastHit[] ConeCastNonAlloc(this Physics physics, Vector3 origin, float maxRadius, Vector3 direction, int hitBufferCount, float maxDistance, LayerMask layerMask, float coneAngle)
         {
             RaycastHit[] sphereCastHits = new RaycastHit[hitBufferCount];
 
@@ -48,8 +48,8 @@ namespace Hedronoid
                 maxRadius, 
                 direction, 
                 sphereCastHits, 
-                maxDistance, 
-                HNDAI.Settings.PlayerLayer, 
+                maxDistance,
+                layerMask, 
                 QueryTriggerInteraction.Ignore);
 
             List<RaycastHit> coneCastHitList = new List<RaycastHit>();

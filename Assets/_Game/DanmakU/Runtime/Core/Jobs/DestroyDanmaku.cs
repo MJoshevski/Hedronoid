@@ -15,8 +15,7 @@ namespace DanmakU
         NativeArray<DanmakuState> InitialStates;
         NativeArray<Vector3> Positions;
         NativeArray<Vector3> OldPositions;
-        NativeArray<float> Yaws;
-        NativeArray<float> Pitches;
+        NativeArray<Quaternion> Rotations;
         NativeArray<float> Speeds;
         NativeArray<float> AngularSpeeds;
         NativeArray<Vector4> Colors;
@@ -28,9 +27,7 @@ namespace DanmakU
             InitialStates = pool.InitialStates;
             Positions = pool.Positions;
             OldPositions = pool.OldPositions;
-            Yaws = pool.Yaws;
-            Pitches = pool.Pitches;
-            Times = pool.Times;
+            Rotations = pool.Rotations;
             Speeds = pool.Speeds;
             AngularSpeeds = pool.AngularSpeeds;
             Colors = pool.Colors;
@@ -48,8 +45,7 @@ namespace DanmakU
                 Times[i] = Times[activeCount];
                 Positions[i] = Positions[activeCount];
                 OldPositions[i] = OldPositions[activeCount];
-                Yaws[i] = Yaws[activeCount];
-                Pitches[i] = Pitches[activeCount];
+                Rotations[i] = Rotations[activeCount];
                 Speeds[i] = Speeds[activeCount];
                 AngularSpeeds[i] = AngularSpeeds[activeCount];
                 Colors[i] = Colors[activeCount];

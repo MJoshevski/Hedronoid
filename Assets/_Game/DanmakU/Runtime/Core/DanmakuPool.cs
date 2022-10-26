@@ -5,10 +5,10 @@ using Unity.Jobs;
 using Unity.Collections;
 using UnityEngine;
 using System.Runtime.CompilerServices;
+using Unity.Mathematics;
 
 namespace DanmakU
 {
-
     /// <summary>
     /// A pool of <see cref="DanmakU.Danmaku"/>.
     /// </summary>
@@ -113,16 +113,10 @@ namespace DanmakU
         public NativeArray<Vector3> Positions;
 
         /// <summary>
-        /// The array of all yaws of <see cref="DanmakU.Danmaku"/> in the pool.
+        /// The array of all rotations of <see cref="DanmakU.Danmaku"/> in the pool.
         /// </summary>
-        /// <seealso cref="DanmakU.Danmaku.Yaw"/>
-        public NativeArray<float> Yaws;
-
-        /// <summary>
-        /// The array of all yaws of <see cref="DanmakU.Danmaku"/> in the pool.
-        /// </summary>
-        /// <seealso cref="DanmakU.Danmaku.Pitch"/>
-        public NativeArray<float> Pitches;
+        /// <seealso cref="DanmakU.Danmaku.Rotation"/>
+        public NativeArray<Quaternion> Rotations;
 
         /// <summary>
         /// The array of all speeds of <see cref="DanmakU.Danmaku"/> in the pool.
@@ -156,8 +150,7 @@ namespace DanmakU
             InitialStates = new NativeArray<DanmakuState>(poolSize, Allocator.Persistent, NativeArrayOptions.UninitializedMemory);
             Times = new NativeArray<float>(poolSize, Allocator.Persistent, NativeArrayOptions.UninitializedMemory);
             Positions = new NativeArray<Vector3>(poolSize, Allocator.Persistent, NativeArrayOptions.UninitializedMemory);
-            Yaws = new NativeArray<float>(poolSize, Allocator.Persistent, NativeArrayOptions.UninitializedMemory);
-            Pitches = new NativeArray<float>(poolSize, Allocator.Persistent, NativeArrayOptions.UninitializedMemory);
+            Rotations = new NativeArray<Quaternion>(poolSize, Allocator.Persistent, NativeArrayOptions.UninitializedMemory);
             Speeds = new NativeArray<float>(poolSize, Allocator.Persistent, NativeArrayOptions.UninitializedMemory);
             AngularSpeeds = new NativeArray<float>(poolSize, Allocator.Persistent, NativeArrayOptions.UninitializedMemory);
             Colors = new NativeArray<Vector4>(poolSize, Allocator.Persistent, NativeArrayOptions.UninitializedMemory);
@@ -231,8 +224,7 @@ namespace DanmakU
             Resize(ref InitialStates);
             Resize(ref Times);
             Resize(ref Positions);
-            Resize(ref Yaws);
-            Resize(ref Pitches);
+            Resize(ref Rotations);
             Resize(ref Speeds);
             Resize(ref AngularSpeeds);
             Resize(ref Colors);
@@ -260,8 +252,7 @@ namespace DanmakU
             InitialStates.Dispose();
             Times.Dispose();
             Positions.Dispose();
-            Yaws.Dispose();
-            Pitches.Dispose();
+            Rotations.Dispose();
             Speeds.Dispose();
             AngularSpeeds.Dispose();
             Colors.Dispose();

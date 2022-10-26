@@ -10,8 +10,7 @@ namespace DanmakU
     public struct DanmakuConfig
     {
         public Vector3 Position;
-        [Radians] public Range Yaw;
-        [Radians] public Range Pitch;
+        public Quaternion Rotation;
         public Range Speed;
         [Radians] public Range AngularSpeed;
         public Color Color;
@@ -25,8 +24,7 @@ namespace DanmakU
             return new DanmakuState
             {
                 Position = Position,
-                Yaw = Yaw.GetValue(),
-                Pitch = Pitch.GetValue(),
+                Rotation = Rotation,
                 Speed = Speed.GetValue(),
                 AngularSpeed = AngularSpeed.GetValue(),
                 Color = Color
@@ -42,8 +40,7 @@ namespace DanmakU
     public struct DanmakuState
     {
         public Vector3 Position;
-        [Radians] public float Yaw;
-        [Radians] public float Pitch;
+        [Radians] public Quaternion Rotation;
         public float Speed;
         [Radians] public float AngularSpeed;
         public Color Color;

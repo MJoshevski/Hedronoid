@@ -344,6 +344,31 @@ namespace Popcron
         }
 
         /// <summary>
+        /// Draws a cone similar to the one that spot lights draw, but with a spherical base
+        /// MATEJ: This implementation doesn't have that 0.5f multiplication that the regular Cone has
+        /// It was giving an unaccurate representation
+        /// </summary>
+        public static void ConeSpherical(Vector3 position, Quaternion rotation, float radius, float length, float angle, Color? color = null, bool dashed = false, int pointsCount = 16)
+        {
+            //draw the end of the cone
+            float endAngle = Mathf.Tan(angle * Mathf.Deg2Rad) * (length);
+            Vector3 forward = rotation * Vector3.forward;
+            Vector3 endPosition = position + forward * (length - radius);
+            float offset = 0f;
+            Draw<PolygonDrawer>(color, dashed, endPosition, pointsCount, endAngle, offset, rotation);
+
+            //draw the 4 circular lines
+            for (int i = 0; i < 4; i++)
+            {
+                float a = i * 90f * Mathf.Deg2Rad;
+                Vector3 point = rotation * new Vector3(Mathf.Cos(a), Mathf.Sin(a)) * endAngle;
+                Line(position, position + point + forward * (length - radius), color, dashed);
+            }
+
+            Sphere(endPosition, radius, color, dashed, pointsCount);
+        }
+
+        /// <summary>
         /// Draws a sphere at position with specified radius.
         /// </summary>
         public static void Sphere(Vector3 position, float radius, Color? color = null, bool dashed = false, int pointsCount = 16)

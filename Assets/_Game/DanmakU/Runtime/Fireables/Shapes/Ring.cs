@@ -21,16 +21,13 @@ namespace DanmakU.Fireables
         {
             float radius = Radius.GetValue();
             int count = Mathf.RoundToInt(Count.GetValue());
-            var rotationYaw = state.Yaw.GetValue();
-            var rotationPitch = state.Pitch.GetValue();
+            var rotation = state.Rotation;
             var currentState = state;
             for (int i = 0; i < count; i++)
             {
-                var angleYaw = rotationYaw + i * (Mathf.PI * 2 / count);
-                var anglePitch = rotationPitch + i * (Mathf.PI * 2 / count);
-                currentState.Position = state.Position + (radius * RotationUtiliity.ToUnitVector(angleYaw, anglePitch));
-                currentState.Yaw = angleYaw;
-                currentState.Pitch = anglePitch;
+                //var angle = rotation + i * (Mathf.PI * 2 / count);
+                //currentState.Position = state.Position + (radius * RotationUtiliity.ToUnitVector(angle));
+                //currentState.Rotation = angle;
                 Subfire(currentState);
             }
         }

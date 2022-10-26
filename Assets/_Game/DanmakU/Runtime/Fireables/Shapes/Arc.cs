@@ -35,24 +35,16 @@ namespace DanmakU.Fireables
             }
             float arcLength = ArcLength.GetValue();
             float arcHeight = ArcHeight.GetValue();
-            var rotationYaw = state.Yaw.GetValue();
-            var rotationPitch = state.Pitch.GetValue();
-            var startLength = rotationYaw - arcLength / 2;
-            var startHeight = rotationPitch - arcHeight / 2;
+            var rotation = state.Rotation;
+            //var start = rotation - arcLength / 2;
 
-            for (int j = 0; j < rowCount; j++)
+            for (int i = 0; i < coloumnCount; i++)
             {
-                var anglePitch = startHeight + j * (arcHeight / (coloumnCount - 1));
-
-                for (int i = 0; i < coloumnCount; i++)
-                {
-                    var angleYaw = startLength + i * (arcLength / (coloumnCount - 1));
-                    var currentState = state;
-                    currentState.Position = state.Position + (radius * RotationUtiliity.ToUnitVector(angleYaw, anglePitch));
-                    currentState.Yaw = angleYaw;
-                    currentState.Pitch = anglePitch;
-                    Subfire(currentState);
-                }
+                //var angle = start + i * (arcLength / (coloumnCount - 1));
+                var currentState = state;
+                //currentState.Position = state.Position + (radius * RotationUtiliity.ToUnitVector(angle));
+                //currentState.Rotation = angle;
+                Subfire(currentState);
             }
         }
     }

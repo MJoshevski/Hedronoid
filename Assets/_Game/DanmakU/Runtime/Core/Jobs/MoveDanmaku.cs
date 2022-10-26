@@ -3,6 +3,7 @@ using Unity.Collections;
 using Unity.Collections.LowLevel.Unsafe;
 using UnityEngine;
 using Unity.Burst;
+using Unity.Mathematics;
 
 namespace DanmakU
 {
@@ -11,8 +12,8 @@ namespace DanmakU
         public float DeltaTime;
 
         public NativeArray<Vector3> Positions;
-        public NativeArray<float> Yaws;
-        public NativeArray<float> Pitches;
+        public NativeArray<Quaternion> Rotations;
+
         [ReadOnly] public NativeArray<float> Speeds;
         [ReadOnly] public NativeArray<float> AngularSpeeds;
 
@@ -20,8 +21,7 @@ namespace DanmakU
         {
             DeltaTime = Time.deltaTime;
             Positions = pool.Positions;
-            Yaws = pool.Yaws;
-            Pitches = pool.Pitches;
+            Rotations = pool.Rotations;
             Speeds = pool.Speeds;
             AngularSpeeds = pool.AngularSpeeds;
         }
@@ -29,28 +29,26 @@ namespace DanmakU
         public unsafe void Execute(int start, int end)
         {
             var positionPtr = (Vector3*)Positions.GetUnsafePtr() + start;
-            var yawRotationPtr = (float*)Yaws.GetUnsafePtr() + start;
-            var pitchRotationPtr = (float*)Pitches.GetUnsafePtr() + start;
+            var rotationPtr = (float*)Rotations.GetUnsafePtr() + start;
             var speedPtr = (float*)Speeds.GetUnsafeReadOnlyPtr() + start;
             var angularSpeedPtr = (float*)AngularSpeeds.GetUnsafeReadOnlyPtr() + start;
-            var yawRotationEnd = yawRotationPtr + (end - start);
-            var pitchRotationEnd = pitchRotationPtr + (end - start);
+            var rotationEnd = rotationPtr + (end - start);
 
-            while (yawRotationPtr < yawRotationEnd)
+            while (rotationPtr < rotationEnd)
             {
                 var speed = *speedPtr++;
-                var yawRotation = *yawRotationPtr + *angularSpeedPtr++ * DeltaTime;
-                var pitchRotation = *pitchRotationPtr + *angularSpeedPtr++ * DeltaTime;
-                *yawRotationPtr = yawRotation;
-                *pitchRotationPtr = pitchRotation;
-                Debug.LogErrorFormat("YAW: {0}, PITCH: {1}", yawRotation, pitchRotation);
-                //positionPtr->x += speed * Mathf.Cos(yawRotation) * DeltaTime;
-                //positionPtr->y += speed * Mathf.Sin(yawRotation) * DeltaTime;
-                positionPtr->x += speed * Mathf.Cos(yawRotation) * Mathf.Cos(pitchRotation) * DeltaTime;
-                positionPtr->y += speed * Mathf.Sin(yawRotation) * Mathf.Cos(pitchRotation) * DeltaTime;
-                positionPtr->z += speed * Mathf.Sin(pitchRotation) * DeltaTime;
-                yawRotationPtr++;
-                pitchRotationPtr++;
+                var yawRotation = *rotationPtr + *angularSpeedPtr++ * DeltaTime;
+                //var pitchRotation = *pitchRotationPtr + *angularSpeedPtr++ * DeltaTime;
+                *rotationPtr = yawRotation;
+                //*pitchRotationPtr = pitchRotation;
+                //Debug.LogErrorFormat("YAW: {0}, PITCH: {1}", yawRotation, pitchRotation);
+                positionPtr->x += speed * Mathf.Cos(yawRotation) * DeltaTime;
+                positionPtr->y += speed * Mathf.Sin(yawRotation) * DeltaTime;
+                //positionPtr->x += speed * Mathf.Cos(yawRotation) * Mathf.Cos(pitchRotation) * DeltaTime;
+                //positionPtr->y += speed * Mathf.Sin(yawRotation) * Mathf.Cos(pitchRotation) * DeltaTime;
+                //positionPtr->z += speed * Mathf.Sin(pitchRotation) * DeltaTime;
+                rotationPtr++;
+                //pitchRotationPtr++;
                 positionPtr++;
             }
         }

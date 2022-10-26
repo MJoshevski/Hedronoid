@@ -57,8 +57,7 @@ namespace DanmakU
                 config = new DanmakuConfig
                 {
                     Position = transform.position,
-                    Yaw = transform.rotation.eulerAngles.z * Mathf.Deg2Rad,
-                    Pitch = transform.rotation.eulerAngles.x * Mathf.Deg2Rad,
+                    Rotation = transform.rotation,
                     Speed = Speed,
                     AngularSpeed = AngularSpeed,
                     Color = Color

@@ -69,41 +69,25 @@ namespace DanmakU
         }
 
         /// <summary>
-        /// Gets or sets the yaw of the Danmaku.
+        /// Gets or sets the rotation of the Danmaku.
         /// </summary>
         /// <remarks>
         /// Units are in radians. 0 points directly right. Pi points directly left.
         /// Controls both the graphical rotation as well as the direction of motion
         /// the Danmaku is moving in.
         /// </remarks>
-        public float Yaw
+        public Quaternion Rotation
         {
             [MethodImpl(MethodImplOptions.AggressiveInlining)]
-            get { return Pool.Yaws[Id]; }
+            get { return Pool.Rotations[Id]; }
             [MethodImpl(MethodImplOptions.AggressiveInlining)]
-            set { Pool.Yaws[Id] = value; }
-        }
-
-        /// <summary>
-        /// Gets or sets the pitch of the Danmaku.
-        /// </summary>
-        /// <remarks>
-        /// Units are in radians. 0 points directly down. Pi points directly up.
-        /// Controls both the graphical rotation as well as the direction of motion
-        /// the Danmaku is moving in.
-        /// </remarks>
-        public float Pitch
-        {
-            [MethodImpl(MethodImplOptions.AggressiveInlining)]
-            get { return Pool.Pitches[Id]; }
-            [MethodImpl(MethodImplOptions.AggressiveInlining)]
-            set { Pool.Pitches[Id] = value; }
+            set { Pool.Rotations[Id] = value; }
         }
 
         /// <summary>
         /// Gets the direction the Danmaku is facing. Guarenteed to be a unit vector.
         /// </summary>
-        public Vector3 Direction => GetDirection(Pool.Yaws[Id], Pool.Pitches[Id]);
+        public Vector3 Direction => GetDirection(Pool.Rotations[Id]);
 
         /// <summary>
         /// Gets or sets the speed of the Danmaku.
@@ -170,8 +154,7 @@ namespace DanmakU
             var danmaku = set.Fire(new DanmakuConfig
             {
                 Position = Position,
-                Yaw = Yaw,
-                Pitch = Pitch,
+                Rotation = Rotation,
                 Speed = Speed,
                 AngularSpeed = AngularSpeed,
                 Color = Color
@@ -189,8 +172,7 @@ namespace DanmakU
             return new DanmakuState
             {
                 Position = Position,
-                Yaw = Yaw,
-                Pitch = Pitch,
+                Rotation = Rotation,
                 Speed = Speed,
                 AngularSpeed = AngularSpeed,
                 Color = Color
@@ -205,8 +187,7 @@ namespace DanmakU
         {
             Position = state.Position;
             OldPosition = state.Position; // Reset OldPosition so collision calculations are correct
-            Yaw = state.Yaw;
-            Pitch = state.Pitch;
+            Rotation = Rotation;
             Speed = state.Speed;
             AngularSpeed = state.AngularSpeed;
             Color = state.Color;
@@ -217,12 +198,9 @@ namespace DanmakU
         /// </summary>
         /// <param name="rotation">the rotation of the Danmaku.</param>
         /// <returns>the unit vector representing the way the bullet is facing.</returns>
-        public static Vector3 GetDirection(float yaw, float pitch)
+        public static Vector3 GetDirection(Quaternion rotation)
         {
-            return new Vector3(
-                Mathf.Cos(yaw) * Mathf.Cos(pitch),
-                Mathf.Sin(yaw) * Mathf.Cos(pitch),
-                Mathf.Sin(pitch));
+            return rotation * Vector3.forward;
         }
 
         public static bool operator ==(Danmaku lhs, Danmaku rhs)

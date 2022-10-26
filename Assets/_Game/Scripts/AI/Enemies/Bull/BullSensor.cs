@@ -14,6 +14,7 @@ namespace Hedronoid.AI
         protected float coneAngle = 15f;
 
         private Physics physics;
+        [HNDReadOnly]
         [SerializeField]
         private float coneRadius;
 
@@ -46,6 +47,11 @@ namespace Hedronoid.AI
             get { return m_sensorTimestep; }
         }
 
+        private void OnValidate()
+        {
+            coneRadius = maxDistance * Mathf.Abs(Mathf.Tan(coneAngle * Mathf.Deg2Rad));
+        }
+
         public virtual Transform GetTargetWithinReach(float distance)
         {
             m_targetsInRange.Clear();
@@ -62,15 +68,15 @@ namespace Hedronoid.AI
         }
         public Transform GetTargetInsideCone(Vector3 direction)
         {
-            coneRadius = maxDistance * Mathf.Abs(Mathf.Tan(coneAngle * Mathf.Deg2Rad));
-
             // First check if we have any players in the cone
             RaycastHit[] players = physics.ConeCastNonAlloc(
                 transform.position,
                 coneRadius,
                 direction,
                 m_colliderBuffer.Length,
-                maxDistance, coneAngle);
+                maxDistance,
+                HNDAI.Settings.PlayerLayer,
+                coneAngle);
 
             if (players.Length > 0)
             {
@@ -90,17 +96,25 @@ namespace Hedronoid.AI
 
             Gizmos.color = Color.blue;
             Gizmos.DrawWireSphere(transform.position, SensorCutoffRange);
+
+            Popcron.Gizmos.ConeSpherical(
+                transform.position,
+                transform.rotation,
+                coneRadius,
+                maxDistance,
+                coneAngle,
+                !Application.isPlaying || GetTargetInsideCone(transform.forward) == null ? Color.yellow : Color.red);
         }
 #endif
         private void Update()
         {
-            Popcron.Gizmos.Cone(
+            Popcron.Gizmos.ConeSpherical(
                 transform.position,
                 transform.rotation,
+                coneRadius,
                 maxDistance,
                 coneAngle,
-                Color.yellow);
+                GetTargetInsideCone(transform.forward) == null ? Color.yellow : Color.red);
         }
     }
-
 }
