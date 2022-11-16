@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-public static class NNParticleSystemExtensions 
+public static class HNDParticleSystemExtensions 
 {
 
     #region Main Module
