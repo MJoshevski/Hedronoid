@@ -345,8 +345,6 @@ namespace Popcron
 
         /// <summary>
         /// Draws a cone similar to the one that spot lights draw, but with a spherical base
-        /// MATEJ: This implementation doesn't have that 0.5f multiplication that the regular Cone has
-        /// It was giving an unaccurate representation
         /// </summary>
         public static void ConeSpherical(Vector3 position, Quaternion rotation, float radius, float length, float angle, Color? color = null, bool dashed = false, int pointsCount = 16)
         {
@@ -367,6 +365,7 @@ namespace Popcron
 
             Sphere(endPosition, radius, color, dashed, pointsCount);
         }
+
 
         /// <summary>
         /// Draws a sphere at position with specified radius.

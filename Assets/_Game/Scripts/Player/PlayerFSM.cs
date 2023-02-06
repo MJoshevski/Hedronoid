@@ -34,6 +34,7 @@ namespace Hedronoid.Player
         GROUND_MOVEMENT,
         JUMPING,
         AIR_JUMPING,
+        RAIL_GRINDING,
         FALLING,
         LANDING,
         DASHING,
@@ -206,6 +207,7 @@ namespace Hedronoid.Player
         private FSMState m_GroundMovementState;
         private FSMState m_JumpingState;
         private FSMState m_AirJumpingState;
+        private FSMState m_RailGrindingState;
         private FSMState m_FallingState;
         private FSMState m_LandingState;
         private FSMState m_DashingState;
@@ -681,6 +683,63 @@ namespace Hedronoid.Player
 
         #endregion
 
+        #region STATE: RAIL GRINDING
+        private void OnEnterRailGrinding(FSMState fromState)
+        {
+            AnimancerState state;
+
+            if (movementVariables.MoveAmount > 0.3f)
+            {
+                state = m_Animancer.Layers[movementVariables.LocomotionLayer].Play(
+                                        movementVariables.FallRollAnimation, 0.2f);
+
+                state.Events.OnEnd = () =>
+                m_Animancer.Layers[movementVariables.LocomotionLayer].
+                StartFade(0, 0.2f);
+            }
+            else
+            {
+                state = m_Animancer.Layers[movementVariables.LocomotionLayer].Play(
+                                        movementVariables.FallAnimation, 0.2f);
+
+                state.Events.OnEnd = () =>
+                m_Animancer.Layers[movementVariables.LocomotionLayer].
+                StartFade(0, 0.2f);
+            }
+
+            secondaryGravityMultiplier = 1f;
+        }
+
+        private void OnUpdateRailGrinding()
+        {
+        }
+
+        private void OnFixedUpdateRailGrinding()
+        {
+            Move();
+
+            secondaryGravityMultiplier += (fallMultiplier - 1f) * Time.fixedDeltaTime;
+            secondaryGravityMultiplier =
+                Mathf.Clamp(secondaryGravityMultiplier, 1f, fallMultiplierThreshold);
+
+            if (OnGround || OnSteep)
+            {
+                ChangeState(EPlayerStates.LANDING);
+            }
+            //else if (GravityService.CurrentGravity == Vector3.zero)
+            //{
+            //    ChangeState(EPlayerStates.FLYING);
+            //}
+
+        }
+
+        private void OnExitRailGrinding(FSMState fromState)
+        {
+            secondaryGravityMultiplier = 1f;
+        }
+        #endregion
+
+
         #region STATE: FALLING
         private void OnEnterFalling(FSMState fromState)
         {
@@ -857,6 +916,8 @@ namespace Hedronoid.Player
             m_JumpingState.onFixedUpdateState = OnFixedUpdateJumping;
             m_AirJumpingState = CreateState(EPlayerStates.AIR_JUMPING, OnUpdateAirJumping, OnEnterAirJumping, OnExitAirJumping);
             m_AirJumpingState.onFixedUpdateState = OnFixedUpdateAirJumping;
+            m_RailGrindingState = CreateState(EPlayerStates.RAIL_GRINDING, OnUpdateRailGrinding, OnEnterRailGrinding, OnExitRailGrinding);
+            m_RailGrindingState.onFixedUpdateState = OnFixedUpdateRailGrinding;
             m_FallingState = CreateState(EPlayerStates.FALLING, OnUpdateFalling, OnEnterFalling, OnExitFalling);
             m_FallingState.onFixedUpdateState = OnFixedUpdateFalling;
             m_LandingState = CreateState(EPlayerStates.LANDING, OnUpdateLanding, OnEnterLanding, OnExitLanding);

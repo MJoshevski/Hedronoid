@@ -71,17 +71,17 @@ namespace Dreamteck.Splines
 
         [SerializeField]
         [HideInInspector]
-        private float _followSpeed = 1f;
+        protected float _followSpeed = 1f;
         [SerializeField]
         [HideInInspector]
-        private float _followDuration = 1f;
+        protected float _followDuration = 1f;
         [SerializeField]
         [HideInInspector]
         [Range(0f, 1f)]
-        private double _startPosition = 0.0;
+        protected double _startPosition = 0.0;
 
-        private double lastClippedPercent = -1.0;
-        private bool followStarted = false;
+        protected double lastClippedPercent = -1.0;
+        protected bool followStarted = false;
 
         [Header("Local motion settings")]
         public Vector3 rotationAxisVector = Vector3.up;
@@ -114,7 +114,7 @@ namespace Dreamteck.Splines
             if (follow && !autoStartPosition) ApplyMotion();
         }
 
-        void Follow()
+        public virtual void Follow()
         {
             if (!followStarted)
             {
@@ -137,7 +137,7 @@ namespace Dreamteck.Splines
             }
         }
 
-        public void Restart(double startPosition = 0.0)
+        public virtual void Restart(double startPosition = 0.0)
         {
             followStarted = false;
             SetPercent(startPosition);
@@ -156,7 +156,7 @@ namespace Dreamteck.Splines
             if (samplesAreLooped && clipFrom == clipTo && distance > 0f && lastClippedPercent == 0.0) lastClippedPercent = 1.0; 
         }
 
-        public void Move(double percent)
+        public virtual void Move(double percent)
         {
 			if(percent == 0.0) return;
             if (sampleCount <= 1)
@@ -226,7 +226,7 @@ namespace Dreamteck.Splines
             InvokeNodes();
         }
 
-        public  void Move(float distance)
+        public virtual void Move(float distance)
         {
             bool endReached = false, beginningReached = false;
             float moved = 0f;
@@ -292,7 +292,7 @@ namespace Dreamteck.Splines
             InvokeNodes();
         }
 
-        private void RotateOnAxis()
+        protected void RotateOnAxis()
         {
             transform.Rotate(rotationAxisVector.normalized, angularMagnitude * Time.deltaTime);
         }

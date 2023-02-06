@@ -358,13 +358,31 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 9b16b4d7b842e3d49b381ee21f68716b, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  m_RayCastDistance: 0
-  m_RayCastOffset: 0
-  maxDistance: 0
-  coneAngle: 50
-  coneRadius: 0
+  m_RayCastDistance: 9.41
+  m_RayCastPositionOffset: {x: 0, y: 0, z: 0}
+  m_RayCastInBetweenOffset: 1.2
+  m_RaycastsDebugSettings:
+    ShowInEditor: 1
+    ShowInBuild: 0
+  m_EnableCullingGizmo: 1
+  m_ShouldCullEnemy: 1
+  m_EnemyCullingDistance: 100
+  m_ConeDebugSettings:
+    ShowInEditor: 1
+    ShowInBuild: 0
+  m_RequireLineOfSight: 1
+  m_ConeOriginOffset: {x: 0, y: 0, z: 0}
+  m_ConeMaxDistance: 35
+  m_ConeRadius: 0
+  m_ConeAngle: 15
   m_sensorRange: 70
+  m_SensorDebugSettings:
+    ShowInEditor: 1
+    ShowInBuild: 0
   m_sensorCutoffRange: 95
+  m_SensorCutoffDebugSettings:
+    ShowInEditor: 1
+    ShowInBuild: 0
   m_sensorTimestep: 0.25
 --- !u!54 &2419484500514599866
 Rigidbody:
@@ -521,7 +539,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 4cf55afa704da4bada4b28145f5f4685, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  version: 4
+  version: 6
   radius: 1.31
   height: 4.43
   canMove: 1
@@ -574,6 +592,7 @@ MonoBehaviour:
   quality: 0
   unwrap: 1
   splitAtEveryPortal: 1
+  accountForGridPenalties: 0
 --- !u!1 &5712743650434480458
 GameObject:
   m_ObjectHideFlags: 0
