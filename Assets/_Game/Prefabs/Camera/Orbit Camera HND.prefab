@@ -95,18 +95,12 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   focus: {fileID: 0}
   orbitCamera: {fileID: 0}
-  cameraTypes: 1
   distance: 4.4
   upAlignmentSpeed: 360
   followSpeed: 9
   rotationSpeed: 90
-  shoulderCentering: 1
-  shoulderFocusRadius: 2.5
-  shoulderCenteringSpeed: 300
-  shoulderAlignSmoothRange: 45
-  catchupFactor: 0.2
-  catchupVeloThreshold: 10
-  lookReleaseThreshold: 10
+  shoulderCentering: 0.998
+  shoulderFocusRadius: 3
   minVerticalAngle: -89
   maxVerticalAngle: 89
   minHorizontalAngle: -89
@@ -114,8 +108,6 @@ MonoBehaviour:
   obstructionMask:
     serializedVersion: 2
     m_Bits: 19457
-  alignDelay: 5
-  alignSmoothRange: 45
   LockCursor: 1
   manualPositionOffset: {x: 1.5, y: 2}
   camerShakeCollection: {fileID: 11400000, guid: 50b93565b24fd6142bca56be4944db42,

@@ -9,12 +9,6 @@ using CameraShake;
 
 namespace Hedronoid
 {
-    public enum OrbitCameraTypes
-    {
-        SimpleCenterFollow = 0,
-        ManualShoulderSwitch = 1
-    }
-
     public class OrbitCamera : HNDGameObject, IGameplaySceneContextInjector
     {
         #region PUBLIC/VISIBLE VARS
@@ -26,7 +20,6 @@ namespace Hedronoid
         public Camera orbitCamera;
 
         [Header("General Behaviour")]
-        public OrbitCameraTypes cameraTypes = OrbitCameraTypes.ManualShoulderSwitch;
         [Tooltip("How far away from the focus point should the camera be?")]
         [Range(1f, 20f)]
 	    public float distance = 5f;
@@ -46,21 +39,6 @@ namespace Hedronoid
 	    public float shoulderCentering = 0.5f;
         [SerializeField, Min(0f)]
         float shoulderFocusRadius = 5f;
-        [Tooltip("How fast do we center on the newly switched shoulder?")]
-        [Min(0f), Range(1f, 360f)]
-        public float shoulderCenteringSpeed = 90f;
-        [Tooltip("At what point between the rotation of angles should we engage full speed smoothing?")]
-        [Range(0f, 90f)]
-        public float shoulderAlignSmoothRange = 45f;
-        [Tooltip("How fast does the camera catch-up to the shoulder focus when moving?")]
-        [Range(0f, 1f)]
-        public float catchupFactor = 0.2f;
-        [Tooltip("How fast do we need to be going for the catch-up factor to take effect?")]
-        [Range(0f, 100f)]
-        public float catchupVeloThreshold = 10f;
-        [Tooltip("How much mouse/camera look intensity we need to apply to interrupt shoulder centering and return camera control to player?")]
-        [Range(0.001f, 10f)]
-        public float lookReleaseThreshold = 10f;
 
         [Header("Camera obstructions")]
         [Tooltip("Minimum angle for the vertical orbit rotation")]
@@ -78,14 +56,6 @@ namespace Hedronoid
         [Tooltip("Which layers obstruct the camera?")]
         public LayerMask obstructionMask = -1;
 
-        [Header("Automatic rotation")]
-        [Tooltip("How long (seconds) do we wait before automatic focus alignment kicks in?")]
-        [Min(0f)]
-        public float alignDelay = 5f;
-        [Tooltip("At what point between the rotation of angles should we engage full speed smoothing?")]
-        [Range(0f, 90f)]
-	    public float alignSmoothRange = 45f;
-
         // CURSOR
         [Header("Cursor Settings")]
         public bool LockCursor;
@@ -93,11 +63,6 @@ namespace Hedronoid
         [Header("Manual Offsets")]
         [SerializeField]
         private Vector2 manualPositionOffset = Vector3.zero;
-        public Vector2 ManualPositionOffset
-        {
-            get { return manualPositionOffset; }
-            private set { manualPositionOffset = value; }
-        }
 
         [Header("Camera Shake Presets")]
         public CameraShakeCollection camerShakeCollection;
@@ -109,8 +74,6 @@ namespace Hedronoid
         private Vector3 focusPoint, previousFocusPoint;
         private Vector2 orbitAngles = new Vector2(45f, 0f);
         private float lastManualRotationTime;
-        private float distanceThreshold;
-        private bool shoulderFocused = true;
         private bool m_playerCreatedAndInitialized = false;
 
         private Quaternion gravityAlignment = Quaternion.identity;
@@ -163,7 +126,6 @@ namespace Hedronoid
             HNDEvents.Instance.AddListener<DebugMenuOpened>(OnDebugMenuOpened);
             HNDEvents.Instance.AddListener<DebugMenuClosed>(OnDebugMenuClosed);
 
-            distanceThreshold = manualPositionOffset.x * 2f;
             gravityAlignment = Quaternion.identity;
             orbitCamera = GetComponent<Camera>();
             orbitCamera.transform.localRotation = orbitRotation = Quaternion.Euler(orbitAngles);
@@ -195,15 +157,11 @@ namespace Hedronoid
         public void LateUpdate()
         {
             if (!m_playerCreatedAndInitialized) return;
+
             OnValidate();
             UpdateGravityAlignment();
             UpdateFocusPoint();
-
-            if (ManualRotation() /*|| AutomaticRotation()*/)
-            {
-                ConstrainAngles();
-                orbitRotation = Quaternion.Euler(orbitAngles);
-            }
+            ManualRotation();
 
             lookRotation = gravityAlignment * orbitRotation;
             lookDirection = lookRotation * Vector3.forward;
@@ -239,9 +197,6 @@ namespace Hedronoid
             Vector3 fromUp = gravityAlignment * Vector3.up;
             Vector3 toUp = GravityService.GetUpAxis(focus.position);
 
-            //Vector3 fromForward = gravityAlignment * Vector3.forward;
-            //Vector3 toForward = GravityService.GetForwardAxis(focus.position);
-
             float dot = Mathf.Clamp(Vector3.Dot(fromUp, toUp), -1f, 1f);
             float angle = Mathf.Acos(dot) * Mathf.Rad2Deg;
             float maxAngle = upAlignmentSpeed * Time.deltaTime;
@@ -249,12 +204,8 @@ namespace Hedronoid
             Quaternion upAlignment =
                 Quaternion.FromToRotation(fromUp, toUp) * gravityAlignment;
 
-            //Quaternion forwardAlignment =
-            //    Quaternion.FromToRotation(fromForward, toForward) * gravityAlignment;
-
             if (angle <= maxAngle)
             {
-                //gravityAlignment = forwardAlignment;
                 gravityAlignment = upAlignment;
             }
             else
@@ -262,9 +213,6 @@ namespace Hedronoid
                 gravityAlignment = Quaternion.SlerpUnclamped(
                     gravityAlignment, upAlignment, maxAngle / angle
                 );
-                //gravityAlignment = Quaternion.SlerpUnclamped(
-                //    gravityAlignment, forwardAlignment, maxAngleF / angleF
-                //);
             }
         }
 
@@ -273,29 +221,12 @@ namespace Hedronoid
             previousFocusPoint = focusPoint;
             Vector3 targetPoint = focus.position;
 
-            //Gizmos.Cube(previousFocusPoint, Quaternion.identity, Vector3.one / 2f, Color.red);
-            //Gizmos.Cube(focusPoint, Quaternion.identity, Vector3.one / 2f, Color.magenta);
-            //Gizmos.Cube(targetPoint, Quaternion.identity, Vector3.one / 2f, Color.green);
-
-            switch (cameraTypes)
+            if (playerAction.SwitchShoulder.WasPressed)
             {
-                case OrbitCameraTypes.SimpleCenterFollow:
-                    focusPoint = targetPoint;
-                    break;
-                case OrbitCameraTypes.ManualShoulderSwitch:
-                    prevHitPoint = Player.RayHit;
-                    distanceThreshold = 0.01f;
-
-                    shoulderFocused = false;
-
-                    if (playerAction.SwitchShoulder.WasPressed)
-                    {
-                        manualPositionOffset.x *= -1;
-                    }
-
-                    UpdateShoulderPosition(targetPoint);      
-                    break;       
+                manualPositionOffset.x *= -1;
             }
+
+            UpdateShoulderPosition(targetPoint);
         }
 
         void UpdateShoulderPosition(Vector3 targetPoint)
@@ -303,50 +234,18 @@ namespace Hedronoid
             Vector3 alignedOffsetVector = lookRotation * manualPositionOffset;
             Vector3 targetPointOffset = targetPoint + alignedOffsetVector;
 
-            Vector3 targetDirection = prevHitPoint.point - targetPointOffset;
-            //Gizmos.Line(targetPointOffset, prevHitPoint.point, Color.magenta);
-
-            float distanceOffset =
-                Vector3.Distance(targetPointOffset, focusPoint);
-
-            //Gizmos.Cube(targetPointOffset, Quaternion.identity, Vector3.one / 2f, Color.blue);
-            //Gizmos.Cube(prevHitPoint.point, Quaternion.identity, Vector3.one * 4f, Color.black);
-
-            if (distanceOffset > Mathf.Abs(distanceThreshold) && 
-                shoulderCentering > 0f)
+            if (shoulderFocusRadius > 0f)
             {
-                if (shoulderFocusRadius > 0f)
-                {
-                    float distance = Vector3.Distance(targetPoint, focusPoint);
-                    float t = 1f;
-                    if (distance > 0.01f && shoulderCentering > 0f)
-                    {
-                        t = Mathf.Pow(1f - shoulderCentering, Time.unscaledDeltaTime);
-                    }
-                    if (distance > shoulderFocusRadius)
-                    {
-                        t = Mathf.Min(t, shoulderFocusRadius / distance);
-                    }
+                float distance = Vector3.Distance(targetPoint, focusPoint);
+                float t = 1f;
 
-                    focusPoint = Vector3.Lerp(targetPointOffset, focusPoint, t);
+                if (distance > 0.01f && shoulderCentering > 0f)
+                    t = Mathf.Pow(1f - shoulderCentering, Time.unscaledDeltaTime);
 
-                    float movMag = Player.m_Rigidbody.velocity.sqrMagnitude;
+                if (distance > shoulderFocusRadius)
+                    t = Mathf.Min(t, shoulderFocusRadius / distance);
 
-                    float factor = 1;
-                    if (movMag > catchupVeloThreshold)
-                        factor = movMag * catchupFactor / 10f;
-
-                    if (prevHitPoint.point != Vector3.zero)
-                        AutomaticCentering();
-
-                    //orbitRotation = Quaternion.Euler(orbitAngles);
-                }
-            }
-            else
-            {
-                focusPoint = targetPointOffset;
-                shoulderFocused = true;
-                distanceThreshold = manualPositionOffset.x * 2f;
+                focusPoint = Vector3.Lerp(targetPointOffset, focusPoint, t);
             }
         }
 
@@ -389,10 +288,10 @@ namespace Hedronoid
             //Camera.value.gameObject.SetActive(false);
         }
 
-        bool ManualRotation()
+        void ManualRotation()
         {
             if (Time.timeScale < float.Epsilon)
-                return false;
+                return;
 
             float x = playerAction.Look.X;
             float y = playerAction.Look.Y;
@@ -400,111 +299,11 @@ namespace Hedronoid
             float horizontalAngle = x * InputManager.Instance.MouseHorizontalSensitivity;
             float verticalAngle = -y * InputManager.Instance.MouseVerticalSensitivity;
 
-            float e = lookReleaseThreshold;
-
-            if (!shoulderFocused && 
-                (horizontalAngle < -e || horizontalAngle > e || verticalAngle < -e || verticalAngle > e))
-                shoulderFocused = true;
-
-            if (!shoulderFocused) return false;
-
             orbitAngles += Time.fixedUnscaledDeltaTime * new Vector2(verticalAngle, horizontalAngle);
-            lastManualRotationTime = Time.unscaledTime;
             prevHitPoint.point = Vector3.zero;
-            return true;
-        }
 
-        void AutomaticCentering ()
-        {
-            // Change last hit ray magnitude to be identical to the previous hit ray
-            Ray hitRay = Player.LookRay;
-            Vector3 hitPoint = hitRay.GetPoint(prevHitPoint.distance);
-
-            // Aligned delta/direction between the two hit points
-            Vector3 alignedDelta = Quaternion.Inverse(gravityAlignment) * 
-                (prevHitPoint.point - hitPoint);
-
-            // Movement direction magnitude of XZ (horizontal) plane
-            Vector2 movement = new Vector2(alignedDelta.x, alignedDelta.z);
-
-            float movementDeltaSqr = movement.sqrMagnitude;
-            if (movementDeltaSqr < 0.000001f)
-                return;
-
-            // Angle from movement direction
-            float headingAngle = GetAngle(movement / Mathf.Sqrt(movementDeltaSqr));
-
-            // Delta/smallest angle required to rotate to reaching heading
-            float deltaAbs =
-                Mathf.Abs(Mathf.DeltaAngle(orbitAngles.y, headingAngle));
-
-            // Scale centering speed with distance between the hit point and focus
-            float focusHitDis = Vector3.Distance(focusPoint, prevHitPoint.point);
-
-            float centeringSpeed;
-
-            // If the focus-hitPoint distance is less than 0, than multiply factor to avoid
-            // really fast rotations at close proximity
-            if (focusHitDis > 1f)
-                centeringSpeed = shoulderCenteringSpeed / focusHitDis;
-            else centeringSpeed = shoulderCenteringSpeed * focusHitDis;
-
-            // Rotation change is the product of the centering factor plus the minimum
-            // between delta time and movement direction delta
-            float rotationChange = centeringSpeed *
-                Mathf.Min(Time.unscaledDeltaTime, movementDeltaSqr);
-
-            // Proper smooth aligning according to a set threshold angle
-            if (deltaAbs < shoulderAlignSmoothRange)
-            {
-                rotationChange *= deltaAbs / shoulderAlignSmoothRange;
-            }
-            else if (180f - deltaAbs < shoulderAlignSmoothRange)
-            {
-                rotationChange *= (180f - deltaAbs) / shoulderAlignSmoothRange;
-            }
-
-            orbitAngles.y =
-                Mathf.MoveTowardsAngle(orbitAngles.y, headingAngle, rotationChange);                    
-        }
-
-        bool AutomaticRotation()
-        {
-            if (Time.unscaledTime - lastManualRotationTime < alignDelay)
-            {
-                return false;
-            }
-
-            Vector3 alignedDelta =
-                Quaternion.Inverse(gravityAlignment) *
-                (focusPoint - previousFocusPoint);
-
-            Vector2 movement = new Vector2(alignedDelta.x, alignedDelta.z);
-
-            float movementDeltaSqr = movement.sqrMagnitude;
-            if (movementDeltaSqr < 0.000001f)
-            {
-                return false;
-            }
-
-            float headingAngle = GetAngle(movement / Mathf.Sqrt(movementDeltaSqr));
-            float deltaAbs = Mathf.Abs(Mathf.DeltaAngle(orbitAngles.y, headingAngle));
-            float rotationChange = rotationSpeed *
-                Mathf.Min(Time.unscaledDeltaTime, movementDeltaSqr);
-
-            if (deltaAbs < alignSmoothRange)
-            {
-                rotationChange *= deltaAbs / alignSmoothRange;
-            }
-            else if (180f - deltaAbs < alignSmoothRange)
-            {
-                rotationChange *= (180f - deltaAbs) / alignSmoothRange;
-            }
-
-            orbitAngles.y =
-                Mathf.MoveTowardsAngle(orbitAngles.y, headingAngle, rotationChange);
-
-            return true;
+            ConstrainAngles();
+            orbitRotation = Quaternion.Euler(orbitAngles);
         }
 
         void ConstrainAngles()
@@ -520,12 +319,6 @@ namespace Hedronoid
             {
                 orbitAngles.y -= 360f;
             }
-        }
-
-        static float GetAngle(Vector2 direction)
-        {
-            float angle = Mathf.Acos(direction.y) * Mathf.Rad2Deg;
-            return direction.x < 0f ? 360f - angle : angle;
         }
         #endregion
 
