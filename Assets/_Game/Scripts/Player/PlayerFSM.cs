@@ -1,7 +1,6 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
-//using Gizmos = Popcron.Gizmos;
 using Hedronoid.HNDFSM;
 using Hedronoid.Core;
 using Hedronoid.Events;
@@ -739,7 +738,6 @@ namespace Hedronoid.Player
         }
         #endregion
 
-
         #region STATE: FALLING
         private void OnEnterFalling(FSMState fromState)
         {
@@ -1086,17 +1084,10 @@ namespace Hedronoid.Player
             jumpPhase += 1;
             float jumpSpeed = Mathf.Sqrt(2f * gravity.magnitude * jumpHeight);
             jumpDirection = (jumpDirection + upAxis).normalized;
+
             float alignedSpeed = Vector3.Dot(velocity, jumpDirection);
+            if (alignedSpeed > 0f) jumpSpeed = Mathf.Max(jumpSpeed - alignedSpeed, 0f);
 
-            if (alignedSpeed > 0f)
-            {
-                jumpSpeed = Mathf.Max(jumpSpeed - alignedSpeed, 0f);
-            }          
-
-            // Transform the aligned velocity to world space
-            velocity = transform.InverseTransformDirection(gravityAlignedVelocity);
-
-            // Apply jump force after zeroing out local y-velocity
             velocity += jumpDirection * jumpSpeed;
         }   
         public void Shoot(bool primaryFire)
@@ -1136,9 +1127,6 @@ namespace Hedronoid.Player
             }
 
             shootDirection = (rayHitPos - bulletOrigin.position).normalized;
-
-
-            Popcron.Gizmos.Line(bulletOrigin.position, rayHitPos, Color.black);
 
             if (primaryFire && Time.realtimeSinceStartup - lastFired_Auto > fireRatePrimary)
             {
