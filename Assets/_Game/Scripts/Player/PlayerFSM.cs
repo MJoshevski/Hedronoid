@@ -685,28 +685,6 @@ namespace Hedronoid.Player
         #region STATE: RAIL GRINDING
         private void OnEnterRailGrinding(FSMState fromState)
         {
-            AnimancerState state;
-
-            if (movementVariables.MoveAmount > 0.3f)
-            {
-                state = m_Animancer.Layers[movementVariables.LocomotionLayer].Play(
-                                        movementVariables.FallRollAnimation, 0.2f);
-
-                state.Events.OnEnd = () =>
-                m_Animancer.Layers[movementVariables.LocomotionLayer].
-                StartFade(0, 0.2f);
-            }
-            else
-            {
-                state = m_Animancer.Layers[movementVariables.LocomotionLayer].Play(
-                                        movementVariables.FallAnimation, 0.2f);
-
-                state.Events.OnEnd = () =>
-                m_Animancer.Layers[movementVariables.LocomotionLayer].
-                StartFade(0, 0.2f);
-            }
-
-            secondaryGravityMultiplier = 1f;
         }
 
         private void OnUpdateRailGrinding()
@@ -743,24 +721,24 @@ namespace Hedronoid.Player
         {
             AnimancerState state;
 
-            if (movementVariables.MoveAmount > 0.3f)
-            {
-                state = m_Animancer.Layers[movementVariables.LocomotionLayer].Play(
-                                        movementVariables.FallRollAnimation, 0.2f);
+            //if (movementVariables.MoveAmount > 0.3f)
+            //{
+            //    state = m_Animancer.Layers[movementVariables.LocomotionLayer].Play(
+            //                            movementVariables.FallRollAnimation, 0.2f);
 
-                state.Events.OnEnd = () =>
-                m_Animancer.Layers[movementVariables.LocomotionLayer].
-                StartFade(0, 0.2f);
-            }
-            else
-            {
+            //    state.Events.OnEnd = () =>
+            //    m_Animancer.Layers[movementVariables.LocomotionLayer].
+            //    StartFade(0, 0.2f);
+            //}
+            //else
+            //{
                 state = m_Animancer.Layers[movementVariables.LocomotionLayer].Play(
                                         movementVariables.FallAnimation, 0.2f);
 
                 state.Events.OnEnd = () =>
                 m_Animancer.Layers[movementVariables.LocomotionLayer].
                 StartFade(0, 0.2f);
-            }
+            //}
 
             secondaryGravityMultiplier = 1f;
         }
@@ -1077,9 +1055,6 @@ namespace Hedronoid.Player
                 return;
             }
 
-            // Zero out the previous up-velocity 
-            gravityAlignedVelocity.y = 0;
-
             stepsSinceLastJump = 0;
             jumpPhase += 1;
             float jumpSpeed = Mathf.Sqrt(2f * gravity.magnitude * jumpHeight);
@@ -1087,6 +1062,9 @@ namespace Hedronoid.Player
 
             float alignedSpeed = Vector3.Dot(velocity, jumpDirection);
             if (alignedSpeed > 0f) jumpSpeed = Mathf.Max(jumpSpeed - alignedSpeed, 0f);
+
+            // Zero out the previous up-velocity 
+            velocity.y = 0;
 
             velocity += jumpDirection * jumpSpeed;
         }   
