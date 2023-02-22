@@ -780,7 +780,7 @@ namespace Hedronoid.Player
             {
                 state = m_Animancer.Layers[movementVariables.LocomotionLayer].Play(
                         movementVariables.LandRollAnimation, 0.2f);
-
+                state.Speed = 2;
                 state.Events.OnEnd = () => 
                 m_Animancer.Layers[movementVariables.LocomotionLayer].
                 StartFade(0, 0.2f);
@@ -789,6 +789,7 @@ namespace Hedronoid.Player
             {
                 state = m_Animancer.Layers[movementVariables.LocomotionLayer].Play(
                         movementVariables.LandAnimation, 0.2f);
+                state.Speed = 2;
 
                 state.Events.OnEnd = () =>
                 m_Animancer.Layers[movementVariables.LocomotionLayer].
