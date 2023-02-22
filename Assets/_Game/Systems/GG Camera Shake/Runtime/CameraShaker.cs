@@ -1,0 +1,106 @@
+﻿using Hedronoid;
+using System.Collections.Generic;
+using UnityEngine;
+
+namespace CameraShake
+{
+    /// <summary>
+    /// Camera shaker component registeres new shakes, holds a list of active shakes, and applies them to the camera additively.
+    /// </summary>
+    public class CameraShaker : MonoBehaviour
+    {
+        public static CameraShaker Instance;
+        public static CameraShakePresets Presets;
+
+        readonly List<ICameraShake> activeShakes = new List<ICameraShake>();
+
+        [Tooltip("Transform which will be affected by the shakes.\n\nCameraShaker will set this transform's local position and rotation.")]
+        [SerializeField]
+        Transform cameraTransform;
+        [SerializeField]
+        OrbitCamera orbitCamera;
+        
+
+        [Tooltip("Scales the strength of all shakes.")]
+        [Range(0, 1)]
+        [SerializeField]
+        public float StrengthMultiplier = 1;
+
+        public CameraShakePresets ShakePresets;
+
+
+        /// <summary>
+        /// Adds a shake to the list of active shakes.
+        /// </summary>
+        public static void Shake(ICameraShake shake)
+        {
+            if (IsInstanceNull()) return;
+            Instance.RegisterShake(shake);
+        }
+
+        /// <summary>
+        /// Adds a shake to the list of active shakes.
+        /// </summary>
+        public void RegisterShake(ICameraShake shake)
+        {
+            shake.Initialize(cameraTransform.position,
+                cameraTransform.rotation);
+            activeShakes.Add(shake);
+        }
+
+        /// <summary>
+        /// Sets the transform which will be affected by the shakes.
+        /// </summary>
+        public void SetCameraTransform(Transform cameraTransform)
+        {
+            cameraTransform.localPosition = Vector3.zero;
+            cameraTransform.localEulerAngles = Vector3.zero;
+            this.cameraTransform = cameraTransform;
+        }
+
+        private void Awake()
+        {
+            Instance = this;
+            ShakePresets = new CameraShakePresets(this);
+            if (!orbitCamera) TryGetComponent(out orbitCamera);
+            Presets = ShakePresets;
+            if (cameraTransform == null)
+                cameraTransform = transform;
+        }
+
+        public void ProcessActiveShakes()
+        {
+            if (cameraTransform == null) return;
+
+            Displacement cameraDisplacement = Displacement.Zero;
+            for (int i = activeShakes.Count - 1; i >= 0; i--)
+            {
+                if (activeShakes[i].IsFinished)
+                {
+                    activeShakes.RemoveAt(i);
+                }
+                else 
+                {
+                    activeShakes[i].Update(Time.deltaTime, cameraTransform.position, cameraTransform.rotation);
+                    cameraDisplacement += activeShakes[i].CurrentDisplacement;
+                }
+            }
+
+            Vector3 lookPosition = StrengthMultiplier * cameraDisplacement.position;
+            Quaternion lookRotation = Quaternion.Euler(StrengthMultiplier * cameraDisplacement.eulerAngles);
+            lookPosition = orbitCamera.LookPosition + lookPosition;
+            lookRotation = orbitCamera.LookRotation * lookRotation;
+            orbitCamera.transform.SetPositionAndRotation(lookPosition, lookRotation);
+        }
+
+        private static bool IsInstanceNull()
+        {
+            if (Instance == null)
+            {
+                Debug.LogError("CameraShaker Instance is missing!");
+                return true;
+            }
+            return false;
+        }
+    }
+}
