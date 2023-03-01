@@ -2,7 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-[CreateAssetMenu(fileName = "LinearShotPattern", menuName = "Hedronoid/ShotPatterns/LinearShotPattern", order = 1)]
+[CreateAssetMenu(fileName = "LinearShotPattern", menuName = "Hedronoid/ShotPatterns/Burst/LinearShotPattern", order = 1)]
 
 public class LinearShotPattern : BaseShotPattern
 {
