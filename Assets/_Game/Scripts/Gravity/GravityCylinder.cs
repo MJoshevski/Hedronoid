@@ -20,24 +20,37 @@ namespace Hedronoid
         [SerializeField, Min(0f)]
         [Tooltip("Boundary cylinder radius. Color = Red")]
         float boundaryRadius = 4f;
+        [SerializeField]
+        [Tooltip("Show boundary cylinder radius gizmo?")]
+        bool showBoundaryRadiusGizmo = true;
 
         [Header("Inner")]
         [SerializeField, Min(0f)]
         [Tooltip("Inner falloff cylinder radius. Color = Cyan")]
         float innerFalloffRadius = 1f;
-
+        [SerializeField]
+        [Tooltip("Show inner falloff cylinder radius gizmo?")]
+        bool showInnerFalloffRadiusGizmo = true;
         [SerializeField, Min(0f)]
         [Tooltip("Inner cylinder radius. Color = Yellow")]
         float innerRadius = 5f;
+        [SerializeField]
+        [Tooltip("Show inner cylinder radius gizmo?")]
+        bool showInnerRadiusGizmo = true;
 
         [Header("Outer")]
         [SerializeField, Min(0f)]
-        [Tooltip("Outer cylinder radius. Color = Yellow")]
-        float outerRadius = 10f;
-
-        [SerializeField, Min(0f)]
         [Tooltip("Outer falloff cylinder radius. Color = Cyan")]
         float outerFalloffRadius = 15f;
+        [SerializeField]
+        [Tooltip("Show outer falloff cylinder radius gizmo?")]
+        bool showOuterFalloffRadiusGizmo = true;
+        [SerializeField, Min(0f)]
+        [Tooltip("Outer cylinder radius. Color = Yellow")]
+        float outerRadius = 10f;
+        [SerializeField]
+        [Tooltip("Show outer cylinder radius gizmo?")]
+        bool showOuterRadiusGizmo = true;
 
         float innerFalloffFactor, outerFalloffFactor;
 
@@ -65,6 +78,7 @@ namespace Hedronoid
         // BOUNDS
         public MeshCollider originalCollider;
         public MeshCollider resizedCollider;
+        [Tooltip("This acts as a button. Click it to rescan the gravity bounds to generate the mesh collider.")]
         public bool scanForColliders = false;
 
         private bool hasEntered = false;
@@ -162,55 +176,70 @@ namespace Hedronoid
 #if UNITY_EDITOR
         void OnDrawGizmosSelected()
         {
-            // Draw boundary cylinder: RED
-            DrawWireCylinder(
-                transform.position, 
-                transform.rotation, 
-                boundaryHeight, 
-                boundaryRadius, 
-                Color.red);
+            if (showBoundaryRadiusGizmo)
+            {
+                // Draw boundary cylinder: RED
+                DrawWireCylinder(
+                    transform.position,
+                    transform.rotation,
+                    boundaryHeight,
+                    boundaryRadius,
+                    Color.red);
+            }
 
-            // Draw inner falloff cylinder: CYAN
-            DrawWireCylinder(
-               transform.position,
-               transform.rotation,
-               boundaryHeight,
-               innerFalloffRadius,
-               Color.cyan);
+            if (showInnerFalloffRadiusGizmo)
+            {
+                // Draw inner falloff cylinder: CYAN
+                DrawWireCylinder(
+                   transform.position,
+                   transform.rotation,
+                   boundaryHeight,
+                   innerFalloffRadius,
+                   Color.cyan);
+            }
 
-            // Draw outer falloff cylinder: CYAN
-            DrawWireCylinder(
-               transform.position,
-               transform.rotation,
-               boundaryHeight,
-               outerFalloffRadius,
-               Color.cyan);
+            if (showInnerRadiusGizmo)
+            {
+                // Draw inner cylinder: YELLOW
+                DrawWireCylinder(
+                   transform.position,
+                   transform.rotation,
+                   boundaryHeight,
+                   innerRadius,
+                   Color.yellow);
+            }
 
-            // Draw inner cylinder: YELLOW
-            DrawWireCylinder(
-               transform.position,
-               transform.rotation,
-               boundaryHeight,
-               innerRadius,
-               Color.yellow);
+            if (showOuterFalloffRadiusGizmo)
+            {
+                // Draw outer falloff cylinder: CYAN
+                DrawWireCylinder(
+                   transform.position,
+                   transform.rotation,
+                   boundaryHeight,
+                   outerFalloffRadius,
+                   Color.cyan);
+            }
 
-            // Draw outer cylinder: YELLOW
-            DrawWireCylinder(
-               transform.position,
-               transform.rotation,
-               boundaryHeight,
-               outerRadius,
-               Color.yellow);
+            if (showOuterRadiusGizmo)
+            {
+                // Draw outer cylinder: YELLOW
+                DrawWireCylinder(
+                   transform.position,
+                   transform.rotation,
+                   boundaryHeight,
+                   outerRadius,
+                   Color.yellow);
+            }
 
             if (ResizeColliderOnEnter)
             {
-                // Draw resized collider cylinder: BLACK
+                // Draw resized collider cylinder: WHITE
                 DrawWireCylinder(
                    transform.position,
                    transform.rotation,
                    resizedHeight,
                    resizedRadius,
-                   Color.black);
+                   Color.white);
             }
         }
         public static void DrawWireCylinder(Vector3 _pos, Quaternion _rot, float _height, float _radius, Color _color = default(Color))
