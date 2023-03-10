@@ -27,6 +27,13 @@
       "source": "embedded",
       "dependencies": {}
     },
+    "com.supremepanda.gpu_instance_manager": {
+      "version": "https://github.com/supremepanda/GPUInstanceManager.git#upm",
+      "depth": 0,
+      "source": "git",
+      "dependencies": {},
+      "hash": "db1251c51979ff3c6deb27b40bad88baeb92b190"
+    },
     "com.unity.2d.sprite": {
       "version": "1.0.0",
       "depth": 0,
@@ -40,7 +47,7 @@
       "dependencies": {}
     },
     "com.unity.burst": {
-      "version": "1.6.5",
+      "version": "1.8.3",
       "depth": 0,
       "source": "registry",
       "dependencies": {

@@ -15,6 +15,8 @@ GameObject:
   - component: {fileID: 5708118461276363095}
   - component: {fileID: 4094592945342926408}
   - component: {fileID: 6378706922481669811}
+  - component: {fileID: 1689873421157626000}
+  - component: {fileID: 7086649171219634355}
   m_Layer: 13
   m_Name: bullet_cube
   m_TagString: Untagged
@@ -254,6 +256,47 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   graphicsObject: {fileID: 4662869875000714296}
+--- !u!114 &1689873421157626000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 947796022108612175}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 474bcb49853aa07438625e644c072ee6, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  m_Version: 1
+  m_UsePipelineSettings: 1
+  m_AdditionalLightsShadowResolutionTier: 2
+  m_LightLayerMask: 1
+  m_CustomShadowLayers: 0
+  m_ShadowLayerMask: 1
+  m_LightCookieSize: {x: 1, y: 1}
+  m_LightCookieOffset: {x: 0, y: 0}
+--- !u!114 &7086649171219634355
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 947796022108612175}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 42c1499e343884aed93ff0d9d76fecfa, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  _autoFindTargetTransform: 1
+  _autoFindMesh: 1
+  _autoFindMaterials: 1
+  _targetTransform: {fileID: 0}
+  _targetMesh: {fileID: 0}
+  _targetMaterials: []
+  _uniqueMeshId: 0
+  _castShadows: 1
+  _receiveShadows: 1
 --- !u!1 &4662869875000714296
 GameObject:
   m_ObjectHideFlags: 0

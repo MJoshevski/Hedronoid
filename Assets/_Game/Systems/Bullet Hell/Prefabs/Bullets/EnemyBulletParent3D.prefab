@@ -11,6 +11,7 @@ GameObject:
   - component: {fileID: 400000}
   - component: {fileID: 114156044515219688}
   - component: {fileID: 8991548416774426471}
+  - component: {fileID: 2628976538316853970}
   m_Layer: 17
   m_Name: EnemyBulletParent3D
   m_TagString: Untagged
@@ -62,6 +63,27 @@ SphereCollider:
   serializedVersion: 2
   m_Radius: 0.5
   m_Center: {x: 0, y: 0, z: 0}
+--- !u!114 &2628976538316853970
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 100000}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 42c1499e343884aed93ff0d9d76fecfa, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  _autoFindTargetTransform: 1
+  _autoFindMesh: 1
+  _autoFindMaterials: 1
+  _targetTransform: {fileID: 0}
+  _targetMesh: {fileID: 0}
+  _targetMaterials: []
+  _uniqueMeshId: 0
+  _castShadows: 1
+  _receiveShadows: 1
 --- !u!1 &100002
 GameObject:
   m_ObjectHideFlags: 0

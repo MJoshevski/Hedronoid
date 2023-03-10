@@ -11,30 +11,6 @@ public class TurretSensor : AIBaseSensor
     protected Collider[] m_colliderBuffer = new Collider[10];
     protected List<Transform> m_targetsInRange = new List<Transform>(10);
 
-    [SerializeField]
-    [Tooltip("This is how far away we will detect the player or NPCs")]
-    protected float m_sensorRange = 3f;
-    public float SensorRange
-    {
-        get { return m_sensorRange; }
-    }
-
-    [SerializeField]
-    [Tooltip("This is how far the cutoff will be once the player has already entered the sensor range")]
-    protected float m_sensorCutoffRange = 20f;
-    public float SensorCutoffRange
-    {
-        get { return m_sensorCutoffRange; }
-    }
-
-    [SerializeField]
-    [Tooltip("This is how often we will check for new targets around us if we are patrolling.")]
-    protected float m_sensorTimestep = 0.25f;
-    public float SensorTimeStep
-    {
-        get { return m_sensorTimestep; }
-    }
-
     protected override void Awake()
     {
         base.Awake();
@@ -86,7 +62,7 @@ public class TurretSensor : AIBaseSensor
     }
 
 #if UNITY_EDITOR
-    private void OnDrawGizmosSelected()
+    protected override void OnDrawGizmosSelected()
     {
         Gizmos.color = Color.magenta;
         Gizmos.DrawWireSphere(transform.position, SensorRange);
