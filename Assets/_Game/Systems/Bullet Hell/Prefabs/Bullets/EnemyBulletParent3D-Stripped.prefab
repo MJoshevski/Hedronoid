@@ -11,7 +11,7 @@ GameObject:
   - component: {fileID: 400000}
   - component: {fileID: 3664028472482785610}
   - component: {fileID: 2977257891421271002}
-  - component: {fileID: 8100346519581015617}
+  - component: {fileID: -2285655573561265127}
   m_Layer: 17
   m_Name: EnemyBulletParent3D-Stripped
   m_TagString: Untagged
@@ -84,7 +84,7 @@ MeshRenderer:
   m_SortingLayer: 0
   m_SortingOrder: 0
   m_AdditionalVertexStreams: {fileID: 0}
---- !u!114 &8100346519581015617
+--- !u!114 &-2285655573561265127
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -93,15 +93,8 @@ MonoBehaviour:
   m_GameObject: {fileID: 100000}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 42c1499e343884aed93ff0d9d76fecfa, type: 3}
+  m_Script: {fileID: 11500000, guid: 2a82519db9291714e954f090af5b25ee, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  _autoFindTargetTransform: 1
-  _autoFindMesh: 1
-  _autoFindMaterials: 1
-  _targetTransform: {fileID: 0}
-  _targetMesh: {fileID: 0}
-  _targetMaterials: []
-  _uniqueMeshId: 0
-  _castShadows: 1
-  _receiveShadows: 1
+  m_meshRenderers:
+  - {fileID: 2977257891421271002}

@@ -113,6 +113,8 @@ namespace Hedronoid
                 {
                     Collider toBeDestroyed = colliders[i];
 
+
+#if UNITY_EDITOR
                     if (toBeDestroyed != null)
                     {
                         EditorApplication.delayCall += () =>
@@ -120,6 +122,7 @@ namespace Hedronoid
                             Undo.DestroyObjectImmediate(toBeDestroyed);
                         };
                     }
+#endif
                 }
 
                 originalCollider = ProceduralPrimitives.GenerateCylinder(transform, originalRadius, 20, originalHeight, originalHeight / 2 + originalZCorrection);

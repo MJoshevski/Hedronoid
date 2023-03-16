@@ -181,12 +181,16 @@ public static class ProceduralPrimitives
         return m_MeshCollider;
     }
 
+
     static IEnumerator DestroyObject(GameObject go)
     {
+#if UNITY_EDITOR
         EditorApplication.delayCall += () =>
         {
             Undo.DestroyObjectImmediate(go);
         };
+#endif
         yield return null;
     }
+
 }
