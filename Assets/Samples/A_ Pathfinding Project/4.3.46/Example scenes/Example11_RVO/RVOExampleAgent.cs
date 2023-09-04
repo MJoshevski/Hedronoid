@@ -151,10 +151,10 @@ namespace Pathfinding.Examples {
 				// When within [slowdownDistance] units from the target, use a progressively lower speed
 				var desiredSpeed = Mathf.Clamp01(remainingDistance / slowdownDistance) * maxSpeed;
 				Debug.DrawLine(transform.position, waypoint, Color.red);
-				controller.SetTarget(rvoTarget, desiredSpeed, maxSpeed);
+				controller.SetTarget(rvoTarget, desiredSpeed, maxSpeed, Vector3.zero);
 			} else {
 				// Stand still
-				controller.SetTarget(pos, maxSpeed, maxSpeed);
+				controller.SetTarget(pos, maxSpeed, maxSpeed, Vector3.zero);
 			}
 
 			// Get a processed movement delta from the rvo controller and move the character.

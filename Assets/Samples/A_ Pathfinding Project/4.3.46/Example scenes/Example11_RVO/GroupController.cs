@@ -19,7 +19,7 @@ namespace Pathfinding.Examples {
 
 		List<RVOExampleAgent> selection = new List<RVOExampleAgent>();
 
-		ISimulator sim;
+		//ISimulator sim;
 
 		Camera cam;
 
@@ -31,22 +31,22 @@ namespace Pathfinding.Examples {
 				throw new System.Exception("No RVOSimulator in the scene. Please add one");
 			}
 
-			sim = simu.GetSimulator();
+			//sim = simu.GetSimulator();
 		}
 
 		public void Update () {
 			if (adjustCamera) {
 				// Adjust camera
-				var bounds = (sim as SimulatorBurst).AgentBounds;
-				float max = Mathf.Max(Mathf.Max(bounds.xMax, -bounds.xMin), Mathf.Max(bounds.yMax, -bounds.yMin));
+				//var bounds = (sim as SimulatorBurst).AgentBounds;
+				//float max = Mathf.Max(Mathf.Max(bounds.xMax, -bounds.xMin), Mathf.Max(bounds.yMax, -bounds.yMin));
 
-				float hh = max / Mathf.Tan((cam.fieldOfView*Mathf.Deg2Rad/2.0f));
-				float hv = max / Mathf.Tan(Mathf.Atan(Mathf.Tan(cam.fieldOfView*Mathf.Deg2Rad/2.0f)*cam.aspect));
+				//float hh = max / Mathf.Tan((cam.fieldOfView*Mathf.Deg2Rad/2.0f));
+				//float hv = max / Mathf.Tan(Mathf.Atan(Mathf.Tan(cam.fieldOfView*Mathf.Deg2Rad/2.0f)*cam.aspect));
 
-				var yCoord = Mathf.Max(hh, hv)*1.1f;
-				yCoord = Mathf.Max(yCoord, 20);
-				yCoord = Mathf.Min(yCoord, cam.farClipPlane - 1f);
-				cam.transform.position = Vector3.Lerp(cam.transform.position, new Vector3(0, yCoord, 0), Time.smoothDeltaTime*2);
+				//var yCoord = Mathf.Max(hh, hv)*1.1f;
+				//yCoord = Mathf.Max(yCoord, 20);
+				//yCoord = Mathf.Min(yCoord, cam.farClipPlane - 1f);
+				//cam.transform.position = Vector3.Lerp(cam.transform.position, new Vector3(0, yCoord, 0), Time.smoothDeltaTime*2);
 			}
 
 			if (Input.GetKey(KeyCode.A) && Input.GetKeyDown(KeyCode.Mouse0)) {

@@ -74,7 +74,7 @@ namespace Pathfinding.Examples {
 		Mesh mesh;
 
 		/// <summary>Reference to the simulator in the scene</summary>
-		Pathfinding.RVO.ISimulator sim;
+		//Pathfinding.RVO.ISimulator sim;
 
 		/// <summary>All agents handled by this script</summary>
 		List<IAgent> agents;
@@ -96,7 +96,7 @@ namespace Pathfinding.Examples {
 				Debug.LogError("No RVOSimulator could be found in the scene. Please add a RVOSimulator component to any GameObject");
 				return;
 			}
-			sim = rvoSim.GetSimulator();
+			//sim = rvoSim.GetSimulator();
 			GetComponent<MeshFilter>().mesh = mesh;
 
 			CreateAgents(agentCount);
@@ -163,7 +163,7 @@ namespace Pathfinding.Examples {
 			Util.Memory.Realloc(ref goals, agentCount, Allocator.Persistent);
 			Util.Memory.Realloc(ref agentColors, agentCount, Allocator.Persistent);
 
-			sim.ClearAgents();
+			//sim.ClearAgents();
 
 			if (type == RVOExampleType.Circle) {
 				float agentArea = agentCount * radius * radius * Mathf.PI;
@@ -175,24 +175,24 @@ namespace Pathfinding.Examples {
 
 				for (int i = 0; i < agentCount; i++) {
 					Vector3 pos = new Vector3(Mathf.Cos(i * Mathf.PI * 2.0f / agentCount), 0, Mathf.Sin(i * Mathf.PI * 2.0f / agentCount)) * math.lerp(innerCircleRadius, outerCircleRadius, UnityEngine.Random.value);
-					IAgent agent = sim.AddAgent(new Vector2(pos.x, pos.z), pos.y);
-					agents.Add(agent);
+					//IAgent agent = sim.AddAgent(new Vector2(pos.x, pos.z), pos.y);
+					//agents.Add(agent);
 					goals[i] = new float3(-pos.x, 0, -pos.z);
 					agentColors[i] = AstarMath.HSVToRGB(i * 360.0f / agentCount, 0.8f, 0.6f);
 				}
 			} else if (type == RVOExampleType.Line) {
 				for (int i = 0; i < agentCount; i++) {
 					Vector3 pos = new Vector3((i % 2 == 0 ? 1 : -1) * exampleScale, 0, (i / 2) * radius * 2.5f);
-					IAgent agent = sim.AddAgent(new Vector2(pos.x, pos.z), pos.y);
-					agents.Add(agent);
+					//IAgent agent = sim.AddAgent(new Vector2(pos.x, pos.z), pos.y);
+					//agents.Add(agent);
 					goals[i] = new float3(-pos.x, 0, pos.z);
 					agentColors[i] = i % 2 == 0 ? Color.red : Color.blue;
 				}
 			} else if (type == RVOExampleType.Point) {
 				for (int i = 0; i < agentCount; i++) {
 					Vector3 pos = new Vector3(Mathf.Cos(i * Mathf.PI * 2.0f / agentCount), 0, Mathf.Sin(i * Mathf.PI * 2.0f / agentCount)) * exampleScale;
-					IAgent agent = sim.AddAgent(new Vector2(pos.x, pos.z), pos.y);
-					agents.Add(agent);
+					//IAgent agent = sim.AddAgent(new Vector2(pos.x, pos.z), pos.y);
+					//agents.Add(agent);
 					goals[i] = new float3(0, 0, 0);
 					agentColors[i] = AstarMath.HSVToRGB(i * 360.0f / agentCount, 0.8f, 0.6f);
 				}
@@ -203,8 +203,8 @@ namespace Pathfinding.Examples {
 					float angle = UnityEngine.Random.value * Mathf.PI * 2.0f;
 					float targetAngle = UnityEngine.Random.value * Mathf.PI * 2.0f;
 					Vector3 pos = new Vector3(Mathf.Cos(angle), 0, Mathf.Sin(angle)) * uniformDistance(circleRad);
-					IAgent agent = sim.AddAgent(new Vector2(pos.x, pos.z), pos.y);
-					agents.Add(agent);
+					//IAgent agent = sim.AddAgent(new Vector2(pos.x, pos.z), pos.y);
+					//agents.Add(agent);
 					goals[i] = new float3(math.cos(targetAngle), 0, math.sin(targetAngle)) * uniformDistance(circleRad);
 					agentColors[i] = AstarMath.HSVToRGB(targetAngle * Mathf.Rad2Deg, 0.8f, 0.6f);
 				}
@@ -218,9 +218,9 @@ namespace Pathfinding.Examples {
 					float angle = ((i % directions)/(float)directions) * Mathf.PI * 2.0f;
 					var dist = distanceBetweenGroups * ((i/(directions*AgentsPerDistance) + 1) + 0.3f*UnityEngine.Random.value);
 					Vector3 pos = new Vector3(Mathf.Cos(angle), 0, Mathf.Sin(angle)) * dist;
-					IAgent agent = sim.AddAgent(new Vector2(pos.x, pos.z), pos.y);
-					agent.Priority = (i % directions) == 0 ? 1 : 0.01f;
-					agents.Add(agent);
+					//IAgent agent = sim.AddAgent(new Vector2(pos.x, pos.z), pos.y);
+					//agent.Priority = (i % directions) == 0 ? 1 : 0.01f;
+					//agents.Add(agent);
 					goals[i] = math.normalizesafe(new float3(-pos.x, 0, -pos.z)) * distanceBetweenGroups * 3;
 					agentColors[i] = AstarMath.HSVToRGB(angle * Mathf.Rad2Deg, 0.8f, 0.6f);
 				}
@@ -344,11 +344,11 @@ namespace Pathfinding.Examples {
 					data.agentTimeHorizon[i] = agentTimeHorizon;
 					data.obstacleTimeHorizon[i] = obstacleTimeHorizon;
 					data.maxNeighbours[i] = maxNeighbours;
-					data.debugDraw[i] = i == 0 && debug;
+					//data.debugDraw[i] = i == 0 && debug;
 
 					// Set the desired velocity for the agent
 					var dist = math.length(goals[i] - data.position[i]);
-					data.SetTarget(i, goals[i], math.min(dist, maxSpeed), maxSpeed*1.1f);
+					//data.SetTarget(i, goals[i], math.min(dist, maxSpeed), maxSpeed*1.1f);
 
 					// Decrease agent priority when it is close to its goal.
 					// Also protect against division by zero.
@@ -367,10 +367,10 @@ namespace Pathfinding.Examples {
 		public void Update () {
 			if (agents == null || mesh == null) return;
 
-			var burstSim = sim as SimulatorBurst;
-			if (burstSim == null) throw new System.Exception("The Lightweight RVO example requires the burst option to be enabled on the RVOSimulator");
+			//var burstSim = sim as SimulatorBurst;
+			//if (burstSim == null) throw new System.Exception("The Lightweight RVO example requires the burst option to be enabled on the RVOSimulator");
 
-			int agentCount = burstSim.AgentCount;
+			//int agentCount = burstSim.AgentCount;
 
 			if (agents.Count != agentCount) {
 				Debug.LogError("Agent count does not match");
@@ -399,7 +399,7 @@ namespace Pathfinding.Examples {
 			NativeArray<int> nativeTris = new NativeArray<int>(agentCount*6, Allocator.TempJob, NativeArrayOptions.UninitializedMemory);
 
 			var settingsJob = new JobSetAgentSettings {
-				data = burstSim.simulationData,
+				//data = burstSim.simulationData,
 				goals = goals,
 				radius = radius,
 				agentTimeHorizon = agentTimeHorizon,
@@ -414,10 +414,10 @@ namespace Pathfinding.Examples {
 			var moveJob = new JobMoveAgents {
 				interpolatedVelocities = interpolatedVelocities,
 				interpolatedRotations = interpolatedRotations,
-				agentPositions = burstSim.simulationData.position,
-				agentMaxSpeeds = burstSim.simulationData.maxSpeed,
-				agentTargetPoints = burstSim.outputData.targetPoint,
-				agentSpeeds = burstSim.outputData.speed,
+				//agentPositions = burstSim.simulationData.position,
+				//agentMaxSpeeds = burstSim.simulationData.maxSpeed,
+				//agentTargetPoints = burstSim.outputData.targetPoint,
+				//agentSpeeds = burstSim.outputData.speed,
 				deltaTime = Time.deltaTime,
 				startIndex = 0,
 				endIndex = agentCount,
@@ -426,8 +426,8 @@ namespace Pathfinding.Examples {
 
 			var meshJob = new JobGenerateMesh {
 				interpolatedRotations = interpolatedRotations,
-				agentPositions = burstSim.simulationData.position,
-				agentRadii = burstSim.simulationData.radius,
+				//agentPositions = burstSim.simulationData.position,
+				//agentRadii = burstSim.simulationData.radius,
 				agentColors = agentColors,
 				verts = nativeVerts,
 				//uvs = nativeUVs,

@@ -42,7 +42,7 @@ namespace Pathfinding.Examples {
 				if (tag > 31) { Debug.LogError("tag > 31"); return; }
 
 				guo.modifyTag = true;
-				guo.setTag = tag;
+				//guo.setTag = tag;
 				guo.updatePhysics = false;
 
 				AstarPath.active.UpdateGraphs(guo);
