@@ -27,19 +27,19 @@ public class LinearShotPattern : BaseShotPattern
             return;
         }
 
-        if (m_shooting)
+        if (m_isShooting)
         {
             return;
         }
 
-        m_shooting = true;
+        m_isShooting = true;
         m_nowIndex = 0;
         m_delayTimer = 0f;
     }
 
     public override void UpdateStatus()
     {
-        if (m_shooting == false)
+        if (m_isShooting == false)
         {
             return;
         }
@@ -54,13 +54,13 @@ public class LinearShotPattern : BaseShotPattern
         }
 
         // Should be firing
-        m_shooting = true;
+        m_isShooting = true;
 
         m_nowIndex++;
 
         if (m_nowIndex >= m_bulletNum)
         {
-            m_shooting = false;
+            m_isShooting = false;
         }
         else
         {

@@ -113,7 +113,21 @@ public sealed class UbhShotCtrl_Burst : HNDMonoBehaviour, IGameplaySceneContextI
 
         aiNavigation = GetComponent<AIBaseNavigation>();
         m_bulletPoolManager = GameplaySceneContext.BulletPoolManager;
+     
+    }
+    protected override void Start()
+    {
+        base.Start();
+        //if (m_startOnAwake)
+        //{
+        //    StartShotRoutine(m_startOnAwakeDelay);
+        //}
 
+        m_homingTarget = GameplaySceneContext.Player.cachedTransform;
+    }
+
+    private void PopulateNativeArrays()
+    {
         // HACK: Take bullet quantities sequentially or randomly from the shot list.
         m_bulletNum = m_shotList[0].m_ShotPattern.m_bulletNum;
 
@@ -122,12 +136,8 @@ public sealed class UbhShotCtrl_Burst : HNDMonoBehaviour, IGameplaySceneContextI
 
         for (int k = 0; k < m_bulletNum; k++)
         {
-            bullets[k] = GetBulletGO(Vector3.zero);
+            bullets[k] = GetBulletGO(m_bulletOrigin.position);
         }
-    }
-    protected override void Start()
-    {
-        base.Start();
 
         Transform[] bulletTransforms = new Transform[m_bulletNum];
 
@@ -142,11 +152,8 @@ public sealed class UbhShotCtrl_Burst : HNDMonoBehaviour, IGameplaySceneContextI
 
         m_BulletRaycasts = new NativeArray<RaycastCommand>(m_bulletNum, Allocator.Persistent);
         m_BulletRayhits = new NativeArray<RaycastHit>(m_bulletNum, Allocator.Persistent);
-        //if (m_startOnAwake)
-        //{
-        //    StartShotRoutine(m_startOnAwakeDelay);
-        //}
     }
+
     protected override void OnEnable()
     {
         base.OnEnable();
@@ -193,6 +200,8 @@ public sealed class UbhShotCtrl_Burst : HNDMonoBehaviour, IGameplaySceneContextI
 
     private void Update()
     {
+        if (!m_shooting) return;
+
         m_shotList[0].m_ShotPattern.UpdateStatus();
 
         updateBulletsJobHandle.Complete();
@@ -531,11 +540,13 @@ public sealed class UbhShotCtrl_Burst : HNDMonoBehaviour, IGameplaySceneContextI
         public float3 originPosition;
         public quaternion originRotation;
         public float speed;
+        public bool inheritAngle;
         public float angleHorizontal;
         public float angleVertical;
         public float accelSpeed;
         public float accelTurn;
         public bool homing;
+        public bool lockOnShot;
         public float3 homingTargetPosition;
         public quaternion homingTargetRotation;
         public float homingAngleSpeed;
@@ -564,19 +575,23 @@ public sealed class UbhShotCtrl_Burst : HNDMonoBehaviour, IGameplaySceneContextI
             Vector3 myAngles = originRotation.EulerAngles();
             float3 zero = float3(0);
             Quaternion newRotation = originRotation;
+            Vector3 originRotEuler = QuaternionExtensions.EulerAngles(originRotation);
 
-            //m_baseAngles = Vector2.zero;
-            //if (inheritAngle && m_parentBaseShot.lockOnShot == false)
-            //{
-            //    m_baseAngles.x = m_parentBaseShot.shotCtrl.transform.eulerAngles.x;
-            //    m_baseAngles.y = m_parentBaseShot.shotCtrl.transform.eulerAngles.y;
-            //}
+            baseAngles = Vector2.zero;
+            if (inheritAngle && lockOnShot == false)
+            {
+                baseAngles.x = originRotEuler.x;
+                baseAngles.y = originRotEuler.y;
+            }
 
             //m_transformCache.SetEulerAngles(
-            //    m_baseAngles.x + m_angleVertical,
-            //    m_baseAngles.y + m_angleHorizontal,
+            //    baseAngles.x + angleVertical,
+            //    baseAngles.y + angleHorizontal,
             //    0f);
-            
+
+            baseAngles.x = angleVertical;
+            baseAngles.y = angleHorizontal;
+
             if (homing)
             {
                 // homing target.
@@ -629,8 +644,9 @@ public sealed class UbhShotCtrl_Burst : HNDMonoBehaviour, IGameplaySceneContextI
             }
 
             // move.
-            bulletPositions[index] = float3(bulletPositions[index].x, bulletPositions[index].y, bulletPositions[index].z) +
-                (math.mul(originRotation, float3(0,0,1)) * (speed * deltaTime));
+            bulletPositions[index] = float3(bulletPositions[index].x, bulletPositions[index].y, bulletPositions[index].z/* + index*/) +
+                (math.mul(newRotation, float3(0, 0, 1)) * (speed * deltaTime));
+
 
             bulletRotations[index] = newRotation;
         }

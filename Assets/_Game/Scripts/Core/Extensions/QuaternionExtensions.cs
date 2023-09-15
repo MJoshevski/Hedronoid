@@ -231,7 +231,7 @@ namespace Hedronoid
             return new float3(ComputeXAngle(q), ComputeYAngle(q), ComputeZAngle(q));
         }
 
-        public static quaternion FromAngles(float3 angles)
+        public static quaternion ToQuaternion(float3 angles)
         {
 
             float cy = math.cos(angles.z * 0.5f);

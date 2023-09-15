@@ -13,7 +13,6 @@ public class BaseShotPattern : ScriptableObject
     public float m_accelSpeed;
     public float m_accelTurn;
     public bool m_homing;
-    public Transform m_homingTarget;
     public float m_homingAngleSpeed;
     public bool m_sinWave;
     public float m_sinWaveSpeed;
@@ -31,7 +30,8 @@ public class BaseShotPattern : ScriptableObject
     public FMOD.Studio.EventInstance m_eventInstance;
 
     public Vector2 m_baseAngles;
-    protected bool m_shooting;
+    protected bool m_isShooting;
+    public bool IsShooting { get { return m_isShooting; } }
 
     public virtual void Initialize() { }
     public virtual void UpdateStatus() { }

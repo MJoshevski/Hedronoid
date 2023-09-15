@@ -126,11 +126,11 @@ namespace Hedronoid
         {
             m_Target = m_TurretSensor.GetTargetWithinReach(m_TurretSensor.SensorRange);
 
-            foreach (UbhShotCtrl.ShotInfo ubs in shotCtrl.m_shotList)
-            {
-                ubs.m_shotObj.m_targetTransform = m_Target;
-                ubs.m_shotObj.disableShooting = m_Target != null ? false : true;
-            }
+            //foreach (UbhShotCtrl.ShotInfo ubs in shotCtrl.m_shotList)
+            //{
+            //    ubs.m_shotObj.m_targetTransform = m_Target;
+            //    ubs.m_shotObj.disableShooting = m_Target != null ? false : true;
+            //}
         }
         void LockOnTarget()
         {

@@ -14,15 +14,14 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   m_prefab: {fileID: 100000, guid: 45602157295b8564092f3374d228c924, type: 3}
   m_bulletNum: 150
-  m_speed: 0.1
-  m_accelSpeed: 0.2
-  m_accelTurn: 3
-  m_homing: 0
-  m_homingTarget: {fileID: 0}
-  m_homingAngleSpeed: 0
+  m_speed: 1
+  m_accelSpeed: 0
+  m_accelTurn: 1
+  m_homing: 1
+  m_homingAngleSpeed: 10
   m_sinWave: 0
-  m_sinWaveSpeed: 0
-  m_sinWaveRangeSize: 0
+  m_sinWaveSpeed: 1
+  m_sinWaveRangeSize: 1
   m_sinWaveInverse: 0
   m_pauseAndResume: 0
   m_pauseTime: 0
@@ -35,5 +34,5 @@ MonoBehaviour:
   m_minSpeed: 0
   m_baseAngles: {x: 0, y: 0}
   m_betweenDelay: 0.1
-  m_verticalAngle: 180
-  m_horizontalAngle: 180
+  m_verticalAngle: 0
+  m_horizontalAngle: 0
